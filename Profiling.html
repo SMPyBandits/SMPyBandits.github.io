@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>A note on execution times, speed and profiling &mdash; AlgoBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="AlgoBandits 0.9.1 documentation" href="index.html"/>
+        <link rel="next" title="UML diagrams" href="uml_diagrams/README.html"/>
+        <link rel="prev" title="Fast C versions of the utilities in kullpack.py" href="Policies/C/README.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AlgoBandits
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PublicationsWithAlgoBandits.html">List of research publications using Lilian Besson&#8217;s AlgoBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/list.html">List of notebooks for AlgoBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A note on execution times, speed and profiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#A-better-approach?"><em>A better approach?</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#An-even-better-approach?"><em>An even better approach?</em></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlgoBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>A note on execution times, speed and profiling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Profiling.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="A-note-on-execution-times,-speed-and-profiling">
+<h1>A note on execution times, speed and profiling<a class="headerlink" href="#A-note-on-execution-times,-speed-and-profiling" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>About (time) profiling with Python (2 or 3): <code class="docutils literal"><span class="pre">cProfile</span></code> or <code class="docutils literal"><span class="pre">profile</span></code> <a class="reference external" href="https://docs.python.org/2/library/profile.html">in Python 2 documentation</a> (<a class="reference external" href="https://docs.python.org/2/library/profile.html">in Python 3 documentation</a>), <a class="reference external" href="https://stackoverflow.com/a/7693928/5889533">this StackOverflow thread</a>, <a class="reference external" href="https://www.huyng.com/posts/python-performance-analysis">this blog post</a>, and the documentation of <a class="reference external" href="https://github.com/rkern/line_profiler"><code class="docutils literal"><span class="pre">line_profiler</span></code></a> (to profile lines instead of functions) and <a class="reference external" href="http://pycallgraph.slowchop.com/en/master/"><code class="docutils literal"><span class="pre">pycallgraph</span></code></a> (to illustrate function calls) and <a class="reference external" href="https://pypi.python.org/pypi/yappi/"><code class="docutils literal"><span class="pre">yappi</span></code></a> (which seems to be thread aware).</li>
+<li>See also <a class="reference external" href="https://www.logilab.org/blogentry/6883"><code class="docutils literal"><span class="pre">pyreverse</span></code></a> to get nice UML-like diagrams illustrating the relationships of packages and classes between each-other.</li>
+</ul>
+<div class="section" id="A-better-approach?">
+<h2><em>A better approach?</em><a class="headerlink" href="#A-better-approach?" title="Permalink to this headline">¶</a></h2>
+<p>In January, I tried to use the <a class="reference external" href="https://www.jetbrains.com/pycharm/download/">PyCharm</a> Python IDE, and it has an awesome profiler included!
+But it was too cumbersome to use...</p>
+</div>
+<div class="section" id="An-even-better-approach?">
+<h2><em>An even better approach?</em><a class="headerlink" href="#An-even-better-approach?" title="Permalink to this headline">¶</a></h2>
+<p>Well now... I know my codebase, and I know how costly or efficient every new piece of code should be, if I find empirically something odd, I explore with one of the above-mentionned module...</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="uml_diagrams/README.html" class="btn btn-neutral float-right" title="UML diagrams" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies/C/README.html" class="btn btn-neutral" title="Fast C versions of the utilities in kullpack.py" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:12m:29s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
