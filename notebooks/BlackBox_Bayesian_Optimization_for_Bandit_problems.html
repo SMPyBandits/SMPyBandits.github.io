@@ -1,0 +1,2473 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Table of Contents &mdash; AlgoBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="AlgoBandits 0.9.1 documentation" href="../index.html"/>
+        <link rel="up" title="List of notebooks for AlgoBandits documentation" href="list.html"/>
+        <link rel="next" title="Table of Contents" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html"/>
+        <link rel="prev" title="Table of Contents" href="Unsupervised_Learning_for_Bandit_problem.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> AlgoBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithAlgoBandits.html">List of research publications using Lilian Besson&#8217;s AlgoBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for AlgoBandits documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html#Easily-creating-MAB-problems">Easily creating MAB problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html#Do-we-even-need-a-smart-learning-algorithm?-Is-UCB-useless?"><em>Do we even need a smart learning algorithm? Is UCB useless?</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Single-Player_Simulation.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Single-Player_Simulation.html#An-example-of-a-small-Single-Player-simulation">An example of a small Single-Player simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.html#An-example-of-a-small-Multi-Player-simulation,-with-Centralized-Algorithms">An example of a small Multi-Player simulation, with Centralized Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html#An-example-of-a-small-Multi-Player-simulation,-with-rhoRand-and-Selfish,-for-different-algorithms">An example of a small Multi-Player simulation, with rhoRand and Selfish, for different algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Unsupervised_Learning_for_Bandit_problem.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Unsupervised_Learning_for_Bandit_problem.html#Trying-to-use-Unsupervised-Learning-algorithms-for-a-Gaussian-bandit-problem">Trying to use Unsupervised Learning algorithms for a Gaussian bandit problem</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem">Trying to use Black-Box Bayesian optimization algorithms for a Gaussian bandit problem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-the-Gaussian-bandit-problem">Creating the Gaussian bandit problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Using-a-Black-Box-optimization-algorithm">Using a Black-Box optimization algorithm</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Implementation">Implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Comparing-its-performance-on-this-Gaussian-problem">Comparing its performance on this Gaussian problem</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Configuring-an-experiment">Configuring an experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Running-an-experiment">Running an experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualizing-the-results">Visualizing the results</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Another-experiment,-with-just-more-Gaussian-arms">Another experiment, with just more Gaussian arms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Running-the-experiment">Running the experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualizing-the-results">Visualizing the results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Very-good-performance!">Very good performance!</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Another-experiment,-with-Bernoulli-arms">Another experiment, with Bernoulli arms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Running-the-experiment">Running the experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Visualizing-the-results">Visualizing the results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Very-good-performances-also!">Very good performances also!</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Conclusion">Conclusion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Non-logarithmic-regret-?">Non-logarithmic regret ?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Comparing-time-complexity">Comparing <em>time complexity</em></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html#Lai-&amp;-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points">Lai &amp; Robbins lower-bound for stochastic bandit with full restart points</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlgoBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="list.html">List of notebooks for AlgoBandits documentation</a> &raquo;</li>
+        
+      <li>Table of Contents</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/notebooks/BlackBox_Bayesian_Optimization_for_Bandit_problems.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Table-of-Contents">
+<h1>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Permalink to this headline">¶</a></h1>
+<p><div class="lev1 toc-item"><p>1&nbsp;&nbsp;Trying to use Black-Box Bayesian optimization algorithms for a
+Gaussian bandit problem</p>
+</div><div class="lev2 toc-item"><p>1.1&nbsp;&nbsp;Creating the Gaussian bandit problem</p>
+</div><div class="lev2 toc-item"><p>1.2&nbsp;&nbsp;Using a Black-Box optimization algorithm</p>
+</div><div class="lev3 toc-item"><p>1.2.1&nbsp;&nbsp;Implementation</p>
+</div><div class="lev2 toc-item"><p>1.3&nbsp;&nbsp;Comparing its performance on this Gaussian problem</p>
+</div><div class="lev3 toc-item"><p>1.3.1&nbsp;&nbsp;Configuring an experiment</p>
+</div><div class="lev3 toc-item"><p>1.3.2&nbsp;&nbsp;Running an experiment</p>
+</div><div class="lev3 toc-item"><p>1.3.3&nbsp;&nbsp;Visualizing the results</p>
+</div><div class="lev2 toc-item"><p>1.4&nbsp;&nbsp;Another experiment, with just more Gaussian arms</p>
+</div><div class="lev3 toc-item"><p>1.4.1&nbsp;&nbsp;Running the experiment</p>
+</div><div class="lev3 toc-item"><p>1.4.2&nbsp;&nbsp;Visualizing the results</p>
+</div><div class="lev3 toc-item"><p>1.4.3&nbsp;&nbsp;Very good performance!</p>
+</div><div class="lev2 toc-item"><p>1.5&nbsp;&nbsp;Another experiment, with Bernoulli arms</p>
+</div><div class="lev3 toc-item"><p>1.5.1&nbsp;&nbsp;Running the experiment</p>
+</div><div class="lev3 toc-item"><p>1.5.2&nbsp;&nbsp;Visualizing the results</p>
+</div><div class="lev3 toc-item"><p>1.5.3&nbsp;&nbsp;Very good performances also!</p>
+</div><div class="lev2 toc-item"><p>1.6&nbsp;&nbsp;Conclusion</p>
+</div><div class="lev3 toc-item"><p>1.6.1&nbsp;&nbsp;Non-logarithmic regret ?</p>
+</div><div class="lev3 toc-item"><p>1.6.2&nbsp;&nbsp;Comparing time complexity</p>
+</div></div>
+<hr class="docutils" />
+<div class="section" id="Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem">
+<h1>Trying to use Black-Box Bayesian optimization algorithms for a Gaussian bandit problem<a class="headerlink" href="#Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem" title="Permalink to this headline">¶</a></h1>
+<p>This small <a class="reference external" href="https://www.jupyter.org/">Jupyter notebook</a> presents an
+experiment, in the context of <a class="reference external" href="https://en.wikipedia.org/wiki/Multi-armed_bandit">Multi-Armed Bandit
+problems</a> (MAB).</p>
+<p><a class="reference external" href="http://perso.crans.org/besson/">I am</a> trying to answer a simple
+question:</p>
+<blockquote>
+<div>“Can we use generic black-box Bayesian optimization algorithm, like
+a <a class="reference external" href="https://scikit-optimize.github.io/#skopt.gp_minimize">Gaussian
+process</a> or
+<a class="reference external" href="https://scikit-optimize.github.io/#skopt.forest_minimize">Bayesian random
+forest</a>,
+instead of MAB algorithms like
+<a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">UCB</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/Thompson_sampling">Thompson
+Sampling</a> ?</div></blockquote>
+<p>I will use my <a class="reference external" href="http://banditslilian.gforge.inria.fr/">AlgoBandits</a>
+library, for which a complete documentation is available, <a class="reference external" href="http://banditslilian.gforge.inria.fr/">here at
+http://banditslilian.gforge.inria.fr/</a>,
+and the <a class="reference external" href="https://scikit-optimize.github.io/">scikit-optimize package
+(skopt)</a>.</p>
+<div class="section" id="Creating-the-Gaussian-bandit-problem">
+<h2>Creating the Gaussian bandit problem<a class="headerlink" href="#Creating-the-Gaussian-bandit-problem" title="Permalink to this headline">¶</a></h2>
+<p>First, be sure to be in the main folder, and import the <code class="docutils literal"><span class="pre">`MAB</span></code>
+class &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Environment.MAB.html#Environment.MAB.MAB">http://banditslilian.gforge.inria.fr/docs/Environment.MAB.html#Environment.MAB.MAB</a>&gt;`__
+from <cite>the ``Environment`</cite>
+package &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Environment.html#module-Environment">http://banditslilian.gforge.inria.fr/docs/Environment.html#module-Environment</a>&gt;`__:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">path</span>
+<span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">MAB</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ - Setting dpi of all figures to 110 ...
+ - Setting &#39;figsize&#39; of all figures to (19.8, 10.8) ...
+Info: Using the Jupyter notebook version of the tqdm() decorator, tqdm_notebook() ...
+</pre></div></div>
+</div>
+<p>And also, import the <code class="docutils literal"><span class="pre">`Gaussian</span></code>
+class &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Arms.Gaussian.html#Arms.Gaussian.Gaussian">http://banditslilian.gforge.inria.fr/docs/Arms.Gaussian.html#Arms.Gaussian.Gaussian</a>&gt;`__
+to create Gaussian-distributed arms.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Gaussian</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Info: numba.jit seems to be available.
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Just improving the ?? in Jupyter. Thanks to https://nbviewer.jupyter.org/gist/minrk/7715212</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">page</span>
+<span class="k">def</span> <span class="nf">myprint</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;text/plain&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="n">myprint</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>Gaussian<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Init signature:</span> Gaussian<span class="ansi-blue-fg">(</span>mu<span class="ansi-blue-fg">,</span> sigma<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.05</span><span class="ansi-blue-fg">,</span> mini<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> maxi<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+Gaussian distributed arm, possibly truncated.
+
+- Default is to truncate into [0, 1] (so Gaussian.draw() is in [0, 1]).
+<span class="ansi-red-fg">Init docstring:</span> New arm.
+<span class="ansi-red-fg">File:</span>           ~/ownCloud/cloud.openmailbox.org/Thèse_2016-17/src/AlgoBandits.git/Arms/Gaussian.py
+<span class="ansi-red-fg">Type:</span>           type
+
+</pre></div></div>
+</div>
+<p>Let create a simple bandit problem, with 3 arms, and visualize an
+histogram showing the repartition of rewards.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">means</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">]</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">(</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">means</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Creating a new MAB problem ...
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = &lt;generator object &lt;genexpr&gt; at 0x7efdb3a6a3b8&gt; ...
+ - with &#39;arms&#39; = [G(0.45, 0.2), G(0.5, 0.2), G(0.55, 0.2)]
+ - with &#39;means&#39; = [ 0.45  0.5   0.55]
+ - with &#39;nbArms&#39; = 3
+ - with &#39;maxArm&#39; = 0.55
+ - with &#39;minArm&#39; = 0.45
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 12 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 61.67% ...
+ - with &#39;arms&#39; represented as: $[G(0.45, 0.2), G(0.5, 0.2), G(0.55, 0.2)^*]$
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">M</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">10000000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_12_0.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_12_0.png" />
+<p>As we can see, the rewards of the different arms are close. It won’t
+be easy to distinguish them.</p>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Using-a-Black-Box-optimization-algorithm">
+<h2>Using a Black-Box optimization algorithm<a class="headerlink" href="#Using-a-Black-Box-optimization-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>I will present directly how to use any black-box optimization algorithm,
+following <code class="docutils literal"><span class="pre">`skopt</span></code>
+“ask-and-tell” &lt;<a class="reference external" href="https://scikit-optimize.github.io/notebooks/ask-and-tell.html">https://scikit-optimize.github.io/notebooks/ask-and-tell.html</a>&gt;`__
+API.</p>
+<p>The optimization algorithm, <code class="docutils literal"><span class="pre">opt</span></code>, needs two methods:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">opt.tell</span></code>, used like <code class="docutils literal"><span class="pre">opt.tell([armId],</span> <span class="pre">loss)</span></code>, to give an
+observation of a certain “loss” (<code class="docutils literal"><span class="pre">loss</span> <span class="pre">=</span> <span class="pre">-</span> <span class="pre">reward</span></code>) from arm
+#<code class="docutils literal"><span class="pre">armId</span></code> to the algorithm.</li>
+<li><code class="docutils literal"><span class="pre">opt.ask</span></code>, used like <code class="docutils literal"><span class="pre">asked</span> <span class="pre">=</span> <span class="pre">opt.ask()</span></code>, to ask the algorithm
+which arm should be sampled first.</li>
+</ul>
+<p>Let use a simple <em>Black-Box Bayesian</em> algorithm, implemented in the
+<cite>scikit-optimize (``skopt`</cite>) &lt;<a class="reference external" href="https://scikit-optimize.github.io/">https://scikit-optimize.github.io/</a>&gt;`__
+package:
+<code class="docutils literal"><span class="pre">`RandomForestRegressor</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.RandomForestRegressor">https://scikit-optimize.github.io/learning/index.html#skopt.learning.RandomForestRegressor</a>&gt;`__.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">skopt.learning</span> <span class="k">import</span> <span class="n">RandomForestRegressor</span>
+</pre></div>
+</div>
+</div>
+<p>First, we need to create a model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">our_est</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>our_est<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Type:</span>        RandomForestRegressor
+<span class="ansi-red-fg">String form:</span>
+RandomForestRegressor(bootstrap=True, criterion=&#39;mse&#39;, max_depth=None,
+           max_features=&#39;a &lt;...&gt; imators=10, n_jobs=1,
+           oob_score=False, random_state=None, verbose=0, warm_start=False)
+<span class="ansi-red-fg">Length:</span>      0
+<span class="ansi-red-fg">File:</span>        /usr/local/lib/python3.5/dist-packages/skopt/learning/forest.py
+<span class="ansi-red-fg">Docstring:</span>   RandomForestRegressor that supports `return_std`.
+
+</pre></div></div>
+</div>
+<p>Then the optimization process is using the
+<code class="docutils literal"><span class="pre">`Optimizer</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/#skopt.Optimizer">https://scikit-optimize.github.io/#skopt.Optimizer</a>&gt;`__
+class from <code class="docutils literal"><span class="pre">`skopt</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/">https://scikit-optimize.github.io/</a>&gt;`__.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">skopt</span> <span class="k">import</span> <span class="n">Optimizer</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">arms_optimizer</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">est</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Optimizer</span><span class="p">([</span>
+            <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span>  <span class="c1"># Categorical dimensions: arm index!</span>
+        <span class="p">],</span>
+        <span class="n">est</span><span class="p">(),</span>
+        <span class="n">acq_optimizer</span><span class="o">=</span><span class="s2">&quot;sampling&quot;</span><span class="p">,</span>
+        <span class="n">n_random_starts</span><span class="o">=</span><span class="mi">3</span> <span class="o">*</span> <span class="n">nbArms</span>  <span class="c1"># Sure ?</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">our_opt</span> <span class="o">=</span> <span class="n">arms_optimizer</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">RandomForestRegressor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>our_opt<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Type:</span>        Optimizer
+<span class="ansi-red-fg">String form:</span> &lt;skopt.optimizer.optimizer.Optimizer object at 0x7efda4b6a550&gt;
+<span class="ansi-red-fg">File:</span>        /usr/local/lib/python3.5/dist-packages/skopt/optimizer/optimizer.py
+<span class="ansi-red-fg">Docstring:</span>
+Run bayesian optimisation loop.
+
+An `Optimizer` represents the steps of a bayesian optimisation loop. To
+use it you need to provide your own loop mechanism. The various
+optimisers provided by `skopt` use this class under the hood.
+
+Use this class directly if you want to control the iterations of your
+bayesian optimisation loop.
+
+Parameters
+----------
+* `dimensions` [list, shape=(n_dims,)]:
+    List of search space dimensions.
+    Each search dimension can be defined either as
+
+    - a `(upper_bound, lower_bound)` tuple (for `Real` or `Integer`
+      dimensions),
+    - a `(upper_bound, lower_bound, &#34;prior&#34;)` tuple (for `Real`
+      dimensions),
+    - as a list of categories (for `Categorical` dimensions), or
+    - an instance of a `Dimension` object (`Real`, `Integer` or
+      `Categorical`).
+
+* `base_estimator` [sklearn regressor]:
+    Should inherit from `sklearn.base.RegressorMixin`.
+    In addition the `predict` method, should have an optional `return_std`
+    argument, which returns `std(Y | x)`` along with `E[Y | x]`.
+
+* `n_random_starts` [int, default=10]:
+    Number of evaluations of `func` with random initialization points
+    before approximating the `func` with `base_estimator`. While random
+    points are being suggested no model will be fit to the observations.
+
+* `acq_func` [string, default=`&#34;EI&#34;`]:
+    Function to minimize over the posterior distribution. Can be either
+
+    - `&#34;LCB&#34;` for lower confidence bound.
+    - `&#34;EI&#34;` for negative expected improvement.
+    - `&#34;PI&#34;` for negative probability of improvement.
+    - `&#34;gp_hedge&#34;` Probabilistically choose one of the above three
+      acquisition functions at every iteration.
+        - The gains `g_i` are initialized to zero.
+        - At every iteration,
+            - Each acquisition function is optimised independently to propose an
+              candidate point `X_i`.
+            - Out of all these candidate points, the next point `X_best` is
+              chosen by $softmax(\eta g_i)$
+            - After fitting the surrogate model with `(X_best, y_best)`,
+              the gains are updated such that $g_i -= \mu(X_i)$
+
+* `acq_optimizer` [string, `&#34;sampling&#34;` or `&#34;lbfgs&#34;`, default=`&#34;lbfgs&#34;`]:
+    Method to minimize the acquistion function. The fit model
+    is updated with the optimal value obtained by optimizing `acq_func`
+    with `acq_optimizer`.
+
+    - If set to `&#34;sampling&#34;`, then `acq_func` is optimized by computing
+      `acq_func` at `n_points` sampled randomly.
+    - If set to `&#34;lbfgs&#34;`, then `acq_func` is optimized by
+          - Sampling `n_restarts_optimizer` points randomly.
+          - `&#34;lbfgs&#34;` is run for 20 iterations with these points as initial
+            points to find local minima.
+          - The optimal of these local minima is used to update the prior.
+
+* `random_state` [int, RandomState instance, or None (default)]:
+    Set random state to something other than None for reproducible
+    results.
+
+* `acq_func_kwargs` [dict]:
+    Additional arguments to be passed to the acquistion function.
+
+* `acq_optimizer_kwargs` [dict]:
+    Additional arguments to be passed to the acquistion optimizer.
+
+Attributes
+----------
+* `Xi` [list]:
+    Points at which objective has been evaluated.
+* `yi` [scalar]:
+    Values of objective at corresponding points in `Xi`.
+* `models` [list]:
+    Regression models used to fit observations and compute acquisition
+    function.
+* `space`
+    An instance of `skopt.space.Space`. Stores parameter search space used
+    to sample points, bounds, and type of parameters.
+
+</pre></div></div>
+</div>
+<div class="section" id="Implementation">
+<h3>Implementation<a class="headerlink" href="#Implementation" title="Permalink to this headline">¶</a></h3>
+<p>In code, this gives the following:</p>
+<ul class="simple">
+<li>the <code class="docutils literal"><span class="pre">getReward(arm,</span> <span class="pre">reward)</span></code> method gives <code class="docutils literal"><span class="pre">loss</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">reward</span></code> to
+the optimization process, with <code class="docutils literal"><span class="pre">opt.tell</span></code> method,</li>
+<li>the <code class="docutils literal"><span class="pre">choice()</span></code> simply calls <code class="docutils literal"><span class="pre">opt.ask()</span></code>.</li>
+</ul>
+<p>Note that the Bayesian optimization takes place with an input space of
+categorial data: instead of optimizing in <span class="math">\(\mathbb{R}\)</span> or
+<span class="math">\(\mathbb{R}^K\)</span> (for <span class="math">\(K\)</span> arms), the input space is a
+categorical representation of <span class="math">\(\{1,\dots,K\}\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">class</span> <span class="nc">BlackBoxOpt</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Black-box Bayesian optimizer for Multi-Armed Bandit, using Gaussian processes.</span>
+
+<span class="sd">    - **Warning**: still highly experimental! Very slow!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+                 <span class="n">opt</span><span class="o">=</span><span class="n">arms_optimizer</span><span class="p">,</span> <span class="n">est</span><span class="o">=</span><span class="n">RandomForestRegressor</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>  <span class="c1"># not used, but needed for my framework</span>
+                 <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms of the MAB problem.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1">#: Current time.</span>
+        <span class="c1"># Black-box optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_opt</span> <span class="o">=</span> <span class="n">opt</span>  <span class="c1"># Store it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_est</span> <span class="o">=</span> <span class="n">est</span>  <span class="c1"># Store it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="n">opt</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">est</span><span class="p">)</span>  <span class="c1">#: The black-box optimizer to use, initialized from the other arguments</span>
+        <span class="c1"># Other attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>  <span class="c1">#: Known lower bounds on the rewards.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">amplitude</span>  <span class="c1">#: Known amplitude of the rewards.</span>
+
+    <span class="c1"># --- Easy methods</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;BlackBoxOpt(</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_opt</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_est</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Reinitialize the black-box optimizer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_opt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_est</span><span class="p">)</span>  <span class="c1"># The black-box optimizer to use, initialized from the other arguments</span>
+
+    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">armId</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Store this observation `reward` for that arm `armId`.</span>
+
+<span class="sd">        - In fact, :class:`skopt.Optimizer` is a *minimizer*, so `loss=1-reward` is stored, to maximize the rewards by minimizing the losses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>  <span class="c1"># project the reward to [0, 1]</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">reward</span>  <span class="c1"># flip</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">tell</span><span class="p">([</span><span class="n">armId</span><span class="p">],</span> <span class="n">loss</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Choose an arm, according to the black-box optimizer.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">asked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+        <span class="c1"># That&#39;s a np.array of int, as we use Categorical input dimension!</span>
+        <span class="n">arm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">asked</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">arm</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>BlackBoxOpt<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Init signature:</span> BlackBoxOpt<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> opt<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&lt;</span>function arms_optimizer at <span class="ansi-cyan-fg">0x7efda4b61488</span><span class="ansi-blue-fg">&gt;</span><span class="ansi-blue-fg">,</span> est<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&lt;</span><span class="ansi-green-fg">class</span> <span class="ansi-blue-fg">&#39;skopt.learning.forest.RandomForestRegressor&#39;</span><span class="ansi-blue-fg">&gt;</span><span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+Black-box Bayesian optimizer for Multi-Armed Bandit, using Gaussian processes.
+
+- **Warning**: still highly experimental! Very slow!
+<span class="ansi-red-fg">Type:</span>           type
+
+</pre></div></div>
+</div>
+<p>For example, for the problem <span class="math">\(M\)</span> defined above, for <span class="math">\(K=3\)</span>
+arms, this gives the following policy:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">policy</span> <span class="o">=</span> <span class="n">BlackBoxOpt</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+policy<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Type:</span>        BlackBoxOpt
+<span class="ansi-red-fg">String form:</span> BlackBoxOpt(arms_optimizer, RandomForestRegressor)
+<span class="ansi-red-fg">Docstring:</span>
+Black-box Bayesian optimizer for Multi-Armed Bandit, using Gaussian processes.
+
+- **Warning**: still highly experimental! Very slow!
+
+</pre></div></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Comparing-its-performance-on-this-Gaussian-problem">
+<h2>Comparing its performance on this Gaussian problem<a class="headerlink" href="#Comparing-its-performance-on-this-Gaussian-problem" title="Permalink to this headline">¶</a></h2>
+<p>We can compare the performance of this <code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> policy, using
+<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.RandomForestRegressor">Random Forest
+regression</a>,
+on the same Gaussian problem, against three strategies:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">`EmpiricalMeans</span></code> &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Policies.EmpiricalMeans.html#Policies.EmpiricalMeans.EmpiricalMeans">http://banditslilian.gforge.inria.fr/docs/Policies.EmpiricalMeans.html#Policies.EmpiricalMeans.EmpiricalMeans</a>&gt;`__,
+which only uses the empirical mean estimators <span class="math">\(\hat{\mu_k}(t)\)</span>.
+It is known to be insufficient.</li>
+<li><code class="docutils literal"><span class="pre">`UCB</span></code> &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Policies.UCB.html#Policies.UCB.UCB">http://banditslilian.gforge.inria.fr/docs/Policies.UCB.html#Policies.UCB.UCB</a>&gt;`__,
+the UCB1 algorithm. It is known to be quite efficient.</li>
+<li><code class="docutils literal"><span class="pre">`Thompson</span></code> &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Policies.Thompson.html#Policies.Thompson.Thompson">http://banditslilian.gforge.inria.fr/docs/Policies.Thompson.html#Policies.Thompson.Thompson</a>&gt;`__,
+the Thompson Sampling algorithm. It is known to be very efficient.</li>
+<li><code class="docutils literal"><span class="pre">`klUCB</span></code> &lt;<a class="reference external" href="http://banditslilian.gforge.inria.fr/docs/Policies.klUCB.html#Policies.klUCB.klUCB">http://banditslilian.gforge.inria.fr/docs/Policies.klUCB.html#Policies.klUCB.klUCB</a>&gt;`__,
+the kl-UCB algorithm, for Gaussian arms (<code class="docutils literal"><span class="pre">klucb</span> <span class="pre">=</span> <span class="pre">klucbGauss</span></code>). It
+is also known to be very efficient.</li>
+</ul>
+<div class="section" id="Configuring-an-experiment">
+<h3>Configuring an experiment<a class="headerlink" href="#Configuring-an-experiment" title="Permalink to this headline">¶</a></h3>
+<p>I implemented in the
+<code class="docutils literal"><span class="pre">`Environment</span></code> &lt;<a class="reference external" href="http://http://banditslilian.gforge.inria.fr/docs/Environment.html">http://http://banditslilian.gforge.inria.fr/docs/Environment.html</a>&gt;`__
+module an
+<code class="docutils literal"><span class="pre">`Evaluator</span></code> &lt;<a class="reference external" href="http://http://banditslilian.gforge.inria.fr/docs/Environment.Evaluator.html#Environment.Evaluator.Evaluator">http://http://banditslilian.gforge.inria.fr/docs/Environment.Evaluator.html#Environment.Evaluator.Evaluator</a>&gt;`__
+class, very convenient to run experiments of Multi-Armed Bandit games
+without a sweat.</p>
+<p>Let us use it!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">Evaluator</span>
+</pre></div>
+</div>
+</div>
+<p>We will start with a small experiment, with a small horizon
+<span class="math">\(T = 2000\)</span> and only <span class="math">\(20\)</span> repetitions. (we should do more,
+but it is very slow due to <code class="docutils literal"><span class="pre">BlackBoxOpt</span></code>…)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">REPETITIONS</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">means</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">]</span>
+<span class="n">ENVIRONMENTS</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">means</span><span class="p">]</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="n">EmpiricalMeans</span><span class="p">,</span> <span class="n">UCB</span><span class="p">,</span> <span class="n">Thompson</span><span class="p">,</span> <span class="n">klUCB</span>
+<span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="n">klucb_mapping</span><span class="p">,</span> <span class="n">klucbGauss</span> <span class="k">as</span> <span class="n">_klucbGauss</span>
+
+<span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="c1"># Custom klucb function</span>
+<span class="k">def</span> <span class="nf">klucbGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;klucbGauss(x, d, sig2) with the good variance (= sigma).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_klucbGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+
+<span class="n">klucb</span> <span class="o">=</span> <span class="n">klucbGauss</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Info: numba.jit seems to be available.
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">POLICIES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># --- Naive algorithms</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">EmpiricalMeans</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Our algorithm, with two Unsupervised Learning algorithms</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BlackBoxOpt</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Basic UCB1 algorithm</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Thompson sampling algorithm</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- klUCB algorithm, with Gaussian klucb function</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucb</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># --- Duration of the experiment</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+    <span class="c1"># --- Number of repetition of the experiment (to have an average)</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="n">REPETITIONS</span><span class="p">,</span>
+    <span class="c1"># --- Parameters for the use of joblib.Parallel</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="n">N_JOBS</span><span class="p">,</span>    <span class="c1"># = nb of CPU cores</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>      <span class="c1"># Max joblib verbosity</span>
+    <span class="c1"># --- Arms</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="n">ENVIRONMENTS</span><span class="p">,</span>
+    <span class="c1"># --- Algorithms</span>
+    <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="n">POLICIES</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">evaluation</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of policies in this comparison: 5
+Time horizon: 2000
+Number of repetitions: 20
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 3
+Creating a new MAB problem ...
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(0.45, 0.2), G(0.5, 0.2), G(0.55, 0.2)] ...
+ - with &#39;arms&#39; = [G(0.45, 0.2), G(0.5, 0.2), G(0.55, 0.2)]
+ - with &#39;means&#39; = [ 0.45  0.5   0.55]
+ - with &#39;nbArms&#39; = 3
+ - with &#39;maxArm&#39; = 0.55
+ - with &#39;minArm&#39; = 0.45
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 12 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 61.67% ...
+ - with &#39;arms&#39; represented as: $[G(0.45, 0.2), G(0.5, 0.2), G(0.55, 0.2)^*]$
+Number of environments to try: 1
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Running-an-experiment">
+<h3>Running an experiment<a class="headerlink" href="#Running-an-experiment" title="Permalink to this headline">¶</a></h3>
+<p>We asked to repeat the experiment <span class="math">\(20\)</span> times, so it will take a
+while… (about 100 minutes maximum).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">tqdm</span>  <span class="c1"># just a pretty loop</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">%%</span><span class="k">time</span>
+for envId, env in tqdm(enumerate(evaluation.envs), desc=&quot;Problems&quot;):
+    # Evaluate just that env
+    evaluation.startOneEnv(envId, env)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fd9de7ec41b64b4f94cd1b6e9aeccb65"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 3, arms: [G(0.45, 0.2), G(0.5, 0.2), G(0.55, 0.2)], minArm: 0.45, maxArm: 0.55)
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;Policies.EmpiricalMeans.EmpiricalMeans&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.EmpiricalMeans.EmpiricalMeans&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;__main__.BlackBoxOpt&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;__main__.BlackBoxOpt&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;Policies.UCB.UCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.UCB.UCB&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #5 = {&#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {&#39;klucb&#39;: &lt;function klucbGauss at 0x7efdb30d0268&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {&#39;klucb&#39;: &lt;function klucbGauss at 0x7efdb30d0268&gt;}} ...
+
+- Evaluating policy #1/5: EmpiricalMeans ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3da9014edf524659a065f962c496520c"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy EmpiricalMeans after 2000 steps: [1 0 2] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 39.85% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 48.85% (relative success)...
+
+- Evaluating policy #2/5: BlackBoxOpt(arms_optimizer, RandomForestRegressor) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done  20 out of  20 | elapsed:    0.6s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "23bcadfc177a453b82f91909cb6d9c88"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done   7 tasks      | elapsed: 14.5min
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #3/5: UCB ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done  20 out of  20 | elapsed: 33.6min finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6ca5178023774bf88accd1689f0c8304"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy UCB after 2000 steps: [1 0 2] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 39.85% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 48.85% (relative success)...
+
+- Evaluating policy #4/5: Thompson ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done  20 out of  20 | elapsed:    0.6s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "44697fc7701b47b4a50addc6b8ee8dba"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy Thompson after 2000 steps: [1 2 0] ...
+  ==&gt; Optimal arm identification: 81.82% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 11.11% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 39.85% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 37.74% (relative success)...
+
+- Evaluating policy #5/5: KL-UCB(Gauss) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done  20 out of  20 | elapsed:    0.6s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a2db1f1d305b470a8cf189cf1c23d020"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy KL-UCB(Gauss) after 2000 steps: [0 1 2] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 88.28% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 97.07% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done   7 tasks      | elapsed:    0.9s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CPU times: user 1.57 s, sys: 464 ms, total: 2.04 s
+Wall time: 33min 42s
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=3)]: Done  20 out of  20 | elapsed:    2.0s finished
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Visualizing-the-results">
+<h3>Visualizing the results<a class="headerlink" href="#Visualizing-the-results" title="Permalink to this headline">¶</a></h3>
+<p>Now, we can plot some performance measures, like the regret, the best
+arm selection rate, the average reward etc.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="n">envId</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">printFinalRanking</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">semilogx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">meanRegret</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotBestArmPulls</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>evaluation<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Type:</span>        Evaluator
+<span class="ansi-red-fg">String form:</span> &lt;Environment.Evaluator.Evaluator object at 0x7efda4b6aac8&gt;
+<span class="ansi-red-fg">File:</span>        ~/ownCloud/cloud.openmailbox.org/Thèse_2016-17/src/AlgoBandits.git/Environment/Evaluator.py
+<span class="ansi-red-fg">Docstring:</span>   Evaluator class to run the simulations.
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Policy &#39;Thompson&#39;     was ranked      1 / 5 for this simulation (last regret = 30.2294).
+- Policy &#39;KL-UCB(Gauss)&#39;        was ranked      2 / 5 for this simulation (last regret = 33.7103).
+- Policy &#39;BlackBoxOpt(arms_optimizer, RandomForestRegressor)&#39;   was ranked      3 / 5 for this simulation (last regret = 43.7773).
+- Policy &#39;EmpiricalMeans&#39;       was ranked      4 / 5 for this simulation (last regret = 48.0636).
+- Policy &#39;UCB&#39;  was ranked      5 / 5 for this simulation (last regret = 61.1631).
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 12 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 61.67% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_1.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 12 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 61.67% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_3.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 12 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 61.67% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_5.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_5.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_6.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_44_6.png" />
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Another-experiment,-with-just-more-Gaussian-arms">
+<h2>Another experiment, with just more Gaussian arms<a class="headerlink" href="#Another-experiment,-with-just-more-Gaussian-arms" title="Permalink to this headline">¶</a></h2>
+<p>This second experiment will be similar, except we consider more arms. As
+they are all very close to each other, with a gap <span class="math">\(\Delta = 0.05\)</span>,
+it gets much harder!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">REPETITIONS</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">means</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.70</span><span class="p">]</span>
+<span class="n">ENVIRONMENTS</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">means</span><span class="p">]</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">POLICIES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># --- Our algorithm, with two Unsupervised Learning algorithms</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BlackBoxOpt</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Basic UCB1 algorithm</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Thompson sampling algorithm</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- klUCB algorithm, with Gaussian klucb function</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucb</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># --- Duration of the experiment</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+    <span class="c1"># --- Number of repetition of the experiment (to have an average)</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="n">REPETITIONS</span><span class="p">,</span>
+    <span class="c1"># --- Parameters for the use of joblib.Parallel</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="n">N_JOBS</span><span class="p">,</span>    <span class="c1"># = nb of CPU cores</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>      <span class="c1"># Max joblib verbosity</span>
+    <span class="c1"># --- Arms</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="n">ENVIRONMENTS</span><span class="p">,</span>
+    <span class="c1"># --- Algorithms</span>
+    <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="n">POLICIES</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">evaluation2</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of policies in this comparison: 4
+Time horizon: 2000
+Number of repetitions: 20
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Creating a new MAB problem ...
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(0.3, 0.25), G(0.35, 0.25), G(0.4, 0.25), G(0.45, 0.25), G(0.5, 0.25), G(0.55, 0.25), G(0.6, 0.25), G(0.65, 0.25), G(0.7, 0.25)] ...
+ - with &#39;arms&#39; = [G(0.3, 0.25), G(0.35, 0.25), G(0.4, 0.25), G(0.45, 0.25), G(0.5, 0.25), G(0.55, 0.25), G(0.6, 0.25), G(0.65, 0.25), G(0.7, 0.25)]
+ - with &#39;means&#39; = [ 0.3   0.35  0.4   0.45  0.5   0.55  0.6   0.65  0.7 ]
+ - with &#39;nbArms&#39; = 9
+ - with &#39;maxArm&#39; = 0.7
+ - with &#39;minArm&#39; = 0.3
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.2 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+ - with &#39;arms&#39; represented as: $[G(0.3, 0.25), G(0.35, 0.25), G(0.4, 0.25), G(0.45, 0.25), G(0.5, 0.25), G(0.55, 0.25), G(0.6, 0.25), G(0.65,$
+$0.25), G(0.7, 0.25)^*]$
+Number of environments to try: 1
+</pre></div></div>
+</div>
+<div class="section" id="Running-the-experiment">
+<h3>Running the experiment<a class="headerlink" href="#Running-the-experiment" title="Permalink to this headline">¶</a></h3>
+<p>We asked to repeat the experiment <span class="math">\(20\)</span> times, so it will take a
+while…</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">%%</span><span class="k">time</span>
+for envId, env in tqdm(enumerate(evaluation2.envs), desc=&quot;Problems&quot;):
+    # Evaluate just that env
+    evaluation2.startOneEnv(envId, env)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ccc49d4cfd4549efacbc8b97dedba304"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 9, arms: [G(0.3, 0.25), G(0.35, 0.25), G(0.4, 0.25), G(0.45, 0.25), G(0.5, 0.25), G(0.55, 0.25), G(0.6, 0.25), G(0.65, 0.25), G(0.7, 0.25)], minArm: 0.3, maxArm: 0.7)
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;__main__.BlackBoxOpt&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;__main__.BlackBoxOpt&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;Policies.UCB.UCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.UCB.UCB&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {&#39;klucb&#39;: &lt;function klucbGauss at 0x7efdb30d0268&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {&#39;klucb&#39;: &lt;function klucbGauss at 0x7efdb30d0268&gt;}} ...
+
+- Evaluating policy #1/4: BlackBoxOpt(arms_optimizer, RandomForestRegressor) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2ef4ef7684a242a7b532e96381fa3278"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed: 15.4min
+[Parallel(n_jobs=4)]: Done  17 out of  20 | elapsed: 36.7min remaining:  6.5min
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #2/4: UCB ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed: 36.9min finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8f059c8f7d054eac9c5ce19af62696e8"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy UCB after 2000 steps: [3 0 1 8 2 5 4 7 6] ...
+  ==&gt; Optimal arm identification: 85.71% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 60.49% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 90.47% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 91.24% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 33.33% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 68.88% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    0.2s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #3/4: Thompson ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    0.6s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c9cbbdd641fb42edb0715fa540507738"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy Thompson after 2000 steps: [5 1 2 4 0 3 6 7 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 93.94% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 92.31% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 80.82% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    0.3s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #4/4: KL-UCB(Gauss) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    0.7s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0f29cc0e91314c37879840fedbc869e6"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy KL-UCB(Gauss) after 2000 steps: [3 4 1 2 0 6 7 5 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 60.49% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 90.47% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 94.19% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 55.56% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 75.18% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    0.5s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CPU times: user 1.58 s, sys: 508 ms, total: 2.09 s
+Wall time: 36min 56s
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  17 out of  20 | elapsed:    1.2s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    1.3s finished
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Visualizing-the-results">
+<h3>Visualizing the results<a class="headerlink" href="#Visualizing-the-results" title="Permalink to this headline">¶</a></h3>
+<p>Now, we can plot some performance measures, like the regret, the best
+arm selection rate, the average reward etc.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Policy &#39;BlackBoxOpt(arms_optimizer, RandomForestRegressor)&#39;   was ranked      1 / 4 for this simulation (last regret = 101.943).
+- Policy &#39;Thompson&#39;     was ranked      2 / 4 for this simulation (last regret = 109.463).
+- Policy &#39;KL-UCB(Gauss)&#39;        was ranked      3 / 4 for this simulation (last regret = 110.81).
+- Policy &#39;UCB&#39;  was ranked      4 / 4 for this simulation (last regret = 218.572).
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.2 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_1.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.2 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_3.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.2 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_5.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_5.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_6.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_54_6.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Very-good-performance!">
+<h3>Very good performance!<a class="headerlink" href="#Very-good-performance!" title="Permalink to this headline">¶</a></h3>
+<p>Whoo, on this last experiment, the <code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> policy works way
+better than the three other policies !!</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Another-experiment,-with-Bernoulli-arms">
+<h2>Another experiment, with Bernoulli arms<a class="headerlink" href="#Another-experiment,-with-Bernoulli-arms" title="Permalink to this headline">¶</a></h2>
+<p>Let also try the same algorithms but on Bernoulli arms.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">REPETITIONS</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">means</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.30</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.70</span><span class="p">]</span>
+<span class="n">ENVIRONMENTS</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="n">Bernoulli</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">means</span><span class="p">]</span> <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">klucbBern</span> <span class="o">=</span> <span class="n">klucb_mapping</span><span class="p">[</span><span class="s1">&#39;Bernoulli&#39;</span><span class="p">]</span>
+
+<span class="n">POLICIES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="c1"># --- Our algorithm, with two Unsupervised Learning algorithms</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BlackBoxOpt</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Basic UCB1 algorithm</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Thompson sampling algorithm</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- klUCB algorithm, with Bernoulli klucb function</span>
+        <span class="c1"># http://banditslilian.gforge.inria.fr/docs/Arms.kullback.html#Arms.kullback.klucbBern</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucbBern</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># --- Duration of the experiment</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+    <span class="c1"># --- Number of repetition of the experiment (to have an average)</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="n">REPETITIONS</span><span class="p">,</span>
+    <span class="c1"># --- Parameters for the use of joblib.Parallel</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="n">N_JOBS</span><span class="p">,</span>    <span class="c1"># = nb of CPU cores</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>      <span class="c1"># Max joblib verbosity</span>
+    <span class="c1"># --- Arms</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="n">ENVIRONMENTS</span><span class="p">,</span>
+    <span class="c1"># --- Algorithms</span>
+    <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="n">POLICIES</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">evaluation3</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of policies in this comparison: 4
+Time horizon: 2000
+Number of repetitions: 20
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Creating a new MAB problem ...
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [B(0.3), B(0.35), B(0.4), B(0.45), B(0.5), B(0.55), B(0.6), B(0.65), B(0.7)] ...
+ - with &#39;arms&#39; = [B(0.3), B(0.35), B(0.4), B(0.45), B(0.5), B(0.55), B(0.6), B(0.65), B(0.7)]
+ - with &#39;means&#39; = [ 0.3   0.35  0.4   0.45  0.5   0.55  0.6   0.65  0.7 ]
+ - with &#39;nbArms&#39; = 9
+ - with &#39;maxArm&#39; = 0.7
+ - with &#39;minArm&#39; = 0.3
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 24.3 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+ - with &#39;arms&#39; represented as: $[B(0.3), B(0.35), B(0.4), B(0.45), B(0.5), B(0.55), B(0.6), B(0.65), B(0.7)^*]$
+Number of environments to try: 1
+</pre></div></div>
+</div>
+<div class="section" id="Running-the-experiment">
+<h3>Running the experiment<a class="headerlink" href="#Running-the-experiment" title="Permalink to this headline">¶</a></h3>
+<p>We asked to repeat the experiment <span class="math">\(20\)</span> times, so it will take a
+while…</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">%%</span><span class="k">time</span>
+for envId, env in tqdm(enumerate(evaluation3.envs), desc=&quot;Problems&quot;):
+    # Evaluate just that env
+    evaluation3.startOneEnv(envId, env)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b601a646e5964967a8f812fa692d967e"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 9, arms: [B(0.3), B(0.35), B(0.4), B(0.45), B(0.5), B(0.55), B(0.6), B(0.65), B(0.7)], minArm: 0.3, maxArm: 0.7)
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;__main__.BlackBoxOpt&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;__main__.BlackBoxOpt&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;Policies.UCB.UCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.UCB.UCB&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {&#39;klucb&#39;: &lt;built-in function klucbBern&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {&#39;klucb&#39;: &lt;built-in function klucbBern&gt;}} ...
+
+- Evaluating policy #1/4: BlackBoxOpt(arms_optimizer, RandomForestRegressor) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "84392a8b1ddf479190af2e37b88f15c7"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed: 15.2min
+[Parallel(n_jobs=4)]: Done  17 out of  20 | elapsed: 35.6min remaining:  6.3min
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #2/4: UCB ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed: 36.0min finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b95873ae7d4a42d4a0e874fdac48152a"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy UCB after 2000 steps: [0 4 3 2 1 6 5 8 7] ...
+  ==&gt; Optimal arm identification: 92.86% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 96.29% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 99.04% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 44.44% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 77.54% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    0.3s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #3/4: Thompson ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    0.8s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f7245c4c0e70429e8238717e772e1cb6"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy Thompson after 2000 steps: [0 3 1 4 6 5 2 7 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 75.31% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.77% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 98.75% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 84.87% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    0.3s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+- Evaluating policy #4/4: KL-UCB(Bern) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    0.9s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3184fa2f29c341fa9c99070b98f1dbf6"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy KL-UCB(Bern) after 2000 steps: [0 2 1 4 3 5 6 7 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 90.12% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 99.92% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 91.95% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    0.5s
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CPU times: user 1.5 s, sys: 560 ms, total: 2.06 s
+Wall time: 36min 5s
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done  17 out of  20 | elapsed:    1.6s remaining:    0.3s
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    1.7s finished
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Visualizing-the-results">
+<h3>Visualizing the results<a class="headerlink" href="#Visualizing-the-results" title="Permalink to this headline">¶</a></h3>
+<p>Now, we can plot some performance measures, like the regret, the best
+arm selection rate, the average reward etc.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Policy &#39;BlackBoxOpt(arms_optimizer, RandomForestRegressor)&#39;   was ranked      1 / 4 for this simulation (last regret = 46.7).
+- Policy &#39;Thompson&#39;     was ranked      2 / 4 for this simulation (last regret = 65.35).
+- Policy &#39;KL-UCB(Bern)&#39; was ranked      3 / 4 for this simulation (last regret = 85.6).
+- Policy &#39;UCB&#39;  was ranked      4 / 4 for this simulation (last regret = 190.35).
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 24.3 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_1.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 24.3 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_3.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 24.3 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 68.89% ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_5.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_5.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_6.png" src="../_images/notebooks_BlackBox_Bayesian_Optimization_for_Bandit_problems_65_6.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Very-good-performances-also!">
+<h3>Very good performances also!<a class="headerlink" href="#Very-good-performances-also!" title="Permalink to this headline">¶</a></h3>
+<p>We can see that <code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> with <code class="docutils literal"><span class="pre">RandomForestRegressor</span></code> also has
+very good performances on Bernoulli problems!</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Conclusion">
+<h2>Conclusion<a class="headerlink" href="#Conclusion" title="Permalink to this headline">¶</a></h2>
+<p>This small simulation shows that with the appropriate tweaking of
+parameters, and on reasonably easy Gaussian Multi-Armed Bandit problems,
+one can use a <strong>Black-Box Bayesian</strong> optimization algorithm, with an
+“ask-and-tell” API to make it <em>on-line</em>.</p>
+<p>Without the need of any parameter tweaking or model selection steps, the
+<code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> policy was quite efficient (using the default
+<code class="docutils literal"><span class="pre">`Optimizer</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.Optimizer">https://scikit-optimize.github.io/learning/index.html#skopt.Optimizer</a>&gt;`__
+and the
+<code class="docutils literal"><span class="pre">`RandomForestRegressor</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/index.html#skopt.learning.RandomForestRegressor">https://scikit-optimize.github.io/index.html#skopt.learning.RandomForestRegressor</a>&gt;`__,
+from <code class="docutils literal"><span class="pre">`skopt</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/">https://scikit-optimize.github.io/</a>&gt;`__ package).</p>
+<p>When comparing in terms of mean rewards, accumulated rewards, best-arm
+selection, and regret (loss against the best fixed-arm policy), this
+<code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> algorithm performs as well as the others.</p>
+<div class="section" id="Non-logarithmic-regret-?">
+<h3>Non-logarithmic regret ?<a class="headerlink" href="#Non-logarithmic-regret-?" title="Permalink to this headline">¶</a></h3>
+<p>But in terms of regret, it seems that the profile for <code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> is
+<strong>not</strong> <em>asymptotically logarithmic</em>, contrarily to <code class="docutils literal"><span class="pre">Thompson</span></code> and
+<code class="docutils literal"><span class="pre">klUCB</span></code> (<em>cf.</em> see the first curve above, at the end on the right).</p>
+<ul class="simple">
+<li>Note that the horizon is not that large, <span class="math">\(T = 2000\)</span> is really
+not that very long.</li>
+<li>And note that we didn’t try any other regressor (I tried them
+elsewhere:
+<code class="docutils literal"><span class="pre">`ExtraTreesRegressor</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.ExtraTreesRegressor">https://scikit-optimize.github.io/learning/index.html#skopt.learning.ExtraTreesRegressor</a>&gt;`__
+worked similarly but it is slower, and
+<code class="docutils literal"><span class="pre">`GaussianProcessRegressor</span></code> &lt;<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.GaussianProcessRegressor">https://scikit-optimize.github.io/learning/index.html#skopt.learning.GaussianProcessRegressor</a>&gt;`__
+was failing, don’t really know why. I think it is not designed to
+work with Categorical inputs.</li>
+</ul>
+</div>
+<div class="section" id="Comparing-time-complexity">
+<h3>Comparing <em>time complexity</em><a class="headerlink" href="#Comparing-time-complexity" title="Permalink to this headline">¶</a></h3>
+<p>Another aspect is the <em>time complexity</em> of the <code class="docutils literal"><span class="pre">BlackBoxOpt</span></code> policy.
+In the simulation above, we saw that it took <strong>way much time</strong> than the
+online bandit algorithms, like <code class="docutils literal"><span class="pre">UCB</span></code>, <code class="docutils literal"><span class="pre">klUCB</span></code> or <code class="docutils literal"><span class="pre">Thompson</span></code>
+sampling.</p>
+<hr class="docutils" />
+<p>This notebook is here to illustrate my
+<a class="reference external" href="http://banditslilian.gforge.inria.fr/">AlgoBandits</a> library, for
+which a complete documentation is available, <a class="reference external" href="http://banditslilian.gforge.inria.fr/">here at
+http://banditslilian.gforge.inria.fr/</a>.</p>
+<blockquote>
+<div>See the discussion on <code class="docutils literal"><span class="pre">`skopt</span></code> GitHub issues
+#407 &lt;<a class="reference external" href="https://github.com/scikit-optimize/scikit-optimize/issues/407">https://github.com/scikit-optimize/scikit-optimize/issues/407</a>&gt;`__.</div></blockquote>
+<blockquote>
+<div>That’s it for this demo! See you, folks!</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html" class="btn btn-neutral float-right" title="Table of Contents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Unsupervised_Learning_for_Bandit_problem.html" class="btn btn-neutral" title="Table of Contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:12m:29s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>How to run the code ? &mdash; AlgoBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="AlgoBandits 0.9.1 documentation" href="index.html"/>
+        <link rel="next" title="List of research publications using Lilian Besson’s AlgoBandits project" href="PublicationsWithAlgoBandits.html"/>
+        <link rel="prev" title="SMPyBandits" href="README.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AlgoBandits
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to run the code ?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Required-modules">Required modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Running-some-simulations">Running some simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Single-player">Single player</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Single-player">Single player</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Single-player,-aggregating-algorithms">Single player, aggregating algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Single-player,-doubling-trick-algorithms">Single player, doubling-trick algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Single-player,-with-Sparse-Stochastic-Bandit">Single player, with Sparse Stochastic Bandit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Single-player,-with-Markovian-problem">Single player, with Markovian problem</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Multi-Player">Multi-Player</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Multi-Player,-one-algorithm">Multi-Player, one algorithm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Multi-Player,-comparing-different-algorithms">Multi-Player, comparing different algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Using-env-variables-?">Using <code class="docutils literal"><span class="pre">env</span></code> variables ?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#In-a-virtualenv-?">In a <code class="docutils literal"><span class="pre">virtualenv</span></code> ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Or-with-a-Makefile-?">Or with a <code class="docutils literal"><span class="pre">Makefile</span></code> ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Or-within-a-Jupyter-notebook-?">Or within a Jupyter notebook ?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#📜-License-?-GitHub-license">📜 License ? </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PublicationsWithAlgoBandits.html">List of research publications using Lilian Besson&#8217;s AlgoBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/list.html">List of notebooks for AlgoBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AlgoBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>How to run the code ?</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/How_to_run_the_code.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="How-to-run-the-code-?">
+<h1>How to run the code ?<a class="headerlink" href="#How-to-run-the-code-?" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>This short page explains quickly how to install the requirements for this project, and then how to use the code to run simulations.</div></blockquote>
+<div class="section" id="Required-modules">
+<h2>Required modules<a class="headerlink" href="#Required-modules" title="Permalink to this headline">¶</a></h2>
+<p><em>First</em>, install the requirements, globally (or with a virtualenv, <a class="reference external" href="#In-a-virtualenv-?">see below</a>):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -r requirements.txt
+</pre></div>
+</div>
+<blockquote>
+<div>Some requirements are only needed for one policy (mostly the experimental ones), and for the documentation.</div></blockquote>
+</div>
+<div class="section" id="Running-some-simulations">
+<h2>Running some simulations<a class="headerlink" href="#Running-some-simulations" title="Permalink to this headline">¶</a></h2>
+<p><em>Then</em>, it should be very straight forward to run some experiment.
+This will run the simulation, average them (by <code class="docutils literal"><span class="pre">repetitions</span></code>) and plot the results.</p>
+<div class="section" id="Single-player">
+<h3>Single player<a class="headerlink" href="#Single-player" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Single-player">
+<h4><a class="reference external" href="main.py">Single player</a><a class="headerlink" href="#Single-player" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main.py
+<span class="c1"># or</span>
+make main
+</pre></div>
+</div>
+</div>
+<div class="section" id="Single-player,-aggregating-algorithms">
+<h4><a class="reference external" href="configuration_comparing_aggregation_algorithms.py">Single player, aggregating algorithms</a><a class="headerlink" href="#Single-player,-aggregating-algorithms" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main.py configuration_comparing_aggregation_algorithms
+<span class="c1"># or</span>
+make comparing_aggregation_algorithms
+</pre></div>
+</div>
+<blockquote>
+<div>See these explainations: <a class="reference external" href="Aggregation.html">Aggregation.md</a></div></blockquote>
+</div>
+<div class="section" id="Single-player,-doubling-trick-algorithms">
+<h4><a class="reference external" href="configuration_comparing_doubling_algorithms.py">Single player, doubling-trick algorithms</a><a class="headerlink" href="#Single-player,-doubling-trick-algorithms" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main.py configuration_comparing_doubling_algorithms
+<span class="c1"># or</span>
+make comparing_doubling_algorithms
+</pre></div>
+</div>
+<blockquote>
+<div>See these explainations: <a class="reference external" href="DoublingTrick.html">DoublingTrick.md</a></div></blockquote>
+</div>
+<div class="section" id="Single-player,-with-Sparse-Stochastic-Bandit">
+<h4><a class="reference external" href="configuration_sparse.py">Single player, with Sparse Stochastic Bandit</a><a class="headerlink" href="#Single-player,-with-Sparse-Stochastic-Bandit" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main.py configuration_sparse
+<span class="c1"># or</span>
+make sparse
+</pre></div>
+</div>
+</div>
+<div class="section" id="Single-player,-with-Markovian-problem">
+<h4><a class="reference external" href="configuration_markovian.py">Single player, with Markovian problem</a><a class="headerlink" href="#Single-player,-with-Markovian-problem" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main.py configuration_markovian
+<span class="c1"># or</span>
+make markovian
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Multi-Player">
+<h3>Multi-Player<a class="headerlink" href="#Multi-Player" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="Multi-Player,-one-algorithm">
+<h4><a class="reference external" href="main_multiplayers.py">Multi-Player, one algorithm</a><a class="headerlink" href="#Multi-Player,-one-algorithm" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main_multiplayers.py
+<span class="c1"># or</span>
+make multi
+</pre></div>
+</div>
+</div>
+<div class="section" id="Multi-Player,-comparing-different-algorithms">
+<h4><a class="reference external" href="main_multiplayers_more.py">Multi-Player, comparing different algorithms</a><a class="headerlink" href="#Multi-Player,-comparing-different-algorithms" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python main_multiplayers_more.py
+<span class="c1"># or</span>
+make moremulti
+</pre></div>
+</div>
+<blockquote>
+<div>See these explainations: <a class="reference external" href="MultiPlayers.html">MultiPlayers.md</a></div></blockquote>
+</div>
+</div>
+<div class="section" id="Using-env-variables-?">
+<h3>Using <code class="docutils literal"><span class="pre">env</span></code> variables ?<a class="headerlink" href="#Using-env-variables-?" title="Permalink to this headline">¶</a></h3>
+<p>For all simulations, I recently added the support for <em>environment variable</em>, to ease the customization of the main parameters of every simulations.</p>
+<p>For instance, if the <a class="reference external" href="configuration_multiplayers_more.py"><code class="docutils literal"><span class="pre">configuration_multiplayers_more.py</span></code></a> file is correct,
+then you can customize to use <code class="docutils literal"><span class="pre">N=4</span></code> repetitions, for horizon <code class="docutils literal"><span class="pre">T=1000</span></code> and <code class="docutils literal"><span class="pre">M=3</span></code> players, parallelized with <code class="docutils literal"><span class="pre">N_JOBS=4</span></code> jobs (use the number of cores of your CPU for optimal performance):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nv">N</span><span class="o">=</span><span class="m">4</span> <span class="nv">T</span><span class="o">=</span><span class="m">1000</span> <span class="nv">M</span><span class="o">=</span><span class="m">3</span> <span class="nv">DEBUG</span><span class="o">=</span>True <span class="nv">SAVEALL</span><span class="o">=</span>False <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> make moremulti
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="In-a-virtualenv-?">
+<h2>In a <a class="reference external" href="https://virtualenv.pypa.io/en/stable/"><code class="docutils literal"><span class="pre">virtualenv</span></code></a> ?<a class="headerlink" href="#In-a-virtualenv-?" title="Permalink to this headline">¶</a></h2>
+<p>If you prefer to not install the requirements globally on your system-wide Python setup, you can (and should) use <a class="reference external" href="https://virtualenv.pypa.io/en/stable/"><code class="docutils literal"><span class="pre">virtualenv</span></code></a>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ virtualenv .
+Using base prefix <span class="s1">&#39;/usr&#39;</span>
+New python executable in /your/path/to/AlgoBandits/bin/python3
+Also creating executable in /your/path/to/AlgoBandits/bin/python
+Installing setuptools, pip, wheel...done.
+$ <span class="nb">source</span> bin/activate  <span class="c1"># in bash, use activate.csh or activate.fish if needed</span>
+$ <span class="nb">type</span> pip  <span class="c1"># just to check</span>
+pip is /your/path/to/AlgoBandits/bin/pip
+$ pip install -r requirements.txt
+Collecting numpy <span class="o">(</span>from -r requirements.txt <span class="o">(</span>line <span class="m">5</span><span class="o">))</span>
+...
+Installing collected packages: numpy, scipy, cycler, pytz, python-dateutil, matplotlib, joblib, pandas, seaborn, tqdm, sphinx-rtd-theme, commonmark, docutils, recommonmark
+Successfully installed commonmark-0.5.4 cycler-0.10.0 docutils-0.13.1 joblib-0.11 matplotlib-2.0.0 numpy-1.12.1 pandas-0.19.2 python-dateutil-2.6.0 pytz-2016.10 recommonmark-0.4.0 scipy-0.19.0 seaborn-0.7.1 sphinx-rtd-theme-0.2.4 tqdm-4.11.2
+</pre></div>
+</div>
+<p>And then be sure to use the virtualenv binary for Python, <code class="docutils literal"><span class="pre">bin/python</span></code>, instead of the system-wide one, to launch the experiments (the Makefile should use it by default, if <code class="docutils literal"><span class="pre">source</span> <span class="pre">bin/activate</span></code> was executed).</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="Or-with-a-Makefile-?">
+<h2>Or with a <a class="reference external" href="Makefile"><code class="docutils literal"><span class="pre">Makefile</span></code></a> ?<a class="headerlink" href="#Or-with-a-Makefile-?" title="Permalink to this headline">¶</a></h2>
+<p>You can also use the provided <a class="reference external" href="Makefile"><code class="docutils literal"><span class="pre">Makefile</span></code></a> file to do this simply:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>make install       <span class="c1"># install the requirements</span>
+make multiplayers  <span class="c1"># run and log the main.py script</span>
+</pre></div>
+</div>
+<p>It can be used to check <a class="reference external" href="logs/main_pylint_log.txt">the quality of the code</a> with <a class="reference external" href="https://www.pylint.org/">pylint</a>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>make lint lint3  <span class="c1"># check the code with pylint</span>
+</pre></div>
+</div>
+<p>It is also used to clean the code, build the doc, send the doc, etc. (This should not be used by others)</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="Or-within-a-Jupyter-notebook-?">
+<h2>Or within a <a class="reference external" href="https://jupyter.org/">Jupyter notebook</a> ?<a class="headerlink" href="#Or-within-a-Jupyter-notebook-?" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>I am writing some <a class="reference external" href="https://jupyter.org/">Jupyter notebooks</a>, in <a class="reference external" href="notebooks/">this folder (<code class="docutils literal"><span class="pre">notebooks/</span></code>)</a>, so if you want to do the same for your small experiments, you can be inspired by the few notebooks already written.</div></blockquote>
+<hr class="docutils" />
+<div class="section" id="📜-License-?-GitHub-license">
+<h3>📜 License ? <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg" /></a><a class="headerlink" href="#📜-License-?-GitHub-license" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://lbesson.mit-license.org/">MIT Licensed</a> (file <a class="reference external" href="LICENSE">LICENSE</a>).</p>
+<p>© 2016-2018 <a class="reference external" href="https://GitHub.com/Naereen">Lilian Besson</a>.</p>
+<p><a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
+<a class="reference external" href="https://GitHub.com/Naereen/ama"><img alt="Ask Me Anything !" src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/"><img alt="Analytics" src="https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel" /></a>
+<img alt="PyPI implementation" src="https://img.shields.io/pypi/implementation/ansicolortags.svg" />
+<img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/ansicolortags.svg" />
+<a class="reference external" href="http://ForTheBadge.com"><img alt="ForTheBadge uses-badges" src="http://ForTheBadge.com/images/badges/uses-badges.svg" /></a>
+<a class="reference external" href="https://GitHub.com/"><img alt="ForTheBadge uses-git" src="http://ForTheBadge.com/images/badges/uses-git.svg" /></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="PublicationsWithAlgoBandits.html" class="btn btn-neutral float-right" title="List of research publications using Lilian Besson’s AlgoBandits project" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="README.html" class="btn btn-neutral" title="SMPyBandits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:12m:29s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
