@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Policies package &mdash; SMPyBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../index.html"/>
+        <link rel="up" title="AlgoBandits.git" href="modules.html"/>
+        <link rel="next" title="Policies.Posterior package" href="Policies.Posterior.html"/>
+        <link rel="prev" title="Environment.usetqdm module" href="Environment.usetqdm.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">AlgoBandits.git</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Policies package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Posterior.html">Policies.Posterior package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Policies.AdBandits.html">Policies.AdBandits module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Aggregator.html">Policies.Aggregator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ApproximatedFHGittins.html">Policies.ApproximatedFHGittins module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BESA.html">Policies.BESA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BasePolicy.html">Policies.BasePolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BayesUCB.html">Policies.BayesUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BayesianIndexPolicy.html">Policies.BayesianIndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BlackBoxOpt.html">Policies.BlackBoxOpt module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BoltzmannGumbel.html">Policies.BoltzmannGumbel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedUCB.html">Policies.DiscountedUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DoublingTrickWrapper.html">Policies.DoublingTrickWrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EmpiricalMeans.html">Policies.EmpiricalMeans module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonDecreasing.html">Policies.EpsilonDecreasing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonDecreasingMEGA.html">Policies.EpsilonDecreasingMEGA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonExpDecreasing.html">Policies.EpsilonExpDecreasing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonFirst.html">Policies.EpsilonFirst module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonGreedy.html">Policies.EpsilonGreedy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3.html">Policies.Exp3 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.KLempUCB.html">Policies.KLempUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSS.html">Policies.MOSS module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSAnytime.html">Policies.MOSSAnytime module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSExperimental.html">Policies.MOSSExperimental module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowRestart.html">Policies.SlidingWindowRestart module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowUCB.html">Policies.SlidingWindowUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Softmax.html">Policies.Softmax module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseUCB.html">Policies.SparseUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseWrapper.html">Policies.SparseWrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseklUCB.html">Policies.SparseklUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.TakeFixedArm.html">Policies.TakeFixedArm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.TakeRandomFixedArm.html">Policies.TakeRandomFixedArm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Thompson.html">Policies.Thompson module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ThompsonRobust.html">Policies.ThompsonRobust module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCB.html">Policies.UCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBH.html">Policies.UCBH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBV.html">Policies.UCBV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBVtuned.html">Policies.UCBVtuned module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBalpha.html">Policies.UCBalpha module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBdagger.html">Policies.UCBdagger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBjulia.html">Policies.UCBjulia module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10.html">Policies.UCBlog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Uniform.html">Policies.Uniform module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UniformOnSome.html">Policies.UniformOnSome module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UnsupervisedLearning.html">Policies.UnsupervisedLearning module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.WrapRange.html">Policies.WrapRange module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCB.html">Policies.klUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBH.html">Policies.klUCBH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBlog10.html">Policies.klUCBlog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog10.html">Policies.klUCBloglog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.usenumba.html">Policies.usenumba module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conf.html">conf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_aggregation_algorithms.html">configuration_comparing_aggregation_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_doubling_algorithms.html">configuration_comparing_doubling_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_markovian.html">configuration_markovian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse.html">configuration_sparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers.html">main_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers_more.html">main_multiplayers_more module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_sparse_multiplayers.html">main_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="policy_server.html">policy_server module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">AlgoBandits.git</a> &raquo;</li>
+        
+      <li>Policies package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Policies-package">
+<h1>Policies package<a class="headerlink" href="#Policies-package" title="Permalink to this headline">¶</a></h1>
+<p>Policies module : contains various bandits algorithms:</p>
+<ul class="simple">
+<li>&#8220;Stupid&#8221; algorithms: <a class="reference internal" href="Policies.Uniform.html#module-Policies.Uniform" title="Policies.Uniform"><code class="xref py py-class docutils literal"><span class="pre">Uniform</span></code></a>, <a class="reference internal" href="Policies.UniformOnSome.html#module-Policies.UniformOnSome" title="Policies.UniformOnSome"><code class="xref py py-class docutils literal"><span class="pre">UniformOnSome</span></code></a>, <a class="reference internal" href="Policies.TakeFixedArm.html#module-Policies.TakeFixedArm" title="Policies.TakeFixedArm"><code class="xref py py-class docutils literal"><span class="pre">TakeFixedArm</span></code></a>, <a class="reference internal" href="Policies.TakeRandomFixedArm.html#module-Policies.TakeRandomFixedArm" title="Policies.TakeRandomFixedArm"><code class="xref py py-class docutils literal"><span class="pre">TakeRandomFixedArm</span></code></a>,</li>
+<li>Greedy algorithms: <a class="reference internal" href="Policies.EpsilonGreedy.html#module-Policies.EpsilonGreedy" title="Policies.EpsilonGreedy"><code class="xref py py-class docutils literal"><span class="pre">EpsilonGreedy</span></code></a>, <a class="reference internal" href="Policies.EpsilonFirst.html#module-Policies.EpsilonFirst" title="Policies.EpsilonFirst"><code class="xref py py-class docutils literal"><span class="pre">EpsilonFirst</span></code></a>, <a class="reference internal" href="Policies.EpsilonDecreasing.html#module-Policies.EpsilonDecreasing" title="Policies.EpsilonDecreasing"><code class="xref py py-class docutils literal"><span class="pre">EpsilonDecreasing</span></code></a>,</li>
+<li>And two variants of the Explore-Then-Commit policy: <a class="reference internal" href="Policies.ExploreThenCommit.html#Policies.ExploreThenCommit.ETC_KnownGap" title="Policies.ExploreThenCommit.ETC_KnownGap"><code class="xref py py-class docutils literal"><span class="pre">ExploreThenCommit.ETC_KnownGap</span></code></a>, <a class="reference internal" href="Policies.ExploreThenCommit.html#Policies.ExploreThenCommit.ETC_RandomStop" title="Policies.ExploreThenCommit.ETC_RandomStop"><code class="xref py py-class docutils literal"><span class="pre">ExploreThenCommit.ETC_RandomStop</span></code></a>,</li>
+<li>Probabilistic weighting algorithms: <a class="reference internal" href="Policies.Hedge.html#module-Policies.Hedge" title="Policies.Hedge"><code class="xref py py-class docutils literal"><span class="pre">Hedge</span></code></a>, <a class="reference internal" href="Policies.Softmax.html#module-Policies.Softmax" title="Policies.Softmax"><code class="xref py py-class docutils literal"><span class="pre">Softmax</span></code></a>, <a class="reference internal" href="Policies.Softmax.html#Policies.Softmax.SoftmaxDecreasing" title="Policies.Softmax.SoftmaxDecreasing"><code class="xref py py-class docutils literal"><span class="pre">Softmax.SoftmaxDecreasing</span></code></a>, <a class="reference internal" href="Policies.Softmax.html#Policies.Softmax.SoftMix" title="Policies.Softmax.SoftMix"><code class="xref py py-class docutils literal"><span class="pre">Softmax.SoftMix</span></code></a>, <a class="reference internal" href="Policies.Softmax.html#Policies.Softmax.SoftmaxWithHorizon" title="Policies.Softmax.SoftmaxWithHorizon"><code class="xref py py-class docutils literal"><span class="pre">Softmax.SoftmaxWithHorizon</span></code></a>, <a class="reference internal" href="Policies.Exp3.html#module-Policies.Exp3" title="Policies.Exp3"><code class="xref py py-class docutils literal"><span class="pre">Exp3</span></code></a>, <a class="reference internal" href="Policies.Exp3.html#Policies.Exp3.Exp3Decreasing" title="Policies.Exp3.Exp3Decreasing"><code class="xref py py-class docutils literal"><span class="pre">Exp3.Exp3Decreasing</span></code></a>, <a class="reference internal" href="Policies.Exp3.html#Policies.Exp3.Exp3SoftMix" title="Policies.Exp3.Exp3SoftMix"><code class="xref py py-class docutils literal"><span class="pre">Exp3.Exp3SoftMix</span></code></a>, <a class="reference internal" href="Policies.Exp3.html#Policies.Exp3.Exp3WithHorizon" title="Policies.Exp3.Exp3WithHorizon"><code class="xref py py-class docutils literal"><span class="pre">Exp3.Exp3WithHorizon</span></code></a>, <a class="reference internal" href="Policies.Exp3.html#Policies.Exp3.Exp3ELM" title="Policies.Exp3.Exp3ELM"><code class="xref py py-class docutils literal"><span class="pre">Exp3.Exp3ELM</span></code></a>, <a class="reference internal" href="Policies.ProbabilityPursuit.html#module-Policies.ProbabilityPursuit" title="Policies.ProbabilityPursuit"><code class="xref py py-class docutils literal"><span class="pre">ProbabilityPursuit</span></code></a>, <a class="reference internal" href="Policies.Exp3PlusPlus.html#module-Policies.Exp3PlusPlus" title="Policies.Exp3PlusPlus"><code class="xref py py-class docutils literal"><span class="pre">Exp3PlusPlus</span></code></a>, and a smart variant <a class="reference internal" href="Policies.BoltzmannGumbel.html#module-Policies.BoltzmannGumbel" title="Policies.BoltzmannGumbel"><code class="xref py py-class docutils literal"><span class="pre">BoltzmannGumbel</span></code></a>,</li>
+<li>Index based UCB algorithms: <a class="reference internal" href="Policies.EmpiricalMeans.html#module-Policies.EmpiricalMeans" title="Policies.EmpiricalMeans"><code class="xref py py-class docutils literal"><span class="pre">EmpiricalMeans</span></code></a>, <a class="reference internal" href="Policies.UCB.html#module-Policies.UCB" title="Policies.UCB"><code class="xref py py-class docutils literal"><span class="pre">UCB</span></code></a>, <a class="reference internal" href="Policies.UCBlog10.html#module-Policies.UCBlog10" title="Policies.UCBlog10"><code class="xref py py-class docutils literal"><span class="pre">UCBlog10</span></code></a>, <a class="reference internal" href="Policies.UCBwrong.html#module-Policies.UCBwrong" title="Policies.UCBwrong"><code class="xref py py-class docutils literal"><span class="pre">UCBwrong</span></code></a>, <a class="reference internal" href="Policies.UCBlog10alpha.html#module-Policies.UCBlog10alpha" title="Policies.UCBlog10alpha"><code class="xref py py-class docutils literal"><span class="pre">UCBlog10alpha</span></code></a>, <a class="reference internal" href="Policies.UCBalpha.html#module-Policies.UCBalpha" title="Policies.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">UCBalpha</span></code></a>, <a class="reference internal" href="Policies.UCBmin.html#module-Policies.UCBmin" title="Policies.UCBmin"><code class="xref py py-class docutils literal"><span class="pre">UCBmin</span></code></a>, <a class="reference internal" href="Policies.UCBplus.html#module-Policies.UCBplus" title="Policies.UCBplus"><code class="xref py py-class docutils literal"><span class="pre">UCBplus</span></code></a>, <a class="reference internal" href="Policies.UCBrandomInit.html#module-Policies.UCBrandomInit" title="Policies.UCBrandomInit"><code class="xref py py-class docutils literal"><span class="pre">UCBrandomInit</span></code></a>, <a class="reference internal" href="Policies.UCBV.html#module-Policies.UCBV" title="Policies.UCBV"><code class="xref py py-class docutils literal"><span class="pre">UCBV</span></code></a>, <a class="reference internal" href="Policies.UCBVtuned.html#module-Policies.UCBVtuned" title="Policies.UCBVtuned"><code class="xref py py-class docutils literal"><span class="pre">UCBVtuned</span></code></a>, <a class="reference internal" href="Policies.UCBH.html#module-Policies.UCBH" title="Policies.UCBH"><code class="xref py py-class docutils literal"><span class="pre">UCBH</span></code></a>, <a class="reference internal" href="Policies.CPUCB.html#module-Policies.CPUCB" title="Policies.CPUCB"><code class="xref py py-class docutils literal"><span class="pre">CPUCB</span></code></a>,</li>
+<li>Index based MOSS algorithms: <a class="reference internal" href="Policies.MOSS.html#module-Policies.MOSS" title="Policies.MOSS"><code class="xref py py-class docutils literal"><span class="pre">MOSS</span></code></a>, <a class="reference internal" href="Policies.MOSSH.html#module-Policies.MOSSH" title="Policies.MOSSH"><code class="xref py py-class docutils literal"><span class="pre">MOSSH</span></code></a>, <a class="reference internal" href="Policies.MOSSAnytime.html#module-Policies.MOSSAnytime" title="Policies.MOSSAnytime"><code class="xref py py-class docutils literal"><span class="pre">MOSSAnytime</span></code></a>, <a class="reference internal" href="Policies.MOSSExperimental.html#module-Policies.MOSSExperimental" title="Policies.MOSSExperimental"><code class="xref py py-class docutils literal"><span class="pre">MOSSExperimental</span></code></a>,</li>
+<li>Bayesian algorithms: <a class="reference internal" href="Policies.Thompson.html#module-Policies.Thompson" title="Policies.Thompson"><code class="xref py py-class docutils literal"><span class="pre">Thompson</span></code></a>, <a class="reference internal" href="Policies.ThompsonRobust.html#module-Policies.ThompsonRobust" title="Policies.ThompsonRobust"><code class="xref py py-class docutils literal"><span class="pre">ThompsonRobust</span></code></a>, <a class="reference internal" href="Policies.BayesUCB.html#module-Policies.BayesUCB" title="Policies.BayesUCB"><code class="xref py py-class docutils literal"><span class="pre">BayesUCB</span></code></a>,</li>
+<li>Based on Kullback-Leibler divergence: <a class="reference internal" href="Policies.klUCB.html#module-Policies.klUCB" title="Policies.klUCB"><code class="xref py py-class docutils literal"><span class="pre">klUCB</span></code></a>, <a class="reference internal" href="Policies.klUCBlog10.html#module-Policies.klUCBlog10" title="Policies.klUCBlog10"><code class="xref py py-class docutils literal"><span class="pre">klUCBlog10</span></code></a>, <a class="reference internal" href="Policies.klUCBloglog.html#module-Policies.klUCBloglog" title="Policies.klUCBloglog"><code class="xref py py-class docutils literal"><span class="pre">klUCBloglog</span></code></a>, <a class="reference internal" href="Policies.klUCBloglog10.html#module-Policies.klUCBloglog10" title="Policies.klUCBloglog10"><code class="xref py py-class docutils literal"><span class="pre">klUCBloglog10</span></code></a>, <a class="reference internal" href="Policies.klUCBPlus.html#module-Policies.klUCBPlus" title="Policies.klUCBPlus"><code class="xref py py-class docutils literal"><span class="pre">klUCBPlus</span></code></a>, <a class="reference internal" href="Policies.klUCBH.html#module-Policies.klUCBH" title="Policies.klUCBH"><code class="xref py py-class docutils literal"><span class="pre">klUCBH</span></code></a>, <a class="reference internal" href="Policies.klUCBHPlus.html#module-Policies.klUCBHPlus" title="Policies.klUCBHPlus"><code class="xref py py-class docutils literal"><span class="pre">klUCBHPlus</span></code></a>, <a class="reference internal" href="Policies.klUCBPlusPlus.html#module-Policies.klUCBPlusPlus" title="Policies.klUCBPlusPlus"><code class="xref py py-class docutils literal"><span class="pre">klUCBPlusPlus</span></code></a>,</li>
+<li>Empirical KL-UCB algorithm: <a class="reference internal" href="Policies.KLempUCB.html#module-Policies.KLempUCB" title="Policies.KLempUCB"><code class="xref py py-class docutils literal"><span class="pre">KLempUCB</span></code></a> (FIXME),</li>
+<li>Other index algorithms: <a class="reference internal" href="Policies.DMED.html#module-Policies.DMED" title="Policies.DMED"><code class="xref py py-class docutils literal"><span class="pre">DMED</span></code></a>, <a class="reference internal" href="Policies.DMED.html#Policies.DMED.DMEDPlus" title="Policies.DMED.DMEDPlus"><code class="xref py py-class docutils literal"><span class="pre">DMED.DMEDPlus</span></code></a>, <a class="reference internal" href="Policies.OCUCB.html#module-Policies.OCUCB" title="Policies.OCUCB"><code class="xref py py-class docutils literal"><span class="pre">OCUCB</span></code></a>, <a class="reference internal" href="Policies.UCBdagger.html#module-Policies.UCBdagger" title="Policies.UCBdagger"><code class="xref py py-class docutils literal"><span class="pre">UCBdagger</span></code></a>,</li>
+<li>Hybrids algorithms, mixing Bayesian and UCB indexes: <a class="reference internal" href="Policies.AdBandits.html#module-Policies.AdBandits" title="Policies.AdBandits"><code class="xref py py-class docutils literal"><span class="pre">AdBandits</span></code></a>,</li>
+<li>Aggregation algorithms: <a class="reference internal" href="Policies.Aggregator.html#module-Policies.Aggregator" title="Policies.Aggregator"><code class="xref py py-class docutils literal"><span class="pre">Aggregator</span></code></a> (mine, it&#8217;s awesome, go on try it!), and <a class="reference internal" href="Policies.CORRAL.html#module-Policies.CORRAL" title="Policies.CORRAL"><code class="xref py py-class docutils literal"><span class="pre">CORRAL</span></code></a>, <a class="reference internal" href="Policies.LearnExp.html#module-Policies.LearnExp" title="Policies.LearnExp"><code class="xref py py-class docutils literal"><span class="pre">LearnExp</span></code></a>,</li>
+<li>Finite-Horizon Gittins index, approximated version: <a class="reference internal" href="Policies.ApproximatedFHGittins.html#module-Policies.ApproximatedFHGittins" title="Policies.ApproximatedFHGittins"><code class="xref py py-class docutils literal"><span class="pre">ApproximatedFHGittins</span></code></a>,</li>
+<li>An <em>experimental</em> policy, using Unsupervised Learning: <a class="reference internal" href="Policies.UnsupervisedLearning.html#module-Policies.UnsupervisedLearning" title="Policies.UnsupervisedLearning"><code class="xref py py-class docutils literal"><span class="pre">UnsupervisedLearning</span></code></a>,</li>
+<li>An <em>experimental</em> policy, using Black-box optimization: <a class="reference internal" href="Policies.BlackBoxOpt.html#module-Policies.BlackBoxOpt" title="Policies.BlackBoxOpt"><code class="xref py py-class docutils literal"><span class="pre">BlackBoxOpt</span></code></a>,</li>
+<li>An experimental policy, using a sliding window of for instance 100 draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible), <a class="reference internal" href="Policies.SlidingWindowRestart.html#module-Policies.SlidingWindowRestart" title="Policies.SlidingWindowRestart"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart</span></code></a>, and 3 versions for UCB, UCBalpha and klUCB: <a class="reference internal" href="Policies.SlidingWindowRestart.html#Policies.SlidingWindowRestart.SWR_UCB" title="Policies.SlidingWindowRestart.SWR_UCB"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart.SWR_UCB</span></code></a>, <a class="reference internal" href="Policies.SlidingWindowRestart.html#Policies.SlidingWindowRestart.SWR_UCBalpha" title="Policies.SlidingWindowRestart.SWR_UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart.SWR_UCBalpha</span></code></a>, <a class="reference internal" href="Policies.SlidingWindowRestart.html#Policies.SlidingWindowRestart.SWR_klUCB" title="Policies.SlidingWindowRestart.SWR_klUCB"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart.SWR_klUCB</span></code></a> (my algorithm, unpublished yet),</li>
+<li>An experimental policy, using just a sliding window of for instance 100 draws, <a class="reference internal" href="Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCB" title="Policies.SlidingWindowUCB.SWUCB"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowUCB.SWUCB</span></code></a>, and <a class="reference internal" href="Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCBPlus" title="Policies.SlidingWindowUCB.SWUCBPlus"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowUCB.SWUCBPlus</span></code></a> if the horizon is known.</li>
+<li>Another experimental policy with a discount factor, <a class="reference internal" href="Policies.DiscountedUCB.html#module-Policies.DiscountedUCB" title="Policies.DiscountedUCB"><code class="xref py py-class docutils literal"><span class="pre">DiscountedUCB</span></code></a> and <a class="reference internal" href="Policies.DiscountedUCB.html#Policies.DiscountedUCB.DiscountedUCBPlus" title="Policies.DiscountedUCB.DiscountedUCBPlus"><code class="xref py py-class docutils literal"><span class="pre">DiscountedUCB.DiscountedUCBPlus</span></code></a>.</li>
+<li>A policy designed to tackle sparse stochastic bandit problems, <a class="reference internal" href="Policies.SparseUCB.html#module-Policies.SparseUCB" title="Policies.SparseUCB"><code class="xref py py-class docutils literal"><span class="pre">SparseUCB</span></code></a>, <a class="reference internal" href="Policies.SparseklUCB.html#module-Policies.SparseklUCB" title="Policies.SparseklUCB"><code class="xref py py-class docutils literal"><span class="pre">SparseklUCB</span></code></a>, and <a class="reference internal" href="Policies.SparseWrapper.html#module-Policies.SparseWrapper" title="Policies.SparseWrapper"><code class="xref py py-class docutils literal"><span class="pre">SparseWrapper</span></code></a> that can be used with <em>any</em> index policy.</li>
+<li>A policy that implements a &#8220;smart doubling trick&#8221; to turn any horizon-dependent policy into a horizon-independent policy without loosing in performances: <a class="reference internal" href="Policies.DoublingTrickWrapper.html#module-Policies.DoublingTrickWrapper" title="Policies.DoublingTrickWrapper"><code class="xref py py-class docutils literal"><span class="pre">DoublingTrickWrapper</span></code></a>,</li>
+<li>An <em>experimental</em> policy, implementing a another kind of doubling trick to turn any policy that needs to know the range <span class="math">\([a,b]\)</span> of rewards a policy that don&#8217;t need to know the range, and that adapt dynamically from the new observations, <a class="reference internal" href="Policies.WrapRange.html#module-Policies.WrapRange" title="Policies.WrapRange"><code class="xref py py-class docutils literal"><span class="pre">WrapRange</span></code></a>,</li>
+<li>The <em>Optimal Sampling for Structured Bandits</em> (OSSB) policy: <a class="reference internal" href="Policies.OSSB.html#module-Policies.OSSB" title="Policies.OSSB"><code class="xref py py-class docutils literal"><span class="pre">OSSB</span></code></a> (it is more generic and can be applied to almost any kind of bandit problem, it works fine for classical stationary bandits but it is not optimal),</li>
+<li><strong>New!</strong> The Best Empirical Sampled Average (BESA) policy: <a class="reference internal" href="Policies.BESA.html#module-Policies.BESA" title="Policies.BESA"><code class="xref py py-class docutils literal"><span class="pre">BESA</span></code></a> (it works crazily well),</li>
+<li>Some are designed only for (fully decentralized) multi-player games: <a class="reference internal" href="Policies.MusicalChair.html#module-Policies.MusicalChair" title="Policies.MusicalChair"><code class="xref py py-class docutils literal"><span class="pre">MusicalChair</span></code></a>, <a class="reference internal" href="Policies.MEGA.html#module-Policies.MEGA" title="Policies.MEGA"><code class="xref py py-class docutils literal"><span class="pre">MEGA</span></code></a>.</li>
+</ul>
+<p>All policies have the same interface, as described in <a class="reference internal" href="Policies.BasePolicy.html#module-Policies.BasePolicy" title="Policies.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">BasePolicy</span></code></a>,
+in order to use them in any experiment with the following approach:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">my_policy</span> <span class="o">=</span> <span class="n">Policy</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">my_policy</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>  <span class="c1"># start the game</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">chosen_arm_t</span> <span class="o">=</span> <span class="n">k_t</span> <span class="o">=</span> <span class="n">my_policy</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>  <span class="c1"># chose one arm</span>
+    <span class="n">reward_t</span>     <span class="o">=</span> <span class="n">sampled</span> <span class="kn">from</span> <span class="nn">an</span> <span class="n">arm</span> <span class="n">k_t</span>   <span class="c1"># sample a reward</span>
+    <span class="n">my_policy</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">k_t</span><span class="p">,</span> <span class="n">reward_t</span><span class="p">)</span>       <span class="c1"># give it the the policy</span>
+</pre></div>
+</div>
+<dl class="data">
+<dt id="Policies.klucb_mapping">
+<code class="descclassname">Policies.</code><code class="descname">klucb_mapping</code><em class="property"> = {'Bernoulli': &lt;built-in function klucbBern&gt;, 'Exponential': &lt;built-in function klucbExp&gt;, 'Gaussian': &lt;built-in function klucbGauss&gt;, 'Poisson': &lt;built-in function klucbPoisson&gt;, 'Gamma': &lt;built-in function klucbGamma&gt;}</em><a class="headerlink" href="#Policies.klucb_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps name of arms to kl functions</p>
+</dd></dl>
+
+<div class="section" id="Subpackages">
+<h2>Subpackages<a class="headerlink" href="#Subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Posterior.html">Policies.Posterior package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Policies.Posterior.html#Submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Policies.Posterior.Beta.html">Policies.Posterior.Beta module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Policies.Posterior.Gamma.html">Policies.Posterior.Gamma module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Policies.Posterior.Gauss.html">Policies.Posterior.Gauss module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Policies.Posterior.Posterior.html">Policies.Posterior.Posterior module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="Submodules">
+<h2>Submodules<a class="headerlink" href="#Submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Policies.AdBandits.html">Policies.AdBandits module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Aggregator.html">Policies.Aggregator module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.ApproximatedFHGittins.html">Policies.ApproximatedFHGittins module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.BESA.html">Policies.BESA module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.BasePolicy.html">Policies.BasePolicy module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.BayesUCB.html">Policies.BayesUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.BayesianIndexPolicy.html">Policies.BayesianIndexPolicy module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.BlackBoxOpt.html">Policies.BlackBoxOpt module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.BoltzmannGumbel.html">Policies.BoltzmannGumbel module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.DiscountedUCB.html">Policies.DiscountedUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.DoublingTrickWrapper.html">Policies.DoublingTrickWrapper module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.EmpiricalMeans.html">Policies.EmpiricalMeans module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.EpsilonDecreasing.html">Policies.EpsilonDecreasing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.EpsilonDecreasingMEGA.html">Policies.EpsilonDecreasingMEGA module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.EpsilonExpDecreasing.html">Policies.EpsilonExpDecreasing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.EpsilonFirst.html">Policies.EpsilonFirst module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.EpsilonGreedy.html">Policies.EpsilonGreedy module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Exp3.html">Policies.Exp3 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.KLempUCB.html">Policies.KLempUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.MOSS.html">Policies.MOSS module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.MOSSAnytime.html">Policies.MOSSAnytime module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.MOSSExperimental.html">Policies.MOSSExperimental module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.SlidingWindowRestart.html">Policies.SlidingWindowRestart module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.SlidingWindowUCB.html">Policies.SlidingWindowUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Softmax.html">Policies.Softmax module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.SparseUCB.html">Policies.SparseUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.SparseWrapper.html">Policies.SparseWrapper module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.SparseklUCB.html">Policies.SparseklUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.TakeFixedArm.html">Policies.TakeFixedArm module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.TakeRandomFixedArm.html">Policies.TakeRandomFixedArm module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Thompson.html">Policies.Thompson module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.ThompsonRobust.html">Policies.ThompsonRobust module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCB.html">Policies.UCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBH.html">Policies.UCBH module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBV.html">Policies.UCBV module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBVtuned.html">Policies.UCBVtuned module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBalpha.html">Policies.UCBalpha module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBdagger.html">Policies.UCBdagger module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBjulia.html">Policies.UCBjulia module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBlog10.html">Policies.UCBlog10 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.Uniform.html">Policies.Uniform module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UniformOnSome.html">Policies.UniformOnSome module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UnsupervisedLearning.html">Policies.UnsupervisedLearning module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.WrapRange.html">Policies.WrapRange module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCB.html">Policies.klUCB module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBH.html">Policies.klUCBH module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBlog10.html">Policies.klUCBlog10 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.klUCBloglog10.html">Policies.klUCBloglog10 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.usenumba.html">Policies.usenumba module</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.Posterior.html" class="btn btn-neutral float-right" title="Policies.Posterior package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Environment.usetqdm.html" class="btn btn-neutral" title="Environment.usetqdm module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:53m:25s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
