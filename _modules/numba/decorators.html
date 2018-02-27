@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>numba.decorators &mdash; SMPyBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">AlgoBandits.git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">:boom: TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks :notebook: by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>numba.decorators</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for numba.decorators</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Define @jit and related decorators.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">sigutils</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="k">import</span> <span class="n">DeprecationError</span>
+<span class="kn">from</span> <span class="nn">.targets</span> <span class="k">import</span> <span class="n">registry</span>
+<span class="kn">from</span> <span class="nn">.stencil</span> <span class="k">import</span> <span class="n">stencil</span>
+
+
+
+<span class="c1"># -----------------------------------------------------------------------------</span>
+<span class="c1"># Decorators</span>
+
+<span class="k">def</span> <span class="nf">autojit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Deprecated.</span>
+
+<span class="sd">    Use jit instead.  Calls to jit internally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;autojit is deprecated, use jit instead which now performs &quot;</span>
+                  <span class="s2">&quot;the same functionality&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+
+
+<span class="n">_msg_deprecated_signature_arg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Deprecated keyword argument `</span><span class="si">{0}</span><span class="s2">`. &quot;</span>
+                                 <span class="s2">&quot;Signatures should be passed as the first &quot;</span>
+                                 <span class="s2">&quot;positional argument.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="jit"><a class="viewcode-back" href="../../docs/Policies.usenumba.html#Arms.usenumba.jit">[docs]</a><span class="k">def</span> <span class="nf">jit</span><span class="p">(</span><span class="n">signature_or_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="p">{},</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This decorator is used to compile a Python function into native code.</span>
+
+<span class="sd">    Args</span>
+<span class="sd">    -----</span>
+<span class="sd">    signature:</span>
+<span class="sd">        The (optional) signature or list of signatures to be compiled.</span>
+<span class="sd">        If not passed, required signatures will be compiled when the</span>
+<span class="sd">        decorated function is called, depending on the argument values.</span>
+<span class="sd">        As a convenience, you can directly pass the function to be compiled</span>
+<span class="sd">        instead.</span>
+
+<span class="sd">    locals: dict</span>
+<span class="sd">        Mapping of local variable names to Numba types. Used to override the</span>
+<span class="sd">        types deduced by Numba&#39;s type inference engine.</span>
+
+<span class="sd">    target: str</span>
+<span class="sd">        Specifies the target platform to compile for. Valid targets are cpu,</span>
+<span class="sd">        gpu, npyufunc, and cuda. Defaults to cpu.</span>
+
+<span class="sd">    options:</span>
+<span class="sd">        For a cpu target, valid options are:</span>
+<span class="sd">            nopython: bool</span>
+<span class="sd">                Set to True to disable the use of PyObjects and Python API</span>
+<span class="sd">                calls. The default behavior is to allow the use of PyObjects</span>
+<span class="sd">                and Python API. Default value is False.</span>
+
+<span class="sd">            forceobj: bool</span>
+<span class="sd">                Set to True to force the use of PyObjects for every value.</span>
+<span class="sd">                Default value is False.</span>
+
+<span class="sd">            looplift: bool</span>
+<span class="sd">                Set to True to enable jitting loops in nopython mode while</span>
+<span class="sd">                leaving surrounding code in object mode. This allows functions</span>
+<span class="sd">                to allocate NumPy arrays and use Python objects, while the</span>
+<span class="sd">                tight loops in the function can still be compiled in nopython</span>
+<span class="sd">                mode. Any arrays that the tight loop uses should be created</span>
+<span class="sd">                before the loop is entered. Default value is True.</span>
+
+<span class="sd">            error_model: str</span>
+<span class="sd">                The error-model affects divide-by-zero behavior.</span>
+<span class="sd">                Valid values are &#39;python&#39; and &#39;numpy&#39;. The &#39;python&#39; model</span>
+<span class="sd">                raises exception.  The &#39;numpy&#39; model sets the result to</span>
+<span class="sd">                *+/-inf* or *nan*.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    A callable usable as a compiled function.  Actual compiling will be</span>
+<span class="sd">    done lazily if no explicit signatures are passed.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    The function can be used in the following ways:</span>
+
+<span class="sd">    1) jit(signatures, target=&#39;cpu&#39;, **targetoptions) -&gt; jit(function)</span>
+
+<span class="sd">        Equivalent to:</span>
+
+<span class="sd">            d = dispatcher(function, targetoptions)</span>
+<span class="sd">            for signature in signatures:</span>
+<span class="sd">                d.compile(signature)</span>
+
+<span class="sd">        Create a dispatcher object for a python function.  Then, compile</span>
+<span class="sd">        the function with the given signature(s).</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            @jit(&quot;int32(int32, int32)&quot;)</span>
+<span class="sd">            def foo(x, y):</span>
+<span class="sd">                return x + y</span>
+
+<span class="sd">            @jit([&quot;int32(int32, int32)&quot;, &quot;float32(float32, float32)&quot;])</span>
+<span class="sd">            def bar(x, y):</span>
+<span class="sd">                return x + y</span>
+
+<span class="sd">    2) jit(function, target=&#39;cpu&#39;, **targetoptions) -&gt; dispatcher</span>
+
+<span class="sd">        Create a dispatcher function object that specializes at call site.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            @jit</span>
+<span class="sd">            def foo(x, y):</span>
+<span class="sd">                return x + y</span>
+
+<span class="sd">            @jit(target=&#39;cpu&#39;, nopython=True)</span>
+<span class="sd">            def bar(x, y):</span>
+<span class="sd">                return x + y</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;argtypes&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DeprecationError</span><span class="p">(</span><span class="n">_msg_deprecated_signature_arg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;argtypes&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s1">&#39;restype&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">DeprecationError</span><span class="p">(</span><span class="n">_msg_deprecated_signature_arg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;restype&#39;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;parallel&#39;</span><span class="p">):</span>
+        <span class="n">uns1</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="n">uns2</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span>
+        <span class="k">if</span> <span class="n">uns1</span> <span class="ow">or</span> <span class="n">uns2</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;The &#39;parallel&#39; target is not currently supported on &quot;</span>
+                   <span class="s2">&quot;Windows operating systems when using Python 2.7, or &quot;</span>
+                   <span class="s2">&quot;on 32 bit hardware.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Caching is not available when the &#39;parallel&#39; target is in &quot;</span>
+                   <span class="s2">&quot;use. Caching is now being disabled to allow execution to &quot;</span>
+                   <span class="s2">&quot;continue.&quot;</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+    <span class="c1"># Handle signature</span>
+    <span class="k">if</span> <span class="n">signature_or_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># No signature, no function</span>
+        <span class="n">pyfunc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signature_or_function</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># A list of signatures is passed</span>
+        <span class="n">pyfunc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">signature_or_function</span>
+    <span class="k">elif</span> <span class="n">sigutils</span><span class="o">.</span><span class="n">is_signature</span><span class="p">(</span><span class="n">signature_or_function</span><span class="p">):</span>
+        <span class="c1"># A single signature is passed</span>
+        <span class="n">pyfunc</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="p">[</span><span class="n">signature_or_function</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># A function is passed</span>
+        <span class="n">pyfunc</span> <span class="o">=</span> <span class="n">signature_or_function</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">_jit</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="nb">locals</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+                   <span class="n">targetoptions</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pyfunc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">pyfunc</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+<span class="k">def</span> <span class="nf">_jit</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="nb">locals</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">targetoptions</span><span class="p">,</span> <span class="o">**</span><span class="n">dispatcher_args</span><span class="p">):</span>
+    <span class="n">dispatcher</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">dispatcher_registry</span><span class="p">[</span><span class="n">target</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">ENABLE_CUDASIM</span> <span class="ow">and</span> <span class="n">target</span> <span class="o">==</span> <span class="s1">&#39;cuda&#39;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">cuda</span>
+            <span class="k">return</span> <span class="n">cuda</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">DISABLE_JIT</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">target</span> <span class="o">==</span> <span class="s1">&#39;npyufunc&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">func</span>
+        <span class="n">disp</span> <span class="o">=</span> <span class="n">dispatcher</span><span class="p">(</span><span class="n">py_func</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="nb">locals</span><span class="p">,</span>
+                          <span class="n">targetoptions</span><span class="o">=</span><span class="n">targetoptions</span><span class="p">,</span>
+                          <span class="o">**</span><span class="n">dispatcher_args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">disp</span><span class="o">.</span><span class="n">enable_caching</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sigs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Register the Dispatcher to the type inference mechanism,</span>
+            <span class="c1"># even though the decorator hasn&#39;t returned yet.</span>
+            <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">typeinfer</span>
+            <span class="k">with</span> <span class="n">typeinfer</span><span class="o">.</span><span class="n">register_dispatcher</span><span class="p">(</span><span class="n">disp</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">sigs</span><span class="p">:</span>
+                    <span class="n">disp</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+                <span class="n">disp</span><span class="o">.</span><span class="n">disable_compile</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">disp</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="k">def</span> <span class="nf">generated_jit</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This decorator allows flexible type-based compilation</span>
+<span class="sd">    of a jitted function.  It works as `@jit`, except that the decorated</span>
+<span class="sd">    function is called at compile-time with the *types* of the arguments</span>
+<span class="sd">    and should return an implementation function for those types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">_jit</span><span class="p">(</span><span class="n">sigs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="p">{},</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+                   <span class="n">targetoptions</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">impl_kind</span><span class="o">=</span><span class="s1">&#39;generated&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="k">def</span> <span class="nf">njit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Equivalent to jit(nopython=True)</span>
+
+<span class="sd">    See documentation for jit function/decorator for full description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;nopython&#39;</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;nopython is set for njit and is ignored&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;forceobj&#39;</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;forceobj is set for njit and is ignored&#39;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+    <span class="n">kws</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;nopython&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">jit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">cfunc</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="p">{},</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This decorator is used to compile a Python function into a C callback</span>
+<span class="sd">    usable with foreign C libraries.</span>
+
+<span class="sd">    Usage::</span>
+<span class="sd">        @cfunc(&quot;float64(float64, float64)&quot;, nopython=True, cache=True)</span>
+<span class="sd">        def add(a, b):</span>
+<span class="sd">            return a + b</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">sigutils</span><span class="o">.</span><span class="n">normalize_signature</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">.ccallback</span> <span class="k">import</span> <span class="n">CFunc</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">CFunc</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="nb">locals</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">enable_caching</span><span class="p">()</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:53m:25s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

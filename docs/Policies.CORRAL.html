@@ -1,0 +1,656 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Policies.CORRAL module &mdash; SMPyBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../index.html"/>
+        <link rel="up" title="Policies package" href="Policies.html"/>
+        <link rel="next" title="Policies.CPUCB module" href="Policies.CPUCB.html"/>
+        <link rel="prev" title="Policies.BoltzmannGumbel module" href="Policies.BoltzmannGumbel.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">AlgoBandits.git</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Policies.html">Policies package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Policies.html#Subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="Policies.html#Submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Policies.AdBandits.html">Policies.AdBandits module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Aggregator.html">Policies.Aggregator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ApproximatedFHGittins.html">Policies.ApproximatedFHGittins module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BESA.html">Policies.BESA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BasePolicy.html">Policies.BasePolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BayesUCB.html">Policies.BayesUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BayesianIndexPolicy.html">Policies.BayesianIndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BlackBoxOpt.html">Policies.BlackBoxOpt module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BoltzmannGumbel.html">Policies.BoltzmannGumbel module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Policies.CORRAL module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedUCB.html">Policies.DiscountedUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DoublingTrickWrapper.html">Policies.DoublingTrickWrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EmpiricalMeans.html">Policies.EmpiricalMeans module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonDecreasing.html">Policies.EpsilonDecreasing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonDecreasingMEGA.html">Policies.EpsilonDecreasingMEGA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonExpDecreasing.html">Policies.EpsilonExpDecreasing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonFirst.html">Policies.EpsilonFirst module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonGreedy.html">Policies.EpsilonGreedy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3.html">Policies.Exp3 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.KLempUCB.html">Policies.KLempUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSS.html">Policies.MOSS module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSAnytime.html">Policies.MOSSAnytime module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSExperimental.html">Policies.MOSSExperimental module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowRestart.html">Policies.SlidingWindowRestart module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowUCB.html">Policies.SlidingWindowUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Softmax.html">Policies.Softmax module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseUCB.html">Policies.SparseUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseWrapper.html">Policies.SparseWrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseklUCB.html">Policies.SparseklUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.TakeFixedArm.html">Policies.TakeFixedArm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.TakeRandomFixedArm.html">Policies.TakeRandomFixedArm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Thompson.html">Policies.Thompson module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ThompsonRobust.html">Policies.ThompsonRobust module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCB.html">Policies.UCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBH.html">Policies.UCBH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBV.html">Policies.UCBV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBVtuned.html">Policies.UCBVtuned module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBalpha.html">Policies.UCBalpha module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBdagger.html">Policies.UCBdagger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBjulia.html">Policies.UCBjulia module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10.html">Policies.UCBlog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Uniform.html">Policies.Uniform module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UniformOnSome.html">Policies.UniformOnSome module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UnsupervisedLearning.html">Policies.UnsupervisedLearning module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.WrapRange.html">Policies.WrapRange module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCB.html">Policies.klUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBH.html">Policies.klUCBH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBlog10.html">Policies.klUCBlog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog10.html">Policies.klUCBloglog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.usenumba.html">Policies.usenumba module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conf.html">conf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_aggregation_algorithms.html">configuration_comparing_aggregation_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_doubling_algorithms.html">configuration_comparing_doubling_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_markovian.html">configuration_markovian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse.html">configuration_sparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers.html">main_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers_more.html">main_multiplayers_more module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_sparse_multiplayers.html">main_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="policy_server.html">policy_server module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">AlgoBandits.git</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.CORRAL module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.CORRAL.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Policies.CORRAL-module">
+<h1>Policies.CORRAL module<a class="headerlink" href="#Policies.CORRAL-module" title="Permalink to this headline">¶</a></h1>
+<p>The CORRAL aggregation bandit algorithm, similar to Exp4 but not exactly equivalent.</p>
+<p>The algorithm is a master A, managing several &#8220;slave&#8221; algorithms, <span class="math">\(A_1, ..., A_N\)</span>.</p>
+<ul class="simple">
+<li>At every step, one slave algorithm is selected, by a random selection from a trust distribution on <span class="math">\([1,...,N]\)</span>.</li>
+<li>Then its decision is listen to, played by the master algorithm, and a feedback reward is received.</li>
+<li>The reward is reweighted by the trust of the listened algorithm, and given back to it.</li>
+<li>The other slaves, whose decision was not even asked, receive a zero reward, or no reward at all.</li>
+<li>The trust probabilities are first uniform, <span class="math">\(P_i = 1/N\)</span>, and then at every step, after receiving the feedback for <em>one</em> arm k (the reward), the trust in each slave Ai is updated: <span class="math">\(P_i\)</span> by the reward received.</li>
+<li>The detail about how to increase or decrease the probabilities are specified in the reference article.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Reference: [[&#8220;Corralling a Band of Bandit Algorithms&#8221;, by A. Agarwal, H. Luo, B. Neyshabur, R.E. Schapire, 01.2017](<a class="reference external" href="https://arxiv.org/abs/1612.06246v2">https://arxiv.org/abs/1612.06246v2</a>)].</p>
+</div>
+<dl class="function">
+<dt id="Policies.CORRAL.renormalize_reward">
+<code class="descclassname">Policies.CORRAL.</code><code class="descname">renormalize_reward</code><span class="sig-paren">(</span><em>reward</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>trust=1.0</em>, <em>unbiased=True</em>, <em>mintrust=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#renormalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.renormalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renormalize the reward to <cite>[0, 1]</cite>:</p>
+<ul class="simple">
+<li>divide by (<cite>trust/mintrust</cite>) if <cite>unbiased</cite> is <cite>True</cite>.</li>
+<li>simply project to <cite>[0, 1]</cite> if <cite>unbiased</cite> is <cite>False</cite>,</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If <cite>mintrust</cite> is unknown, the unbiased estimator CANNOT be projected back to a bounded interval.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CORRAL.unnormalize_reward">
+<code class="descclassname">Policies.CORRAL.</code><code class="descname">unnormalize_reward</code><span class="sig-paren">(</span><em>reward</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#unnormalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.unnormalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project back reward to <cite>[lower, lower + amplitude]</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CORRAL.log_Barrier_OMB">
+<code class="descclassname">Policies.CORRAL.</code><code class="descname">log_Barrier_OMB</code><span class="sig-paren">(</span><em>trusts</em>, <em>losses</em>, <em>rates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#log_Barrier_OMB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.log_Barrier_OMB" title="Permalink to this definition">¶</a></dt>
+<dd><p>A step of the <em>log-barrier Online Mirror Descent</em>, updating the trusts:</p>
+<ul class="simple">
+<li>Find <span class="math">\(\lambda \in [\min_i l_{t,i}, \max_i l_{t,i}]\)</span> such that <span class="math">\(\sum_i \frac{1}{1/p_{t,i} + \eta_{t,i}(l_{t,i} - \lambda)} = 1\)</span>.</li>
+<li>Return <span class="math">\(\mathbf{p}_{t+1,i}\)</span> such that <span class="math">\(\frac{1}{p_{t+1,i}} = \frac{1}{p_{t,i}} + \eta_{t,i}(l_{t,i} - \lambda)\)</span>.</li>
+<li>Note: uses <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize_scalar()</span></code> for the optimization.</li>
+<li>Reference: [Learning in games: Robustness of fast convergence, by D.Foster, Z.Li, T.Lykouris, K.Sridharan, and E.Tardos, NIPS 2016].</li>
+</ul>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CORRAL.UNBIASED">
+<code class="descclassname">Policies.CORRAL.</code><code class="descname">UNBIASED</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CORRAL.UNBIASED" title="Permalink to this definition">¶</a></dt>
+<dd><p>self.unbiased is a flag to know if the rewards are used as biased estimator,
+i.e., just <span class="math">\(r_t\)</span>, or unbiased estimators, <span class="math">\(r_t / p_t\)</span>, if <span class="math">\(p_t\)</span> is the probability of selecting that arm at time <span class="math">\(t\)</span>.
+It seemed to work better with unbiased estimators (of course).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CORRAL.BROADCAST_ALL">
+<code class="descclassname">Policies.CORRAL.</code><code class="descname">BROADCAST_ALL</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CORRAL.BROADCAST_ALL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to give back a reward to only one slave algorithm (default, <cite>False</cite>) or to all slaves who voted for the same arm</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.CORRAL.CORRAL">
+<em class="property">class </em><code class="descclassname">Policies.CORRAL.</code><code class="descname">CORRAL</code><span class="sig-paren">(</span><em>nbArms</em>, <em>children=None</em>, <em>horizon=None</em>, <em>rate=None</em>, <em>unbiased=True</em>, <em>broadcast_all=False</em>, <em>prior='uniform'</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The CORRAL aggregation bandit algorithm, similar to Exp4 but not exactly equivalent.</p>
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>children=None</em>, <em>horizon=None</em>, <em>rate=None</em>, <em>unbiased=True</em>, <em>broadcast_all=False</em>, <em>prior='uniform'</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.nbArms">
+<code class="descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.lower">
+<code class="descname">lower</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.lower" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.amplitude">
+<code class="descname">amplitude</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.amplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Larger values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.unbiased">
+<code class="descname">unbiased</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.unbiased" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag, see above.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.broadcast_all">
+<code class="descname">broadcast_all</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.broadcast_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag, see above.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.gamma">
+<code class="descname">gamma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant <span class="math">\(\gamma = 1 / T\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.beta">
+<code class="descname">beta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant <span class="math">\(\beta = \exp(1 / \log(T))\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.nbChildren">
+<code class="descname">nbChildren</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.nbChildren" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number N of slave algorithms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.rates">
+<code class="descname">rates</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of the learning rate (will be <strong>increasing</strong> in time).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.children">
+<code class="descname">children</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of slave algorithms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.trusts">
+<code class="descname">trusts</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.trusts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial trusts in the slaves. Default to uniform, but a prior can also be given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.bar_trusts">
+<code class="descname">bar_trusts</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.bar_trusts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial bar trusts in the slaves. Default to uniform, but a prior can also be given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.choices">
+<code class="descname">choices</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep track of the last choices of each slave, to know whom to update if update_all_children is false.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.last_choice">
+<code class="descname">last_choice</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.last_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember the index of the last child trusted for a decision.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.losses">
+<code class="descname">losses</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the log-barrier OMD step, a vector of losses has to be given. Faster to keep it as an attribute instead of reallocating it every time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.rhos">
+<code class="descname">rhos</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.rhos" title="Permalink to this definition">¶</a></dt>
+<dd><p>I use the inverses of the <span class="math">\(\rho_{t,i}\)</span> from the Algorithm in the reference article. Simpler to understand, less numerical errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nicely print the name of the algorithm with its relevant parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.__setattr__">
+<code class="descname">__setattr__</code><span class="sig-paren">(</span><em>name</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.__setattr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trick method, to update the <span class="math">\(\gamma\)</span> and <span class="math">\(\beta\)</span> parameters of the CORRAL algorithm if the horizon T changes.</p>
+<ul class="simple">
+<li>This is here just to eventually allow <a class="reference internal" href="Policies.DoublingTrickWrapper.html#module-Policies.DoublingTrickWrapper" title="Policies.DoublingTrickWrapper"><code class="xref py py-class docutils literal"><span class="pre">Policies.DoublingTrickWrapper</span></code></a> to be used with a CORRAL player.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Not tested yet!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.startGame">
+<code class="descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the game for each child.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.getReward">
+<code class="descname">getReward</code><span class="sig-paren">(</span><em>arm</em>, <em>reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give reward for each child, and then update the trust probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choice">
+<code class="descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choice</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceWithRank">
+<code class="descname">choiceWithRank</code><span class="sig-paren">(</span><em>rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceWithRank</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.CORRAL'</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceFromSubSet">
+<code class="descname">choiceFromSubSet</code><span class="sig-paren">(</span><em>availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceFromSubSet</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceMultiple">
+<code class="descname">choiceMultiple</code><span class="sig-paren">(</span><em>nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceMultiple</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceIMP">
+<code class="descname">choiceIMP</code><span class="sig-paren">(</span><em>nb=1</em>, <em>startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceIMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceIMP</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.estimatedOrder">
+<code class="descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>estimatedOrder</cite>.</p>
+<ul class="simple">
+<li>Return the estimate order of the arms, as a permutation on <span class="math">\([0,...,K-1]\)</span> that would order the arms by increasing means.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.estimatedBestArms">
+<code class="descname">estimatedBestArms</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.CPUCB.html" class="btn btn-neutral float-right" title="Policies.CPUCB module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.BoltzmannGumbel.html" class="btn btn-neutral" title="Policies.BoltzmannGumbel module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:53m:25s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

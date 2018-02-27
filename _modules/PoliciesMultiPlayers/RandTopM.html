@@ -1,0 +1,630 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PoliciesMultiPlayers.RandTopM &mdash; SMPyBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">AlgoBandits.git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">:boom: TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks :notebook: by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.RandTopM</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for PoliciesMultiPlayers.RandTopM</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; RandTopM: four proposals for an efficient multi-players learning policy. :class:`RandTopM` and :class:`MCTopM` are the two main algorithms, with variants (see below).</span>
+
+<span class="sd">- Each child player is selfish, and plays according to an index policy (any index policy, e.g., UCB, Thompson, KL-UCB, BayesUCB etc),</span>
+<span class="sd">- But instead of aiming at the best (the 1-st best) arm, player i constantly aims at *one* of the M best arms (denoted :math:`\hat{M}^j(t)`, according to its index policy of indexes :math:`g^j_k(t)` (where M is the number of players),</span>
+<span class="sd">- When a collision occurs or when the currently chosen arm lies outside of the current estimate of the set M-best, a new current arm is chosen.</span>
+
+<span class="sd">.. note:: This is not fully decentralized: as each child player needs to know the (fixed) number of players.</span>
+
+<span class="sd">- Reference: [[Multi-Player Bandits Revisited, Lilian Besson and Emilie Kaufmann, 2017]](https://hal.inria.fr/hal-01629733)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.8&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
+
+<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+
+
+<span class="c1">#: Whether to use or not the variant with the &quot;chair&quot;: after using an arm successfully (no collision), a player won&#39;t move after future collisions (she assumes the other will move). But she will still change her chosen arm if it lies outside of the estimated M-best. :class:`RandTopM` (and variants) uses `False` and :class:`MCTopM` (and variants) uses `True`.</span>
+<span class="n">WITH_CHAIR</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">WITH_CHAIR</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="c1">#: XXX First experimental idea: when the currently chosen arm lies outside of the estimated Mbest set, force to first try (at least once) the arm with lowest UCB indexes in this Mbest_j(t) set. Used by :class:`RandTopMCautious` and :class:`RandTopMExtraCautious`, and by :class:`MCTopMCautious` and :class:`MCTopMExtraCautious`.</span>
+<span class="n">OPTIM_PICK_WORST_FIRST</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">OPTIM_PICK_WORST_FIRST</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="c1">#: XXX Second experimental idea: when the currently chosen arm becomes the worst of the estimated Mbest set, leave it (even before it lies outside of Mbest_j(t)). Used by :class:`RandTopMExtraCautious` and :class:`MCTopMExtraCautious`.</span>
+<span class="n">OPTIM_EXIT_IF_WORST_WAS_PICKED</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">OPTIM_EXIT_IF_WORST_WAS_PICKED</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="c1">#: XXX Third experimental idea: when the currently chosen arm becomes the worst of the estimated Mbest set, leave it (even before it lies outside of Mbest_j(t)). **Default now!**. `False` only for :class:`RandTopMOld` and :class:`MCTopMOld`.</span>
+<span class="n">OPTIM_PICK_PREV_WORST_FIRST</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">OPTIM_PICK_PREV_WORST_FIRST</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="c1"># --- Class oneRandTopM, for children</span>
+
+<div class="viewcode-block" id="oneRandTopM"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM">[docs]</a><span class="k">class</span> <span class="nc">oneRandTopM</span><span class="p">(</span><span class="n">ChildPointer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class that acts as a child policy, but in fact it pass all its method calls to the mother class, who passes it to its i-th player.</span>
+
+<span class="sd">    - Except for the handleCollision method: a new random arm is sampled after observing a collision,</span>
+<span class="sd">    - And the player does not aim at the best arm, but at one of the best arm, based on her index policy.</span>
+<span class="sd">    - (See variants for more details.)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="oneRandTopM.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxRank</span><span class="p">,</span>
+                 <span class="n">withChair</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">oneRandTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># self.nbArms = self.mother._players[self.playerId].nbArms  #: Number of arms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span> <span class="o">=</span> <span class="n">maxRank</span>  <span class="c1">#: Max rank, usually nbPlayers but can be different.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Current chosen arm.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_withChair</span> <span class="o">=</span> <span class="n">withChair</span>  <span class="c1"># Whether to use or not the variant with the &quot;chair&quot;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pickWorstFirst</span> <span class="o">=</span> <span class="n">pickWorstFirst</span>  <span class="c1"># XXX Whether to use or not the variant with the &quot;cautious choice&quot;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exitIfWorstWasPicked</span> <span class="o">=</span> <span class="n">exitIfWorstWasPicked</span>  <span class="c1"># XXX Whether to use or not the second variant with the &quot;even more cautious choice&quot;...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pickPrevWorstFirst</span> <span class="o">=</span> <span class="n">pickPrevWorstFirst</span>  <span class="c1"># XXX Whether to use or not the third variant with the &quot;smart and cautious choice&quot;...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Not yet sitted. After 1 step without collision, don&#39;t react to collision (but still react when the chosen arm lies outside M-best).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prevWorst</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#: Keep track of the last arms worst than the chosen one (at previous time step).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1">#: Internal time</span></div>
+
+<div class="viewcode-block" id="oneRandTopM.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>   <span class="c1"># Better to recompute it automatically</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span><span class="p">]</span>
+        <span class="n">Mbest_is_incorrect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">index</span><span class="p">))</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+        <span class="n">str_Mbest</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">Mbest_is_incorrect</span> <span class="k">else</span> <span class="sa">r</span><span class="s2">&quot;, $M$-best: $</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Mbest</span><span class="p">()))</span>
+        <span class="n">str_chosen_arm</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;, arm: $</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># WARNING remember to change here when defining a new variant of RandTopM</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;#</span><span class="si">{}</span><span class="s2">&lt;</span><span class="si">{}</span><span class="s2">TopM</span><span class="si">{}{}</span><span class="s2">-</span><span class="si">{}{}{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;MC&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_withChair</span> <span class="k">else</span> <span class="s2">&quot;Rand&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;ExtraCautious&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exitIfWorstWasPicked</span> <span class="k">else</span> <span class="s2">&quot;Cautious&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickWorstFirst</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickPrevWorstFirst</span> <span class="k">else</span> <span class="s2">&quot;Old&quot;</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">str_Mbest</span><span class="p">,</span> <span class="n">str_chosen_arm</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="oneRandTopM.startGame"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start game.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">oneRandTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Start not sitted, of course!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="oneRandTopM.Mbest"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.Mbest">[docs]</a>    <span class="k">def</span> <span class="nf">Mbest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Current estimate of the M-best arms. M is the maxRank given to the algorithm.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimatedBestArms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="oneRandTopM.worst_Mbest"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.worst_Mbest">[docs]</a>    <span class="k">def</span> <span class="nf">worst_Mbest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Index of the worst of the current estimate of the M-best arms. M is the maxRank given to the algorithm.&quot;&quot;&quot;</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimatedOrder</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">order</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="oneRandTopM.worst_previous__and__current_Mbest"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.worst_previous__and__current_Mbest">[docs]</a>    <span class="k">def</span> <span class="nf">worst_previous__and__current_Mbest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_arm</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Return the set from which to select a random arm for :class:`MCTopM` (the optimization is now the default):</span>
+
+<span class="sd">        .. math:: \hat{M}^j(t) \cap \{ m : g^j_m(t-1) \leq g^j_k(t-1) \}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_Mbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mbest</span><span class="p">()</span>
+        <span class="n">prev_WorstThenChair</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prevWorst</span>
+        <span class="k">if</span> <span class="n">prev_WorstThenChair</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">prev_WorstThenChair</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING for the MCTopM variant using the &#39;pickPrevWorstFirst&#39; optimization, it should ever find an empty set &#39;prev_WorstThenChair&#39; ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+            <span class="k">return</span> <span class="n">current_Mbest</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">current_Mbest</span><span class="p">,</span> <span class="n">prev_WorstThenChair</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="oneRandTopM.handleCollision"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.handleCollision">[docs]</a>    <span class="k">def</span> <span class="nf">handleCollision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get a new random arm from the current estimate of Mbest, and give reward to the algorithm if not None.&quot;&quot;&quot;</span>
+        <span class="c1"># RandTopM UCB indexes learn on the SENSING, not on the successful transmissions!</span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># print(&quot;Info: RandTopM UCB internal indexes DOES get updated by reward, in case of collision, learning is done on SENSING, not successful transmissions!&quot;)  # DEBUG</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">oneRandTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_withChair</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Mbest</span><span class="p">())</span>  <span class="c1"># New random arm</span></div>
+            <span class="c1"># print(&quot; - A oneRandTopM player {} saw a collision on arm {}, so she had to select a new random arm {} from her estimate of M-best = {} ...&quot;.format(self, arm, self.chosen_arm, self.Mbest()))  # DEBUG</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     print(&quot; - A oneRandTopM player {} saw a collision on arm {}, but she ignores it as she plays with a chair and is now sitted ...&quot;.format(self, arm))  # DEBUG</span>
+
+<div class="viewcode-block" id="oneRandTopM.getReward"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Pass the call to self.mother._getReward_one(playerId, arm, reward) with the player&#39;s ID number. &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">oneRandTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_withChair</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span><span class="p">:</span>
+                    <span class="c1"># print(&quot; - A oneRandTopM player {} used this arm {} without any collision, so she is now sitted on this rank, and will not change in case of collision (but will change if the arm lies outside her estimate of M-best)...&quot;.format(self, self.chosen_arm))  # DEBUG</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">True</span></div>
+                <span class="c1"># else:</span>
+                <span class="c1">#     print(&quot; - A oneRandTopM player {} is already sitted on this arm {} ...&quot;.format(self, self.chosen_arm))  # DEBUG</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     print(&quot; - A oneRandTopM player {} is not playing with a chair, nothing to do ...&quot;.format(self)  # DEBUG</span>
+
+<div class="viewcode-block" id="oneRandTopM.choice"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reconsider the choice of arm, and then use the chosen arm.</span>
+
+<span class="sd">        - For all variants, if the chosen arm is no longer in the current estimate of the Mbest set, a new one is selected,</span>
+<span class="sd">        - The basic RandTopM selects uniformly an arm in estimate Mbest,</span>
+<span class="sd">        - MCTopM starts by being *&quot;non sitted&quot;* on its new chosen arm,</span>
+<span class="sd">        - MCTopMCautious is forced to first try the arm with *lowest* UCB indexes (or whatever index policy is used).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>  <span class="c1"># Force to sample each arm at least one</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">oneRandTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># But now, trust the estimated set Mbest</span>
+            <span class="n">current_Mbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mbest</span><span class="p">()</span>
+            <span class="n">worst_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">worst_Mbest</span><span class="p">()</span>
+            <span class="c1"># XXX optimization for MCTopMExtraCautious</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_Mbest</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_exitIfWorstWasPicked</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">==</span> <span class="n">worst_current</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_withChair</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="c1"># old_arm = self.chosen_arm</span>
+                <span class="c1"># XXX optimization for MCTopMCautious and MCTopMExtraCautious</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickWorstFirst</span><span class="p">:</span>
+                    <span class="c1"># aim at the worst of the current estimated arms</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">worst_current</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickPrevWorstFirst</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">worst_previous__and__current_Mbest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">current_Mbest</span><span class="p">)</span>  <span class="c1"># New random arm</span>
+                <span class="c1"># print(&quot;\n - A oneRandTopM player {} had chosen arm = {}, but it lied outside of M-best = {}, so she selected a new one = {} {}...&quot;.format(self, old_arm, current_Mbest, self.chosen_arm, &quot;and is no longer sitted&quot; if self._withChair else &quot;but is not playing with a chair&quot;))  # DEBUG</span>
+        <span class="c1"># Done</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># XXX optimization for MCTopM</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickPrevWorstFirst</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prevWorst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chosen_arm</span></div>
+
+<div class="viewcode-block" id="oneRandTopM._index"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM._index">[docs]</a>    <span class="k">def</span> <span class="nf">_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Update and return the indexes of the underlying index policy.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span><span class="p">]</span><span class="o">.</span><span class="n">computeAllIndex</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span><span class="p">]</span><span class="o">.</span><span class="n">index</span></div></div>
+
+
+<span class="c1"># --- Class RandTopM</span>
+
+<div class="viewcode-block" id="RandTopM"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopM">[docs]</a><span class="k">class</span> <span class="nc">RandTopM</span><span class="p">(</span><span class="n">BaseMPPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RandTopM: a proposal for an efficient multi-players learning policy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RandTopM.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopM.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">withChair</span><span class="o">=</span><span class="n">WITH_CHAIR</span><span class="p">,</span>
+                 <span class="n">pickWorstFirst</span><span class="o">=</span><span class="n">OPTIM_PICK_WORST_FIRST</span><span class="p">,</span>
+                 <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="n">OPTIM_EXIT_IF_WORST_WAS_PICKED</span><span class="p">,</span>
+                 <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="n">OPTIM_PICK_PREV_WORST_FIRST</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - withChair: see ``WITH_CHAIR``,</span>
+<span class="sd">        - pickWorstFirst: see ``OPTIM_PICK_WORST_FIRST``,</span>
+<span class="sd">        - exitIfWorstWasPicked: see ``EXIT_IF_WORST_WAS_PICKED``,</span>
+<span class="sd">        - pickPrevWorstFirst: see ``OPTIM_PICK_PREV_WORST_FIRST``,</span>
+<span class="sd">        - maxRank: maximum rank allowed by the RandTopM child (default to nbPlayers, but for instance if there is 2 × RandTopM[UCB] + 2 × RandTopM[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; s = RandTopM(nbPlayers, Thompson, nbArms)</span>
+
+<span class="sd">        - To get a list of usable players, use ``s.children``.</span>
+
+<span class="sd">        .. warning:: ``s._players`` is for internal use ONLY!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">nbPlayers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; for RandTopM class has to be &gt; 0.&quot;</span>  <span class="c1"># DEBUG</span>
+        <span class="k">if</span> <span class="n">maxRank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maxRank</span> <span class="o">=</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span> <span class="o">=</span> <span class="n">maxRank</span>  <span class="c1">#: Max rank, usually nbPlayers but can be different</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="n">nbPlayers</span>  <span class="c1">#: Number of players</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">withChair</span> <span class="o">=</span> <span class="n">withChair</span>  <span class="c1">#: Using a chair ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pickWorstFirst</span> <span class="o">=</span> <span class="n">pickWorstFirst</span>  <span class="c1">#: Using first optimization ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exitIfWorstWasPicked</span> <span class="o">=</span> <span class="n">exitIfWorstWasPicked</span>  <span class="c1">#: Using second optimization ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pickPrevWorstFirst</span> <span class="o">=</span> <span class="n">pickPrevWorstFirst</span>  <span class="c1">#: Using third optimization ? Default to yes now.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms</span>
+        <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">oneRandTopM</span><span class="p">(</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">withChair</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandTopM.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopM.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;RandTopM(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="RandTopMCautious"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMCautious">[docs]</a><span class="k">class</span> <span class="nc">RandTopMCautious</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RandTopMCautious: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+
+<span class="sd">    .. warning:: Still very experimental! But it seems to be the most efficient decentralized MP algorithm we have so far...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RandTopMCautious.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMCautious.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the RandTopMCautious child (default to nbPlayers, but for instance if there is 2 × RandTopMCautious[UCB] + 2 × RandTopMCautious[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RandTopMCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandTopMCautious.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMCautious.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;RandTopMCautious(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="RandTopMExtraCautious"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMExtraCautious">[docs]</a><span class="k">class</span> <span class="nc">RandTopMExtraCautious</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RandTopMExtraCautious: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+
+<span class="sd">    .. warning:: Still very experimental! But it seems to be the most efficient decentralized MP algorithm we have so far...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RandTopMExtraCautious.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMExtraCautious.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the RandTopMExtraCautious child (default to nbPlayers, but for instance if there is 2 × RandTopMExtraCautious[UCB] + 2 × RandTopMExtraCautious[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RandTopMExtraCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandTopMExtraCautious.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMExtraCautious.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;RandTopMExtraCautious(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="RandTopMOld"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMOld">[docs]</a><span class="k">class</span> <span class="nc">RandTopMOld</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RandTopMOld: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RandTopMOld.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMOld.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the RandTopMOld child (default to nbPlayers, but for instance if there is 2 × RandTopMOld[UCB] + 2 × RandTopMOld[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RandTopMOld</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RandTopMOld.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.RandTopMOld.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;RandTopMOld(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="MCTopM"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopM">[docs]</a><span class="k">class</span> <span class="nc">MCTopM</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; MCTopM: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+
+<span class="sd">    .. warning:: Still very experimental! But it seems to be the most efficient decentralized MP algorithm we have so far...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MCTopM.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopM.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the MCTopM child (default to nbPlayers, but for instance if there is 2 × MCTopM[UCB] + 2 × MCTopM[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MCTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MCTopM.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopM.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;MCTopM(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="MCTopMCautious"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMCautious">[docs]</a><span class="k">class</span> <span class="nc">MCTopMCautious</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; MCTopMCautious: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+
+<span class="sd">    .. warning:: Still very experimental! But it seems to be the most efficient decentralized MP algorithm we have so far...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MCTopMCautious.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMCautious.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the MCTopMCautious child (default to nbPlayers, but for instance if there is 2 × MCTopMCautious[UCB] + 2 × MCTopMCautious[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MCTopMCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MCTopMCautious.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMCautious.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;MCTopMCautious(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="MCTopMExtraCautious"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMExtraCautious">[docs]</a><span class="k">class</span> <span class="nc">MCTopMExtraCautious</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; MCTopMExtraCautious: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+
+<span class="sd">    .. warning:: Still very experimental! But it seems to be the most efficient decentralized MP algorithm we have so far...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MCTopMExtraCautious.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMExtraCautious.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the MCTopMExtraCautious child (default to nbPlayers, but for instance if there is 2 × MCTopMExtraCautious[UCB] + 2 × MCTopMExtraCautious[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MCTopMExtraCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MCTopMExtraCautious.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMExtraCautious.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;MCTopMExtraCautious(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="MCTopMOld"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMOld">[docs]</a><span class="k">class</span> <span class="nc">MCTopMOld</span><span class="p">(</span><span class="n">RandTopM</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; MCTopMOld: another proposal for an efficient multi-players learning policy, more &quot;stationary&quot; than RandTopM.</span>
+
+<span class="sd">    .. warning:: Still very experimental! But it seems to be one of the most efficient decentralized MP algorithm we have so far... The two other variants of MCTopM seem even better!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MCTopMOld.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMOld.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - maxRank: maximum rank allowed by the MCTopMOld child (default to nbPlayers, but for instance if there is 2 × MCTopMOld[UCB] + 2 × MCTopMOld[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MCTopMOld</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MCTopMOld.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMOld.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;MCTopMOld(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:53m:25s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
