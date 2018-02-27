@@ -1,0 +1,3 @@
+# Documentation for "Open-Source Python package for Single- and Multi-Players multi-armed Bandits algorithms"
+
+In progress...
