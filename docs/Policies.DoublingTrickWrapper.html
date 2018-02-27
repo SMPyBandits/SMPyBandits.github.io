@@ -1,0 +1,741 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Policies.DoublingTrickWrapper module &mdash; SMPyBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../index.html"/>
+        <link rel="up" title="Policies package" href="Policies.html"/>
+        <link rel="next" title="Policies.EmpiricalMeans module" href="Policies.EmpiricalMeans.html"/>
+        <link rel="prev" title="Policies.DiscountedUCB module" href="Policies.DiscountedUCB.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">AlgoBandits.git</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Policies.html">Policies package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Policies.html#Subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="Policies.html#Submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Policies.AdBandits.html">Policies.AdBandits module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Aggregator.html">Policies.Aggregator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ApproximatedFHGittins.html">Policies.ApproximatedFHGittins module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BESA.html">Policies.BESA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BasePolicy.html">Policies.BasePolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BayesUCB.html">Policies.BayesUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BayesianIndexPolicy.html">Policies.BayesianIndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BlackBoxOpt.html">Policies.BlackBoxOpt module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BoltzmannGumbel.html">Policies.BoltzmannGumbel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedUCB.html">Policies.DiscountedUCB module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Policies.DoublingTrickWrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EmpiricalMeans.html">Policies.EmpiricalMeans module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonDecreasing.html">Policies.EpsilonDecreasing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonDecreasingMEGA.html">Policies.EpsilonDecreasingMEGA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonExpDecreasing.html">Policies.EpsilonExpDecreasing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonFirst.html">Policies.EpsilonFirst module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonGreedy.html">Policies.EpsilonGreedy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3.html">Policies.Exp3 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.KLempUCB.html">Policies.KLempUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSS.html">Policies.MOSS module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSAnytime.html">Policies.MOSSAnytime module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSExperimental.html">Policies.MOSSExperimental module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowRestart.html">Policies.SlidingWindowRestart module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowUCB.html">Policies.SlidingWindowUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Softmax.html">Policies.Softmax module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseUCB.html">Policies.SparseUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseWrapper.html">Policies.SparseWrapper module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SparseklUCB.html">Policies.SparseklUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.TakeFixedArm.html">Policies.TakeFixedArm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.TakeRandomFixedArm.html">Policies.TakeRandomFixedArm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Thompson.html">Policies.Thompson module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.ThompsonRobust.html">Policies.ThompsonRobust module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCB.html">Policies.UCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBH.html">Policies.UCBH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBV.html">Policies.UCBV module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBVtuned.html">Policies.UCBVtuned module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBalpha.html">Policies.UCBalpha module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBdagger.html">Policies.UCBdagger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBjulia.html">Policies.UCBjulia module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10.html">Policies.UCBlog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Uniform.html">Policies.Uniform module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UniformOnSome.html">Policies.UniformOnSome module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UnsupervisedLearning.html">Policies.UnsupervisedLearning module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.WrapRange.html">Policies.WrapRange module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCB.html">Policies.klUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBH.html">Policies.klUCBH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBlog10.html">Policies.klUCBlog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog10.html">Policies.klUCBloglog10 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.usenumba.html">Policies.usenumba module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conf.html">conf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_aggregation_algorithms.html">configuration_comparing_aggregation_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_doubling_algorithms.html">configuration_comparing_doubling_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_markovian.html">configuration_markovian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse.html">configuration_sparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers.html">main_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers_more.html">main_multiplayers_more module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_sparse_multiplayers.html">main_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="policy_server.html">policy_server module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">AlgoBandits.git</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.DoublingTrickWrapper module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.DoublingTrickWrapper.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Policies.DoublingTrickWrapper-module">
+<h1>Policies.DoublingTrickWrapper module<a class="headerlink" href="#Policies.DoublingTrickWrapper-module" title="Permalink to this headline">¶</a></h1>
+<p>A policy that acts as a wrapper on another policy <cite>P</cite>, assumed to be <em>horizon dependent</em> (has to known <span class="math">\(T\)</span>), by implementing a &#8220;doubling trick&#8221;:</p>
+<ul class="simple">
+<li>starts to assume that <span class="math">\(T=T_0=1000\)</span>, and run the policy <span class="math">\(P(T_0)\)</span>, from <span class="math">\(t=1\)</span> to <span class="math">\(t=T_0\)</span>,</li>
+<li>if <span class="math">\(t &gt; T_0\)</span>, then the &#8220;doubling trick&#8221; is performed, by either reinitializing or just changing the parameter <cite>horizon</cite> of the policy P, for instance with <span class="math">\(T_2 = 10 \times T_0\)</span>,</li>
+<li>and keep doing this until <span class="math">\(t = T\)</span>.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is implemented in a very generic way, with simply a function <cite>next_horizon(horizon)</cite> that gives the next horizon to try when crossing the current guess.
+It can be a simple linear function (<cite>next_horizon(horizon) = horizon + 100</cite>), a geometric growth to have the &#8220;real&#8221; doubling trick (<cite>next_horizon(horizon) = horizon * 10</cite>), or even functions growing exponentially fast (<cite>next_horizon(horizon) = horizon ** 1.1</cite>, <cite>next_horizon(horizon) = horizon ** 1.5</cite>, <cite>next_horizon(horizon) = horizon ** 2</cite>).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>My guess is that this &#8220;doubling trick&#8221; wrapping policy can only be efficient if:</p>
+<ul class="last simple">
+<li>the underlying policy <cite>P</cite> is a very efficient horizon-dependent algorithm, e.g., the <a class="reference internal" href="#module-Policies.DoublingTrickWrapper" title="Policies.DoublingTrickWrapper"><code class="xref py py-class docutils literal"><span class="pre">Policies.DoublingTrickWrapper</span></code></a>,</li>
+<li>the growth function <cite>next_horizon</cite> is growing faster than any geometric rate, so that the number of refresh is <span class="math">\(o(\log T)\)</span> and not <span class="math">\(O(\log T)\)</span>.</li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Reference: [[What the Doubling Trick Can or Can&#8217;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](<a class="reference external" href="https://hal.inria.fr/hal-XXX">https://hal.inria.fr/hal-XXX</a>), to be presented soon.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Interface: If <cite>FULL_RESTART=False</cite> (default), the underlying algorithm is recreated at every breakpoint,
+instead its attribute <cite>horizon</cite> or <cite>_horizon</cite> is updated. Be sure that this is enough to really
+change the internal value used by the policy. Some policy use T only once to compute others parameters,
+which should be updated as well. A manual implementation of the <cite>__setattr__</cite> method can help.</p>
+</div>
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.default_horizonDependent_policy">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">default_horizonDependent_policy</code><a class="headerlink" href="#Policies.DoublingTrickWrapper.default_horizonDependent_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default horizon-dependent policy</p>
+<p>alias of <code class="xref py py-class docutils literal"><span class="pre">UCBH</span></code></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.FULL_RESTART">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">FULL_RESTART</code><em class="property"> = False</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.FULL_RESTART" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constant to know what to do when restarting the underlying policy with a new horizon parameter.</p>
+<ul class="simple">
+<li><cite>True</cite> means that a new policy, initialized from scratch, will be created at every breakpoint.</li>
+<li><cite>False</cite> means that the same policy object is used but just its attribute <cite>horizon</cite> is updated (default).</li>
+</ul>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.DEFAULT_FIRST_HORIZON">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">DEFAULT_FIRST_HORIZON</code><em class="property"> = 200</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DEFAULT_FIRST_HORIZON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default horizon, used for the first step.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.ARITHMETIC_STEP">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">ARITHMETIC_STEP</code><em class="property"> = 200</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.ARITHMETIC_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default stepsize for the arithmetic horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__arithmetic">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">next_horizon__arithmetic</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__arithmetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__arithmetic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The arithmetic horizon progression function:</p>
+<div class="math">
+\[\begin{split}T &amp;\mapsto T + 100,\\
+T_i &amp;:= T_0 + 100 \times i.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.GEOMETRIC_STEP">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">GEOMETRIC_STEP</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.GEOMETRIC_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default multiplicative constant for the geometric horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__geometric">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">next_horizon__geometric</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__geometric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__geometric" title="Permalink to this definition">¶</a></dt>
+<dd><p>The geometric horizon progression function:</p>
+<div class="math">
+\[\begin{split}T &amp;\mapsto T \times 2,\\
+T_i &amp;:= T_0 2^i.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.EXPONENTIAL_STEP">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">EXPONENTIAL_STEP</code><em class="property"> = 1.5</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.EXPONENTIAL_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exponential constant for the exponential horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">next_horizon__exponential</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math">
+\[\begin{split}T &amp;\mapsto \left\lfloor T^{1.5} \right\rfloor,\\
+T_i &amp;:= \left\lfloor T_0^{1.5^i} \right\rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.SLOW_EXPONENTIAL_STEP">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">SLOW_EXPONENTIAL_STEP</code><em class="property"> = 1.1</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.SLOW_EXPONENTIAL_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exponential constant for the slow exponential horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential_slow">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">next_horizon__exponential_slow</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential_slow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential_slow" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math">
+\[\begin{split}T &amp;\mapsto \left\lfloor T^{1.1} \right\rfloor,\\
+T_i &amp;:= \left\lfloor T_0^{1.1^i} \right\rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.FAST_EXPONENTIAL_STEP">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">FAST_EXPONENTIAL_STEP</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.FAST_EXPONENTIAL_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exponential constant for the fast exponential horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential_fast">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">next_horizon__exponential_fast</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential_fast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math">
+\[\begin{split}T &amp;\mapsto \lfloor T^{2} \rfloor,\\
+T_i &amp;:= \lfloor T_0^{2^i} \rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.ALPHA">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">ALPHA</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.ALPHA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constant <span class="math">\(\alpha\)</span> for the generic exponential sequence.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.BETA">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">BETA</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.BETA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constant <span class="math">\(\beta\)</span> for the generic exponential sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential_generic">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">next_horizon__exponential_generic</code><span class="sig-paren">(</span><em>i</em>, <em>horizon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential_generic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The generic exponential horizon progression function:</p>
+<div class="math">
+\[T_i := \left\lfloor \frac{T_0}{a} a^{b^i} \right\rfloor.\]</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.default_next_horizon">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">default_next_horizon</code><a class="headerlink" href="#Policies.DoublingTrickWrapper.default_next_horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chose the default horizon growth function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.breakpoints">
+<code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">breakpoints</code><span class="sig-paren">(</span><em>next_horizon</em>, <em>first_horizon</em>, <em>horizon</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#breakpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.breakpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of restart point (breakpoints), if starting from <code class="docutils literal"><span class="pre">first_horizon</span></code> to <code class="docutils literal"><span class="pre">horizon</span></code> with growth function <code class="docutils literal"><span class="pre">next_horizon</span></code>.</p>
+<ul class="simple">
+<li>Also return the gap between the last guess for horizon and the true horizon. This gap should not be too large.</li>
+<li>Nicely print all the values if <code class="docutils literal"><span class="pre">debug=True</span></code>.</li>
+<li>First examples:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_horizon</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">30000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__arithmetic</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  
+<span class="go">([1000, 2000, 3000, 4000, 5000, ..., 28000, 29000, 30000], 0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__geometric</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 10000, 100000], 70000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 31622], 1622)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_slow</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 1995, 4265, 9838, 24671, 67827], 37827)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_fast</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 1000000], 970000)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Second examples:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_horizon</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__arithmetic</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  
+<span class="go">([5000, 6000, 7000, ..., 998000, 999000, 1000000], 0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__geometric</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 50000, 500000, 5000000], 4000000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 353553, 210223755], 209223755)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_slow</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 11718, 29904, 83811, 260394, 906137, 3572014], 2572014)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_fast</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 25000000], 24000000)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Third examples:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_horizon</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">1123456</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__arithmetic</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="go">([10, 1010, ..., 1122010, 1123010, 1124010], 554)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__geometric</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">([10, 100, 1000, 10000, 100000, 1000000, 10000000], 8876544)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">([10, 31, 172, 2255, 107082, 35040856], 33917400)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_slow</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">([10, 12, 15, 19, 25, 34, 48, 70, 107, 170, 284, 499, 928, 1837, 3895, 8903, 22104, 60106, 180638, 606024, 2294768], 1171312)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_fast</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">([10, 100, 10000, 100000000], 98876544)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper">
+<em class="property">class </em><code class="descclassname">Policies.DoublingTrickWrapper.</code><code class="descname">DoublingTrickWrapper</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart=False</em>, <em>policy=&lt;class 'Policies.UCBH.UCBH'&gt;</em>, <em>next_horizon=CPUDispatcher(&lt;function next_horizon__exponential_slow&gt;)</em>, <em>first_horizon=200</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>A policy that acts as a wrapper on another policy <cite>P</cite>, assumed to be <em>horizon dependent</em> (has to known <span class="math">\(T\)</span>), by implementing a &#8220;doubling trick&#8221;.</p>
+<ul class="simple">
+<li>Reference: [[What the Doubling Trick Can or Can&#8217;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](<a class="reference external" href="https://hal.inria.fr/hal-XXX">https://hal.inria.fr/hal-XXX</a>), to be presented soon.</li>
+</ul>
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart=False</em>, <em>policy=&lt;class 'Policies.UCBH.UCBH'&gt;</em>, <em>next_horizon=CPUDispatcher(&lt;function next_horizon__exponential_slow&gt;)</em>, <em>first_horizon=200</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.full_restart">
+<code class="descname">full_restart</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.full_restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant to know how to refresh the underlying policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.policy">
+<code class="descname">policy</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Underlying policy</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.next_horizon_name">
+<code class="descname">next_horizon_name</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.next_horizon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty string of the name of this growing function</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.horizon">
+<code class="descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last guess for the horizon</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.startGame">
+<code class="descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the policy for a new game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.getReward">
+<code class="descname">getReward</code><span class="sig-paren">(</span><em>arm</em>, <em>reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the reward, as usual, update t and sometimes restart the underlying policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.index">
+<code class="descname">index</code><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get attribute <code class="docutils literal"><span class="pre">index</span></code> from the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.choice">
+<code class="descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choice</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceWithRank">
+<code class="descname">choiceWithRank</code><span class="sig-paren">(</span><em>rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceWithRank</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceFromSubSet">
+<code class="descname">choiceFromSubSet</code><span class="sig-paren">(</span><em>availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceFromSubSet</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceMultiple">
+<code class="descname">choiceMultiple</code><span class="sig-paren">(</span><em>nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceMultiple</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceIMP">
+<code class="descname">choiceIMP</code><span class="sig-paren">(</span><em>nb=1</em>, <em>startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceIMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceIMP</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.estimatedOrder">
+<code class="descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">estimatedOrder</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.estimatedBestArms">
+<code class="descname">estimatedBestArms</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">estimatedBestArms</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.DoublingTrickWrapper'</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.computeIndex">
+<code class="descname">computeIndex</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">computeIndex</span></code> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.computeAllIndex">
+<code class="descname">computeAllIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.computeAllIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.computeAllIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to <code class="docutils literal"><span class="pre">computeAllIndex</span></code> of the underlying policy.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.EmpiricalMeans.html" class="btn btn-neutral float-right" title="Policies.EmpiricalMeans module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.DiscountedUCB.html" class="btn btn-neutral" title="Policies.DiscountedUCB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:53m:25s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
