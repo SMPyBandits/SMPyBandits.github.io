@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Environment.sortedDistance &mdash; SMPyBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">AlgoBandits.git</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">:boom: TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks :notebook: by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Environment.sortedDistance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Environment.sortedDistance</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; sortedDistance: define function to measure of sortedness of permutations of [0..N-1].</span>
+
+<span class="sd">- Cf. http://stevehanov.ca/blog/index.php?id=145 and https://stackoverflow.com/q/8206617</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+
+<span class="kn">from</span> <span class="nn">difflib</span> <span class="k">import</span> <span class="n">SequenceMatcher</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+
+
+<div class="viewcode-block" id="weightedDistance"><a class="viewcode-back" href="../../docs/Environment.sortedDistance.html#Environment.sortedDistance.weightedDistance">[docs]</a><span class="k">def</span> <span class="nf">weightedDistance</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Relative difference between the best possible weighted choices and the actual choices.</span>
+
+<span class="sd">    &gt;&gt;&gt; weights = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]</span>
+<span class="sd">    &gt;&gt;&gt; choices = [8, 6, 5, 2]</span>
+<span class="sd">    &gt;&gt;&gt; weightedDistance(choices, weights)  # not a bad choice  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.8333...</span>
+<span class="sd">    &gt;&gt;&gt; choices = [8, 6, 5, 7]</span>
+<span class="sd">    &gt;&gt;&gt; weightedDistance(choices, weights)  # best choice!  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.000...</span>
+<span class="sd">    &gt;&gt;&gt; choices = [3, 2, 1, 0]</span>
+<span class="sd">    &gt;&gt;&gt; weightedDistance(choices, weights)  # worst choice!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.3333...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+    <span class="n">bestWeights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">weights</span><span class="p">)[</span><span class="o">-</span><span class="n">n</span><span class="p">:])</span>
+    <span class="n">chosenWeights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="o">-</span><span class="n">n</span><span class="p">:]])</span>
+    <span class="k">return</span> <span class="n">chosenWeights</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">bestWeights</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="manhattan"><a class="viewcode-back" href="../../docs/Environment.sortedDistance.html#Environment.sortedDistance.manhattan">[docs]</a><span class="k">def</span> <span class="nf">manhattan</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A certain measure of sortedness for the list A, based on Manhattan distance.</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; manhattan(perm)  # sorted  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.0...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 5, 4, 3]</span>
+<span class="sd">    &gt;&gt;&gt; manhattan(perm)  # almost sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.777...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 9, 6, 4, 0, 3, 1, 7, 8, 5]  # doctest: +ELLIPSIS</span>
+<span class="sd">    &gt;&gt;&gt; manhattan(perm)</span>
+<span class="sd">    0.4</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 1, 6, 4, 0, 3, 5, 7, 8, 9]  # better sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    &gt;&gt;&gt; manhattan(perm)</span>
+<span class="sd">    0.72</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">comp</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">permutation</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="kendalltau"><a class="viewcode-back" href="../../docs/Environment.sortedDistance.html#Environment.sortedDistance.kendalltau">[docs]</a><span class="k">def</span> <span class="nf">kendalltau</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A certain measure of sortedness for the list A, based on Kendall Tau ranking coefficient.</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; kendalltau(perm)  # sorted  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.98...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 5, 4, 3]</span>
+<span class="sd">    &gt;&gt;&gt; kendalltau(perm)  # almost sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.90...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 9, 6, 4, 0, 3, 1, 7, 8, 5]</span>
+<span class="sd">    &gt;&gt;&gt; kendalltau(perm)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.211...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 1, 6, 4, 0, 3, 5, 7, 8, 9]  # better sorted!</span>
+<span class="sd">    &gt;&gt;&gt; kendalltau(perm)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.984...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">kendalltau</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span><span class="o">.</span><span class="n">pvalue</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="spearmanr"><a class="viewcode-back" href="../../docs/Environment.sortedDistance.html#Environment.sortedDistance.spearmanr">[docs]</a><span class="k">def</span> <span class="nf">spearmanr</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A certain measure of sortedness for the list A, based on Spearman ranking coefficient.</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; spearmanr(perm)  # sorted  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.0...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 5, 4, 3]</span>
+<span class="sd">    &gt;&gt;&gt; spearmanr(perm)  # almost sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.92...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 9, 6, 4, 0, 3, 1, 7, 8, 5]</span>
+<span class="sd">    &gt;&gt;&gt; spearmanr(perm)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.248...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 1, 6, 4, 0, 3, 5, 7, 8, 9]  # better sorted!</span>
+<span class="sd">    &gt;&gt;&gt; spearmanr(perm)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.986...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span><span class="o">.</span><span class="n">pvalue</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="gestalt"><a class="viewcode-back" href="../../docs/Environment.sortedDistance.html#Environment.sortedDistance.gestalt">[docs]</a><span class="k">def</span> <span class="nf">gestalt</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A certain measure of sortedness for the list A, based on Gestalt pattern matching.</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; gestalt(perm)  # sorted  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.0...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 5, 4, 3]</span>
+<span class="sd">    &gt;&gt;&gt; gestalt(perm)  # almost sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.666...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 9, 6, 4, 0, 3, 1, 7, 8, 5]</span>
+<span class="sd">    &gt;&gt;&gt; gestalt(perm)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.4...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 1, 6, 4, 0, 3, 5, 7, 8, 9]  # better sorted!</span>
+<span class="sd">    &gt;&gt;&gt; gestalt(perm)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.5...</span>
+
+<span class="sd">    &gt;&gt;&gt; import random</span>
+<span class="sd">    &gt;&gt;&gt; random.seed(0)</span>
+<span class="sd">    &gt;&gt;&gt; ratings = [random.gauss(1200, 200) for i in range(100000)]</span>
+<span class="sd">    &gt;&gt;&gt; gestalt(ratings)  # doctest: +ELLIPSIS</span>
+<span class="sd">    8e-05...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="meanDistance"><a class="viewcode-back" href="../../docs/Environment.sortedDistance.html#Environment.sortedDistance.meanDistance">[docs]</a><span class="k">def</span> <span class="nf">meanDistance</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="n">manhattan</span><span class="p">,</span> <span class="n">gestalt</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;A certain measure of sortedness for the list A, based on mean of the 2 distances: manhattan and gestalt.</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 3, 4]</span>
+<span class="sd">    &gt;&gt;&gt; meanDistance(perm)  # sorted  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.0</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [0, 1, 2, 5, 4, 3]</span>
+<span class="sd">    &gt;&gt;&gt; meanDistance(perm)  # almost sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.722...</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 9, 6, 4, 0, 3, 1, 7, 8, 5]  # doctest: +ELLIPSIS</span>
+<span class="sd">    &gt;&gt;&gt; meanDistance(perm)</span>
+<span class="sd">    0.4</span>
+
+<span class="sd">    &gt;&gt;&gt; perm = [2, 1, 6, 4, 0, 3, 5, 7, 8, 9]  # better sorted!  # doctest: +ELLIPSIS</span>
+<span class="sd">    &gt;&gt;&gt; meanDistance(perm)</span>
+<span class="sd">    0.61</span>
+
+<span class="sd">    .. warning:: I removed :func:`kendalltau` and :func:`spearmanr` as they were giving 100% for many cases where clearly there were no reason to give 100%...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+        <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">method</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="n">comp</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span></div>
+
+
+<span class="c1"># Default distance</span>
+<span class="n">sortedDistance</span> <span class="o">=</span> <span class="n">meanDistance</span>
+
+
+<span class="c1"># Only export and expose the useful functions defined here</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;weightedDistance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;manhattan&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kendalltau&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;spearmanr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gestalt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;meanDistance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sortedDistance&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:53m:25s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
