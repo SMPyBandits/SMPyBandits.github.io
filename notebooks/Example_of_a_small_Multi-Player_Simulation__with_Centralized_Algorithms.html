@@ -1,0 +1,2835 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Table of Contents &mdash; AlgoBandits 0.9.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="AlgoBandits 0.9.1 documentation" href="../index.html"/>
+        <link rel="up" title="List of notebooks for AlgoBandits documentation" href="list.html"/>
+        <link rel="next" title="Table of Contents" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html"/>
+        <link rel="prev" title="Table of Contents" href="Example_of_a_small_Single-Player_Simulation.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> AlgoBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithAlgoBandits.html">List of research publications using Lilian Besson&#8217;s AlgoBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for AlgoBandits documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html#Easily-creating-MAB-problems">Easily creating MAB problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html#Do-we-even-need-a-smart-learning-algorithm?-Is-UCB-useless?"><em>Do we even need a smart learning algorithm? Is UCB useless?</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Single-Player_Simulation.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Single-Player_Simulation.html#An-example-of-a-small-Single-Player-simulation">An example of a small Single-Player simulation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#An-example-of-a-small-Multi-Player-simulation,-with-Centralized-Algorithms">An example of a small Multi-Player simulation, with Centralized Algorithms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-the-problem">Creating the problem</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Parameters-for-the-simulation">Parameters for the simulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Three-MAB-problems-with-Bernoulli-arms">Three MAB problems with Bernoulli arms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Some-RL-algorithms">Some RL algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Creating-the-EvaluatorMultiPlayers-objects">Creating the <code class="docutils literal"><span class="pre">EvaluatorMultiPlayers</span></code> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Solving-the-problem">Solving the problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Plotting-the-results">Plotting the results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#First-problem">First problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Second-problem">Second problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Third-problem">Third problem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Comparing-their-performances">Comparing their performances</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html#An-example-of-a-small-Multi-Player-simulation,-with-rhoRand-and-Selfish,-for-different-algorithms">An example of a small Multi-Player simulation, with rhoRand and Selfish, for different algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Unsupervised_Learning_for_Bandit_problem.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Unsupervised_Learning_for_Bandit_problem.html#Trying-to-use-Unsupervised-Learning-algorithms-for-a-Gaussian-bandit-problem">Trying to use Unsupervised Learning algorithms for a Gaussian bandit problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html#Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem">Trying to use Black-Box Bayesian optimization algorithms for a Gaussian bandit problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html#Lai-&amp;-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points">Lai &amp; Robbins lower-bound for stochastic bandit with full restart points</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Policies/C/README.html">Fast C versions of the utilities in <code class="docutils literal"><span class="pre">kullpack.py</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AlgoBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="list.html">List of notebooks for AlgoBandits documentation</a> &raquo;</li>
+        
+      <li>Table of Contents</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/notebooks/Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Table-of-Contents">
+<h1>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Permalink to this headline">¶</a></h1>
+<p><div class="lev1 toc-item"><p>1&nbsp;&nbsp;An example of a small Multi-Player simulation, with Centralized
+Algorithms</p>
+</div><div class="lev2 toc-item"><p>1.1&nbsp;&nbsp;Creating the problem</p>
+</div><div class="lev3 toc-item"><p>1.1.1&nbsp;&nbsp;Parameters for the simulation</p>
+</div><div class="lev3 toc-item"><p>1.1.2&nbsp;&nbsp;Three MAB problems with Bernoulli arms</p>
+</div><div class="lev3 toc-item"><p>1.1.3&nbsp;&nbsp;Some RL algorithms</p>
+</div><div class="lev2 toc-item"><p>1.2&nbsp;&nbsp;Creating the EvaluatorMultiPlayers objects</p>
+</div><div class="lev2 toc-item"><p>1.3&nbsp;&nbsp;Solving the problem</p>
+</div><div class="lev2 toc-item"><p>1.4&nbsp;&nbsp;Plotting the results</p>
+</div><div class="lev3 toc-item"><p>1.4.1&nbsp;&nbsp;First problem</p>
+</div><div class="lev3 toc-item"><p>1.4.2&nbsp;&nbsp;Second problem</p>
+</div><div class="lev3 toc-item"><p>1.4.3&nbsp;&nbsp;Third problem</p>
+</div><div class="lev3 toc-item"><p>1.4.4&nbsp;&nbsp;Comparing their performances</p>
+</div></div>
+<hr class="docutils" />
+<div class="section" id="An-example-of-a-small-Multi-Player-simulation,-with-Centralized-Algorithms">
+<h1>An example of a small Multi-Player simulation, with Centralized Algorithms<a class="headerlink" href="#An-example-of-a-small-Multi-Player-simulation,-with-Centralized-Algorithms" title="Permalink to this headline">¶</a></h1>
+<p>First, be sure to be in the main folder, and import
+<code class="docutils literal"><span class="pre">EvaluatorMultiPlayers</span></code> from <code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">path</span>
+<span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Local imports</span>
+<span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">EvaluatorMultiPlayers</span><span class="p">,</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+<p>We also need arms, for instance <code class="docutils literal"><span class="pre">Bernoulli</span></code>-distributed arm:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Import arms</span>
+<span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+</pre></div>
+</div>
+</div>
+<p>And finally we need some single-player and multi-player Reinforcement
+Learning algorithms:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Import algorithms</span>
+<span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">PoliciesMultiPlayers</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Just improving the ?? in Jupyter. Thanks to https://nbviewer.jupyter.org/gist/minrk/7715212</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">page</span>
+<span class="k">def</span> <span class="nf">myprint</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;text/plain&#39;</span><span class="p">])</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="n">myprint</span>
+</pre></div>
+</div>
+</div>
+<p>For instance, this imported the <code class="docutils literal"><span class="pre">UCB</span></code> algorithm:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>UCBalpha<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Init signature:</span> UCBalpha<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+The UCB1 (UCB-alpha) index policy, modified to take a random permutation order for the initial exploration of each arm (reduce collisions in the multi-players setting).
+Reference: [Auer et al. 02].
+<span class="ansi-red-fg">Init docstring:</span>
+New generic index policy.
+
+- nbArms: the number of arms,
+- lower, amplitude: lower value and known amplitude of the rewards.
+<span class="ansi-red-fg">File:</span>           ~/AlgoBandits.git/Policies/UCBalpha.py
+<span class="ansi-red-fg">Type:</span>           type
+
+</pre></div></div>
+</div>
+<p>As well as the <code class="docutils literal"><span class="pre">CentralizedMultiplePlay</span></code> multi-player policy:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span>CentralizedMultiplePlay<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Init signature:</span> CentralizedMultiplePlay<span class="ansi-blue-fg">(</span>nbPlayers<span class="ansi-blue-fg">,</span> playerAlgo<span class="ansi-blue-fg">,</span> nbArms<span class="ansi-blue-fg">,</span> uniformAllocation<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+CentralizedMultiplePlay: a multi-player policy where ONE policy is used by a centralized agent; asking the policy to select nbPlayers arms at each step.
+
+<span class="ansi-red-fg">Init docstring:</span>
+- nbPlayers: number of players to create (in self._players).
+- playerAlgo: class to use for every players.
+- nbArms: number of arms, given as first argument to playerAlgo.
+- uniformAllocation: Should the affectations of users always be uniform, or fixed when UCB indexes have converged? First choice is more fair, but linear nb of switches, second choice is not fair, but cst nb of switches.
+- `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.
+
+Examples:
+
+&gt;&gt;&gt; s = CentralizedMultiplePlay(10, TakeFixedArm, 14)
+&gt;&gt;&gt; s = CentralizedMultiplePlay(NB_PLAYERS, Softmax, nbArms, temperature=TEMPERATURE)
+
+- To get a list of usable players, use s.children.
+- Warning: s._players is for internal use ONLY!
+<span class="ansi-red-fg">File:</span>           ~/AlgoBandits.git/PoliciesMultiPlayers/CentralizedMultiplePlay.py
+<span class="ansi-red-fg">Type:</span>           type
+
+</pre></div></div>
+</div>
+<p>We also need a collision model. The usual ones are defined in the
+<code class="docutils literal"><span class="pre">CollisionModels</span></code> package, and the only one we need is the classical
+one, where two or more colliding users don’t receive any rewards.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1"># Collision Models</span>
+<span class="kn">from</span> <span class="nn">Environment.CollisionModels</span> <span class="k">import</span> <span class="n">onlyUniqUserGetsReward</span>
+
+onlyUniqUserGetsReward<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">Signature:</span> onlyUniqUserGetsReward<span class="ansi-blue-fg">(</span>t<span class="ansi-blue-fg">,</span> arms<span class="ansi-blue-fg">,</span> players<span class="ansi-blue-fg">,</span> choices<span class="ansi-blue-fg">,</span> rewards<span class="ansi-blue-fg">,</span> pulls<span class="ansi-blue-fg">,</span> collisions<span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Docstring:</span>
+Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+- This is the default collision model, cf. https://arxiv.org/abs/0910.2065v3 collision model 1.
+- The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).
+<span class="ansi-red-fg">File:</span>      ~/AlgoBandits.git/Environment/CollisionModels.py
+<span class="ansi-red-fg">Type:</span>      function
+
+</pre></div></div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Creating-the-problem">
+<h2>Creating the problem<a class="headerlink" href="#Creating-the-problem" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Parameters-for-the-simulation">
+<h3>Parameters for the simulation<a class="headerlink" href="#Parameters-for-the-simulation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><span class="math">\(T = 10000\)</span> is the time horizon,</li>
+<li><span class="math">\(N = 100\)</span> is the number of repetitions (should be larger to
+have consistent results),</li>
+<li><span class="math">\(M = 2\)</span> is the number of players,</li>
+<li><code class="docutils literal"><span class="pre">N_JOBS</span> <span class="pre">=</span> <span class="pre">4</span></code> is the number of cores used to parallelize the code.</li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">NB_PLAYERS</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">collisionModel</span> <span class="o">=</span> <span class="n">onlyUniqUserGetsReward</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Three-MAB-problems-with-Bernoulli-arms">
+<h3>Three MAB problems with Bernoulli arms<a class="headerlink" href="#Three-MAB-problems-with-Bernoulli-arms" title="Permalink to this headline">¶</a></h3>
+<p>We consider in this example <span class="math">\(3\)</span> problems, with <code class="docutils literal"><span class="pre">Bernoulli</span></code> arms,
+of different means.</p>
+<ol class="arabic">
+<li><p class="first">The first problem is very easy, with two good arms and three arms,
+with a fixed gap
+<span class="math">\(\Delta = \max_{\mu_i \neq \mu_j}(\mu_{i} - \mu_{j}) = 0.1\)</span>.</p>
+</li>
+<li><p class="first">The second problem is as easier, with a larger gap.</p>
+</li>
+<li><p class="first">Third problem is harder, with a smaller gap, and a very large
+difference between the two optimal arms and the suboptimal arms.</p>
+<blockquote>
+<div><p>Note: right now, the multi-environments evaluator does not work well
+for MP policies, if there is a number different of arms in the
+scenarios. So I use the same number of arms in all the problems.</p>
+</div></blockquote>
+</li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">ENVIRONMENTS</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># 1)  Bernoulli arms</span>
+        <span class="p">{</span>   <span class="c1"># Scenario 1 from [Komiyama, Honda, Nakagawa, 2016, arXiv 1506.00779]</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>   <span class="c1"># Classical scenario</span>
+             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>   <span class="c1"># Harder scenario</span>
+             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.84</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Some-RL-algorithms">
+<h3>Some RL algorithms<a class="headerlink" href="#Some-RL-algorithms" title="Permalink to this headline">¶</a></h3>
+<p>We will compare Thompson Sampling against <span class="math">\(\mathrm{UCB}_1\)</span>, using
+two different centralized policy:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">CentralizedMultiplePlay</span></code> is the naive use of a Bandit algorithm
+for Multi-Player decision making: at every step, the internal
+decision making process is used to determine not <span class="math">\(1\)</span> arm but
+<span class="math">\(M\)</span> to sample. For UCB-like algorithm, the decision making is
+based on a <span class="math">\(\arg\max\)</span> on UCB-like indexes, usually of the form
+<span class="math">\(I_j(t) = X_j(t) + B_j(t)\)</span>, where
+<span class="math">\(X_j(t) = \hat{\mu_j}(t) = \sum_{\tau \leq t} r_j(\tau) / N_j(t)\)</span>
+is the empirical mean of arm <span class="math">\(j\)</span>, and <span class="math">\(B_j(t)\)</span> is a bias
+term, of the form
+<span class="math">\(B_j(t) = \sqrt{\frac{\alpha \log(t)}{2 N_j(t)}}\)</span>.</li>
+<li><code class="docutils literal"><span class="pre">CentralizedIMP</span></code> is very similar, but instead of following the
+internal decision making for all the decisions, the system uses just
+the empirical means <span class="math">\(X_j(t)\)</span> to determine <span class="math">\(M-1\)</span> arms to
+sample, and the bias-corrected term (i.e., the internal decision
+making, can be sampling from a Bayesian posterior for instance) is
+used just for one decision. It is an heuristic, proposed in
+<a class="reference external" href="https://arxiv.org/abs/1506.00779">[Komiyama, Honda, Nakagawa,
+2016]</a>.</li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">nbArms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ENVIRONMENTS</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+<span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">nbArms</span> <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">ENVIRONMENTS</span><span class="p">),</span> <span class="s2">&quot;Error: not yet support if different environments have different nb of arms&quot;</span>
+<span class="n">nbArms</span>
+
+<span class="n">SUCCESSIVE_PLAYERS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CentralizedMultiplePlay</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="p">,</span>
+    <span class="n">CentralizedIMP</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="p">,</span>
+    <span class="n">CentralizedMultiplePlay</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">Thompson</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span><span class="o">.</span><span class="n">children</span><span class="p">,</span>
+    <span class="n">CentralizedIMP</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">Thompson</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span><span class="o">.</span><span class="n">children</span>
+<span class="p">]</span>
+<span class="n">SUCCESSIVE_PLAYERS</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[16]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>5
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ - One new child, of index 0, and class #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+ - One new child, of index 1, and class #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+ - One new child, of index 0, and class #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+ - One new child, of index 1, and class #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+ - One new child, of index 0, and class #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+ - One new child, of index 1, and class #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+ - One new child, of index 0, and class #1&lt;CentralizedIMP(Thompson)&gt; ...
+ - One new child, of index 1, and class #2&lt;CentralizedIMP(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[16]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>[[CentralizedMultiplePlay(UCB($\alpha=1$)),
+  CentralizedMultiplePlay(UCB($\alpha=1$))],
+ [CentralizedIMP(UCB($\alpha=1$)), CentralizedIMP(UCB($\alpha=1$))],
+ [CentralizedMultiplePlay(Thompson), CentralizedMultiplePlay(Thompson)],
+ [CentralizedIMP(Thompson), CentralizedIMP(Thompson)]]
+</pre></div>
+</div>
+</div>
+<p>The mother class in this case does all the job here, as we use
+centralized learning.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">OnePlayer</span> <span class="o">=</span> <span class="n">SUCCESSIVE_PLAYERS</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">OnePlayer</span><span class="o">.</span><span class="n">nbArms</span>
+
+<span class="n">OneMother</span> <span class="o">=</span> <span class="n">OnePlayer</span><span class="o">.</span><span class="n">mother</span>
+<span class="n">OneMother</span>
+<span class="n">OneMother</span><span class="o">.</span><span class="n">nbArms</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[17]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>5
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[17]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;PoliciesMultiPlayers.CentralizedMultiplePlay.CentralizedMultiplePlay at 0x7f5580f03f60&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[17]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>5
+</pre></div>
+</div>
+</div>
+<p>Complete configuration for the problem:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># --- Duration of the experiment</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+    <span class="c1"># --- Number of repetition of the experiment (to have an average)</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="n">REPETITIONS</span><span class="p">,</span>
+    <span class="c1"># --- Parameters for the use of joblib.Parallel</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="n">N_JOBS</span><span class="p">,</span>    <span class="c1"># = nb of CPU cores</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>      <span class="c1"># Max joblib verbosity</span>
+    <span class="c1"># --- Collision model</span>
+    <span class="s2">&quot;collisionModel&quot;</span><span class="p">:</span> <span class="n">onlyUniqUserGetsReward</span><span class="p">,</span>
+    <span class="c1"># --- Arms</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="n">ENVIRONMENTS</span><span class="p">,</span>
+    <span class="c1"># --- Algorithms</span>
+    <span class="s2">&quot;successive_players&quot;</span><span class="p">:</span> <span class="n">SUCCESSIVE_PLAYERS</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Creating-the-EvaluatorMultiPlayers-objects">
+<h2>Creating the <code class="docutils literal"><span class="pre">EvaluatorMultiPlayers</span></code> objects<a class="headerlink" href="#Creating-the-EvaluatorMultiPlayers-objects" title="Permalink to this headline">¶</a></h2>
+<p>We will need to create several objects, as the simulation first runs one
+policy against each environment, and then aggregate them to compare
+them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">%%</span><span class="k">time</span>
+N_players = len(configuration[&quot;successive_players&quot;])
+
+# List to keep all the EvaluatorMultiPlayers objects
+evs = [None] * N_players
+evaluators = [[None] * N_players] * len(configuration[&quot;environment&quot;])
+
+for playersId, players in tqdm(enumerate(configuration[&quot;successive_players&quot;]), desc=&quot;Creating&quot;):
+    print(&quot;\n\nConsidering the list of players :\n&quot;, players)
+    conf = configuration.copy()
+    conf[&#39;players&#39;] = players
+    evs[playersId] = EvaluatorMultiPlayers(conf)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1b430a25062449478dddfdd73fc75e27"}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+Considering the list of players :
+ [CentralizedMultiplePlay(UCB($\alpha=1$)), CentralizedMultiplePlay(UCB($\alpha=1$))]
+Number of players in the multi-players game: 2
+Time horizon: 10000
+Number of repetitions: 100
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function &lt;function onlyUniqUserGetsReward at 0x7f55868d3510&gt;).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. https://arxiv.org/abs/0910.2065v3 collision model 1.
+    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).
+
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.3, 0.4, 0.5, 0.6, 0.7], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.3, 0.4, 0.5, 0.6, 0.7]
+ - with &#39;arms&#39; = [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)]
+ - with &#39;means&#39; = [ 0.3  0.4  0.5  0.6  0.7]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.7
+ - with &#39;minArm&#39; = 0.3
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.1, 0.3, 0.5, 0.7, 0.9], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.1, 0.3, 0.5, 0.7, 0.9]
+ - with &#39;arms&#39; = [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)]
+ - with &#39;means&#39; = [ 0.1  0.3  0.5  0.7  0.9]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.9
+ - with &#39;minArm&#39; = 0.1
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.005, 0.01, 0.015, 0.84, 0.85], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.005, 0.01, 0.015, 0.84, 0.85]
+ - with &#39;arms&#39; = [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)]
+ - with &#39;means&#39; = [ 0.005  0.01   0.015  0.84   0.85 ]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.85
+ - with &#39;minArm&#39; = 0.005
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - with &#39;arms&#39; represented as: $[B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)^*]$
+Number of environments to try: 3
+
+
+Considering the list of players :
+ [CentralizedIMP(UCB($\alpha=1$)), CentralizedIMP(UCB($\alpha=1$))]
+Number of players in the multi-players game: 2
+Time horizon: 10000
+Number of repetitions: 100
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function &lt;function onlyUniqUserGetsReward at 0x7f55868d3510&gt;).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. https://arxiv.org/abs/0910.2065v3 collision model 1.
+    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).
+
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.3, 0.4, 0.5, 0.6, 0.7], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.3, 0.4, 0.5, 0.6, 0.7]
+ - with &#39;arms&#39; = [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)]
+ - with &#39;means&#39; = [ 0.3  0.4  0.5  0.6  0.7]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.7
+ - with &#39;minArm&#39; = 0.3
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.1, 0.3, 0.5, 0.7, 0.9], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.1, 0.3, 0.5, 0.7, 0.9]
+ - with &#39;arms&#39; = [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)]
+ - with &#39;means&#39; = [ 0.1  0.3  0.5  0.7  0.9]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.9
+ - with &#39;minArm&#39; = 0.1
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.005, 0.01, 0.015, 0.84, 0.85], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.005, 0.01, 0.015, 0.84, 0.85]
+ - with &#39;arms&#39; = [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)]
+ - with &#39;means&#39; = [ 0.005  0.01   0.015  0.84   0.85 ]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.85
+ - with &#39;minArm&#39; = 0.005
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - with &#39;arms&#39; represented as: $[B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)^*]$
+Number of environments to try: 3
+
+
+Considering the list of players :
+ [CentralizedMultiplePlay(Thompson), CentralizedMultiplePlay(Thompson)]
+Number of players in the multi-players game: 2
+Time horizon: 10000
+Number of repetitions: 100
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function &lt;function onlyUniqUserGetsReward at 0x7f55868d3510&gt;).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. https://arxiv.org/abs/0910.2065v3 collision model 1.
+    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).
+
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.3, 0.4, 0.5, 0.6, 0.7], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.3, 0.4, 0.5, 0.6, 0.7]
+ - with &#39;arms&#39; = [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)]
+ - with &#39;means&#39; = [ 0.3  0.4  0.5  0.6  0.7]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.7
+ - with &#39;minArm&#39; = 0.3
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.1, 0.3, 0.5, 0.7, 0.9], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.1, 0.3, 0.5, 0.7, 0.9]
+ - with &#39;arms&#39; = [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)]
+ - with &#39;means&#39; = [ 0.1  0.3  0.5  0.7  0.9]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.9
+ - with &#39;minArm&#39; = 0.1
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.005, 0.01, 0.015, 0.84, 0.85], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.005, 0.01, 0.015, 0.84, 0.85]
+ - with &#39;arms&#39; = [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)]
+ - with &#39;means&#39; = [ 0.005  0.01   0.015  0.84   0.85 ]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.85
+ - with &#39;minArm&#39; = 0.005
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - with &#39;arms&#39; represented as: $[B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)^*]$
+Number of environments to try: 3
+
+
+Considering the list of players :
+ [CentralizedIMP(Thompson), CentralizedIMP(Thompson)]
+Number of players in the multi-players game: 2
+Time horizon: 10000
+Number of repetitions: 100
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function &lt;function onlyUniqUserGetsReward at 0x7f55868d3510&gt;).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. https://arxiv.org/abs/0910.2065v3 collision model 1.
+    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).
+
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.3, 0.4, 0.5, 0.6, 0.7], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.3, 0.4, 0.5, 0.6, 0.7]
+ - with &#39;arms&#39; = [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)]
+ - with &#39;means&#39; = [ 0.3  0.4  0.5  0.6  0.7]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.7
+ - with &#39;minArm&#39; = 0.3
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.1, 0.3, 0.5, 0.7, 0.9], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.1, 0.3, 0.5, 0.7, 0.9]
+ - with &#39;arms&#39; = [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)]
+ - with &#39;means&#39; = [ 0.1  0.3  0.5  0.7  0.9]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.9
+ - with &#39;minArm&#39; = 0.1
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - with &#39;arms&#39; represented as: $[B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)^*]$
+Creating a new MAB problem ...
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.005, 0.01, 0.015, 0.84, 0.85], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+ - with &#39;params&#39; = [0.005, 0.01, 0.015, 0.84, 0.85]
+ - with &#39;arms&#39; = [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)]
+ - with &#39;means&#39; = [ 0.005  0.01   0.015  0.84   0.85 ]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 0.85
+ - with &#39;minArm&#39; = 0.005
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - with &#39;arms&#39; represented as: $[B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)^*]$
+Number of environments to try: 3
+
+CPU times: user 96 ms, sys: 8 ms, total: 104 ms
+Wall time: 96.2 ms
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Solving-the-problem">
+<h2>Solving the problem<a class="headerlink" href="#Solving-the-problem" title="Permalink to this headline">¶</a></h2>
+<p>Now we can simulate the <span class="math">\(2\)</span> environments, for the successive
+policies. That part can take some time.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">%%</span><span class="k">time</span>
+for playersId, evaluation in tqdm(enumerate(evs), desc=&quot;Policies&quot;):
+    for envId, env in tqdm(enumerate(evaluation.envs), desc=&quot;Problems&quot;):
+        # Evaluate just that env
+        evaluation.startOneEnv(envId, env)
+        # Storing it after simulation is done
+        evaluators[envId][playersId] = evaluation
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a5167342128c4388aae12131f9b149cf"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1acb2886c9264255a592dee2f44d1f55"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)], minArm: 0.3, maxArm: 0.7)
+- Adding player #1 = #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+- Adding player #2 = #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fb431acec35840e482c9af30b49b3224"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; after 10000 steps: [1 2 0 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 68.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 85.84% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 81.19% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 78.76% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; after 10000 steps: [1 2 0 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 68.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 85.84% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 81.19% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 78.76% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.1s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   17.0s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   39.0s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)], minArm: 0.1, maxArm: 0.9)
+- Adding player #1 = #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+- Adding player #2 = #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d813a0882c194f27bfa28ccb670241e3"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; after 10000 steps: [1 0 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; after 10000 steps: [1 0 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.1s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   19.5s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   43.4s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)], minArm: 0.005, maxArm: 0.85)
+- Adding player #1 = #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+- Adding player #2 = #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fe7d5a38e51240e9b234a4c21516b241"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    2.7s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   18.5s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   39.0s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1908b65ff5a44dd6a7f781a4e1226c42"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)], minArm: 0.3, maxArm: 0.7)
+- Adding player #1 = #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+- Adding player #2 = #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "04bf4fe4b3ff437eab5e64a44981df2c"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; after 10000 steps: [1 0 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; after 10000 steps: [1 0 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    5.8s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   33.1s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:  1.3min finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)], minArm: 0.1, maxArm: 0.9)
+- Adding player #1 = #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+- Adding player #2 = #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b6c264bd188744e693b147eba149255e"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    6.3s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   33.7s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:  1.3min finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)], minArm: 0.005, maxArm: 0.85)
+- Adding player #1 = #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+- Adding player #2 = #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "47a15e25b19944a19a901971771068e1"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedIMP(UCB($\alpha=1$))&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedIMP(UCB($\alpha=1$))&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    5.8s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   33.6s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:  1.3min finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "01401dd458214e7db2d61aa24eec34b9"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)], minArm: 0.3, maxArm: 0.7)
+- Adding player #1 = #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+- Adding player #2 = #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e5c525c46c7e4b8f84641cb0162dc824"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedMultiplePlay(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedMultiplePlay(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    2.7s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   15.1s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   35.0s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)], minArm: 0.1, maxArm: 0.9)
+- Adding player #1 = #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+- Adding player #2 = #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "adef63450ba841ea9af528fc9fbd9ec1"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedMultiplePlay(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...  ==&gt; Optimal arm identification: 100.00% (relative success)...
+
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedMultiplePlay(Thompson)&gt; after 10000 steps: [1 0 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.1s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   16.8s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   41.9s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)], minArm: 0.005, maxArm: 0.85)
+- Adding player #1 = #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+- Adding player #2 = #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedMultiplePlay(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "de39fbc3008848e9a63aa5dae6f0d972"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedMultiplePlay(Thompson)&gt; after 10000 steps: [1 0 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedMultiplePlay(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.1s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   17.1s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   38.2s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6bfd7adbcd574ac2bdddacb85258104f"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.3), B(0.4), B(0.5), B(0.6), B(0.7)], minArm: 0.3, maxArm: 0.7)
+- Adding player #1 = #1&lt;CentralizedIMP(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedIMP(Thompson)&gt; ...
+- Adding player #2 = #2&lt;CentralizedIMP(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedIMP(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "56e8e037c17a4689b361e7ae46bb86ad"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedIMP(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedIMP(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.2s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   16.1s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   38.0s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.1), B(0.3), B(0.5), B(0.7), B(0.9)], minArm: 0.1, maxArm: 0.9)
+- Adding player #1 = #1&lt;CentralizedIMP(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedIMP(Thompson)&gt; ...
+- Adding player #2 = #2&lt;CentralizedIMP(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedIMP(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3c49ee0f383b426a99f501ce5bea58a4"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedIMP(Thompson)&gt; after 10000 steps: [0 2 1 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedIMP(Thompson)&gt; after 10000 steps: [0 1 2 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 98.57% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 99.64% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.7s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   17.9s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   39.3s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Evaluating environment: MAB(nbArms: 5, arms: [B(0.005), B(0.01), B(0.015), B(0.84), B(0.85)], minArm: 0.005, maxArm: 0.85)
+- Adding player #1 = #1&lt;CentralizedIMP(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #1&lt;CentralizedIMP(Thompson)&gt; ...
+- Adding player #2 = #2&lt;CentralizedIMP(Thompson)&gt; ...
+  Using this already created player &#39;player&#39; = #2&lt;CentralizedIMP(Thompson)&gt; ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "221fbff4c1d64c28b993aa94e4267188"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy #1&lt;CentralizedIMP(Thompson)&gt; after 10000 steps: [0 2 1 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+
+Estimated order by the policy #2&lt;CentralizedIMP(Thompson)&gt; after 10000 steps: [0 2 1 3 4] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Manhattan   distance from optimal ordering: 84.00% (relative success)...
+  ==&gt; Kendell Tau distance from optimal ordering: 95.00% (relative success)...
+  ==&gt; Spearman    distance from optimal ordering: 96.26% (relative success)...
+  ==&gt; Gestalt     distance from optimal ordering: 80.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 88.81% (relative success)...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.0s
+[Parallel(n_jobs=4)]: Done  42 tasks      | elapsed:   18.0s
+[Parallel(n_jobs=4)]: Done 100 out of 100 | elapsed:   44.6s finished
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CPU times: user 40.5 s, sys: 1.83 s, total: 42.3 s
+Wall time: 10min 28s
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Plotting-the-results">
+<h2>Plotting the results<a class="headerlink" href="#Plotting-the-results" title="Permalink to this headline">¶</a></h2>
+<p>And finally, visualize them, with the plotting method of a
+<code class="docutils literal"><span class="pre">EvaluatorMultiPlayers</span></code> object:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="n">envId</span><span class="p">):</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">printFinalRanking</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+    <span class="c1"># Rewards</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRewards</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+    <span class="c1"># Fairness</span>
+    <span class="c1">#evaluation.plotFairness(envId, fairness=&quot;STD&quot;)</span>
+    <span class="c1"># Centralized regret</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegretCentralized</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">subTerms</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1">#evaluation.plotRegretCentralized(envId, semilogx=True, subTerms=True)</span>
+    <span class="c1"># Number of switches</span>
+    <span class="c1">#evaluation.plotNbSwitchs(envId, cumulated=False)</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotNbSwitchs</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">cumulated</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Frequency of selection of the best arms</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotBestArmPulls</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+    <span class="c1"># Number of collisions - not for Centralized* policies</span>
+    <span class="c1">#evaluation.plotNbCollisions(envId, cumulated=False)</span>
+    <span class="c1">#evaluation.plotNbCollisions(envId, cumulated=True)</span>
+    <span class="c1"># Frequency of collision in each arm</span>
+    <span class="c1">#evaluation.plotFrequencyCollisions(envId, piechart=True)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="First-problem">
+<h3>First problem<a class="headerlink" href="#First-problem" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(\mu = [0.3, 0.4, 0.5, 0.6, 0.7]\)</span> was an easy Bernoulli problem.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">playersId</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">evs</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Policies&quot;</span><span class="p">):</span>
+    <span class="n">evaluation</span> <span class="o">=</span> <span class="n">evaluators</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">playersId</span><span class="p">]</span>
+    <span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "839828ac6f764ae68721c64b36aff336"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Player #1, &#39;#1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt;&#39;       was ranked      1 / 2 for this simulation (last rewards = 6470.17).
+- Player #2, &#39;#2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt;&#39;       was ranked      2 / 2 for this simulation (last rewards = 6393.89).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_2.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 9 ...
+ -  For 2 players, our lower bound gave = 18 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 12.1 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - [Anandtharam et al] centralized lowerbound = 18,
+ - Our decentralized lowerbound = 12.1,
+ - [Anandkumar et al] decentralized lowerbound = 9
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_4.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_4.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_5.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_6.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_6.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Player #1, &#39;#1&lt;CentralizedIMP(UCB($\alpha=1$))&gt;&#39;        was ranked      1 / 2 for this simulation (last rewards = 6486.51).
+- Player #2, &#39;#2&lt;CentralizedIMP(UCB($\alpha=1$))&gt;&#39;        was ranked      2 / 2 for this simulation (last rewards = 6368).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_8.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_8.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 9 ...
+ -  For 2 players, our lower bound gave = 18 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 12.1 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - [Anandtharam et al] centralized lowerbound = 18,
+ - Our decentralized lowerbound = 12.1,
+ - [Anandkumar et al] decentralized lowerbound = 9
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_10.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_10.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_11.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_11.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_12.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_12.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Player #2, &#39;#2&lt;CentralizedMultiplePlay(Thompson)&gt;&#39;      was ranked      1 / 2 for this simulation (last rewards = 6496.3).
+- Player #1, &#39;#1&lt;CentralizedMultiplePlay(Thompson)&gt;&#39;      was ranked      2 / 2 for this simulation (last rewards = 6406.86).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_14.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_14.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 9 ...
+ -  For 2 players, our lower bound gave = 18 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 12.1 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - [Anandtharam et al] centralized lowerbound = 18,
+ - Our decentralized lowerbound = 12.1,
+ - [Anandkumar et al] decentralized lowerbound = 9
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_16.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_16.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_17.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_17.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_18.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_18.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #0 :
+- Player #2, &#39;#2&lt;CentralizedIMP(Thompson)&gt;&#39;       was ranked      1 / 2 for this simulation (last rewards = 6458.99).
+- Player #1, &#39;#1&lt;CentralizedIMP(Thompson)&gt;&#39;       was ranked      2 / 2 for this simulation (last rewards = 6434.01).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_20.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_20.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 9 ...
+ -  For 2 players, our lower bound gave = 18 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 12.1 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - [Anandtharam et al] centralized lowerbound = 18,
+ - Our decentralized lowerbound = 12.1,
+ - [Anandkumar et al] decentralized lowerbound = 9
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_22.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_22.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_23.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_23.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_24.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_33_24.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Second-problem">
+<h3>Second problem<a class="headerlink" href="#Second-problem" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(\mu = [0.1, 0.3, 0.5, 0.7, 0.9]\)</span> was an easier Bernoulli problem,
+with larger gap <span class="math">\(\Delta = 0.2\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">playersId</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">evs</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Policies&quot;</span><span class="p">):</span>
+    <span class="n">evaluation</span> <span class="o">=</span> <span class="n">evaluators</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">playersId</span><span class="p">]</span>
+    <span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "40412a4e268b4ac19ac72b62a3f12242"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #1 :
+- Player #2, &#39;#2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt;&#39;       was ranked      1 / 2 for this simulation (last rewards = 8005.87).
+- Player #1, &#39;#1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt;&#39;       was ranked      2 / 2 for this simulation (last rewards = 7883.31).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_2.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 4.23 ...
+ -  For 2 players, our lower bound gave = 8.46 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 5.35 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - [Anandtharam et al] centralized lowerbound = 8.46,
+ - Our decentralized lowerbound = 5.35,
+ - [Anandkumar et al] decentralized lowerbound = 4.23
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_4.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_4.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_5.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_6.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_6.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #1 :
+- Player #2, &#39;#2&lt;CentralizedIMP(UCB($\alpha=1$))&gt;&#39;        was ranked      1 / 2 for this simulation (last rewards = 8082.85).
+- Player #1, &#39;#1&lt;CentralizedIMP(UCB($\alpha=1$))&gt;&#39;        was ranked      2 / 2 for this simulation (last rewards = 7794.39).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_8.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_8.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 4.23 ...
+ -  For 2 players, our lower bound gave = 8.46 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 5.35 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - [Anandtharam et al] centralized lowerbound = 8.46,
+ - Our decentralized lowerbound = 5.35,
+ - [Anandkumar et al] decentralized lowerbound = 4.23
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_10.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_10.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_11.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_11.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_12.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_12.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #1 :
+- Player #1, &#39;#1&lt;CentralizedMultiplePlay(Thompson)&gt;&#39;      was ranked      1 / 2 for this simulation (last rewards = 8248.81).
+- Player #2, &#39;#2&lt;CentralizedMultiplePlay(Thompson)&gt;&#39;      was ranked      2 / 2 for this simulation (last rewards = 7637.28).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_14.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_14.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 4.23 ...
+ -  For 2 players, our lower bound gave = 8.46 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 5.35 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - [Anandtharam et al] centralized lowerbound = 8.46,
+ - Our decentralized lowerbound = 5.35,
+ - [Anandkumar et al] decentralized lowerbound = 4.23
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_16.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_16.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_17.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_17.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_18.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_18.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #1 :
+- Player #1, &#39;#1&lt;CentralizedIMP(Thompson)&gt;&#39;       was ranked      1 / 2 for this simulation (last rewards = 7970).
+- Player #2, &#39;#2&lt;CentralizedIMP(Thompson)&gt;&#39;       was ranked      2 / 2 for this simulation (last rewards = 7929.56).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_20.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_20.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 4.23 ...
+ -  For 2 players, our lower bound gave = 8.46 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 5.35 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - [Anandtharam et al] centralized lowerbound = 8.46,
+ - Our decentralized lowerbound = 5.35,
+ - [Anandkumar et al] decentralized lowerbound = 4.23
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_22.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_22.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_23.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_23.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_24.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_35_24.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Third-problem">
+<h3>Third problem<a class="headerlink" href="#Third-problem" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\(\mu = [0.005, 0.01, 0.015, 0.84, 0.85]\)</span> is an harder Bernoulli
+problem, as there is a huge gap between suboptimal and optimal arms.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">for</span> <span class="n">playersId</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">evs</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Policies&quot;</span><span class="p">):</span>
+    <span class="n">evaluation</span> <span class="o">=</span> <span class="n">evaluators</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">playersId</span><span class="p">]</span>
+    <span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "feb3b40ff24f41f48676ca9639ca679a"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #2 :
+- Player #2, &#39;#2&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt;&#39;       was ranked      1 / 2 for this simulation (last rewards = 8400.78).
+- Player #1, &#39;#1&lt;CentralizedMultiplePlay(UCB($\alpha=1$))&gt;&#39;       was ranked      2 / 2 for this simulation (last rewards = 8396.29).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_2.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.41 ...
+ -  For 2 players, our lower bound gave = 2.83 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.78 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - [Anandtharam et al] centralized lowerbound = 2.83,
+ - Our decentralized lowerbound = 2.78,
+ - [Anandkumar et al] decentralized lowerbound = 1.41
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_4.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_4.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_5.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_6.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_6.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #2 :
+- Player #2, &#39;#2&lt;CentralizedIMP(UCB($\alpha=1$))&gt;&#39;        was ranked      1 / 2 for this simulation (last rewards = 8405.84).
+- Player #1, &#39;#1&lt;CentralizedIMP(UCB($\alpha=1$))&gt;&#39;        was ranked      2 / 2 for this simulation (last rewards = 8399.73).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_8.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_8.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.41 ...
+ -  For 2 players, our lower bound gave = 2.83 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.78 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - [Anandtharam et al] centralized lowerbound = 2.83,
+ - Our decentralized lowerbound = 2.78,
+ - [Anandkumar et al] decentralized lowerbound = 1.41
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_10.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_10.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_11.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_11.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_12.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_12.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #2 :
+- Player #2, &#39;#2&lt;CentralizedMultiplePlay(Thompson)&gt;&#39;      was ranked      1 / 2 for this simulation (last rewards = 8421.93).
+- Player #1, &#39;#1&lt;CentralizedMultiplePlay(Thompson)&gt;&#39;      was ranked      2 / 2 for this simulation (last rewards = 8388.24).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_14.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_14.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.41 ...
+ -  For 2 players, our lower bound gave = 2.83 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.78 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - [Anandtharam et al] centralized lowerbound = 2.83,
+ - Our decentralized lowerbound = 2.78,
+ - [Anandkumar et al] decentralized lowerbound = 1.41
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_16.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_16.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_17.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_17.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_18.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_18.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #2 :
+- Player #1, &#39;#1&lt;CentralizedIMP(Thompson)&gt;&#39;       was ranked      1 / 2 for this simulation (last rewards = 8411.13).
+- Player #2, &#39;#2&lt;CentralizedIMP(Thompson)&gt;&#39;       was ranked      2 / 2 for this simulation (last rewards = 8398.26).
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_20.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_20.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.41 ...
+ -  For 2 players, our lower bound gave = 2.83 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.78 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - [Anandtharam et al] centralized lowerbound = 2.83,
+ - Our decentralized lowerbound = 2.78,
+ - [Anandkumar et al] decentralized lowerbound = 1.41
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_22.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_22.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_23.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_23.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_24.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_37_24.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Comparing-their-performances">
+<h3>Comparing their performances<a class="headerlink" href="#Comparing-their-performances" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plotCombined</span><span class="p">(</span><span class="n">e0</span><span class="p">,</span> <span class="n">eothers</span><span class="p">,</span> <span class="n">envId</span><span class="p">):</span>
+    <span class="c1"># Centralized regret</span>
+    <span class="n">e0</span><span class="o">.</span><span class="n">plotRegretCentralized</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">evaluators</span><span class="o">=</span><span class="n">eothers</span><span class="p">)</span>
+    <span class="c1"># Fairness</span>
+    <span class="n">e0</span><span class="o">.</span><span class="n">plotFairness</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">fairness</span><span class="o">=</span><span class="s2">&quot;STD&quot;</span><span class="p">,</span> <span class="n">evaluators</span><span class="o">=</span><span class="n">eothers</span><span class="p">)</span>
+    <span class="c1"># Number of switches</span>
+    <span class="n">e0</span><span class="o">.</span><span class="n">plotNbSwitchsCentralized</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">cumulated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">evaluators</span><span class="o">=</span><span class="n">eothers</span><span class="p">)</span>
+    <span class="c1"># Number of collisions - not for Centralized* policies</span>
+    <span class="c1">#e0.plotNbCollisions(envId, cumulated=True, evaluators=eothers)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span> <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">envId</span><span class="p">,</span> <span class="n">env</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]):</span>
+    <span class="n">e0</span><span class="p">,</span> <span class="n">eothers</span> <span class="o">=</span> <span class="n">evaluators</span><span class="p">[</span><span class="n">envId</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">evaluators</span><span class="p">[</span><span class="n">envId</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">plotCombined</span><span class="p">(</span><span class="n">e0</span><span class="p">,</span> <span class="n">eothers</span><span class="p">,</span> <span class="n">envId</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 9 ...
+ -  For 2 players, our lower bound gave = 18 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 12.1 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 9.46 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - [Anandtharam et al] centralized lowerbound = 18,
+ - Our decentralized lowerbound = 12.1,
+ - [Anandkumar et al] decentralized lowerbound = 9
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_1.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_2.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_3.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 4.23 ...
+ -  For 2 players, our lower bound gave = 8.46 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 5.35 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 3.12 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 40.00% ...
+ - [Anandtharam et al] centralized lowerbound = 8.46,
+ - Our decentralized lowerbound = 5.35,
+ - [Anandkumar et al] decentralized lowerbound = 4.23
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_5.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_6.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_6.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_7.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_7.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.41 ...
+ -  For 2 players, our lower bound gave = 2.83 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.78 ...
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 27.3 for 1-player problem ...
+ - a Optimal Arm Identification factor H_OI(mu) = 29.40% ...
+ - [Anandtharam et al] centralized lowerbound = 2.83,
+ - Our decentralized lowerbound = 2.78,
+ - [Anandkumar et al] decentralized lowerbound = 1.41
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_9.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_9.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_10.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_10.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_11.png" src="../_images/notebooks_Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms_40_11.png" />
+</div>
+</div>
+<hr class="docutils" />
+<blockquote>
+<div>That’s it for this demo!</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html" class="btn btn-neutral float-right" title="Table of Contents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Example_of_a_small_Single-Player_Simulation.html" class="btn btn-neutral" title="Table of Contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 28 Feb 2018, 00h:12m:29s.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
