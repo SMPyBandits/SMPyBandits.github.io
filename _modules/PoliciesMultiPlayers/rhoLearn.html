@@ -7,16 +7,16 @@
   <meta charset="utf-8">
   <script type="text/javascript">
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-38514290-2']);
-      _gaq.push(['_trackPageview']);
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-38514290-2']);
+        _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>PoliciesMultiPlayers.rhoLearn &mdash; SMPyBandits 0.9.1 documentation</title>
@@ -210,23 +210,26 @@
     <span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="n">Uniform</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: ../Policies/Uniform.py was not imported correctly...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-    <span class="c1"># ... Just reimplement it here manually, if not found in ../Policies/Uniform.py</span>
-    <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="n">Uniform</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: ../Policies/Uniform.py was not imported correctly...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="c1"># ... Just reimplement it here manually, if not found in ../Policies/Uniform.py</span>
+        <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
 
-    <span class="k">class</span> <span class="nc">Uniform</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot;Quick reimplementation of Policies.Uniform&quot;&quot;&quot;</span>
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>
+        <span class="k">class</span> <span class="nc">Uniform</span><span class="p">():</span>
+            <span class="sd">&quot;&quot;&quot;Quick reimplementation of Policies.Uniform&quot;&quot;&quot;</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>
 
-        <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">pass</span>
+            <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">pass</span>
 
-        <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
-            <span class="k">pass</span>
+            <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+                <span class="k">pass</span>
 
-        <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">.rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
 
@@ -356,7 +359,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 28 Feb 2018, 01h:10m:04s.
+      Last updated on 28 Feb 2018, 16h:08m:55s.
 
     </p>
   </div>
