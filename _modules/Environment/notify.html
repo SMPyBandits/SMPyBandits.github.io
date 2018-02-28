@@ -7,16 +7,16 @@
   <meta charset="utf-8">
   <script type="text/javascript">
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-38514290-2']);
-      _gaq.push(['_trackPageview']);
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-38514290-2']);
+        _gaq.push(['_trackPageview']);
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Environment.notify &mdash; SMPyBandits 0.9.1 documentation</title>
@@ -198,12 +198,14 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.5&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">getcwd</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">exists</span><span class="p">,</span> <span class="n">join</span>
 <span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span>
 
+
+<span class="n">VERBOUS</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Constants for the program</span>
 <span class="n">PROGRAM_NAME</span> <span class="o">=</span> <span class="s2">&quot;SMPyBandits&quot;</span>  <span class="c1">#: Program name</span>
@@ -230,9 +232,10 @@
         <span class="k">return</span> <span class="n">iconpng</span>
 
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error, gi.repository.GdkPixbuf seems to not be available, so notification icons will not be available ...&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On Ubuntu, if you want notification icons to work, install the &#39;python-gobject&#39; and &#39;libnotify-bin&#39; packages.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(For more details, cf. &#39;http://www.devdungeon.com/content/desktop-notifications-python-libnotify&#39;)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">VERBOUS</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error, gi.repository.GdkPixbuf seems to not be available, so notification icons will not be available ...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On Ubuntu, if you want notification icons to work, install the &#39;python-gobject&#39; and &#39;libnotify-bin&#39; packages.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(For more details, cf. &#39;http://www.devdungeon.com/content/desktop-notifications-python-libnotify&#39;)&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="load_icon"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.load_icon">[docs]</a>    <span class="k">def</span> <span class="nf">load_icon</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot; Load and open the icon. &quot;&quot;&quot;</span>
@@ -249,9 +252,10 @@
     <span class="n">Notify</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
     <span class="n">has_Notify</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error, gi.repository.Notify seems to not be available, so notification will not be available ...&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On Ubuntu, if you want notifications to work, install the &#39;python-gobject&#39; and &#39;libnotify-bin&#39; packages.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(For more details, cf. &#39;http://www.devdungeon.com/content/desktop-notifications-python-libnotify&#39;)&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">VERBOUS</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error, gi.repository.Notify seems to not be available, so notification will not be available ...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On Ubuntu, if you want notifications to work, install the &#39;python-gobject&#39; and &#39;libnotify-bin&#39; packages.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(For more details, cf. &#39;http://www.devdungeon.com/content/desktop-notifications-python-libnotify&#39;)&quot;</span><span class="p">)</span>
 
 
 <span class="c1"># Define the first notify function, with gi.repository.Notify</span>
@@ -346,7 +350,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 28 Feb 2018, 01h:10m:04s.
+      Last updated on 28 Feb 2018, 16h:08m:55s.
 
     </p>
   </div>
