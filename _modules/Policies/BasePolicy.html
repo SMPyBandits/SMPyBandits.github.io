@@ -194,9 +194,13 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#: If True, every time a reward is received, a warning message is displayed if it lies outsides of ``[lower, lower + amplitude]``.</span>
+<span class="n">CHECKBOUNDS</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">CHECKBOUNDS</span> <span class="o">=</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="BasePolicy"><a class="viewcode-back" href="../../docs/Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy">[docs]</a><span class="k">class</span> <span class="nc">BasePolicy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -227,17 +231,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
-    <span class="c1"># def getReward(self, arm, reward, checkBounds=False):  # XXX useless checkBounds feature</span>
-<div class="viewcode-block" id="BasePolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Give a reward: increase t, pulls, and update cumulated sum of rewards for that arm (normalized in [0, 1]).&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># # XXX we could check here if the reward is outside the bounds</span>
-        <span class="c1"># if checkBounds:</span>
-        <span class="c1">#     if not 0 &lt;= reward - self.lower &lt;= self.amplitude:</span>
-        <span class="c1">#         print(&quot;[Warning] {} received on arm {} a reward = {} that is outside the interval [{}, {}] : the policy will probably fail to work correctly...&quot;.format(self, arm, reward, self.lower, self.lower + self.amplitude))</span>
-        <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span></div>
+    <span class="k">if</span> <span class="n">CHECKBOUNDS</span><span class="p">:</span>
+        <span class="c1"># XXX useless checkBounds feature</span>
+        <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Give a reward: increase t, pulls, and update cumulated sum of rewards for that arm (normalized in [0, 1]).&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># XXX we could check here if the reward is outside the bounds</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: </span><span class="si">{}</span><span class="s2"> received on arm </span><span class="si">{}</span><span class="s2"> a reward = </span><span class="si">{:.3g}</span><span class="s2"> that is outside the interval [</span><span class="si">{:.3g}</span><span class="s2">, </span><span class="si">{:.3g}</span><span class="s2">] : the policy will probably fail to work correctly...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     print(&quot;Info: {} received on arm {} a reward = {:.3g} that is inside the interval [{:.3g}, {:.3g}]&quot;.format(self, arm, reward, self.lower, self.lower + self.amplitude))  # DEBUG</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># It&#39;s faster to define two methods and pick one</span>
+        <span class="c1"># (one test in init, that&#39;s it)</span>
+        <span class="c1"># rather than doing the test in the method</span>
+<div class="viewcode-block" id="BasePolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy.getReward">[docs]</a>        <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Give a reward: increase t, pulls, and update cumulated sum of rewards for that arm (normalized in [0, 1]).&quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span></div>
 
     <span class="c1"># --- Basic choice() and handleCollision() method</span>
 
@@ -303,7 +319,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 01 Mar 2018, 18h.
+      Last updated on 02 Mar 2018, 17h.
 
     </p>
   </div>

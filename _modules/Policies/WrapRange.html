@@ -189,7 +189,7 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A policy that acts as a wrapper on another policy `P`, which requires to know the range :math:`[a, b]` of the rewards, by implementing a &quot;doubling trick&quot; to adapt to an unknown range of rewards.</span>
 
-<span class="sd">It&#39;s an interesting variant of the &quot;doubling trick&quot;, used to tackle another unknown aspect of sequential experiments: some algorithms need to use rewards in :math:`[0,1]`, and are easy to use if the rewards known to be in some interval :math:`[a, b]` (I did this from the very beginning here, with :math:`[lower, lower+amplitude]`).</span>
+<span class="sd">It&#39;s an interesting variant of the &quot;doubling trick&quot;, used to tackle another unknown aspect of sequential experiments: some algorithms need to use rewards in :math:`[0,1]`, and are easy to use if the rewards known to be in some interval :math:`[a, b]` (I did this from the very beginning here, with ``[lower, lower+amplitude]``).</span>
 <span class="sd">But if the interval :math:`[a,b]` is unknown, what can we do?</span>
 <span class="sd">The &quot;Doubling Trick&quot;, in this setting, refers to this algorithm:</span>
 
@@ -275,8 +275,7 @@
 <span class="sd">        2. Else if :math:`r &gt; l_{t-1} + a_{t-1}`, let :math:`a_t = r - l_{t-1}` and :math:`R_t := R_t \times \frac{a_{t-1}}{a-t}`,</span>
 <span class="sd">        3. Otherwise, nothing to do, the current reward is still correctly in :math:`[l_{t-1}, l_{t-1} + a_{t-1}]`, so simply keep :math:`l_t = l_{t-1}` and :math:`a_t = a_{t-1}`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># print(&quot; - At time t = {}, got a reward = {} from arm {} ...&quot;.format(self.t, arm, reward))  # DEBUG</span>
-        <span class="c1"># super(WrapRange, self).getReward(arm, reward)</span>
+        <span class="c1"># print(&quot; - At time t = {}, got a reward = {:.3g} from arm {} ...&quot;.format(self.t, reward, arm))  # DEBUG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># check if the reward is still in [lower, lower + amplitude]</span>
@@ -289,7 +288,7 @@
                 <span class="c1"># Now we maybe have to rescale all the previous history!</span>
                 <span class="c1"># 1st case: At+1=At, so just a small linear shift is enough</span>
                 <span class="c1"># FIXME bring this back! but count it correctly for the regret</span>
-                <span class="c1"># self.rewards += (old_l - self.lower) / self.amplitude</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">+=</span> <span class="p">(</span><span class="n">old_l</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Info: </span><span class="si">{}</span><span class="s2"> saw a reward </span><span class="si">{:.3g}</span><span class="s2"> above its higher value </span><span class="si">{:.3g}</span><span class="s2">, now amplitude = </span><span class="si">{:.3g}</span><span class="s2">... (</span><span class="si">{}</span><span class="s2">th change)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_i</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>
@@ -297,7 +296,7 @@
                 <span class="c1"># 2nd case: Lt+1=Lt, so just a small multiplicative shift is enough</span>
                 <span class="c1"># the shift is &lt; 1, OK</span>
                 <span class="c1"># FIXME bring this back! but count it correctly for the regret</span>
-                <span class="c1"># self.rewards *= old_a / self.amplitude</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">*=</span> <span class="n">old_a</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span></div>
 
@@ -359,7 +358,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 01 Mar 2018, 18h.
+      Last updated on 02 Mar 2018, 17h.
 
     </p>
   </div>
