@@ -116,10 +116,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Some illustrations for this project</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#(Average)-cumulative-regret">(Average) cumulative regret</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#(Average)-cumulative-regret-and-standard-deviation---FIXME">(Average) cumulative regret and standard deviation - FIXME</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Normalized-cumulative-regret">Normalized cumulative regret</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Best-arm-pulls-frequency">Best arm pulls frequency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Histogram-of-regrets-at-the-end-of-some-simulations">Histogram of regrets at the end of some simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Demonstration-of-different-Aggregation-policies">Demonstration of different Aggregation policies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Demonstration-of-multi-player-algorithms">Demonstration of multi-player algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Other-illustrations">Other illustrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Piece-wise-stationary-problems">Piece-wise stationary problems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Sparse-problem-and-Sparsity-aware-algorithms">Sparse problem and Sparsity-aware algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Demonstration-of-the-Doubling-Trick-policy">Demonstration of the Doubling Trick policy</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
@@ -228,22 +233,60 @@
 </style>
 <div class="section" id="Some-illustrations-for-this-project">
 <h1>Some illustrations for <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits">this project</a><a class="headerlink" href="#Some-illustrations-for-this-project" title="Permalink to this headline">¶</a></h1>
-<p>Here are some plots illustrating the performances of the different <a class="reference external" href="../Policies/">policies</a> implemented in this project, against various problems (with <a class="reference external" href="docs/...Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> arms only):</p>
-<div class="section" id="(Average)-cumulative-regret">
-<h2>(Average) cumulative regret<a class="headerlink" href="#(Average)-cumulative-regret" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="100000_steps__50_repetition_6_policies_1_Aggr.png"><img alt="100000_steps__50_repetition_6_policies_1_Aggr.png" src="plots/100000_steps__50_repetition_6_policies_1_Aggr.png" /></a></p>
+<p>Here are some plots illustrating the performances of the different <a class="reference external" href="../SMPyBandits/Policies/">policies</a> implemented in this project, against various problems (with <a class="reference external" href="docs/...SMPyBandits.Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> arms only):</p>
+<div class="section" id="Histogram-of-regrets-at-the-end-of-some-simulations">
+<h2>Histogram of regrets at the end of some simulations<a class="headerlink" href="#Histogram-of-regrets-at-the-end-of-some-simulations" title="Permalink to this headline">¶</a></h2>
+<p>On a simple Bernoulli problem, we can compare 16 different algorithms (on a short horizon and a small number of repetitions, just as an example).
+If we plot the distribution of the regret at the end of each experiment, <code class="docutils literal"><span class="pre">R_T</span></code>, we can see this kind of plot:</p>
+<p><img alt="Histogramme_regret_monoplayer_2.png" src="../_images/Histogramme_regret_monoplayer_2.png" /></p>
+<p>It helps a lot to see both the mean value (in solid black) of the regret, and its distribution of a few runs (100 here).
+It can be used to detect algorithms that perform well in average, but sometimes with really bad runs.
+Here, the <a class="reference external" href="docs/...SMPyBandits.Policies.Exp3PlusPlus.html">Exp3++</a> seems to had one bad run.</p>
 </div>
-<div class="section" id="(Average)-cumulative-regret-and-standard-deviation---FIXME">
-<h2>(Average) cumulative regret and standard deviation - FIXME<a class="headerlink" href="#(Average)-cumulative-regret-and-standard-deviation---FIXME" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="100000_steps__50_repetition_6_policies_1_Aggr__mean_and_std.png"><img alt="100000_steps__50_repetition_6_policies_1_Aggr__mean_and_std.png" src="plots/100000_steps__50_repetition_6_policies_1_Aggr__mean_and_std.png" /></a></p>
+<hr class="docutils" />
+<div class="section" id="Demonstration-of-different-Aggregation-policies">
+<h2>Demonstration of different <a class="reference external" href="../Aggregation.html">Aggregation policies</a><a class="headerlink" href="#Demonstration-of-different-Aggregation-policies" title="Permalink to this headline">¶</a></h2>
+<p>On a fixed Gaussian problem, aggregating some algorithms tuned for this exponential family (ie, they know the variance but not the means).
+Our algorithm, <a class="reference external" href="docs/...SMPyBandits.Policies.Aggregator.html">Aggregator</a>, outperforms its ancestor <a class="reference external" href="docs/...SMPyBandits.Policies.Aggregator.html">Exp4</a> as well as the other state-of-the-art experts aggregation algorithms, <a class="reference external" href="docs/...SMPyBandits.Policies.CORRAL.html">CORRAL</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.LearnExp.html">LearnExp</a>.</p>
+<p><img alt="main____env3-4_932221613383548446.png" src="../_images/main____env3-4_932221613383548446.png" /></p>
 </div>
-<div class="section" id="Normalized-cumulative-regret">
-<h2>Normalized cumulative regret<a class="headerlink" href="#Normalized-cumulative-regret" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="100000_steps__50_repetition_6_policies_1_Aggr__normalized.png"><img alt="100000_steps__50_repetition_6_policies_1_Aggr__normalized.png" src="plots/100000_steps__50_repetition_6_policies_1_Aggr__normalized.png" /></a></p>
+<hr class="docutils" />
+<div class="section" id="Demonstration-of-multi-player-algorithms">
+<h2>Demonstration of <a class="reference external" href="../MultiPlayers.html">multi-player algorithms</a><a class="headerlink" href="#Demonstration-of-multi-player-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>Regret plot on a random Bernoulli problem, with <code class="docutils literal"><span class="pre">M=6</span></code> players accessing independently and in a decentralized way <code class="docutils literal"><span class="pre">K=9</span></code> arms.
+Our algorithms (<a class="reference external" href="docs/...SMPyBandits.PoliciesMultiPlayers.RandTopM.html">RandTopM</a> and <a class="reference external" href="docs/...SMPyBandits.PoliciesMultiPlayers.RandTopM.html">MCTopM</a>, as well as <a class="reference external" href="docs/...SMPyBandits.Policie.Selfish.html">Selfish</a>) outperform the state-of-the-art <a class="reference external" href="docs/...SMPyBandits.PoliciesMultiPlayers.rhoRand.html">rhoRand</a>:</p>
+<p><img alt="MP__K9_M6_T5000_N500__4_algos__all_RegretCentralized____env1-1_8318947830261751207.png" src="../_images/MP__K9_M6_T5000_N500__4_algos__all_RegretCentralized____env1-1_8318947830261751207.png" /></p>
+<p>Histogram on the same random Bernoulli problems.
+We see that some all algorithms have a non-negligible variance on their regrets.</p>
+<p><img alt="MP__K9_M6_T10000_N1000__4_algos__all_HistogramsRegret____env1-1_8200873569864822246.png" src="../_images/MP__K9_M6_T10000_N1000__4_algos__all_HistogramsRegret____env1-1_8200873569864822246.png" /></p>
+<p>Comparison with two other &#8220;state-of-the-art&#8221; algorithms (<a class="reference external" href="docs/...SMPyBandits.Policies.MusicalChair.html">MusicalChair</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.MEGA.html">MEGA</a>, in semilogy scale to really see the different scale of regret between efficient and sub-optimal algorithms):</p>
+<p><img alt="MP__K9_M3_T123456_N100__8_algos__all_RegretCentralized_semilogy____env1-1_7803645526012310577.png" src="../_images/MP__K9_M3_T123456_N100__8_algos__all_RegretCentralized_semilogy____env1-1_7803645526012310577.png" /></p>
 </div>
-<div class="section" id="Best-arm-pulls-frequency">
-<h2>Best arm pulls frequency<a class="headerlink" href="#Best-arm-pulls-frequency" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="100000_steps__50_repetition_6_policies_1_Aggr__bestArmFrequency.png"><img alt="100000_steps__50_repetition_6_policies_1_Aggr__bestArmFrequency.png" src="plots/100000_steps__50_repetition_6_policies_1_Aggr__bestArmFrequency.png" /></a></p>
+<hr class="docutils" />
+<div class="section" id="Other-illustrations">
+<h2>Other illustrations<a class="headerlink" href="#Other-illustrations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Piece-wise-stationary-problems">
+<h3>Piece-wise stationary problems<a class="headerlink" href="#Piece-wise-stationary-problems" title="Permalink to this headline">¶</a></h3>
+<p>Comparing <a class="reference external" href="docs/...SMPyBandits.Policies.SlidingWindowUCB.html">Sliding-Window UCB</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.DiscountedUCB.html">Discounted UCB</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.UCB.html">UCB</a>, on a simple Bernoulli problem which regular random shuffling of the arm.
+<img alt="Demo_of_DiscountedUCB2.png" src="../_images/Demo_of_DiscountedUCB2.png" /></p>
+</div>
+<div class="section" id="Sparse-problem-and-Sparsity-aware-algorithms">
+<h3>Sparse problem and Sparsity-aware algorithms<a class="headerlink" href="#Sparse-problem-and-Sparsity-aware-algorithms" title="Permalink to this headline">¶</a></h3>
+<p>Comparing regular <a class="reference external" href="docs/...SMPyBandits.Policies.UCB.html">UCB</a>, <a class="reference external" href="docs/...SMPyBandits.Policies.klUCB.html">klUCB</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.Thompson.html">Thompson sampling</a> against <a class="reference external" href="docs/...SMPyBandits.Policies.SparseWrapper.html">&#8220;sparse-aware&#8221; versions</a>, on a simple Gaussian problem with <code class="docutils literal"><span class="pre">K=10</span></code> arms but only <code class="docutils literal"><span class="pre">s=4</span></code> with non-zero mean.</p>
+<p><img alt="Demo_of_SparseWrapper_regret.png" src="../_images/Demo_of_SparseWrapper_regret.png" /></p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Demonstration-of-the-Doubling-Trick-policy">
+<h2>Demonstration of the <a class="reference external" href="../DoublingTrick.html">Doubling Trick policy</a><a class="headerlink" href="#Demonstration-of-the-Doubling-Trick-policy" title="Permalink to this headline">¶</a></h2>
+<p>On a fixed problem with full restart:
+<img alt="main____env1-1_3633169128724378553.png" src="../_images/main____env1-1_3633169128724378553.png" /></p>
+<p>On a fixed problem with no restart:
+<img alt="main____env1-1_5972568793654673752.png" src="../_images/main____env1-1_5972568793654673752.png" /></p>
+<p>On random problems with full restart:
+<img alt="main____env1-1_1217677871459230631.png" src="../_images/main____env1-1_1217677871459230631.png" /></p>
+<p>On random problems with no restart:
+<img alt="main____env1-1_5964629015089571121.png" src="../_images/main____env1-1_5964629015089571121.png" /></p>
 </div>
 </div>
 
@@ -270,7 +313,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 02 Mar 2018, 17h.
+      Last updated on 05 Mar 2018, 15h.
 
     </p>
   </div>
