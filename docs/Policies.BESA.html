@@ -329,7 +329,7 @@
 <p>The Best Empirical Sampled Average (BESA) algorithm.</p>
 <ul class="simple">
 <li>Reference: [[Sub-Sampling For Multi Armed Bandits, Baransi et al., 2014]](<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01025651">https://hal.archives-ouvertes.fr/hal-01025651</a>)</li>
-<li>See also: <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/103">https://github.com/SMPyBandits/SMPyBandits/issues/103</a></li>
+<li>See also: <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/103">https://github.com/SMPyBandits/SMPyBandits/issues/103</a> and <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/116">https://github.com/SMPyBandits/SMPyBandits/issues/116</a></li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -347,6 +347,12 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">The BESA algorithm is efficient only with the random sub-sampling, don&#8217;t use this one except for comparing.</p>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">subsample_deterministic</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">array([0, 1, 2, 3])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subsample_deterministic</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>  
+<span class="go">array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -360,6 +366,13 @@
 <p class="first admonition-title">Note</p>
 <p class="last">The BESA algorithm is efficient only with the random sub-sampling.</p>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subsample_uniform</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  
+<span class="go">array([4, 0, 1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subsample_uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>  
+<span class="go">array([ 7, 16,  2,  3,  1, 18,  5,  4,  0,  8])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="data">
@@ -372,6 +385,13 @@
 <dt id="Policies.BESA.inverse_permutation">
 <code class="descclassname">Policies.BESA.</code><code class="descname">inverse_permutation</code><span class="sig-paren">(</span><em>permutation</em>, <em>j</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#inverse_permutation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.inverse_permutation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inverse the permutation for given input j, that is, it finds i such that p[i] = j.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">permutation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inverse_permutation</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inverse_permutation</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -390,6 +410,17 @@
 <p class="first admonition-title">Note</p>
 <p class="last"><code class="docutils literal"><span class="pre">rewards</span></code> can be a numpy array of shape (at least) <code class="docutils literal"><span class="pre">(nbArms,</span> <span class="pre">max(Na,</span> <span class="pre">Nb))</span></code> or a dictionary maping <code class="docutils literal"><span class="pre">a,b</span></code> to lists (or iterators) of lengths <code class="docutils literal"><span class="pre">&gt;=</span> <span class="pre">max(Na,</span> <span class="pre">Nb)</span></code>.</p>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2345</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better in the first 6 samples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
+<span class="go">[0, 0, 1, 1, 0, 0, 1, 0, 0, 0]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -404,11 +435,24 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">The binary tournament is NOT RANDOMIZED here, this version is only for testing.</p>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better</span>
+<span class="go">array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better in the first 6 samples</span>
+<span class="go">array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
+<span class="go">[0, 3, 3, 0, 3, 0, 0, 0, 3, 1]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="Policies.BESA.besa_K_actions__smart_divideandconquer">
-<code class="descclassname">Policies.BESA.</code><code class="descname">besa_K_actions__smart_divideandconquer</code><span class="sig-paren">(</span><em>rewards</em>, <em>pulls</em>, <em>left</em>, <em>right</em>, <em>random_permutation_of_arm</em>, <em>subsample_function=&lt;function subsample_uniform&gt;</em>, <em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#besa_K_actions__smart_divideandconquer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.besa_K_actions__smart_divideandconquer" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.BESA.</code><code class="descname">besa_K_actions__smart_divideandconquer</code><span class="sig-paren">(</span><em>rewards</em>, <em>pulls</em>, <em>left</em>, <em>right</em>, <em>random_permutation_of_arm=None</em>, <em>subsample_function=&lt;function subsample_uniform&gt;</em>, <em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#besa_K_actions__smart_divideandconquer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.besa_K_actions__smart_divideandconquer" title="Permalink to this definition">¶</a></dt>
 <dd><p>BESA recursive selection algorithm for an action set of size <span class="math">\(\mathcal{K} \geq 1\)</span>.</p>
 <ul class="simple">
 <li>I prefer to implement for a discrete action set <span class="math">\(\{\text{left}, \dots, \text{right}\}\)</span> (end <em>included</em>) instead of a generic <code class="docutils literal"><span class="pre">actions</span></code> vector, to speed up the code, but it is less readable.</li>
@@ -417,6 +461,19 @@
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The binary tournament is RANDOMIZED here, as it should be.</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better</span>
+<span class="go">array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better in the first 6 samples</span>
+<span class="go">array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__smart_divideandconquer</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__smart_divideandconquer</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
+<span class="go">[3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
+</pre></div>
 </div>
 </dd></dl>
 
@@ -433,11 +490,73 @@
 <p class="first admonition-title">Note</p>
 <p class="last">The binary tournament is RANDOMIZED here, <em>as it should be</em>.</p>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better</span>
+<span class="go">array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better in the first 6 samples</span>
+<span class="go">array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
+<span class="go">[3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.BESA.besa_K_actions__non_binary">
+<code class="descclassname">Policies.BESA.</code><code class="descname">besa_K_actions__non_binary</code><span class="sig-paren">(</span><em>rewards</em>, <em>pulls</em>, <em>actions</em>, <em>subsample_function=&lt;function subsample_uniform&gt;</em>, <em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#besa_K_actions__non_binary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.besa_K_actions__non_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>BESA recursive selection algorithm for an action set of size <span class="math">\(\mathcal{K} \geq 1\)</span>.</p>
+<ul class="simple">
+<li>Instead of doing this binary tree tournaments (which results in <span class="math">\(\mathcal{O}(K^2)\)</span> calls to the 2-arm procedure), we can do a line tournaments: 1 vs 2, winner vs 3, winner vs 4 etc, winner vs K-1 (which results in <span class="math">\(\mathcal{O}(K)\)</span> calls),</li>
+<li>Actions is assumed to be shuffled <em>before</em> calling this function!</li>
+<li>The depth argument is just for pretty printing debugging information (useless).</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better</span>
+<span class="go">array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better in the first 6 samples</span>
+<span class="go">array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__non_binary</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__non_binary</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
+<span class="go">[3, 3, 3, 2, 0, 3, 3, 3, 3, 3]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.BESA.besa_K_actions__non_recursive">
+<code class="descclassname">Policies.BESA.</code><code class="descname">besa_K_actions__non_recursive</code><span class="sig-paren">(</span><em>rewards</em>, <em>pulls</em>, <em>subsample_function=&lt;function subsample_uniform&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#besa_K_actions__non_recursive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.besa_K_actions__non_recursive" title="Permalink to this definition">¶</a></dt>
+<dd><p>BESA non-recursive selection algorithm for an action set of size <span class="math">\(\mathcal{K} \geq 1\)</span>.</p>
+<ul class="simple">
+<li>No calls to <a class="reference internal" href="#Policies.BESA.besa_two_actions" title="Policies.BESA.besa_two_actions"><code class="xref py py-func docutils literal"><span class="pre">besa_two_actions()</span></code></a>, just generalize it to K actions instead of 2.</li>
+<li>Actions is assumed to be shuffled <em>before</em> calling this function!</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better</span>
+<span class="go">array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better in the first 6 samples</span>
+<span class="go">array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
+<span class="go">[1, 3, 0, 2, 2, 3, 1, 1, 3, 1]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.BESA.BESA">
-<em class="property">class </em><code class="descclassname">Policies.BESA.</code><code class="descname">BESA</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>minPullsOfEachArm=1</em>, <em>randomized_tournament=True</em>, <em>random_subsample=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#BESA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.BESA" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.BESA.</code><code class="descname">BESA</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>minPullsOfEachArm=1</em>, <em>randomized_tournament=True</em>, <em>random_subsample=True</em>, <em>non_binary=False</em>, <em>non_recursive=False</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#BESA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.BESA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The Best Empirical Sampled Average (BESA) algorithm.</p>
 <ul class="simple">
@@ -449,7 +568,7 @@
 </div>
 <dl class="method">
 <dt id="Policies.BESA.BESA.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>minPullsOfEachArm=1</em>, <em>randomized_tournament=True</em>, <em>random_subsample=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#BESA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.BESA.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>minPullsOfEachArm=1</em>, <em>randomized_tournament=True</em>, <em>random_subsample=True</em>, <em>non_binary=False</em>, <em>non_recursive=False</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#BESA.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.BESA.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -474,6 +593,18 @@
 <dt id="Policies.BESA.BESA.random_subsample">
 <code class="descname">random_subsample</code><em class="property"> = None</em><a class="headerlink" href="#Policies.BESA.BESA.random_subsample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether to use a deterministic or random sub-sampling procedure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.BESA.BESA.non_binary">
+<code class="descname">non_binary</code><em class="property"> = None</em><a class="headerlink" href="#Policies.BESA.BESA.non_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to use <a class="reference internal" href="#Policies.BESA.besa_K_actions" title="Policies.BESA.besa_K_actions"><code class="xref py py-func docutils literal"><span class="pre">besa_K_actions()</span></code></a> or <a class="reference internal" href="#Policies.BESA.besa_K_actions__non_binary" title="Policies.BESA.besa_K_actions__non_binary"><code class="xref py py-func docutils literal"><span class="pre">besa_K_actions__non_binary()</span></code></a> for the selection of K arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.BESA.BESA.non_recursive">
+<code class="descname">non_recursive</code><em class="property"> = None</em><a class="headerlink" href="#Policies.BESA.BESA.non_recursive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to use <a class="reference internal" href="#Policies.BESA.besa_K_actions" title="Policies.BESA.besa_K_actions"><code class="xref py py-func docutils literal"><span class="pre">besa_K_actions()</span></code></a> or <a class="reference internal" href="#Policies.BESA.besa_K_actions__non_recursive" title="Policies.BESA.besa_K_actions__non_recursive"><code class="xref py py-func docutils literal"><span class="pre">besa_K_actions__non_recursive()</span></code></a> for the selection of K arms.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -605,7 +736,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 02 Mar 2018, 17h.
+      Last updated on 05 Mar 2018, 15h.
 
     </p>
   </div>
