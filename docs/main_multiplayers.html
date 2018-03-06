@@ -49,7 +49,7 @@
     <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../index.html"/>
         <link rel="up" title="SMPyBandits modules" href="modules.html"/>
         <link rel="next" title="main_multiplayers_more module" href="main_multiplayers_more.html"/>
-        <link rel="prev" title="configuration_sparse module" href="configuration_sparse.html"/> 
+        <link rel="prev" title="main module" href="main.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -110,22 +110,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Policies.html">Policies package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_comparing_aggregation_algorithms.html">configuration_comparing_aggregation_algorithms module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_comparing_doubling_algorithms.html">configuration_comparing_doubling_algorithms module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_markovian.html">configuration_markovian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_sparse.html">configuration_sparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">main_multiplayers module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="main_multiplayers_more.html">main_multiplayers_more module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="main_sparse_multiplayers.html">main_sparse_multiplayers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="policy_server.html">policy_server module</a></li>
 </ul>
 </li>
@@ -245,6 +245,67 @@
 </style>
 <div class="section" id="main_multiplayers-module">
 <h1>main_multiplayers module<a class="headerlink" href="#main_multiplayers-module" title="Permalink to this headline">¶</a></h1>
+<p>Script to load the config, run the simulations, and plot them, for the multi-players case.</p>
+<dl class="data">
+<dt id="main_multiplayers.USE_PICKLE">
+<code class="descclassname">main_multiplayers.</code><code class="descname">USE_PICKLE</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers.USE_PICKLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we save the Evaluator object to a .pickle file at the end of the simulation?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.PLOT_DIR">
+<code class="descclassname">main_multiplayers.</code><code class="descname">PLOT_DIR</code><em class="property"> = 'plots'</em><a class="headerlink" href="#main_multiplayers.PLOT_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory for the plots</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.piechart">
+<code class="descclassname">main_multiplayers.</code><code class="descname">piechart</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers.piechart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a piechart for collision counts? Otherwise, plot an histogram.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.averageRegret">
+<code class="descclassname">main_multiplayers.</code><code class="descname">averageRegret</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers.averageRegret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use average regret ?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.normalized">
+<code class="descclassname">main_multiplayers.</code><code class="descname">normalized</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers.normalized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot normalized regret?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.fairnessAmplitude">
+<code class="descclassname">main_multiplayers.</code><code class="descname">fairnessAmplitude</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers.fairnessAmplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use amplitude measure for the fairness or std?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.subTerms">
+<code class="descclassname">main_multiplayers.</code><code class="descname">subTerms</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers.subTerms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the 3 sub terms for the regret</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.do_plots">
+<code class="descclassname">main_multiplayers.</code><code class="descname">do_plots</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers.do_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to do the plots or not</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.interactive">
+<code class="descclassname">main_multiplayers.</code><code class="descname">interactive</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers.interactive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to show plots, one by one, or not at all and just save them</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers.saveallfigs">
+<code class="descclassname">main_multiplayers.</code><code class="descname">saveallfigs</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers.saveallfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save all the figures ?</p>
+</dd></dl>
+
 </div>
 
 
@@ -260,7 +321,7 @@
         <a href="main_multiplayers_more.html" class="btn btn-neutral float-right" title="main_multiplayers_more module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="configuration_sparse.html" class="btn btn-neutral" title="configuration_sparse module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="main.html" class="btn btn-neutral" title="main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -270,7 +331,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Mar 2018, 15h.
+      Last updated on 06 Mar 2018, 16h.
 
     </p>
   </div>

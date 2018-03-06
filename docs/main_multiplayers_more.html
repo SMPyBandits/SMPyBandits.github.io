@@ -48,7 +48,7 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../index.html"/>
         <link rel="up" title="SMPyBandits modules" href="modules.html"/>
-        <link rel="next" title="configuration_multiplayers module" href="configuration_multiplayers.html"/>
+        <link rel="next" title="main_sparse_multiplayers module" href="main_sparse_multiplayers.html"/>
         <link rel="prev" title="main_multiplayers module" href="main_multiplayers.html"/> 
 
   
@@ -110,22 +110,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Policies.html">Policies package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_comparing_aggregation_algorithms.html">configuration_comparing_aggregation_algorithms module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_comparing_doubling_algorithms.html">configuration_comparing_doubling_algorithms module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_markovian.html">configuration_markovian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_sparse.html">configuration_sparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="main_multiplayers.html">main_multiplayers module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">main_multiplayers_more module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="main_sparse_multiplayers.html">main_sparse_multiplayers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="policy_server.html">policy_server module</a></li>
 </ul>
 </li>
@@ -245,6 +245,73 @@
 </style>
 <div class="section" id="main_multiplayers_more-module">
 <h1>main_multiplayers_more module<a class="headerlink" href="#main_multiplayers_more-module" title="Permalink to this headline">¶</a></h1>
+<p>Script to load the config, run the simulations, and plot them, for the multi-players case.</p>
+<dl class="data">
+<dt id="main_multiplayers_more.USE_PICKLE">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">USE_PICKLE</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers_more.USE_PICKLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we save the Evaluator object to a .pickle file at the end of the simulation?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.PLOT_DIR">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">PLOT_DIR</code><em class="property"> = 'plots'</em><a class="headerlink" href="#main_multiplayers_more.PLOT_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory for the plots</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.piechart">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">piechart</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers_more.piechart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a piechart for collision counts? Otherwise, plot an histogram.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.averageRegret">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">averageRegret</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers_more.averageRegret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use average regret ?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.normalized">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">normalized</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers_more.normalized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot normalized regret?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.fairnessAmplitude">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">fairnessAmplitude</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers_more.fairnessAmplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use amplitude measure for the fairness or std?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.subTerms">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">subTerms</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers_more.subTerms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the 3 sub terms for the regret</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.do_simple_plots">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">do_simple_plots</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers_more.do_simple_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to do the plots for single experiments or not</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.do_comparison_plots">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">do_comparison_plots</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers_more.do_comparison_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to do the plots for comparison experiments or not</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.interactive">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">interactive</code><em class="property"> = False</em><a class="headerlink" href="#main_multiplayers_more.interactive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to show plots, one by one, or not at all and just save them</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="main_multiplayers_more.saveallfigs">
+<code class="descclassname">main_multiplayers_more.</code><code class="descname">saveallfigs</code><em class="property"> = True</em><a class="headerlink" href="#main_multiplayers_more.saveallfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save all the figures ?</p>
+</dd></dl>
+
 </div>
 
 
@@ -257,7 +324,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="configuration_multiplayers.html" class="btn btn-neutral float-right" title="configuration_multiplayers module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="main_sparse_multiplayers.html" class="btn btn-neutral float-right" title="main_sparse_multiplayers module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="main_multiplayers.html" class="btn btn-neutral" title="main_multiplayers module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -270,7 +337,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Mar 2018, 15h.
+      Last updated on 06 Mar 2018, 16h.
 
     </p>
   </div>
