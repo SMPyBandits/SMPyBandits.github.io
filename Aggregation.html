@@ -245,14 +245,14 @@
 </ul>
 <div class="section" id="Idea">
 <h2>Idea<a class="headerlink" href="#Idea" title="Permalink to this headline">¶</a></h2>
-<p>The basic idea of a policy aggregation algorithm is to run in parallel some online learning algorithms, denoted <code class="docutils literal"><span class="pre">A_1</span></code>,...,<code class="docutils literal"><span class="pre">A_N</span></code> (<code class="docutils literal"><span class="pre">A_i</span></code>), and make them all vote at each step, and use some probabilistic scheme to select a decision from their votes.</p>
+<p>The basic idea of a policy aggregation algorithm is to run in parallel some online learning algorithms, denoted <code class="docutils literal"><span class="pre">A_1</span></code>,…,<code class="docutils literal"><span class="pre">A_N</span></code> (<code class="docutils literal"><span class="pre">A_i</span></code>), and make them all vote at each step, and use some probabilistic scheme to select a decision from their votes.</p>
 <p>Hopefully, if all the algorithms <code class="docutils literal"><span class="pre">A_i</span></code> are not too bad and at least one of them is efficient for the problem at hand, the aggregation algorithm will learn to mainly trust the efficient one(s) and discard the votes from the others.
 An efficient aggregation algorithm should have performances similar to the best child algorithm <code class="docutils literal"><span class="pre">A_i</span></code>, in any problem.</p>
 <p>The <a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">Exp4 algorithm</a> by [Auer et al, 2002] is the first aggregation algorithm for online bandit algorithms, and recently other algorithms include <a class="reference external" href="docs/Policies.LearnExp.html">LearnExp</a> ([<a class="reference external" href="https://arxiv.org/abs/1702.04825">Singla et al, 2017</a>]) and <a class="reference external" href="docs/Policies.CORRAL.html">CORRAL</a> ([<a class="reference external" href="https://arxiv.org/abs/1612.06246v2">Agarwal et al, 2017</a>]).</p>
 <hr class="docutils" />
 <div class="section" id="Mathematical-explanations">
 <h3>Mathematical explanations<a class="headerlink" href="#Mathematical-explanations" title="Permalink to this headline">¶</a></h3>
-<p>Initially, every child algorithms <code class="docutils literal"><span class="pre">A_i</span></code> has the same &#8220;trust&#8221; probability <code class="docutils literal"><span class="pre">p_i</span></code>, and at every step, the aggregated bandit first listen to the decision from all its children <code class="docutils literal"><span class="pre">A_i</span></code> (<code class="docutils literal"><span class="pre">a_{i,t}</span></code> in <code class="docutils literal"><span class="pre">1</span> <span class="pre">..</span> <span class="pre">K</span></code>), and then decide which arm to select by a probabilistic vote: the probability of selecting arm <code class="docutils literal"><span class="pre">k</span></code> is the sum of the trust probability of the children who voted for arm <code class="docutils literal"><span class="pre">k</span></code>.
+<p>Initially, every child algorithms <code class="docutils literal"><span class="pre">A_i</span></code> has the same “trust” probability <code class="docutils literal"><span class="pre">p_i</span></code>, and at every step, the aggregated bandit first listen to the decision from all its children <code class="docutils literal"><span class="pre">A_i</span></code> (<code class="docutils literal"><span class="pre">a_{i,t}</span></code> in <code class="docutils literal"><span class="pre">1</span> <span class="pre">..</span> <span class="pre">K</span></code>), and then decide which arm to select by a probabilistic vote: the probability of selecting arm <code class="docutils literal"><span class="pre">k</span></code> is the sum of the trust probability of the children who voted for arm <code class="docutils literal"><span class="pre">k</span></code>.
 It could also be done the other way: the aggregated bandit could first decide which children to listen to, then trust him.</p>
 <p>But we want to update the trust probability of all the children algorithms, not only one, when it was wised to trust them.
 Mathematically, when the aggregated arm choose to pull the arm <code class="docutils literal"><span class="pre">k</span></code> at step <code class="docutils literal"><span class="pre">t</span></code>, if it yielded a positive reward <code class="docutils literal"><span class="pre">r_{k,t}</span></code>, then the probability of all children algorithms <code class="docutils literal"><span class="pre">A_i</span></code> who decided (independently) to chose <code class="docutils literal"><span class="pre">k</span></code> (i.e., <code class="docutils literal"><span class="pre">a_{i,t}</span> <span class="pre">=</span> <span class="pre">k</span></code>) are increased multiplicatively: <code class="docutils literal"><span class="pre">p_i</span> <span class="pre">&lt;-</span> <span class="pre">p_i</span> <span class="pre">*</span> <span class="pre">exp(+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">r_{k,t})</span></code> where <code class="docutils literal"><span class="pre">beta</span></code> is a positive <em>learning rate</em>, e.g., <code class="docutils literal"><span class="pre">beta</span> <span class="pre">=</span> <span class="pre">0.1</span></code>.</p>
@@ -325,18 +325,18 @@ make comparing_aggregation_algorithms   <span class="c1"># run and log the main.
 <h2>Some illustrations<a class="headerlink" href="#Some-illustrations" title="Permalink to this headline">¶</a></h2>
 <p>Here are some plots illustrating the performances of the different <a class="reference external" href="SMPyBandits/Policies/">policies</a> implemented in this project, against various problems (with <a class="reference external" href="docs/Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> arms only):</p>
 <div class="section" id="On-a-&quot;simple&quot;-Bernoulli-problem-(semi-log-y-scale)">
-<h3>On a &#8220;simple&#8221; Bernoulli problem (semi-log-y scale)<a class="headerlink" href="#On-a-"simple"-Bernoulli-problem-(semi-log-y-scale)" title="Permalink to this headline">¶</a></h3>
+<h3>On a “simple” Bernoulli problem (semi-log-y scale)<a class="headerlink" href="#On-a-"simple"-Bernoulli-problem-(semi-log-y-scale)" title="Permalink to this headline">¶</a></h3>
 <p><img alt="On a &quot;simple&quot; Bernoulli problem (semi-log-y scale)." src="_images/main_semilogy____env1-4_932221613383548446.png" /></p>
 <p>Aggregator is the most efficient, and very similar to Exp4 here.</p>
 </div>
 <div class="section" id="On-a-&quot;harder&quot;-Bernoulli-problem">
-<h3>On a &#8220;harder&#8221; Bernoulli problem<a class="headerlink" href="#On-a-"harder"-Bernoulli-problem" title="Permalink to this headline">¶</a></h3>
+<h3>On a “harder” Bernoulli problem<a class="headerlink" href="#On-a-"harder"-Bernoulli-problem" title="Permalink to this headline">¶</a></h3>
 <p><img alt="On a &quot;harder&quot; Bernoulli problem, they all have similar performances, except LearnExp." src="_images/main____env2-4_932221613383548446.png" /></p>
 <p>They all have similar performances, except LearnExp, which performs badly.
 We can check that the problem is indeed harder as the lower-bound (in black) is much larger.</p>
 </div>
 <div class="section" id="On-an-&quot;easy&quot;-Gaussian-problem">
-<h3>On an &#8220;easy&#8221; Gaussian problem<a class="headerlink" href="#On-an-"easy"-Gaussian-problem" title="Permalink to this headline">¶</a></h3>
+<h3>On an “easy” Gaussian problem<a class="headerlink" href="#On-an-"easy"-Gaussian-problem" title="Permalink to this headline">¶</a></h3>
 <p><img alt="On an &quot;easy&quot; Gaussian problem, only Aggregator shows reasonable performances, thanks to BayesUCB and Thompson sampling." src="_images/main____env3-4_932221613383548446.png" /></p>
 <p>Only Aggregator shows reasonable performances, thanks to BayesUCB and Thompson sampling.
 CORRAL and LearnExp clearly appears sub-efficient.</p>
@@ -346,7 +346,7 @@ CORRAL and LearnExp clearly appears sub-efficient.</p>
 <p><img alt="On a harder problem, mixing Bernoulli, Gaussian, Exponential arms, with 3 arms of each types with the ." src="_images/main_semilogy____env4-4_932221613383548446.png" /></p>
 <p>This problem is much harder as it has 3 arms of each types with the <em>same mean</em>.</p>
 <p><img alt="The semi-log-x scale clearly shows the logarithmic growth of the regret for the best algorithms and our proposal Aggregator, even in a hard &quot;mixed&quot; problem." src="_images/main_semilogx____env4-4_932221613383548446.png" /></p>
-<p>The semi-log-x scale clearly shows the logarithmic growth of the regret for the best algorithms and our proposal Aggregator, even in a hard &#8220;mixed&#8221; problem.</p>
+<p>The semi-log-x scale clearly shows the logarithmic growth of the regret for the best algorithms and our proposal Aggregator, even in a hard “mixed” problem.</p>
 <blockquote>
 <div>These illustrations come from my article, <a class="reference external" href="https://hal.inria.fr/hal-01705292">[Aggregation of Multi-Armed Bandits Learning Algorithms for Opportunistic Spectrum Access, Lilian Besson and Emilie Kaufmann and Christophe Moy, 2017]</a>, presented at the <a class="reference external" href="http://wcnc2018.ieee-wcnc.org/">IEEE WCNC 2018</a> conference.</div></blockquote>
 </div>
