@@ -19,7 +19,7 @@
             </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tqdm._tqdm &mdash; SMPyBandits 0.9.1 documentation</title>
+  <title>tqdm._tqdm &mdash; SMPyBandits 0.9.2 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.1 documentation" href="../../index.html"/>
+    <link rel="top" title="SMPyBandits 0.9.2 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -240,9 +240,13 @@
 <span class="c1"># works only if fork available (Linux, MacOSX, but not on Windows)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="n">mp_lock</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># multiprocessing lock</span>
-    <span class="n">th_lock</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># thread lock</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">mp_lock</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="n">mp_lock</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">th_lock</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># thread lock</span>
+<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="n">th_lock</span> <span class="o">=</span> <span class="kc">None</span>
 
 
@@ -1460,7 +1464,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 06 Mar 2018, 16h.
+      Last updated on 07 Mar 2018, 16h.
 
     </p>
   </div>
@@ -1482,7 +1486,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.9.1',
+            VERSION:'0.9.2',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
