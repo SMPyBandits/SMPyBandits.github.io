@@ -199,7 +199,10 @@
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
-<span class="kn">from</span> <span class="nn">.UCB</span> <span class="k">import</span> <span class="n">UCB</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.UCB</span> <span class="k">import</span> <span class="n">UCB</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">UCB</span> <span class="k">import</span> <span class="n">UCB</span>
 
 
 <div class="viewcode-block" id="binofit_scalar"><a class="viewcode-back" href="../../docs/Policies.CPUCB.html#Policies.CPUCB.binofit_scalar">[docs]</a><span class="k">def</span> <span class="nf">binofit_scalar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
@@ -293,19 +296,19 @@
 
 <span class="sd">    &gt;&gt;&gt; (phat, pci) = binofit(xArray, N)</span>
 <span class="sd">    &gt;&gt;&gt; phat</span>
-<span class="sd">    array([ 0.61,  0.54,  0.61,  0.52])</span>
+<span class="sd">    array([0.61, 0.54, 0.61, 0.52])</span>
 <span class="sd">    &gt;&gt;&gt; pci  # 0.6 of course lies in the 95% confidence intervals  # doctest: +ELLIPSIS</span>
-<span class="sd">    array([[ 0.507...,  0.705...],</span>
-<span class="sd">           [ 0.437...,  0.640...],</span>
-<span class="sd">           [ 0.507...,  0.705...],</span>
-<span class="sd">           [ 0.417...,  0.620...]])</span>
+<span class="sd">    array([[0.507..., 0.705...],</span>
+<span class="sd">           [0.437..., 0.640...],</span>
+<span class="sd">           [0.507..., 0.705...],</span>
+<span class="sd">           [0.417..., 0.620...]])</span>
 
 <span class="sd">    &gt;&gt;&gt; (phat, pci) = binofit(xArray, N, 0.01)</span>
 <span class="sd">    &gt;&gt;&gt; pci  # 0.6 is also in the 99% confidence intervals, but it is larger  # doctest: +ELLIPSIS</span>
-<span class="sd">    array([[ 0.476...,  0.732...],</span>
-<span class="sd">           [ 0.407...,  0.668...],</span>
-<span class="sd">           [ 0.476...,  0.732...],</span>
-<span class="sd">           [ 0.387...,  0.650...]])</span>
+<span class="sd">    array([[0.476..., 0.732...],</span>
+<span class="sd">           [0.407..., 0.668...],</span>
+<span class="sd">           [0.476..., 0.732...],</span>
+<span class="sd">           [0.387..., 0.650...]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># If inputs are list or tuples</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xArray</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -396,7 +399,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

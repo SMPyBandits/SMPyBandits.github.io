@@ -195,14 +195,14 @@
 <span class="sd">- Then, fit some unsupervised learning model on each arm, to build a model of its distribution (e.g., a simple Gaussian, with mean and variance obtained from the data).</span>
 <span class="sd">- And then, at each time step, use the models to generate some prediction for the output of each arm, and play according to the arm with highest prediction.</span>
 
-<span class="sd">  + If needed, refit the models once in a while, to incorporate all the collected data.</span>
-<span class="sd">  + If needed, use a robust estimate (e.g., mean of 100 samples) to choose the arm to play, instead of only *one* sample.</span>
+<span class="sd">    + If needed, refit the models once in a while, to incorporate all the collected data.</span>
+<span class="sd">    + If needed, use a robust estimate (e.g., mean of 100 samples) to choose the arm to play, instead of only *one* sample.</span>
 
 <span class="sd">.. warning:: This is still **experimental**! It is NOT efficient in terms of storage, and NOT efficient either in terms of efficiency against a Bandit problem (i.e., regret, best arm identification etc).</span>
 <span class="sd">.. warning:: It is NOT really an on-line policy, as both the memory consumption and the time complexity of each step *increase* with time!</span>
 
 
-<span class="sd">This module provides also two simple Unsupervised Learning algorithm, :class:`SimpleGaussianKernel` and :class:`SimpleBernoulliKernel`, see below.</span>
+<span class="sd">This module provides also two simple Unsupervised Learning algorithm, :class:`SimpleGaussianA` and :class:`SimpleBernoulliKernel`, see below.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -374,7 +374,9 @@
 <span class="sd">      + Otherwise, use the previously trained model to choose the arm :math:`A(t) \in \{1,\dots,K\}` to play next (see :meth:`choice` below).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="UnsupervisedLearning.__init__"><a class="viewcode-back" href="../../docs/Policies.UnsupervisedLearning.html#Policies.UnsupervisedLearning.UnsupervisedLearning.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">KernelDensity</span><span class="p">,</span>
+<div class="viewcode-block" id="UnsupervisedLearning.__init__"><a class="viewcode-back" href="../../docs/Policies.UnsupervisedLearning.html#Policies.UnsupervisedLearning.UnsupervisedLearning.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+                 <span class="n">estimator</span><span class="o">=</span><span class="n">SimpleGaussianKernel</span><span class="p">,</span>
+                <span class="c1">#  estimator=KernelDensity,</span>
                  <span class="n">T_0</span><span class="o">=</span><span class="n">T0</span><span class="p">,</span> <span class="n">fit_every</span><span class="o">=</span><span class="n">FIT_EVERY</span><span class="p">,</span> <span class="n">meanOf</span><span class="o">=</span><span class="n">MEAN_OF</span><span class="p">,</span>
                  <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>  <span class="c1"># not used, but needed for my framework</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -525,7 +527,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

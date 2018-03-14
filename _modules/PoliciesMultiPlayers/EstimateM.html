@@ -202,13 +202,17 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.8&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 
-<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
 
 
 <span class="c1"># --- threshold function xi(n, k)</span>
@@ -222,6 +226,13 @@
 <span class="sd">    - any function such that: :math:`\xi(T, k) = \omega(\log T)` for all `k &gt; 1`. (cf. http://mathworld.wolfram.com/Little-OmegaNotation.html). I choose :math:`\log(1 + T)^2` or :math:`\log(1 + T) \log(1 + \log(1 + T))`, as it seems to work just fine and satisfies the condition (25) from [Distributed Algorithms for Learning..., Anandkumar et al., 2010](http://ieeexplore.ieee.org/document/5462144/).</span>
 
 <span class="sd">    .. warning:: It requires the horizon :math:`T`, and does not use the current time :math:`t`.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; threshold_on_t_with_horizon(1000, 3)  # doctest: +ELLIPSIS</span>
+<span class="sd">    14.287...</span>
+<span class="sd">    &gt;&gt;&gt; threshold_on_t_with_horizon(1000, 3, horizon=2000)  # doctest: +ELLIPSIS</span>
+<span class="sd">    16.357...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># print(&quot;Calling threshold function &#39;threshold_on_t_with_horizon&#39; with t = {}, nbPlayersEstimate = {} and horizon = {} ...&quot;.format(t, nbPlayersEstimate, horizon))  # DEBUG</span>
     <span class="k">if</span> <span class="n">nbPlayersEstimate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
@@ -245,6 +256,13 @@
 <span class="sd">    - If :math:`T_t` is too small, ``min_fake_horizon`` is used instead.</span>
 
 <span class="sd">    .. warning:: This is ongoing research!</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; threshold_on_t_doubling_trick(1000, 3)  # doctest: +ELLIPSIS</span>
+<span class="sd">    14.356...</span>
+<span class="sd">    &gt;&gt;&gt; threshold_on_t_doubling_trick(1000, 3, horizon=2000)  # doctest: +ELLIPSIS</span>
+<span class="sd">    14.356...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fake_horizon_now</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">T0</span> <span class="o">*</span> <span class="p">(</span><span class="n">base</span> <span class="o">**</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">base</span><span class="p">)))),</span> <span class="n">min_fake_horizon</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">threshold_on_t_with_horizon</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">nbPlayersEstimate</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="n">fake_horizon_now</span><span class="p">)</span></div>
@@ -257,6 +275,13 @@
 <span class="sd">    - `1` if `nbPlayersEstimate` is `1`,</span>
 <span class="sd">    - My heuristic to be any-time (ie, without needing to know the horizon) is to use a function of :math:`t` (current time) and not :math:`T` (horizon).</span>
 <span class="sd">    - The choice which seemed to perform the best in practice was :math:`\xi(t, k) = c t` for a small constant :math:`c` (like 5 or 10).</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; threshold_on_t(1000, 3)  # doctest: +ELLIPSIS</span>
+<span class="sd">    47.730...</span>
+<span class="sd">    &gt;&gt;&gt; threshold_on_t(1000, 3, horizon=2000)  # doctest: +ELLIPSIS</span>
+<span class="sd">    47.730...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># print(&quot;Calling threshold function &#39;threshold_on_t&#39; with t = {}, nbPlayersEstimate = {} and horizon = {} ...&quot;.format(t, nbPlayersEstimate, horizon))  # DEBUG</span>
     <span class="k">if</span> <span class="n">nbPlayersEstimate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
@@ -421,7 +446,13 @@
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = EstimateM(nbPlayers, nbArms, rhoRand, UCB, alpha=0.5)</span>
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *; from PoliciesMultiPlayers import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 4</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 2</span>
+<span class="sd">        &gt;&gt;&gt; s = EstimateM(nbPlayers, nbArms, rhoRand, UCBalpha, alpha=0.5)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [0, 3]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 
@@ -442,6 +473,15 @@
 
 <div class="viewcode-block" id="EstimateM.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.EstimateM.html#PoliciesMultiPlayers.EstimateM.EstimateM.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;EstimateM(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -457,7 +497,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

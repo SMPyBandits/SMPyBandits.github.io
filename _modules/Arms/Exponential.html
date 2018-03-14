@@ -197,19 +197,19 @@
 <span class="sd">&gt;&gt;&gt; random.seed(0); np.random.seed(0)</span>
 <span class="sd">&gt;&gt;&gt; Exp03 = ExponentialFromMean(0.3)</span>
 <span class="sd">&gt;&gt;&gt; Exp03</span>
-<span class="sd">Exp(3.21, 1)</span>
+<span class="sd">\mathrm{Exp}(3.2, 1)</span>
 <span class="sd">&gt;&gt;&gt; Exp03.mean  # doctest: +ELLIPSIS</span>
 <span class="sd">0.3000...</span>
 
 <span class="sd">Examples of sampling from an arm:</span>
 
 <span class="sd">&gt;&gt;&gt; Exp03.draw()  # doctest: +ELLIPSIS</span>
-<span class="sd">0.0109...</span>
-<span class="sd">&gt;&gt;&gt; Exp03.draw_nparray(20)  # doctest: +ELLIPSIS</span>
-<span class="sd">array([ 0.1876...,  0.1048...,  0.1583...,  0.1899...,  0.2686...,</span>
-<span class="sd">        0.1367...,  0.2585...,  0.0358...,  0.0115...,  0.2998... ,</span>
-<span class="sd">        0.0730...,  0.1992...,  0.1768...,  0.0241...,  0.8271... ,</span>
-<span class="sd">        0.7633...,  1.    ...,  0.0572...,  0.0784...,  0.0435...])</span>
+<span class="sd">0.052...</span>
+<span class="sd">&gt;&gt;&gt; Exp03.draw_nparray(20)  # doctest: +ELLIPSIS,+NORMALIZE_WHITESPACE</span>
+<span class="sd">array([0.18..., 0.10..., 0.15..., 0.18..., 0.26...,</span>
+<span class="sd">       0.13..., 0.25..., 0.03..., 0.01..., 0.29... ,</span>
+<span class="sd">       0.07..., 0.19..., 0.17..., 0.02... , 0.82... ,</span>
+<span class="sd">       0.76..., 1.     , 0.05..., 0.07..., 0.04...])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -223,8 +223,14 @@
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">minimize</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klExp</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klExp</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klExp</span>
 
 
 <span class="k">def</span> <span class="nf">p_of_expectation</span><span class="p">(</span><span class="n">expectation</span><span class="p">,</span> <span class="n">trunc</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -326,6 +332,15 @@
 
 <span class="c1"># Only export and expose the class defined here</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Exponential&quot;</span><span class="p">,</span> <span class="s2">&quot;ExponentialFromMean&quot;</span><span class="p">,</span> <span class="s2">&quot;UnboundedExponential&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -341,7 +356,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

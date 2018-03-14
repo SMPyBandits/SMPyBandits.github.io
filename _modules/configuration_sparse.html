@@ -276,8 +276,8 @@
 <span class="n">UPDATE_LIKE_EXP4</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># trusts^(t+1) &lt;-- trusts^t * exp(rate_t * estimate reward at time t)</span>
 
 <span class="c1">#: To know if my Aggregator policy is tried.</span>
-<span class="n">TEST_Aggregator</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># XXX do not let this = False if you want to test my Aggregator policy</span>
 <span class="n">TEST_Aggregator</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">TEST_Aggregator</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># XXX do not let this = False if you want to test my Aggregator policy</span>
 
 <span class="c1">#: Should we cache rewards? The random rewards will be the same for all the REPETITIONS simulations for each algorithms.</span>
 <span class="n">CACHE_REWARDS</span> <span class="o">=</span> <span class="n">TEST_Aggregator</span>
@@ -305,6 +305,11 @@
 <span class="n">SPARSITY</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="p">))</span>
 <span class="n">SPARSITY</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SPARSITY&#39;</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="p">))</span>
 
+<span class="c1">#: Default value for the lower value of means</span>
+<span class="n">LOWER</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="c1">#: Default value for the amplitude value of means</span>
+<span class="n">AMPLITUDE</span> <span class="o">=</span> <span class="mf">1.</span>
+
 <span class="c1">#: Type of arms for non-hard-coded problems (Bayesian problems)</span>
 <span class="n">ARM_TYPE</span> <span class="o">=</span> <span class="s2">&quot;Gaussian&quot;</span>
 <span class="n">ARM_TYPE</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ARM_TYPE&#39;</span><span class="p">,</span> <span class="n">ARM_TYPE</span><span class="p">))</span>
@@ -313,11 +318,32 @@
     <span class="s2">&quot;Uniform&quot;</span><span class="p">:</span> <span class="n">UniformArm</span><span class="p">,</span>
     <span class="s2">&quot;Bernoulli&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
     <span class="s2">&quot;Gaussian&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="s2">&quot;Gauss&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span>
+    <span class="s2">&quot;Gaussian_0_1&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_1</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_2&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_2</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_5&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_5</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_10&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_10</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_100&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_100</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m1_1&quot;</span><span class="p">:</span> <span class="n">Gaussian_m1_1</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m2_2&quot;</span><span class="p">:</span> <span class="n">Gaussian_m2_2</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m5_5&quot;</span><span class="p">:</span> <span class="n">Gaussian_m5_5</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m10_10&quot;</span><span class="p">:</span> <span class="n">Gaussian_m10_10</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m100_100&quot;</span><span class="p">:</span> <span class="n">Gaussian_m100_100</span><span class="p">,</span>
+    <span class="s2">&quot;UnboundedGaussian&quot;</span><span class="p">:</span> <span class="n">UnboundedGaussian</span><span class="p">,</span>
     <span class="s2">&quot;Poisson&quot;</span><span class="p">:</span> <span class="n">Poisson</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="n">Poisson</span><span class="p">,</span>
     <span class="s2">&quot;Exponential&quot;</span><span class="p">:</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="s2">&quot;Exp&quot;</span><span class="p">:</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="n">ExponentialFromMean</span><span class="p">,</span>
     <span class="s2">&quot;Gamma&quot;</span><span class="p">:</span> <span class="n">GammaFromMean</span><span class="p">,</span>
 <span class="p">}</span>
+
+<span class="c1"># WARNING That&#39;s nonsense, rewards of unbounded distributions just don&#39;t have lower, amplitude values...</span>
+<span class="k">if</span> <span class="n">ARM_TYPE</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;UnboundedGaussian&quot;</span><span class="p">,</span>
+            <span class="c1"># &quot;Gaussian&quot;,</span>
+        <span class="p">]:</span>
+    <span class="n">LOWER</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span>
+    <span class="n">AMPLITUDE</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">LOWER</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;LOWER&#39;</span><span class="p">,</span> <span class="n">LOWER</span><span class="p">))</span>
+<span class="n">AMPLITUDE</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;AMPLITUDE&#39;</span><span class="p">,</span> <span class="n">AMPLITUDE</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">AMPLITUDE</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: invalid amplitude = </span><span class="si">{:.3g}</span><span class="s2"> but has to be &gt; 0.&quot;</span>  <span class="c1"># DEBUG</span>
+<span class="n">VARIANCE</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;VARIANCE&#39;</span><span class="p">,</span> <span class="n">VARIANCE</span><span class="p">))</span>
+
+<span class="n">ARM_TYPE_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ARM_TYPE</span><span class="p">)</span>
 <span class="n">ARM_TYPE</span> <span class="o">=</span> <span class="n">mapping_ARM_TYPE</span><span class="p">[</span><span class="n">ARM_TYPE</span><span class="p">]</span>
+
+<span class="c1">#: True to use bayesian problem</span>
+<span class="n">ENVIRONMENT_BAYESIAN</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">ENVIRONMENT_BAYESIAN</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;BAYES&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ENVIRONMENT_BAYESIAN</span><span class="p">))</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
 
 <span class="c1">#: Means of arms for non-hard-coded problems (non Bayesian)</span>
 <span class="n">MEANS</span> <span class="o">=</span> <span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">NB_ARMS</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
@@ -346,10 +372,10 @@
         <span class="c1">#     &quot;arm_type&quot;: Bernoulli,</span>
         <span class="c1">#     &quot;params&quot;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]</span>
         <span class="c1"># },</span>
-        <span class="c1"># {   # A very easy problem, but it is used in a lot of articles</span>
-        <span class="c1">#     &quot;arm_type&quot;: Bernoulli,</span>
-        <span class="c1">#     &quot;params&quot;: MEANS</span>
-        <span class="c1"># },</span>
+        <span class="p">{</span>   <span class="c1"># A very easy problem, but it is used in a lot of articles</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">MEANS</span>
+        <span class="p">},</span>
         <span class="c1"># &quot;environment&quot;: [  # 2)  Gaussian arms</span>
         <span class="c1"># {   # An example problem with 3 or 9 arms</span>
         <span class="c1">#     &quot;arm_type&quot;: Gaussian,</span>
@@ -364,26 +390,46 @@
         <span class="c1">#     &quot;params&quot;: randomMeansWithSparsity(NB_ARMS, SPARSITY, mingap=None, lower=0., lowerNonZero=0.2, amplitude=1., isSorted=True)</span>
         <span class="c1"># },</span>
         <span class="c1"># FIXED I need to do Bayesian problems for Gaussian arms also!</span>
+        <span class="c1"># {   # A Bayesian problem: every repetition use a different mean vectors!</span>
+        <span class="c1">#     &quot;arm_type&quot;: ARM_TYPE,</span>
+        <span class="c1">#     # # &quot;arm_type&quot;: lambda mu: Gaussian(mu, VARIANCE),  # XXX Not sure a lambda can be a &#39;arm_type&#39;, as joblib will need to pickle the objects for parallelization</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;function&quot;: randomMeansWithSparsity,</span>
+        <span class="c1">#         &quot;args&quot;: {</span>
+        <span class="c1">#             &quot;nbArms&quot;: NB_ARMS,</span>
+        <span class="c1">#             &quot;mingap&quot;: None,</span>
+        <span class="c1">#             # &quot;mingap&quot;: 0.1,</span>
+        <span class="c1">#             # &quot;mingap&quot;: 1. / (3 * NB_ARMS),</span>
+        <span class="c1">#             &quot;lower&quot;: 0.,</span>
+        <span class="c1">#             &quot;lowerNonZero&quot;: 0.1,</span>
+        <span class="c1">#             &quot;amplitude&quot;: 1.,</span>
+        <span class="c1">#             &quot;isSorted&quot;: True,</span>
+        <span class="c1">#             &quot;sparsity&quot;: SPARSITY,</span>
+        <span class="c1">#         }</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="n">ENVIRONMENT_BAYESIAN</span><span class="p">:</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># XXX Bernoulli arms</span>
         <span class="p">{</span>   <span class="c1"># A Bayesian problem: every repetition use a different mean vectors!</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
-            <span class="c1"># # &quot;arm_type&quot;: lambda mu: Gaussian(mu, VARIANCE),  # XXX Not sure a lambda can be a &#39;arm_type&#39;, as joblib will need to pickle the objects for parallelization</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">randomMeansWithSparsity</span><span class="p">,</span>
+                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">randomMeans</span><span class="p">,</span>
                 <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;nbArms&quot;</span><span class="p">:</span> <span class="n">NB_ARMS</span><span class="p">,</span>
                     <span class="s2">&quot;mingap&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="c1"># &quot;mingap&quot;: 0.0000001,</span>
                     <span class="c1"># &quot;mingap&quot;: 0.1,</span>
                     <span class="c1"># &quot;mingap&quot;: 1. / (3 * NB_ARMS),</span>
-                    <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                    <span class="s2">&quot;lowerNonZero&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                    <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
+                    <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span>
+                    <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
                     <span class="s2">&quot;isSorted&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                    <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">},</span>
-    <span class="p">],</span>
-<span class="p">}</span>
+    <span class="p">]</span>
 
 <span class="c1"># if len(configuration[&#39;environment&#39;]) &gt; 1:</span>
 <span class="c1">#     raise ValueError(&quot;WARNING do not use this hack if you try to use more than one environment.&quot;)</span>
@@ -440,7 +486,7 @@
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
-                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCBPlus</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
@@ -450,7 +496,7 @@
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
-                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCBPlus</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
@@ -460,7 +506,7 @@
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
-                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCBPlus</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
@@ -470,7 +516,7 @@
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
-                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCBPlus</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
@@ -603,7 +649,7 @@
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="c1"># --- KL algorithms, here only klUCBPlus with different klucb functions</span>
+        <span class="c1"># --- KL algorithms, here only klUCB with different klucb functions</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -612,28 +658,28 @@
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCBPlus</span><span class="p">,</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucbBern</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="c1"># {</span>
-        <span class="c1">#     &quot;archtype&quot;: klUCBPlus,</span>
+        <span class="c1">#     &quot;archtype&quot;: klUCB,</span>
         <span class="c1">#     &quot;params&quot;: {</span>
         <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
         <span class="c1">#         &quot;klucb&quot;: klucbExp,</span>
         <span class="c1">#     }</span>
         <span class="c1"># },</span>
         <span class="c1"># {</span>
-        <span class="c1">#     &quot;archtype&quot;: klUCBPlus,</span>
+        <span class="c1">#     &quot;archtype&quot;: klUCB,</span>
         <span class="c1">#     &quot;params&quot;: {</span>
         <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
         <span class="c1">#         &quot;klucb&quot;: klucbGauss,</span>
         <span class="c1">#     }</span>
         <span class="c1"># },</span>
         <span class="c1"># {</span>
-        <span class="c1">#     &quot;archtype&quot;: klUCBPlus,</span>
+        <span class="c1">#     &quot;archtype&quot;: klUCB,</span>
         <span class="c1">#     &quot;params&quot;: {</span>
         <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
         <span class="c1">#         &quot;klucb&quot;: klucbGamma,</span>
@@ -687,7 +733,7 @@
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCBPlus</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
@@ -743,7 +789,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>
