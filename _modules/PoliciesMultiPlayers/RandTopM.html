@@ -205,8 +205,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 
-<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
 
 
 <span class="c1">#: Whether to use or not the variant with the &quot;chair&quot;: after using an arm successfully (no collision), a player won&#39;t move after future collisions (she assumes the other will move). But she will still change her chosen arm if it lies outside of the estimated M-best. :class:`RandTopM` (and variants) uses `False` and :class:`MCTopM` (and variants) uses `True`.</span>
@@ -383,7 +388,13 @@
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = RandTopM(nbPlayers, Thompson, nbArms)</span>
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = RandTopM(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 
@@ -424,6 +435,16 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the RandTopMCautious child (default to nbPlayers, but for instance if there is 2 × RandTopMCautious[UCB] + 2 × RandTopMCautious[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = RandTopMCautious(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RandTopMCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -446,6 +467,17 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the RandTopMExtraCautious child (default to nbPlayers, but for instance if there is 2 × RandTopMExtraCautious[UCB] + 2 × RandTopMExtraCautious[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = RandTopMExtraCautious(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RandTopMExtraCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -466,6 +498,17 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the RandTopMOld child (default to nbPlayers, but for instance if there is 2 × RandTopMOld[UCB] + 2 × RandTopMOld[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = RandTopMOld(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RandTopMOld</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -488,6 +531,16 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the MCTopM child (default to nbPlayers, but for instance if there is 2 × MCTopM[UCB] + 2 × MCTopM[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = MCTopM(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MCTopM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -510,6 +563,16 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the MCTopMCautious child (default to nbPlayers, but for instance if there is 2 × MCTopMCautious[UCB] + 2 × MCTopMCautious[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = MCTopMCautious(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MCTopMCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -532,6 +595,16 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the MCTopMExtraCautious child (default to nbPlayers, but for instance if there is 2 × MCTopMExtraCautious[UCB] + 2 × MCTopMExtraCautious[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = MCTopMExtraCautious(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MCTopMExtraCautious</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -554,11 +627,30 @@
 <span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
 <span class="sd">        - maxRank: maximum rank allowed by the MCTopMOld child (default to nbPlayers, but for instance if there is 2 × MCTopMOld[UCB] + 2 × MCTopMOld[klUCB], maxRank should be 4 not 2).</span>
 <span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = MCTopMOld(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MCTopMOld</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">withChair</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pickWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exitIfWorstWasPicked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pickPrevWorstFirst</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MCTopMOld.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.MCTopMOld.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;MCTopMOld(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 </pre></div>
 
@@ -575,7 +667,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

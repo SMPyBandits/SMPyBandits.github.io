@@ -308,6 +308,13 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">It requires the horizon <span class="math">\(T\)</span>, and does not use the current time <span class="math">\(t\)</span>.</p>
 </div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_with_horizon</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">14.287...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_with_horizon</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>  
+<span class="go">16.357...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -323,6 +330,13 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">This is ongoing research!</p>
 </div>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_doubling_trick</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">14.356...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_doubling_trick</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>  
+<span class="go">14.356...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -335,6 +349,13 @@
 <li>My heuristic to be any-time (ie, without needing to know the horizon) is to use a function of <span class="math">\(t\)</span> (current time) and not <span class="math">\(T\)</span> (horizon).</li>
 <li>The choice which seemed to perform the best in practice was <span class="math">\(\xi(t, k) = c t\)</span> for a small constant <span class="math">\(c\)</span> (like 5 or 10).</li>
 </ul>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">47.730...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>  
+<span class="go">47.730...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -475,7 +496,13 @@
 <li><cite>*args</cite>, <cite>**kwargs</cite>: arguments, named arguments, given to <code class="docutils literal"><span class="pre">decentralizedPolicy</span></code> (will probably be given to the single-player decentralized policy under the hood, don&#8217;t care).</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">EstimateM</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">rhoRand</span><span class="p">,</span> <span class="n">UCB</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">PoliciesMultiPlayers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">EstimateM</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">rhoRand</span><span class="p">,</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[0, 3]</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -542,7 +569,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

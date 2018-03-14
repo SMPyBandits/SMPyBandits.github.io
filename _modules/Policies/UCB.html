@@ -199,12 +199,22 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
-<span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
 
 
 <div class="viewcode-block" id="UCB"><a class="viewcode-back" href="../../docs/Policies.UCB.html#Policies.UCB.UCB">[docs]</a><span class="k">class</span> <span class="nc">UCB</span><span class="p">(</span><span class="n">IndexPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The UCB policy for bounded bandits.</span>
 <span class="sd">    Reference: [Lai &amp; Robbins, 1985].</span>
+
+<span class="sd">    &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">    &gt;&gt;&gt; policy = UCB(10)</span>
+<span class="sd">    &gt;&gt;&gt; policy.choice()</span>
+<span class="sd">    5</span>
+<span class="sd">    &gt;&gt;&gt; policy.computeAllIndex(); policy.index</span>
+<span class="sd">    array([inf, inf, inf, inf, inf, inf, inf, inf, inf, inf])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="UCB.computeIndex"><a class="viewcode-back" href="../../docs/Policies.UCB.html#Policies.UCB.UCB.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
@@ -222,6 +232,16 @@
         <span class="n">indexes</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">)</span>
         <span class="n">indexes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">indexes</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
 </pre></div>
 
            </div>
@@ -237,7 +257,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>
