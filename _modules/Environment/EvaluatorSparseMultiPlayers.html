@@ -204,19 +204,34 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="c1"># import h5py</span>
-<span class="c1"># Local imports, libraries</span>
-<span class="kn">from</span> <span class="nn">.usejoblib</span> <span class="k">import</span> <span class="n">USE_JOBLIB</span><span class="p">,</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">.usetqdm</span> <span class="k">import</span> <span class="n">USE_TQDM</span><span class="p">,</span> <span class="n">tqdm</span>
-<span class="c1"># Local imports, tools and config</span>
-<span class="kn">from</span> <span class="nn">.plotsettings</span> <span class="k">import</span> <span class="n">BBOX_INCHES</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">maximizeWindow</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="n">makemarkers</span><span class="p">,</span> <span class="n">add_percent_formatter</span><span class="p">,</span> <span class="n">wraptext</span><span class="p">,</span> <span class="n">wraplatex</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">show_and_save</span><span class="p">,</span> <span class="n">nrows_ncols</span><span class="p">,</span> <span class="n">addTextForWorstCases</span>
-<span class="kn">from</span> <span class="nn">.sortedDistance</span> <span class="k">import</span> <span class="n">weightedDistance</span><span class="p">,</span> <span class="n">manhattan</span><span class="p">,</span> <span class="n">kendalltau</span><span class="p">,</span> <span class="n">spearmanr</span><span class="p">,</span> <span class="n">gestalt</span><span class="p">,</span> <span class="n">meanDistance</span><span class="p">,</span> <span class="n">sortedDistance</span>
-<span class="kn">from</span> <span class="nn">.fairnessMeasures</span> <span class="k">import</span> <span class="n">amplitude_fairness</span><span class="p">,</span> <span class="n">std_fairness</span><span class="p">,</span> <span class="n">rajjain_fairness</span><span class="p">,</span> <span class="n">mean_fairness</span><span class="p">,</span> <span class="n">fairnessMeasure</span><span class="p">,</span> <span class="n">fairness_mapping</span>
-<span class="c1"># Local imports, objects and functions</span>
-<span class="kn">from</span> <span class="nn">.CollisionModels</span> <span class="k">import</span> <span class="n">onlyUniqUserGetsRewardSparse</span><span class="p">,</span> <span class="n">full_lost_if_collision</span>
-<span class="kn">from</span> <span class="nn">.MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">DynamicMAB</span>
-<span class="kn">from</span> <span class="nn">.ResultMultiPlayers</span> <span class="k">import</span> <span class="n">ResultMultiPlayers</span>
-<span class="c1"># Inheritance</span>
-<span class="kn">from</span> <span class="nn">.EvaluatorMultiPlayers</span> <span class="k">import</span> <span class="n">EvaluatorMultiPlayers</span><span class="p">,</span> <span class="n">_extract</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># Local imports, libraries</span>
+    <span class="kn">from</span> <span class="nn">.usejoblib</span> <span class="k">import</span> <span class="n">USE_JOBLIB</span><span class="p">,</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+    <span class="kn">from</span> <span class="nn">.usetqdm</span> <span class="k">import</span> <span class="n">USE_TQDM</span><span class="p">,</span> <span class="n">tqdm</span>
+    <span class="c1"># Local imports, tools and config</span>
+    <span class="kn">from</span> <span class="nn">.plotsettings</span> <span class="k">import</span> <span class="n">BBOX_INCHES</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">maximizeWindow</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="n">makemarkers</span><span class="p">,</span> <span class="n">add_percent_formatter</span><span class="p">,</span> <span class="n">wraptext</span><span class="p">,</span> <span class="n">wraplatex</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">show_and_save</span><span class="p">,</span> <span class="n">nrows_ncols</span>
+    <span class="kn">from</span> <span class="nn">.sortedDistance</span> <span class="k">import</span> <span class="n">weightedDistance</span><span class="p">,</span> <span class="n">manhattan</span><span class="p">,</span> <span class="n">kendalltau</span><span class="p">,</span> <span class="n">spearmanr</span><span class="p">,</span> <span class="n">gestalt</span><span class="p">,</span> <span class="n">meanDistance</span><span class="p">,</span> <span class="n">sortedDistance</span>
+    <span class="kn">from</span> <span class="nn">.fairnessMeasures</span> <span class="k">import</span> <span class="n">amplitude_fairness</span><span class="p">,</span> <span class="n">std_fairness</span><span class="p">,</span> <span class="n">rajjain_fairness</span><span class="p">,</span> <span class="n">mean_fairness</span><span class="p">,</span> <span class="n">fairnessMeasure</span><span class="p">,</span> <span class="n">fairness_mapping</span>
+    <span class="c1"># Local imports, objects and functions</span>
+    <span class="kn">from</span> <span class="nn">.CollisionModels</span> <span class="k">import</span> <span class="n">onlyUniqUserGetsRewardSparse</span><span class="p">,</span> <span class="n">full_lost_if_collision</span>
+    <span class="kn">from</span> <span class="nn">.MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">DynamicMAB</span>
+    <span class="kn">from</span> <span class="nn">.ResultMultiPlayers</span> <span class="k">import</span> <span class="n">ResultMultiPlayers</span>
+    <span class="c1"># Inheritance</span>
+    <span class="kn">from</span> <span class="nn">.EvaluatorMultiPlayers</span> <span class="k">import</span> <span class="n">EvaluatorMultiPlayers</span><span class="p">,</span> <span class="n">_extract</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c1"># Local imports, libraries</span>
+    <span class="kn">from</span> <span class="nn">usejoblib</span> <span class="k">import</span> <span class="n">USE_JOBLIB</span><span class="p">,</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+    <span class="kn">from</span> <span class="nn">usetqdm</span> <span class="k">import</span> <span class="n">USE_TQDM</span><span class="p">,</span> <span class="n">tqdm</span>
+    <span class="c1"># Local imports, tools and config</span>
+    <span class="kn">from</span> <span class="nn">plotsettings</span> <span class="k">import</span> <span class="n">BBOX_INCHES</span><span class="p">,</span> <span class="n">signature</span><span class="p">,</span> <span class="n">maximizeWindow</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="n">makemarkers</span><span class="p">,</span> <span class="n">add_percent_formatter</span><span class="p">,</span> <span class="n">wraptext</span><span class="p">,</span> <span class="n">wraplatex</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">show_and_save</span><span class="p">,</span> <span class="n">nrows_ncols</span>
+    <span class="kn">from</span> <span class="nn">sortedDistance</span> <span class="k">import</span> <span class="n">weightedDistance</span><span class="p">,</span> <span class="n">manhattan</span><span class="p">,</span> <span class="n">kendalltau</span><span class="p">,</span> <span class="n">spearmanr</span><span class="p">,</span> <span class="n">gestalt</span><span class="p">,</span> <span class="n">meanDistance</span><span class="p">,</span> <span class="n">sortedDistance</span>
+    <span class="kn">from</span> <span class="nn">fairnessMeasures</span> <span class="k">import</span> <span class="n">amplitude_fairness</span><span class="p">,</span> <span class="n">std_fairness</span><span class="p">,</span> <span class="n">rajjain_fairness</span><span class="p">,</span> <span class="n">mean_fairness</span><span class="p">,</span> <span class="n">fairnessMeasure</span><span class="p">,</span> <span class="n">fairness_mapping</span>
+    <span class="c1"># Local imports, objects and functions</span>
+    <span class="kn">from</span> <span class="nn">CollisionModels</span> <span class="k">import</span> <span class="n">onlyUniqUserGetsRewardSparse</span><span class="p">,</span> <span class="n">full_lost_if_collision</span>
+    <span class="kn">from</span> <span class="nn">MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">DynamicMAB</span>
+    <span class="kn">from</span> <span class="nn">ResultMultiPlayers</span> <span class="k">import</span> <span class="n">ResultMultiPlayers</span>
+    <span class="c1"># Inheritance</span>
+    <span class="kn">from</span> <span class="nn">EvaluatorMultiPlayers</span> <span class="k">import</span> <span class="n">EvaluatorMultiPlayers</span><span class="p">,</span> <span class="n">_extract</span>
 
 
 <span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Default nb of repetitions</span>
@@ -507,12 +522,22 @@
 
 <span class="sd">    Examples:</span>
 
+<span class="sd">    &gt;&gt;&gt; import random; random.seed(0)</span>
 <span class="sd">    &gt;&gt;&gt; tosses = [with_proba(0.6) for _ in range(10000)]; sum(tosses)</span>
-<span class="sd">    6043</span>
+<span class="sd">    5977</span>
 <span class="sd">    &gt;&gt;&gt; tosses = [with_proba(0.111) for _ in range(100000)]; sum(tosses)</span>
-<span class="sd">    11162</span>
+<span class="sd">    11158</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">uniform_in_zero_one</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">proba</span></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -528,7 +553,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

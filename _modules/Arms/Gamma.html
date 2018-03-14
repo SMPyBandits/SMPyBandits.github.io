@@ -204,15 +204,13 @@
 <span class="sd">Examples of sampling from an arm:</span>
 
 <span class="sd">&gt;&gt;&gt; Gamma03.draw()  # doctest: +ELLIPSIS</span>
-<span class="sd">1</span>
-<span class="sd">&gt;&gt;&gt; Gamma03.draw_nparray(20)  # doctest: +ELLIPSIS</span>
-<span class="sd">array([  1.35...e-01,   1.84...e-01,   5.71...e-02,</span>
-<span class="sd">         6.36...e-02,   4.94...e-01,   1.51...e-01,</span>
-<span class="sd">         1.48...e-04,   2.25...e-06,   4.56...e-01,</span>
-<span class="sd">         1.00...e+00,   7.59...e-02,   8.12...e-04,</span>
-<span class="sd">         1.54...e-03,   1.14...e-01,   1.18...e-02,</span>
-<span class="sd">         7.30...e-02,   1.76...e-06,   1.94...e-01,</span>
-<span class="sd">         1.00...e+00,   3.30...e-02])</span>
+<span class="sd">0.079...</span>
+<span class="sd">&gt;&gt;&gt; Gamma03.draw_nparray(20)  # doctest: +ELLIPSIS,+NORMALIZE_WHITESPACE</span>
+<span class="sd">array([1.35...e-01, 1.84...e-01, 5.71...e-02, 6.36...e-02,</span>
+<span class="sd">       4.94...e-01, 1.51...e-01, 1.48...e-04, 2.25...e-06,</span>
+<span class="sd">       4.56...e-01, 1.00...e+00, 7.59...e-02, 8.12...e-04,</span>
+<span class="sd">       1.54...e-03, 1.14...e-01, 1.18...e-02, 7.30...e-02,</span>
+<span class="sd">       1.76...e-06, 1.94...e-01, 1.00...e+00, 3.30...e-02])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -223,8 +221,15 @@
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="k">import</span> <span class="n">gamma</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klGamma</span>
+<span class="c1"># Local imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klGamma</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klGamma</span>
 
 <span class="n">oo</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>  <span class="c1"># Nice way to write +infinity</span>
 
@@ -309,6 +314,15 @@
 
 <span class="c1"># Only export and expose the class defined here</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Gamma&quot;</span><span class="p">,</span> <span class="s2">&quot;GammaFromMean&quot;</span><span class="p">,</span> <span class="s2">&quot;UnboundedGamma&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -324,7 +338,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

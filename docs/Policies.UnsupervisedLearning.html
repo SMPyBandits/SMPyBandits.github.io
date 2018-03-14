@@ -328,13 +328,18 @@
 <h1>Policies.UnsupervisedLearning module<a class="headerlink" href="#Policies.UnsupervisedLearning-module" title="Permalink to this headline">¶</a></h1>
 <p>An experimental &#8220;on-line&#8221; policy, using algorithms from Unsupervised Learning.</p>
 <p>Basically, it works like this:</p>
-<ul class="simple">
-<li>Start with a purely random exploration phase (uniform exploration), to get some data about each arm,</li>
-<li>Then, fit some unsupervised learning model on each arm, to build a model of its distribution (e.g., a simple Gaussian, with mean and variance obtained from the data).</li>
-<li>And then, at each time step, use the models to generate some prediction for the output of each arm, and play according to the arm with highest prediction.<ul>
+<ul>
+<li><p class="first">Start with a purely random exploration phase (uniform exploration), to get some data about each arm,</p>
+</li>
+<li><p class="first">Then, fit some unsupervised learning model on each arm, to build a model of its distribution (e.g., a simple Gaussian, with mean and variance obtained from the data).</p>
+</li>
+<li><p class="first">And then, at each time step, use the models to generate some prediction for the output of each arm, and play according to the arm with highest prediction.</p>
+<blockquote>
+<div><ul class="simple">
 <li>If needed, refit the models once in a while, to incorporate all the collected data.</li>
 <li>If needed, use a robust estimate (e.g., mean of 100 samples) to choose the arm to play, instead of only <em>one</em> sample.</li>
 </ul>
+</div></blockquote>
 </li>
 </ul>
 <div class="admonition warning">
@@ -345,7 +350,7 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">It is NOT really an on-line policy, as both the memory consumption and the time complexity of each step <em>increase</em> with time!</p>
 </div>
-<p>This module provides also two simple Unsupervised Learning algorithm, <a class="reference internal" href="#Policies.UnsupervisedLearning.SimpleGaussianKernel" title="Policies.UnsupervisedLearning.SimpleGaussianKernel"><code class="xref py py-class docutils literal"><span class="pre">SimpleGaussianKernel</span></code></a> and <a class="reference internal" href="#Policies.UnsupervisedLearning.SimpleBernoulliKernel" title="Policies.UnsupervisedLearning.SimpleBernoulliKernel"><code class="xref py py-class docutils literal"><span class="pre">SimpleBernoulliKernel</span></code></a>, see below.</p>
+<p>This module provides also two simple Unsupervised Learning algorithm, <code class="xref py py-class docutils literal"><span class="pre">SimpleGaussianA</span></code> and <a class="reference internal" href="#Policies.UnsupervisedLearning.SimpleBernoulliKernel" title="Policies.UnsupervisedLearning.SimpleBernoulliKernel"><code class="xref py py-class docutils literal"><span class="pre">SimpleBernoulliKernel</span></code></a>, see below.</p>
 <dl class="class">
 <dt id="Policies.UnsupervisedLearning.FittingModel">
 <em class="property">class </em><code class="descclassname">Policies.UnsupervisedLearning.</code><code class="descname">FittingModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UnsupervisedLearning.html#FittingModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UnsupervisedLearning.FittingModel" title="Permalink to this definition">¶</a></dt>
@@ -558,7 +563,7 @@
 
 <dl class="class">
 <dt id="Policies.UnsupervisedLearning.UnsupervisedLearning">
-<em class="property">class </em><code class="descclassname">Policies.UnsupervisedLearning.</code><code class="descname">UnsupervisedLearning</code><span class="sig-paren">(</span><em>nbArms</em>, <em>estimator=&lt;class 'sklearn.neighbors.kde.KernelDensity'&gt;</em>, <em>T_0=100</em>, <em>fit_every=1000</em>, <em>meanOf=100</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UnsupervisedLearning.html#UnsupervisedLearning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UnsupervisedLearning.UnsupervisedLearning" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UnsupervisedLearning.</code><code class="descname">UnsupervisedLearning</code><span class="sig-paren">(</span><em>nbArms</em>, <em>estimator=&lt;class 'Policies.UnsupervisedLearning.SimpleGaussianKernel'&gt;</em>, <em>T_0=100</em>, <em>fit_every=1000</em>, <em>meanOf=100</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UnsupervisedLearning.html#UnsupervisedLearning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UnsupervisedLearning.UnsupervisedLearning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Generic policy using an Unsupervised Learning algorithm, for instance from scikit-learn.</p>
 <ul class="simple">
@@ -588,7 +593,7 @@
 </ul>
 <dl class="method">
 <dt id="Policies.UnsupervisedLearning.UnsupervisedLearning.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>estimator=&lt;class 'sklearn.neighbors.kde.KernelDensity'&gt;</em>, <em>T_0=100</em>, <em>fit_every=1000</em>, <em>meanOf=100</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UnsupervisedLearning.html#UnsupervisedLearning.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UnsupervisedLearning.UnsupervisedLearning.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>estimator=&lt;class 'Policies.UnsupervisedLearning.SimpleGaussianKernel'&gt;</em>, <em>T_0=100</em>, <em>fit_every=1000</em>, <em>meanOf=100</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UnsupervisedLearning.html#UnsupervisedLearning.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UnsupervisedLearning.UnsupervisedLearning.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new UnsupervisedLearning policy.</p>
 </dd></dl>
 
@@ -782,7 +787,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

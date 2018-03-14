@@ -204,12 +204,12 @@
 <span class="sd">Examples of sampling from an arm:</span>
 
 <span class="sd">&gt;&gt;&gt; Unif01.draw()  # doctest: +ELLIPSIS</span>
-<span class="sd">0.4049...</span>
-<span class="sd">&gt;&gt;&gt; Unif01.draw_nparray(20)  # doctest: +ELLIPSIS</span>
-<span class="sd">array([ 0.5488...,  0.7151...,  0.6027...,  0.5448...,  0.4236...,</span>
-<span class="sd">        0.6458...,  0.4375...,  0.8917...,  0.9636...,  0.3834...,</span>
-<span class="sd">        0.7917...,  0.5288...,  0.5680...,  0.9255...,  0.0710...,</span>
-<span class="sd">        0.0871...,  0.0202...,  0.8326...,  0.7781...,  0.8700...])</span>
+<span class="sd">0.8444...</span>
+<span class="sd">&gt;&gt;&gt; Unif01.draw_nparray(20)  # doctest: +ELLIPSIS,+NORMALIZE_WHITESPACE</span>
+<span class="sd">array([0.54... , 0.71..., 0.60..., 0.54..., 0.42... ,</span>
+<span class="sd">       0.64..., 0.43..., 0.89...  , 0.96..., 0.38...,</span>
+<span class="sd">       0.79..., 0.52..., 0.56..., 0.92..., 0.07...,</span>
+<span class="sd">       0.08... , 0.02... , 0.83..., 0.77..., 0.87...])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -219,8 +219,15 @@
 <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="k">import</span> <span class="n">random</span> <span class="k">as</span> <span class="n">nprandom</span>
 
-<span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span>
+<span class="c1"># Local imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klBern</span>
 
 
 <div class="viewcode-block" id="UniformArm"><a class="viewcode-back" href="../../docs/Arms.UniformArm.html#Arms.UniformArm.UniformArm">[docs]</a><span class="k">class</span> <span class="nc">UniformArm</span><span class="p">(</span><span class="n">Arm</span><span class="p">):</span>
@@ -235,7 +242,7 @@
 <span class="sd">    &gt;&gt;&gt; arm_m10_10 = UniformArm(-10, 10)  # also UniformArm(lower=-10, amplitude=20)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="UniformArm.__init__"><a class="viewcode-back" href="../../docs/Arms.UniformArm.html#Arms.UniformArm.UniformArm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mini</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">maxi</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="UniformArm.__init__"><a class="viewcode-back" href="../../docs/Arms.UniformArm.html#Arms.UniformArm.UniformArm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mini</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">maxi</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;New arm.&quot;&quot;&quot;</span>
         <span class="n">mini</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">lower</span><span class="p">)</span>
         <span class="n">maxi</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">maxi</span><span class="p">,</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">)</span>
@@ -284,6 +291,15 @@
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UniformArm&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -299,7 +315,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

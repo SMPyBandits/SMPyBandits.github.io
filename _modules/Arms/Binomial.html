@@ -204,10 +204,10 @@
 <span class="sd">Examples of sampling from an arm:</span>
 
 <span class="sd">&gt;&gt;&gt; B03_10.draw()</span>
-<span class="sd">3.0</span>
+<span class="sd">3</span>
 <span class="sd">&gt;&gt;&gt; B03_10.draw_nparray(20)</span>
-<span class="sd">array([ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  1.,  1.,  0.,  1.,  0.,  0.,</span>
-<span class="sd">        1.,  0.,  0.,  0.,  1.,  1.,  1.])</span>
+<span class="sd">array([4., 3., 3., 3., 3., 3., 5., 6., 3., 4., 3., 3., 5., 1., 1., 0., 4.,</span>
+<span class="sd">       4., 5., 6.])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -218,8 +218,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="k">import</span> <span class="n">binomial</span> <span class="k">as</span> <span class="n">npbinomial</span>
 
-<span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBin</span>
+<span class="c1"># Local imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBin</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klBin</span>
 
 
 <div class="viewcode-block" id="Binomial"><a class="viewcode-back" href="../../docs/Arms.Binomial.html#Arms.Binomial.Binomial">[docs]</a><span class="k">class</span> <span class="nc">Binomial</span><span class="p">(</span><span class="n">Arm</span><span class="p">):</span>
@@ -237,7 +244,8 @@
 
 <div class="viewcode-block" id="Binomial.draw"><a class="viewcode-back" href="../../docs/Arms.Binomial.html#Arms.Binomial.Binomial.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Draw one random sample. The parameter t is ignored in this Arm.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">npbinomial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draws</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+        <span class="c1"># return np.asarray(npbinomial(self.draws, self.probability), dtype=float)</span>
+        <span class="k">return</span> <span class="n">npbinomial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draws</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">probability</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Binomial.draw_nparray"><a class="viewcode-back" href="../../docs/Arms.Binomial.html#Arms.Binomial.Binomial.draw_nparray">[docs]</a>    <span class="k">def</span> <span class="nf">draw_nparray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,)):</span>
         <span class="sd">&quot;&quot;&quot; Draw a numpy array of random samples, of a certain shape.&quot;&quot;&quot;</span>
@@ -270,6 +278,15 @@
 
 <span class="c1"># Only export and expose the class defined here</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Binomial&quot;</span><span class="p">]</span>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -285,7 +302,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

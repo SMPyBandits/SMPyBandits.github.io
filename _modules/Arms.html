@@ -192,12 +192,12 @@
 
 <span class="sd">Each arm class follows the same interface:</span>
 
-<span class="sd">&gt;&gt;&gt; my_arm = Arm(params)</span>
-<span class="sd">&gt;&gt;&gt; my_arm.mean</span>
+<span class="sd">&gt;&gt;&gt; my_arm = Arm(params)  #: doctest: +SKIP</span>
+<span class="sd">&gt;&gt;&gt; my_arm.mean  #: doctest: +SKIP</span>
 <span class="sd">0.5</span>
-<span class="sd">&gt;&gt;&gt; my_arm.draw()  # one random draw</span>
+<span class="sd">&gt;&gt;&gt; my_arm.draw()  # one random draw  #: doctest: +SKIP</span>
 <span class="sd">0.0</span>
-<span class="sd">&gt;&gt;&gt; my_arm.draw_nparray(20)  # or ((3, 10)), many draw</span>
+<span class="sd">&gt;&gt;&gt; my_arm.draw_nparray(20)  # or ((3, 10)), many draw  #: doctest: +SKIP</span>
 <span class="sd">array([ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  1.,  1.,  0.,  1.,  0.,  0.,</span>
 <span class="sd">        1.,  0.,  0.,  0.,  1.,  1.,  1.])</span>
 
@@ -223,6 +223,7 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="c1"># Local imports</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.Constant</span> <span class="k">import</span> <span class="n">Constant</span>
     <span class="kn">from</span> <span class="nn">.UniformArm</span> <span class="k">import</span> <span class="n">UniformArm</span>
@@ -372,7 +373,7 @@
 <div class="viewcode-block" id="randomMeansWithSparsity"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomMeansWithSparsity">[docs]</a><span class="k">def</span> <span class="nf">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</span>
 
-<span class="sd">    - Exactly ``nbArms-sparsity`` arms will have a mean = ``lower`` and the others are randomly sampled uniformly in [lowerNonZero, lower + amplitude].</span>
+<span class="sd">    - Exactly ``nbArms-sparsity`` arms will have a mean = ``lower`` and the others are randomly sampled uniformly in ``[lowerNonZero, lower + amplitude]``.</span>
 <span class="sd">    - All means will be different, except if ``mingap=None``, with a min gap &gt; 0.</span>
 
 <span class="sd">    &gt;&gt;&gt; import numpy as np; np.random.seed(1234)  # reproducible results</span>
@@ -399,6 +400,53 @@
             <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">sparsity</span><span class="p">))</span>
     <span class="n">bad_mus</span> <span class="o">=</span> <span class="p">[</span><span class="n">lower</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">)</span>
     <span class="n">good_mus</span> <span class="o">=</span> <span class="n">lowerNonZero</span> <span class="o">+</span> <span class="p">((</span><span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">-</span> <span class="n">lowerNonZero</span><span class="p">)</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shuffled</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="randomMeansWithSparsity2"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomMeansWithSparsity2">[docs]</a><span class="k">def</span> <span class="nf">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lower</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</span>
+
+<span class="sd">    - Exactly ``nbArms-sparsity`` arms will have a mean sampled uniformly in ``[lower, lowerNonZero]`` and the others are randomly sampled uniformly in ``[lowerNonZero, lower + amplitude]``.</span>
+<span class="sd">    - All means will be different, except if ``mingap=None``, with a min gap &gt; 0.</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.05)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.595..., 0.811...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.1)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.718..., 0.892...]</span>
+
+<span class="sd">    - Means are sorted, except if ``isSorted=False``.</span>
+
+<span class="sd">    &gt;&gt;&gt; import random; random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.1, isSorted=True)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.1, isSorted=False)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">sparsity</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;sparsity&#39; = </span><span class="si">{}</span><span class="s2"> has to be 0 &lt;= sparsity &lt;= nbArms = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sparsity</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">lower</span> <span class="o">&lt;</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;lower&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &lt; &#39;lowerNonZero&#39; = </span><span class="si">{:.3g}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># first the bad</span>
+    <span class="n">nb_bad</span> <span class="o">=</span> <span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_bad</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span> <span class="o">==</span> <span class="n">nb_bad</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_bad</span><span class="p">))</span>
+    <span class="n">bad_mus</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="p">((</span><span class="n">lowerNonZero</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="s2">&quot;Error: bad generation of &#39;bad_mus&#39;, in interval [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">] instead of [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">]...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">),</span> <span class="n">lower</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># then the good</span>
+    <span class="n">nb_good</span> <span class="o">=</span> <span class="n">sparsity</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_good</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span> <span class="o">==</span> <span class="n">nb_good</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_good</span><span class="p">))</span>
+    <span class="n">good_mus</span> <span class="o">=</span> <span class="n">lowerNonZero</span> <span class="o">+</span> <span class="p">((</span><span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">-</span> <span class="n">lowerNonZero</span><span class="p">)</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">lowerNonZero</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">,</span> <span class="s2">&quot;Error: bad generation of &#39;good_mus&#39;, in interval [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">] instead of [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">]...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">good_mus</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">good_mus</span><span class="p">),</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
     <span class="n">mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
@@ -534,7 +582,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

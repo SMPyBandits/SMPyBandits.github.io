@@ -264,12 +264,12 @@
 <p>Arms : contains different types of bandit arms:
 <a class="reference internal" href="Arms.Constant.html#module-Arms.Constant" title="Arms.Constant"><code class="xref py py-class docutils literal"><span class="pre">Constant</span></code></a>, <a class="reference internal" href="Arms.UniformArm.html#module-Arms.UniformArm" title="Arms.UniformArm"><code class="xref py py-class docutils literal"><span class="pre">UniformArm</span></code></a>, <a class="reference internal" href="Arms.Bernoulli.html#module-Arms.Bernoulli" title="Arms.Bernoulli"><code class="xref py py-class docutils literal"><span class="pre">Bernoulli</span></code></a>, <a class="reference internal" href="Arms.Binomial.html#module-Arms.Binomial" title="Arms.Binomial"><code class="xref py py-class docutils literal"><span class="pre">Binomial</span></code></a>, <a class="reference internal" href="Arms.Poisson.html#module-Arms.Poisson" title="Arms.Poisson"><code class="xref py py-class docutils literal"><span class="pre">Poisson</span></code></a>, <a class="reference internal" href="Arms.Gaussian.html#module-Arms.Gaussian" title="Arms.Gaussian"><code class="xref py py-class docutils literal"><span class="pre">Gaussian</span></code></a>, <a class="reference internal" href="Arms.Exponential.html#module-Arms.Exponential" title="Arms.Exponential"><code class="xref py py-class docutils literal"><span class="pre">Exponential</span></code></a>, <a class="reference internal" href="Arms.Gamma.html#module-Arms.Gamma" title="Arms.Gamma"><code class="xref py py-class docutils literal"><span class="pre">Gamma</span></code></a>.</p>
 <p>Each arm class follows the same interface:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span> <span class="o">=</span> <span class="n">Arm</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">mean</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span> <span class="o">=</span> <span class="n">Arm</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1">#: doctest: +SKIP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">mean</span>  <span class="c1">#: doctest: +SKIP</span>
 <span class="go">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>  <span class="c1"># one random draw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>  <span class="c1"># one random draw  #: doctest: +SKIP</span>
 <span class="go">0.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">draw_nparray</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># or ((3, 10)), many draw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">draw_nparray</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># or ((3, 10)), many draw  #: doctest: +SKIP</span>
 <span class="go">array([ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  1.,  1.,  0.,  1.,  0.,  0.,</span>
 <span class="go">        1.,  0.,  0.,  0.,  1.,  1.,  1.])</span>
 </pre></div>
@@ -384,7 +384,7 @@
 <code class="descclassname">Arms.</code><code class="descname">randomMeansWithSparsity</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>sparsity=3</em>, <em>mingap=0.01</em>, <em>lower=0.0</em>, <em>lowerNonZero=0.5</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#randomMeansWithSparsity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.randomMeansWithSparsity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</p>
 <ul class="simple">
-<li>Exactly <code class="docutils literal"><span class="pre">nbArms-sparsity</span></code> arms will have a mean = <code class="docutils literal"><span class="pre">lower</span></code> and the others are randomly sampled uniformly in [lowerNonZero, lower + amplitude].</li>
+<li>Exactly <code class="docutils literal"><span class="pre">nbArms-sparsity</span></code> arms will have a mean = <code class="docutils literal"><span class="pre">lower</span></code> and the others are randomly sampled uniformly in <code class="docutils literal"><span class="pre">[lowerNonZero,</span> <span class="pre">lower</span> <span class="pre">+</span> <span class="pre">amplitude]</span></code>.</li>
 <li>All means will be different, except if <code class="docutils literal"><span class="pre">mingap=None</span></code>, with a min gap &gt; 0.</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
@@ -401,6 +401,33 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<span class="go">[0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Arms.randomMeansWithSparsity2">
+<code class="descclassname">Arms.</code><code class="descname">randomMeansWithSparsity2</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>sparsity=3</em>, <em>mingap=0.01</em>, <em>lower=-1.0</em>, <em>lowerNonZero=0.0</em>, <em>amplitude=2.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#randomMeansWithSparsity2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.randomMeansWithSparsity2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</p>
+<ul class="simple">
+<li>Exactly <code class="docutils literal"><span class="pre">nbArms-sparsity</span></code> arms will have a mean sampled uniformly in <code class="docutils literal"><span class="pre">[lower,</span> <span class="pre">lowerNonZero]</span></code> and the others are randomly sampled uniformly in <code class="docutils literal"><span class="pre">[lowerNonZero,</span> <span class="pre">lower</span> <span class="pre">+</span> <span class="pre">amplitude]</span></code>.</li>
+<li>All means will be different, except if <code class="docutils literal"><span class="pre">mingap=None</span></code>, with a min gap &gt; 0.</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  
+<span class="go">[0.0, 0.0, 0.0, 0.0, 0.595..., 0.811...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  
+<span class="go">[0.0, 0.0, 0.0, 0.0, 0.718..., 0.892...]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Means are sorted, except if <code class="docutils literal"><span class="pre">isSorted=False</span></code>.</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="go">[0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
 </pre></div>
 </div>
@@ -522,7 +549,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>
