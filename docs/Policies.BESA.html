@@ -413,8 +413,10 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2345</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">];</span> <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">);</span> <span class="n">N</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better in the first 6 samples</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better  </span>
+<span class="go">array([0.154..., 0.158...])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 0 is better in the first 6 samples  </span>
+<span class="go">array([0.341..., 0.019...])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
 <span class="go">0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
@@ -445,7 +447,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  
 <span class="go">3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  
-<span class="go">[0, 3, 3, 0, 3, 0, 0, 0, 3, 1]</span>
+<span class="go">[3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -736,7 +738,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

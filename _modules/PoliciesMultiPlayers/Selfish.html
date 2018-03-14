@@ -199,8 +199,12 @@
 
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
-<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
 
 
 <div class="viewcode-block" id="SelfishChildPointer"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.SelfishChildPointer">[docs]</a><span class="k">class</span> <span class="nc">SelfishChildPointer</span><span class="p">(</span><span class="n">ChildPointer</span><span class="p">):</span>
@@ -238,8 +242,15 @@
 
 <span class="sd">        Examples:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = Selfish(10, TakeFixedArm, 14)</span>
-<span class="sd">        &gt;&gt;&gt; s = Selfish(NB_PLAYERS, Softmax, nbArms, temperature=TEMPERATURE)</span>
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = Selfish(nbPlayers, nbArms, Uniform)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 13, 1, 8, 16, 15]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 9, 15, 11, 6, 16]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 <span class="sd">        - Warning: ``s._players`` is for internal use ONLY!</span>
@@ -271,6 +282,15 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Selfish internal indexes does NOT get updated by reward, but by 0, in case of collision, learning is done on SUCCESSFUL TRANSMISSIONS (ie. ACK), not sensing!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span>
         <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penalty</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">penalty</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -286,7 +306,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

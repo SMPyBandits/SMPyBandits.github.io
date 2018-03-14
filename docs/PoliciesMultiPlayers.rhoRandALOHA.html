@@ -316,16 +316,16 @@
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">seed</span><span class="p">;</span> <span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># reproducibility</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">new_rank</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">]</span>
-<span class="go">[1, 5, 9, 8, 7, 5, 8, 6, 4, 9]</span>
+<span class="go">[7, 7, 1, 5, 9, 8, 7, 5, 8, 6]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">new_rank</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">]</span>
-<span class="go">[5, 3, 2, 5, 9, 3, 5, 2, 2, 6]</span>
+<span class="go">[4, 9, 3, 5, 3, 2, 5, 9, 3, 5]</span>
 </pre></div>
 </div>
 <p>Example with <cite>forceChange = True</cite>, when a new rank is picked different than the current one.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">new_rank</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">]</span>
-<span class="go">[9, 2, 6, 7, 6, 4, 9, 8, 8, 9]</span>
+<span class="go">[2, 2, 6, 8, 9, 2, 6, 7, 6, 4]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">new_rank</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">]</span>
-<span class="go">[1, 9, 1, 2, 7, 1, 8, 6, 4, 6]</span>
+<span class="go">[9, 8, 8, 9, 1, 9, 1, 2, 7, 1]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -450,7 +450,16 @@
 <li><cite>*args</cite>, <cite>**kwargs</cite>: arguments, named arguments, given to playerAlgo.</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rhoRandALOHA</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">Thompson</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">alpha_p0</span><span class="p">,</span> <span class="n">forceChange</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p0</span><span class="p">,</span> <span class="n">alpha_p0</span><span class="p">,</span> <span class="n">forceChange</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rhoRandALOHA</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">UCB</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">alpha_p0</span><span class="p">,</span> <span class="n">forceChange</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[12, 15, 0, 3, 3, 7]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[9, 4, 6, 12, 1, 6]</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -543,7 +552,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

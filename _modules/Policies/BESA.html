@@ -203,7 +203,10 @@
 
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
 
 
 <span class="c1"># --- Utility functions</span>
@@ -275,8 +278,10 @@
 <span class="sd">    &gt;&gt;&gt; np.random.seed(2345)  # reproducible results</span>
 <span class="sd">    &gt;&gt;&gt; pulls = [6, 10]; K = len(pulls); N = max(pulls)</span>
 <span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
-<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 1 is better</span>
-<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 0 is better in the first 6 samples</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 1 is better  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([0.154..., 0.158...])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 0 is better in the first 6 samples  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([0.341..., 0.019...])</span>
 <span class="sd">    &gt;&gt;&gt; besa_two_actions(rewards, pulls, 0, 1, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
 <span class="sd">    0</span>
 <span class="sd">    &gt;&gt;&gt; [besa_two_actions(rewards, pulls, 0, 1, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
@@ -335,7 +340,7 @@
 <span class="sd">    &gt;&gt;&gt; besa_K_actions__non_randomized(rewards, pulls, 0, K-1, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
 <span class="sd">    3</span>
 <span class="sd">    &gt;&gt;&gt; [besa_K_actions__non_randomized(rewards, pulls, 0, K-1, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
-<span class="sd">    [0, 3, 3, 0, 3, 0, 0, 0, 3, 1]</span>
+<span class="sd">    [3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># assert left &lt;= right, &quot;Error: in &#39;besa_K_actions&#39; function, left = {} was not &lt;= right = {}...&quot;.format(left, right)  # DEBUG</span>
     <span class="c1"># print(&quot;In &#39;besa_K_actions&#39;, left = {} and right = {} for this call.&quot;.format(left, right))  # DEBUG</span>
@@ -700,7 +705,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

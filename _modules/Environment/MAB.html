@@ -205,13 +205,19 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.pykov</span> <span class="k">import</span> <span class="n">Chain</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: &#39;pykov&#39; module seems to not be available. But it is shipped with SMPyBandits. Weird.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dou you want to try to install it from https://github.com/riccardoscalco/Pykov ?&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: the &#39;MarkovianMAB&#39; class will not work...&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pykov</span> <span class="k">import</span> <span class="n">Chain</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: &#39;pykov&#39; module seems to not be available. But it is shipped with SMPyBandits. Weird.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dou you want to try to install it from https://github.com/riccardoscalco/Pykov ?&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: the &#39;MarkovianMAB&#39; class will not work...&quot;</span><span class="p">)</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">.plotsettings</span> <span class="k">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">wraptext</span><span class="p">,</span> <span class="n">wraplatex</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">show_and_save</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.plotsettings</span> <span class="k">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">wraptext</span><span class="p">,</span> <span class="n">wraplatex</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">show_and_save</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">plotsettings</span> <span class="k">import</span> <span class="n">signature</span><span class="p">,</span> <span class="n">wraptext</span><span class="p">,</span> <span class="n">wraplatex</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">show_and_save</span>
 
 
 <div class="viewcode-block" id="MAB"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.MAB">[docs]</a><span class="k">class</span> <span class="nc">MAB</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1017,7 +1023,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

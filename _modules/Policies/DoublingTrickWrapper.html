@@ -223,13 +223,18 @@
 
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
-
-<span class="kn">from</span> <span class="nn">.UCBH</span> <span class="k">import</span> <span class="n">UCBH</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.UCBH</span> <span class="k">import</span> <span class="n">UCBH</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">UCBH</span> <span class="k">import</span> <span class="n">UCBH</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.usenumba</span> <span class="k">import</span> <span class="n">jit</span>  <span class="c1"># Import numba.jit or a dummy jit(f)=f</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">SystemError</span><span class="p">):</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">SystemError</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">usenumba</span> <span class="k">import</span> <span class="n">jit</span>  <span class="c1"># Import numba.jit or a dummy jit(f)=f</span>
 
 
@@ -383,9 +388,9 @@
 <span class="sd">    &gt;&gt;&gt; first_horizon = 1000</span>
 <span class="sd">    &gt;&gt;&gt; horizon = 30000</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__arithmetic, first_horizon, horizon)  # doctest: +ELLIPSIS</span>
-<span class="sd">    ([1000, 2000, 3000, 4000, 5000, ..., 28000, 29000, 30000], 0)</span>
+<span class="sd">    ([1000, 1200, 1400, ..., 29800, 30000], 0)</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__geometric, first_horizon, horizon)</span>
-<span class="sd">    ([1000, 10000, 100000], 70000)</span>
+<span class="sd">    ([1000, 2000, 4000, 8000, 16000, 32000], 2000)</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential, first_horizon, horizon)</span>
 <span class="sd">    ([1000, 31622], 1622)</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential_slow, first_horizon, horizon)</span>
@@ -398,9 +403,9 @@
 <span class="sd">    &gt;&gt;&gt; first_horizon = 5000</span>
 <span class="sd">    &gt;&gt;&gt; horizon = 1000000</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__arithmetic, first_horizon, horizon)  # doctest: +ELLIPSIS</span>
-<span class="sd">    ([5000, 6000, 7000, ..., 998000, 999000, 1000000], 0)</span>
+<span class="sd">    ([5000, 5200, ..., 999600, 999800, 1000000], 0)</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__geometric, first_horizon, horizon)</span>
-<span class="sd">    ([5000, 50000, 500000, 5000000], 4000000)</span>
+<span class="sd">    ([5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000, 1280000], 280000)</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential, first_horizon, horizon)</span>
 <span class="sd">    ([5000, 353553, 210223755], 209223755)</span>
 <span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential_slow, first_horizon, horizon)</span>
@@ -412,15 +417,15 @@
 
 <span class="sd">    &gt;&gt;&gt; first_horizon = 10</span>
 <span class="sd">    &gt;&gt;&gt; horizon = 1123456</span>
-<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__arithmetic, first_horizon, horizon, debug=True)  # doctest: +ELLIPSIS</span>
-<span class="sd">    ([10, 1010, ..., 1122010, 1123010, 1124010], 554)</span>
-<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__geometric, first_horizon, horizon, debug=True)</span>
-<span class="sd">    ([10, 100, 1000, 10000, 100000, 1000000, 10000000], 8876544)</span>
-<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential, first_horizon, horizon, debug=True)</span>
+<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__arithmetic, first_horizon, horizon)  # doctest: +ELLIPSIS</span>
+<span class="sd">    ([10, 210, 410, ..., 1123210, 1123410, 1123610], 154)</span>
+<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__geometric, first_horizon, horizon)</span>
+<span class="sd">    ([10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 20480, 40960, 81920, 163840, 327680, 655360, 1310720], 187264)</span>
+<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential, first_horizon, horizon)</span>
 <span class="sd">    ([10, 31, 172, 2255, 107082, 35040856], 33917400)</span>
-<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential_slow, first_horizon, horizon, debug=True)</span>
+<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential_slow, first_horizon, horizon)</span>
 <span class="sd">    ([10, 12, 15, 19, 25, 34, 48, 70, 107, 170, 284, 499, 928, 1837, 3895, 8903, 22104, 60106, 180638, 606024, 2294768], 1171312)</span>
-<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential_fast, first_horizon, horizon, debug=True)</span>
+<span class="sd">    &gt;&gt;&gt; breakpoints(next_horizon__exponential_fast, first_horizon, horizon)</span>
 <span class="sd">    ([10, 100, 10000, 100000000], 98876544)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
@@ -602,7 +607,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

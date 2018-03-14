@@ -208,8 +208,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 
-<span class="kn">from</span> <span class="nn">.rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
-<span class="kn">from</span> <span class="nn">.EstimateM</span> <span class="k">import</span> <span class="n">threshold_on_t_with_horizon</span><span class="p">,</span> <span class="n">threshold_on_t_doubling_trick</span><span class="p">,</span> <span class="n">threshold_on_t</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
+    <span class="kn">from</span> <span class="nn">.EstimateM</span> <span class="k">import</span> <span class="n">threshold_on_t_with_horizon</span><span class="p">,</span> <span class="n">threshold_on_t_doubling_trick</span><span class="p">,</span> <span class="n">threshold_on_t</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
+    <span class="kn">from</span> <span class="nn">EstimateM</span> <span class="k">import</span> <span class="n">threshold_on_t_with_horizon</span><span class="p">,</span> <span class="n">threshold_on_t_doubling_trick</span><span class="p">,</span> <span class="n">threshold_on_t</span>
 
 
 <span class="c1"># --- Class oneRhoEst, for children</span>
@@ -236,7 +240,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>  <span class="c1">#: Threshold function</span>
         <span class="c1"># Internal variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayersEstimate</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Number of players. Optimistic: start by assuming it is alone!</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Current rank, starting to 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Current rank, starting to 1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collisionCount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Count collisions on each arm, since last increase of nbPlayersEstimate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timeSinceLastCollision</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Time since last collision. Don&#39;t remember why I thought using this could be useful... But it&#39;s not!</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Internal time</span></div>
@@ -316,7 +320,15 @@
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = rhoEst(nbPlayers, UCB, nbArms, threshold=threshold_on_t)</span>
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = rhoEst(nbPlayers, nbArms, UCB, threshold=threshold_on_t)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [9, 4, 6, 12, 1, 6]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 <span class="sd">        - Warning: ``s._players`` is for internal use ONLY!</span>
@@ -353,7 +365,16 @@
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = rhoEstPlus(nbPlayers, UCB, nbArms, horizon)</span>
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; horizon = 1000</span>
+<span class="sd">        &gt;&gt;&gt; s = rhoEstPlus(nbPlayers, nbArms, UCB, horizon=horizon)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [9, 4, 6, 12, 1, 6]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 <span class="sd">        - Warning: ``s._players`` is for internal use ONLY!</span>
@@ -370,6 +391,15 @@
 
 <div class="viewcode-block" id="rhoEstPlus.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoEst.html#PoliciesMultiPlayers.rhoEst.rhoEstPlus.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;rhoEstPlus(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -385,7 +415,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

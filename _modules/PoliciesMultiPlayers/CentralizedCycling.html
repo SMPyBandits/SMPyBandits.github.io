@@ -200,9 +200,14 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-<span class="kn">from</span> <span class="nn">.BaseCentralizedPolicy</span> <span class="k">import</span> <span class="n">BaseCentralizedPolicy</span>
-<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.BaseCentralizedPolicy</span> <span class="k">import</span> <span class="n">BaseCentralizedPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">BaseCentralizedPolicy</span> <span class="k">import</span> <span class="n">BaseCentralizedPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
 
 
 <div class="viewcode-block" id="Cycling"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.CentralizedCycling.html#PoliciesMultiPlayers.CentralizedCycling.Cycling">[docs]</a><span class="k">class</span> <span class="nc">Cycling</span><span class="p">(</span><span class="n">BaseCentralizedPolicy</span><span class="p">):</span>
@@ -243,7 +248,16 @@
 
 <span class="sd">        Examples:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = CentralizedCycling(10, 14)</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; s = CentralizedCycling(2, 3)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [2, 1]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [0, 2]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [1, 0]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [2, 1]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 <span class="sd">        - Warning: ``s._players`` is for internal use</span>
@@ -267,13 +281,13 @@
             <span class="c1"># XXX this &quot;trash&quot; arm with max number of collision will cycle: that&#39;s the best we can do!</span>
         <span class="c1"># Shuffle it once, just to be even more fair in average (by repetitions)</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CentralizedCycling: initialized with </span><span class="si">{}</span><span class="s2"> arms and </span><span class="si">{}</span><span class="s2"> players ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It decided to use this affectation of arms :&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="c1"># print(&quot;CentralizedCycling: initialized with {} arms and {} players ...&quot;.format(nbArms, nbPlayers))  # DEBUG</span>
+        <span class="c1"># print(&quot;It decided to use this affectation of arms :&quot;)  # DEBUG</span>
         <span class="c1"># Internal object memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_players</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
         <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - Player number </span><span class="si">{}</span><span class="s2"> will use an offset of </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="n">playerId</span><span class="p">]))</span>  <span class="c1"># DEBUG</span>
+            <span class="c1"># print(&quot; - Player number {} will use an offset of {} ...&quot;.format(playerId + 1, self._offsets[playerId]))  # DEBUG</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">Cycling</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="n">playerId</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">ChildPointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_printNbCollisions</span><span class="p">()</span>  <span class="c1"># DEBUG</span></div>
@@ -290,6 +304,15 @@
                 <span class="n">nbAffected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">==</span> <span class="n">armId</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">nbAffected</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - For arm number </span><span class="si">{}</span><span class="s2">, there is </span><span class="si">{}</span><span class="s2"> different child player affected on this arm ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">armId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nbAffected</span><span class="p">))</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -305,7 +328,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

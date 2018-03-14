@@ -352,7 +352,15 @@
 <li>armsMAB: MAB object that represents the arms.</li>
 </ul>
 <p>Examples:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">OracleNotFair</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">MAB</span><span class="p">({</span><span class="s1">&#39;arm_type&#39;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]}))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">problem</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">({</span><span class="s1">&#39;arm_type&#39;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]})</span>  
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">OracleNotFair</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">problem</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[2, 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[2, 1]</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -422,7 +430,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

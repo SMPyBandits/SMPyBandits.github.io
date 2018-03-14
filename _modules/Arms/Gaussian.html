@@ -204,12 +204,12 @@
 <span class="sd">Examples of sampling from an arm:</span>
 
 <span class="sd">&gt;&gt;&gt; Gauss03.draw()  # doctest: +ELLIPSIS</span>
-<span class="sd">0.2276...</span>
-<span class="sd">&gt;&gt;&gt; Gauss03.draw_nparray(20)  # doctest: +ELLIPSIS</span>
-<span class="sd">array([ 0.3882...,  0.3200...,  0.3489... ,  0.4120...,  0.3933... ,</span>
-<span class="sd">        0.2511...,  0.3475...,  0.2924...,  0.2948...,  0.3205...,</span>
-<span class="sd">        0.3072...,  0.3727...,  0.3380...,  0.3060...,  0.3221...,</span>
-<span class="sd">        0.3166...,  0.3747...,  0.2897...,  0.3156...,  0.2572...])</span>
+<span class="sd">0.3470...</span>
+<span class="sd">&gt;&gt;&gt; Gauss03.draw_nparray(20)  # doctest: +ELLIPSIS,+NORMALIZE_WHITESPACE</span>
+<span class="sd">array([0.388..., 0.320..., 0.348... , 0.412..., 0.393... ,</span>
+<span class="sd">       0.251..., 0.347..., 0.292..., 0.294..., 0.320...,</span>
+<span class="sd">       0.307..., 0.372..., 0.338..., 0.306..., 0.322...,</span>
+<span class="sd">       0.316..., 0.374..., 0.289..., 0.315..., 0.257...])</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -221,8 +221,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">erf</span>
 
-<span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klGauss</span>
+<span class="c1"># Local imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arm</span> <span class="k">import</span> <span class="n">Arm</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klGauss</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klGauss</span>
 
 <span class="n">oo</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>  <span class="c1"># Nice way to write +infinity</span>
 
@@ -409,6 +416,15 @@
     <span class="s2">&quot;Gaussian_m100_100&quot;</span><span class="p">,</span>
     <span class="s2">&quot;UnboundedGaussian&quot;</span>
 <span class="p">]</span>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -424,7 +440,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>

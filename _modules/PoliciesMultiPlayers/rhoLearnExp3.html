@@ -211,10 +211,14 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 
+<span class="c1"># XXX Durty hack!</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">path</span>
     <span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="n">Exp3</span><span class="p">,</span> <span class="n">Exp3Decreasing</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.Policies</span> <span class="k">import</span> <span class="n">Exp3</span><span class="p">,</span> <span class="n">Exp3Decreasing</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="n">Exp3</span><span class="p">,</span> <span class="n">Exp3Decreasing</span>
 <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="n">Exp3</span><span class="p">,</span> <span class="n">Exp3Decreasing</span>
@@ -222,7 +226,10 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: ../Policies/Exp3.py was not imported correctly...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="k">raise</span> <span class="n">e</span>
 
-<span class="kn">from</span> <span class="nn">.rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
 
 
 <span class="c1"># --- Define various function mapping the two decoupled feedback to a numerical reward</span>
@@ -348,7 +355,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">oneRhoLearnExp3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">maxRank</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rankSelection</span> <span class="o">=</span> <span class="n">rankSelectionAlgo</span><span class="p">(</span><span class="n">maxRank</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span> <span class="o">=</span> <span class="n">maxRank</span>  <span class="c1">#: Max rank, usually nbPlayers but can be different</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Current rank, starting to 1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Current rank, starting to 1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">change_rank_each_step</span> <span class="o">=</span> <span class="n">change_rank_each_step</span>  <span class="c1">#: Change rank at each step?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">feedback_function</span> <span class="o">=</span> <span class="n">feedback_function</span>  <span class="c1">#: Feedback function: (sensing, collision) -&gt; reward</span>
         <span class="n">feedback_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">feedback_function</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
@@ -420,8 +427,15 @@
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; s = rhoLearnExp3(nbPlayers, BayesUCB, nbArms, Uniform)  # Exactly rhoRand!</span>
-<span class="sd">        &gt;&gt;&gt; s = rhoLearnExp3(nbPlayers, BayesUCB, nbArms)           # Possibly better than rhoRand!</span>
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = rhoLearnExp3(nbPlayers, nbArms, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [0, 1, 9, 0, 10, 3]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [11, 2, 0, 0, 4, 5]</span>
 
 <span class="sd">        - To get a list of usable players, use ``s.children``.</span>
 <span class="sd">        - Warning: ``s._players`` is for internal use ONLY!</span>
@@ -459,7 +473,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 07 Mar 2018, 16h.
+      Last updated on 14 Mar 2018, 18h.
 
     </p>
   </div>
