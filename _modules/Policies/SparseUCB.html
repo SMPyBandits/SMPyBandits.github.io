@@ -193,6 +193,8 @@
 <span class="sd">- The SparseUCB algorithm requires to known **exactly** the value of ``s``.</span>
 
 <span class="sd">- Reference: [[&quot;Sparse Stochastic Bandits&quot;, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](https://arxiv.org/abs/1706.01383)].</span>
+
+<span class="sd">.. warning:: This algorithm only works for sparse Gaussian (or sub-Gaussian) stochastic bandits.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -229,7 +231,7 @@
 
 <div class="viewcode-block" id="SparseUCB.__init__"><a class="viewcode-back" href="../../docs/Policies.SparseUCB.html#Policies.SparseUCB.SparseUCB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">ALPHA</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SparseUCB</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">sparsity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sparsity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sparsity</span> <span class="o">==</span> <span class="n">nbArms</span><span class="p">:</span>
             <span class="n">sparsity</span> <span class="o">=</span> <span class="n">nbArms</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: regular UCBalpha should be used instead of SparseUCB if &#39;sparsity&#39; = &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
         <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">sparsity</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;sparsity&#39; has to be in [1, nbArms = </span><span class="si">{}</span><span class="s2">] but was </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">sparsity</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
@@ -344,7 +346,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 14 Mar 2018, 18h.
+      Last updated on 20 Mar 2018, 20h.
 
     </p>
   </div>
