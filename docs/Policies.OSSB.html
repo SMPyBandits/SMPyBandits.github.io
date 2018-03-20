@@ -335,6 +335,15 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">This is the simplified OSSB algorithm for classical bandits. It can be applied to more general bandit problems, see the original paper.</p>
 </div>
+<ul class="simple">
+<li>The <a class="reference internal" href="#Policies.OSSB.OSSB" title="Policies.OSSB.OSSB"><code class="xref py py-class docutils literal"><span class="pre">OSSB</span></code></a> is for Bernoulli stochastic bandits, and <a class="reference internal" href="#Policies.OSSB.GaussianOSSB" title="Policies.OSSB.GaussianOSSB"><code class="xref py py-class docutils literal"><span class="pre">GaussianOSSB</span></code></a> is for Gaussian stochastic bandits, with a direct application of the result from their paper.</li>
+<li>The <a class="reference internal" href="#Policies.OSSB.SparseOSSB" title="Policies.OSSB.SparseOSSB"><code class="xref py py-class docutils literal"><span class="pre">SparseOSSB</span></code></a> is for sparse Gaussian (or sub-Gaussian) stochastic bandits, of known variance.</li>
+</ul>
+<dl class="function">
+<dt id="Policies.OSSB.klGauss_vect">
+<code class="descclassname">Policies.OSSB.</code><code class="descname">klGauss_vect</code><span class="sig-paren">(</span><em>xs</em>, <em>y</em>, <em>sig2x=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#klGauss_vect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.klGauss_vect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="class">
 <dt id="Policies.OSSB.Phase">
 <em class="property">class </em><code class="descclassname">Policies.OSSB.</code><code class="descname">Phase</code><a class="headerlink" href="#Policies.OSSB.Phase" title="Permalink to this definition">¶</a></dt>
@@ -411,35 +420,69 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="Policies.OSSB.solve_optimization_problem">
-<code class="descclassname">Policies.OSSB.</code><code class="descname">solve_optimization_problem</code><span class="sig-paren">(</span><em>thetas</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#solve_optimization_problem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.solve_optimization_problem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the optimization problem (2)-(3) as defined in the paper.</p>
+<dt id="Policies.OSSB.solve_optimization_problem__classic">
+<code class="descclassname">Policies.OSSB.</code><code class="descname">solve_optimization_problem__classic</code><span class="sig-paren">(</span><em>thetas</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#solve_optimization_problem__classic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.solve_optimization_problem__classic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the optimization problem (2)-(3) as defined in the paper, for classical stochastic bandits.</p>
 <ul class="simple">
 <li>No need to solve anything, as they give the solution for classical bandits.</li>
 </ul>
 </dd></dl>
 
 <dl class="function">
-<dt id="Policies.OSSB.solve_optimization_problem__sparse_bandits">
-<code class="descclassname">Policies.OSSB.</code><code class="descname">solve_optimization_problem__sparse_bandits</code><span class="sig-paren">(</span><em>thetas</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#solve_optimization_problem__sparse_bandits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.solve_optimization_problem__sparse_bandits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the optimization problem (2)-(3) as defined in the paper.</p>
+<dt id="Policies.OSSB.solve_optimization_problem__gaussian">
+<code class="descclassname">Policies.OSSB.</code><code class="descname">solve_optimization_problem__gaussian</code><span class="sig-paren">(</span><em>thetas</em>, <em>sig2x=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#solve_optimization_problem__gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.solve_optimization_problem__gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the optimization problem (2)-(3) as defined in the paper, for Gaussian classical stochastic bandits.</p>
 <ul class="simple">
-<li>FIXME</li>
+<li>No need to solve anything, as they give the solution for Gaussian classical bandits.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.OSSB.solve_optimization_problem__sparse_bandits">
+<code class="descclassname">Policies.OSSB.</code><code class="descname">solve_optimization_problem__sparse_bandits</code><span class="sig-paren">(</span><em>thetas</em>, <em>sparsity=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#solve_optimization_problem__sparse_bandits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.solve_optimization_problem__sparse_bandits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the optimization problem (2)-(3) as defined in the paper, for sparse stochastic bandits.</p>
+<ul class="simple">
+<li>I recomputed suboptimal solution to the optimization problem, and found the same as in [[&#8220;Sparse Stochastic Bandits&#8221;, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](<a class="reference external" href="https://arxiv.org/abs/1706.01383">https://arxiv.org/abs/1706.01383</a>)].</li>
 </ul>
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.OSSB.OSSB">
-<em class="property">class </em><code class="descclassname">Policies.OSSB.</code><code class="descname">OSSB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#OSSB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.OSSB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.OSSB.</code><code class="descname">OSSB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>solve_optimization_problem='classic'</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#OSSB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.OSSB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
 <p>Optimal Sampling for Structured Bandits (OSSB) algorithm.</p>
 <ul class="simple">
+<li><code class="docutils literal"><span class="pre">solve_optimization_problem</span></code> can be <code class="docutils literal"><span class="pre">&quot;classic&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;bernoulli&quot;</span></code> for classic stochastic bandit with no structure, <code class="docutils literal"><span class="pre">&quot;gaussian&quot;</span></code> for classic bandit for Gaussian arms, or <code class="docutils literal"><span class="pre">&quot;sparse&quot;</span></code> for sparse stochastic bandit (give the sparsity <code class="docutils literal"><span class="pre">s</span></code> in a <code class="docutils literal"><span class="pre">kwargs</span></code>).</li>
 <li>Reference: [[Minimal Exploration in Structured Stochastic Bandits, Combes et al, arXiv:1711.00400 [stat.ML]]](https://arxiv.org/abs/1711.00400)</li>
 </ul>
 <dl class="method">
 <dt id="Policies.OSSB.OSSB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#OSSB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.OSSB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>solve_optimization_problem='classic'</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#OSSB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.OSSB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OSSB.OSSB.epsilon">
+<code class="descname">epsilon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OSSB.OSSB.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math">\(\varepsilon\)</span> for the OSSB algorithm. Can be = 0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OSSB.OSSB.gamma">
+<code class="descname">gamma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OSSB.OSSB.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math">\(\gamma\)</span> for the OSSB algorithm. Can be = 0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OSSB.OSSB.counter_s_no_exploitation_phase">
+<code class="descname">counter_s_no_exploitation_phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OSSB.OSSB.counter_s_no_exploitation_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>counter of number of exploitation phase</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OSSB.OSSB.phase">
+<code class="descname">phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OSSB.OSSB.phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>categorical variable for the phase</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Policies.OSSB.OSSB.__str__">
@@ -478,6 +521,40 @@
 
 </dd></dl>
 
+<dl class="class">
+<dt id="Policies.OSSB.GaussianOSSB">
+<em class="property">class </em><code class="descclassname">Policies.OSSB.</code><code class="descname">GaussianOSSB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>variance=0.25</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#GaussianOSSB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.GaussianOSSB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.OSSB.OSSB" title="Policies.OSSB.OSSB"><code class="xref py py-class docutils literal"><span class="pre">Policies.OSSB.OSSB</span></code></a></p>
+<p>Optimal Sampling for Structured Bandits (OSSB) algorithm, for Gaussian Stochastic Bandits.</p>
+<dl class="method">
+<dt id="Policies.OSSB.GaussianOSSB.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>variance=0.25</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#GaussianOSSB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.GaussianOSSB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OSSB.GaussianOSSB.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.OSSB'</em><a class="headerlink" href="#Policies.OSSB.GaussianOSSB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.OSSB.SparseOSSB">
+<em class="property">class </em><code class="descclassname">Policies.OSSB.</code><code class="descname">SparseOSSB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>sparsity=None</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#SparseOSSB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.SparseOSSB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.OSSB.OSSB" title="Policies.OSSB.OSSB"><code class="xref py py-class docutils literal"><span class="pre">Policies.OSSB.OSSB</span></code></a></p>
+<p>Optimal Sampling for Structured Bandits (OSSB) algorithm, for Sparse Stochastic Bandits.</p>
+<dl class="attribute">
+<dt id="Policies.OSSB.SparseOSSB.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.OSSB'</em><a class="headerlink" href="#Policies.OSSB.SparseOSSB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.OSSB.SparseOSSB.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.0</em>, <em>gamma=0.0</em>, <em>sparsity=None</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OSSB.html#SparseOSSB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OSSB.SparseOSSB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -503,7 +580,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 14 Mar 2018, 18h.
+      Last updated on 20 Mar 2018, 20h.
 
     </p>
   </div>

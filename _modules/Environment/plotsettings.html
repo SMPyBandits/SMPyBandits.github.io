@@ -311,26 +311,35 @@
 <span class="c1">#: Shrink factor if the legend is displayed on the right of the plot.</span>
 <span class="c1">#:</span>
 <span class="c1">#: .. warning:: I still don&#39;t really understand how this works. Just manually decrease if the legend takes more space (i.e., more algorithms with longer names)</span>
-<span class="c1"># SHRINKFACTOR = 0.75</span>
-<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.65</span>
 <span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.60</span>
+<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.65</span>
+<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.70</span>
+
+<span class="c1">#: Default parameter for maximum number of label to display in the legend INSIDE the figure</span>
+<span class="n">MAXNBOFLABELINFIGURE</span> <span class="o">=</span> <span class="mi">7</span>
 
 
-<div class="viewcode-block" id="legend"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.legend">[docs]</a><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">putatright</span><span class="o">=</span><span class="n">PUTATRIGHT</span><span class="p">,</span> <span class="n">shrinkfactor</span><span class="o">=</span><span class="n">SHRINKFACTOR</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="legend"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.legend">[docs]</a><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">putatright</span><span class="o">=</span><span class="n">PUTATRIGHT</span><span class="p">,</span> <span class="n">shrinkfactor</span><span class="o">=</span><span class="n">SHRINKFACTOR</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxnboflabelinfigure</span><span class="o">=</span><span class="n">MAXNBOFLABELINFIGURE</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;plt.legend() with good options, cf. http://matplotlib.org/users/recipes.html#transparent-fancy-legends.</span>
-
 
 <span class="sd">    - It can place the legend to the right also, see https://stackoverflow.com/a/4701285/.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">len_leg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">putatright</span> <span class="o">=</span> <span class="n">len_leg</span> <span class="o">&gt;</span> <span class="n">maxnboflabelinfigure</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: forcing to use putatright = </span><span class="si">{}</span><span class="s2"> because there is </span><span class="si">{}</span><span class="s2"> items in the legend.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">putatright</span><span class="p">,</span> <span class="n">len_leg</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># print(&quot;    e =&quot;, e)  # DEBUG</span>
+        <span class="k">pass</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hack_fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span>  <span class="c1"># HACK XXX WARNING</span>
+        <span class="c1"># fig = plt.gcf()</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span>  <span class="c1"># HACK</span>
     <span class="k">if</span> <span class="n">putatright</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Shrink current axis by 20% on xaxis and 10% on yaxis</span>
-            <span class="n">delta_rect</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">shrinkfactor</span><span class="p">)</span><span class="o">/</span><span class="mf">5.</span>
-            <span class="c1"># rect = [left, bottom, right, top] in normalized (0, 1) figure coordinates.</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="n">delta_rect</span><span class="o">/</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">delta_rect</span><span class="p">,</span> <span class="n">shrinkfactor</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">delta_rect</span><span class="p">])</span>
+            <span class="n">delta_rect</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">shrinkfactor</span><span class="p">)</span><span class="o">/</span><span class="mf">6.25</span>
+            <span class="c1"># XXX rect = [left, bottom, right, top] in normalized (0, 1) figure coordinates.</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="n">delta_rect</span><span class="p">,</span> <span class="n">delta_rect</span><span class="p">,</span> <span class="n">shrinkfactor</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">delta_rect</span><span class="p">])</span>
             <span class="c1"># Put a legend to the right of the current axis</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
         <span class="k">except</span><span class="p">:</span>
@@ -430,7 +439,7 @@
 
 
 <span class="c1">#: Default value for the ``width`` parameter for :func:`wraptext` and :func:`wraplatex`.</span>
-<span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">95</span>
 
 
 <div class="viewcode-block" id="wraptext"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.wraptext">[docs]</a><span class="k">def</span> <span class="nf">wraptext</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">WIDTH</span><span class="p">):</span>
@@ -531,7 +540,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 14 Mar 2018, 18h.
+      Last updated on 20 Mar 2018, 20h.
 
     </p>
   </div>
