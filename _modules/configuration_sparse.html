@@ -341,8 +341,8 @@
 <span class="n">MEANS</span> <span class="o">=</span> <span class="n">uniformMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">NB_ARMS</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="n">LOWERNONZERO</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">AMPLITUDE</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1">#: Whether to sort the means of the problems or not.</span>
-<span class="n">ISSORTED</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">ISSORTED</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">ISSORTED</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <span class="c1">#: This dictionary configures the experiments</span>
@@ -496,6 +496,20 @@
 
 <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
     <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># --- Naive algorithms</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">EmpiricalMeans</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">EpsilonDecreasing</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nbArms</span><span class="p">),</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
         <span class="c1"># --- UCBalpha algorithm</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCBalpha</span><span class="p">,</span>
@@ -553,12 +567,38 @@
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">ApproximatedFHGittins</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.1</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
+                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.05</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
+                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">ApproximatedFHGittins</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.05</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
                 <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="c1"># # --- SparseWrapper algorithm, 4 different versions whether using old UCB for sets J(t) and K(t) or not</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">ApproximatedFHGittins</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.05</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
+                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- SparseWrapper algorithm, 4 different versions whether using old UCB for sets J(t) and K(t) or not</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
+                <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
         <span class="c1"># {</span>
         <span class="c1">#     &quot;archtype&quot;: SparseWrapper,</span>
         <span class="c1">#     &quot;params&quot;: {</span>
@@ -730,7 +770,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 20 Mar 2018, 20h.
+      Last updated on 21 Mar 2018, 11h.
 
     </p>
   </div>
