@@ -272,9 +272,9 @@
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>All function are <em>not</em> vectorized, and assume only one value for each argument.
+<p>All functions are <em>not</em> vectorized, and assume only one value for each argument.
 If you want vectorized function, use the wrapper <code class="xref py py-func docutils literal"><span class="pre">numpy.vectorize()</span></code>:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klBern_vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">klBern</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klBern_vect</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="mf">0.2</span><span class="p">)</span>  
 <span class="go">array([0.036..., 0.223..., 1.145...])</span>
@@ -282,6 +282,15 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 <span class="go">array([0.104..., 0.022..., 0...])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klBern_vect</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>  
 <span class="go">array([0.036..., 0.087..., 0.550...])</span>
+</pre></div>
+</div>
+<p>For some functions, you would be better off writing a vectorized version manually, for instance if you want to fix a value of some optional parameters:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># WARNING using np.vectorize gave weird result on klGauss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># klGauss_vect = np.vectorize(klGauss, excluded=&quot;y&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">klGauss_vect</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sig2x</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>  <span class="c1"># vectorized for first input only</span>
+<span class="gp">... </span>   <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">klGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sig2x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">klGauss_vect</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">)</span>  
+<span class="go">array([2.42, 0.02, 1.62])</span>
 </pre></div>
 </div>
 </div>
@@ -551,6 +560,10 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 <span class="go">3.1534...</span>
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Using <a class="reference internal" href="Policies.klUCB.html#module-Policies.klUCB" title="Policies.klUCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.klUCB</span></code></a> (and variants) with <a class="reference internal" href="#Arms.kullback.klGauss" title="Arms.kullback.klGauss"><code class="xref py py-func docutils literal"><span class="pre">klGauss()</span></code></a> is equivalent to use <a class="reference internal" href="Policies.UCB.html#module-Policies.UCB" title="Policies.UCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCB</span></code></a>, so prefer the simpler version.</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -560,13 +573,18 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 <ul class="simple">
 <li>x: value of the cum reward,</li>
 <li>d: upper bound on the divergence,</li>
-<li>kl: the KL divergence to be used (klBern, klGauss, etc),</li>
+<li>kl: the KL divergence to be used (<a class="reference internal" href="#Arms.kullback.klBern" title="Arms.kullback.klBern"><code class="xref py py-func docutils literal"><span class="pre">klBern()</span></code></a>, <a class="reference internal" href="#Arms.kullback.klGauss" title="Arms.kullback.klGauss"><code class="xref py py-func docutils literal"><span class="pre">klGauss()</span></code></a>, etc),</li>
 <li>upperbound, lowerbound=float(&#8216;-inf&#8217;): the known bound of the values x,</li>
 <li>precision=1e-6: the threshold from where to stop the research,</li>
+<li>max_iterations: max number of iterations of the loop (safer to bound it to reduce time complexity).</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">It uses a bisection search.</p>
+<p class="last">It uses a <strong>bisection search</strong>, and one call to <code class="docutils literal"><span class="pre">kl</span></code> for each step of the bisection search.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See below for examples for different KL divergence functions.</p>
 </div>
 </dd></dl>
 
@@ -650,6 +668,10 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klucbGauss</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
 <span class="go">1.570820...</span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Using <a class="reference internal" href="Policies.klUCB.html#module-Policies.klUCB" title="Policies.klUCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.klUCB</span></code></a> (and variants) with <a class="reference internal" href="#Arms.kullback.klucbGauss" title="Arms.kullback.klucbGauss"><code class="xref py py-func docutils literal"><span class="pre">klucbGauss()</span></code></a> is equivalent to use <a class="reference internal" href="Policies.UCB.html#module-Policies.UCB" title="Policies.UCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCB</span></code></a>, so prefer the simpler version.</p>
 </div>
 </dd></dl>
 
@@ -770,7 +792,7 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 <dl class="attribute">
 <dt id="Arms.kullback.maxEV">
 <code class="descclassname">Arms.kullback.</code><code class="descname">maxEV</code><a class="reference internal" href="../_modules/Arms/kullback.html#maxEV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.kullback.maxEV" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maximize expectation of V wrt. q st. KL(p, q) &lt; klMax.</p>
+<dd><p>Maximize expectation of <span class="math">\(V\)</span> with respect to <span class="math">\(q\)</span> st. <span class="math">\(\mathrm{KL}(p, q) &lt; \text{klMax}\)</span>.</p>
 <ul class="simple">
 <li>Input args.: p, V, klMax.</li>
 <li>Reference: Section 3.2 of [Filippi, Cappé &amp; Garivier - Allerton, 2011](<a class="reference external" href="https://arxiv.org/pdf/1004.5229.pdf">https://arxiv.org/pdf/1004.5229.pdf</a>).</li>
@@ -780,15 +802,18 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 <dl class="attribute">
 <dt id="Arms.kullback.reseqp">
 <code class="descclassname">Arms.kullback.</code><code class="descname">reseqp</code><a class="reference internal" href="../_modules/Arms/kullback.html#reseqp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.kullback.reseqp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve f(reseqp(p, V, klMax)) = klMax, using Newton method.</p>
+<dd><p>Solve <code class="docutils literal"><span class="pre">f(reseqp(p,</span> <span class="pre">V,</span> <span class="pre">klMax))</span> <span class="pre">=</span> <span class="pre">klMax</span></code>, using Newton method.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This is a subroutine of <a class="reference internal" href="#Arms.kullback.maxEV" title="Arms.kullback.maxEV"><code class="xref py py-func docutils literal"><span class="pre">maxEV()</span></code></a>.</p>
 </div>
 <ul class="simple">
 <li>Reference: Eq. (4) in Section 3.2 of [Filippi, Cappé &amp; Garivier - Allerton, 2011](<a class="reference external" href="https://arxiv.org/pdf/1004.5229.pdf">https://arxiv.org/pdf/1004.5229.pdf</a>).</li>
-<li>Warning: <cite>np.dot</cite> is very slow!</li>
 </ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><cite>np.dot</cite> is very slow!</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -804,8 +829,11 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
 </div>
 <ul class="simple">
 <li>Reference: Eq. (4) in Section 3.2 of [Filippi, Cappé &amp; Garivier - Allerton, 2011].</li>
-<li>Warning: <cite>np.dot</cite> is very slow!</li>
 </ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><cite>np.dot</cite> is very slow!</p>
+</div>
 </dd></dl>
 
 </div>
@@ -833,7 +861,7 @@ If you want vectorized function, use the wrapper <code class="xref py py-func do
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 20 Mar 2018, 20h.
+      Last updated on 21 Mar 2018, 11h.
 
     </p>
   </div>
