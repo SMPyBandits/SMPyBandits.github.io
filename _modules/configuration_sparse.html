@@ -224,14 +224,14 @@
 <span class="c1"># HORIZON = 20000</span>
 <span class="c1"># HORIZON = 30000</span>
 <span class="c1"># # # HORIZON = 40000</span>
-<span class="c1"># HORIZON = 100000</span>
+<span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">100000</span>
 <span class="n">HORIZON</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">HORIZON</span><span class="p">))</span>
 
 <span class="c1">#: REPETITIONS : number of repetitions of the experiments.</span>
 <span class="c1">#: Warning: Should be &gt;= 10 to be statistically trustworthy.</span>
 <span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># XXX To profile the code, turn down parallel computing</span>
 <span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Nb of cores, to have exactly one repetition process by cores</span>
-<span class="c1"># REPETITIONS = 1000</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="c1"># REPETITIONS = 200</span>
 <span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="c1"># REPETITIONS = 50</span>
@@ -430,13 +430,17 @@
         <span class="p">},</span>
     <span class="p">]</span>
 <span class="k">elif</span> <span class="n">ARM_TYPE_str</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Gaussian&quot;</span><span class="p">,</span> <span class="s2">&quot;UnboundedGaussian&quot;</span><span class="p">]:</span>
+    <span class="kn">from</span> <span class="nn">Policies.OSSB</span> <span class="k">import</span> <span class="n">solve_optimization_problem__sparse_bandits</span>
+    <span class="n">means</span> <span class="o">=</span> <span class="n">uniformMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">NB_ARMS</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="n">LOWERNONZERO</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">AMPLITUDE</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="n">ISSORTED</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="n">SPARSITY</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">solve_optimization_problem__sparse_bandits</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">only_strong_or_weak</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
     <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
         <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
                 <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
                 <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">[</span>
                     <span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">VARIANCE</span><span class="p">,</span> <span class="n">LOWER</span><span class="p">,</span> <span class="n">LOWER</span><span class="o">+</span><span class="n">AMPLITUDE</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span>
-                    <span class="n">uniformMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">NB_ARMS</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="n">LOWERNONZERO</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">AMPLITUDE</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="n">ISSORTED</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">means</span>
                 <span class="p">],</span>
         <span class="p">},</span> <span class="p">],</span>
     <span class="p">})</span>
@@ -503,13 +507,13 @@
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">EpsilonDecreasing</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nbArms</span><span class="p">),</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: EpsilonDecreasing,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 1. / (2 * nbArms),</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
         <span class="c1"># --- UCBalpha algorithm</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCBalpha</span><span class="p">,</span>
@@ -526,68 +530,68 @@
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Gauss</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="c1"># --- KL algorithms, here only klUCB with different klucb functions</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucbBern</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucbGauss</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="c1"># --- BayesUCB algorithm</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
         <span class="c1"># {</span>
-        <span class="c1">#     &quot;archtype&quot;: BayesUCB,</span>
+        <span class="c1">#     &quot;archtype&quot;: Thompson,</span>
         <span class="c1">#     &quot;params&quot;: {</span>
-        <span class="c1">#         &quot;posterior&quot;: Gauss,  # XXX does not work yet!</span>
+        <span class="c1">#         &quot;posterior&quot;: Gauss,</span>
         <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
         <span class="c1">#     }</span>
         <span class="c1"># },</span>
-        <span class="c1"># --- Finite-Horizon Gittins index</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">ApproximatedFHGittins</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.05</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
-                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">ApproximatedFHGittins</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.05</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
-                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">ApproximatedFHGittins</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mf">1.05</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">,</span>
-                <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
+        <span class="c1"># # --- KL algorithms, here only klUCB with different klucb functions</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: klUCB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;klucb&quot;: klucbBern,</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: klUCB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;klucb&quot;: klucbGauss,  # XXX exactly like UCB !</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># # --- BayesUCB algorithm</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: BayesUCB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;posterior&quot;: Beta,</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># # {</span>
+        <span class="c1"># #     &quot;archtype&quot;: BayesUCB,</span>
+        <span class="c1"># #     &quot;params&quot;: {</span>
+        <span class="c1"># #         &quot;posterior&quot;: Gauss,  # XXX does not work yet!</span>
+        <span class="c1"># #         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1"># #     }</span>
+        <span class="c1"># # },</span>
+        <span class="c1"># # --- Finite-Horizon Gittins index</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: ApproximatedFHGittins,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;horizon&quot;: 1.05 * HORIZON,</span>
+        <span class="c1">#         &quot;alpha&quot;: 4,</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: ApproximatedFHGittins,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;horizon&quot;: 1.05 * HORIZON,</span>
+        <span class="c1">#         &quot;alpha&quot;: 1,</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: ApproximatedFHGittins,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;horizon&quot;: 1.05 * HORIZON,</span>
+        <span class="c1">#         &quot;alpha&quot;: 0.25,</span>
+        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
         <span class="c1"># --- SparseWrapper algorithm, 4 different versions whether using old UCB for sets J(t) and K(t) or not</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
@@ -680,14 +684,14 @@
         <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
         <span class="c1">#     }</span>
         <span class="c1"># },</span>
-        <span class="c1"># --- The new OSSB algorithm</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">OSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># XXX test to change these values!</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># XXX test to change these values!</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
+        <span class="c1"># # --- The new OSSB algorithm</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: OSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.0,  # XXX test to change these values!</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.0,  # XXX test to change these values!</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
         <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Gaussian bandits</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">GaussianOSSB</span><span class="p">,</span>
@@ -704,6 +708,96 @@
                 <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
     <span class="p">]</span>
@@ -770,7 +864,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Mar 2018, 11h.
+      Last updated on 04 Apr 2018, 18h.
 
     </p>
   </div>
