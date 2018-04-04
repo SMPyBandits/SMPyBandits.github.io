@@ -198,7 +198,7 @@
 <span class="sd">.. warning::</span>
 
 <span class="sd">    All functions are *not* vectorized, and assume only one value for each argument.</span>
-<span class="sd">    If you want vectorized function, use the wrapper :func:`numpy.vectorize`:</span>
+<span class="sd">    If you want vectorized function, use the wrapper :py:class:`numpy.vectorize`:</span>
 
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; klBern_vect = np.vectorize(klBern)</span>
@@ -244,7 +244,9 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="klBern"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klBern">[docs]</a><span class="k">def</span> <span class="nf">klBern</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Bernoulli distributions. https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Bernoulli distributions. https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</span>
+
+<span class="sd">    .. math:: \mathrm{KL}(\mathcal{B}(x), \mathcal{B}(y)) = x \log(\frac{x}{y}) + (1-x) \log(\frac{1-x}{1-y}).</span>
 
 <span class="sd">    &gt;&gt;&gt; klBern(0.5, 0.5)</span>
 <span class="sd">    0.0</span>
@@ -269,9 +271,13 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="klBin"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klBin">[docs]</a><span class="k">def</span> <span class="nf">klBin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Binomial distributions. https://math.stackexchange.com/questions/320399/kullback-leibner-divergence-of-binomial-distributions</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Binomial distributions. https://math.stackexchange.com/questions/320399/kullback-leibner-divergence-of-binomial-distributions</span>
 
-<span class="sd">    Warning, the two distributions must have the same parameter n, and x, y are p, q in (0, 1).</span>
+<span class="sd">    - It is simply the n times :func:`klBern` on x and y.</span>
+
+<span class="sd">    .. math:: \mathrm{KL}(\mathrm{Bin}(x, n), \mathrm{Bin}(y, n)) = n \times \left(x \log(\frac{x}{y}) + (1-x) \log(\frac{1-x}{1-y}) \right).</span>
+
+<span class="sd">    .. warning:: The two distributions must have the same parameter n, and x, y are p, q in (0, 1).</span>
 
 <span class="sd">    &gt;&gt;&gt; klBin(0.5, 0.5, 10)</span>
 <span class="sd">    0.0</span>
@@ -296,7 +302,9 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="klPoisson"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klPoisson">[docs]</a><span class="k">def</span> <span class="nf">klPoisson</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Poison distributions. https://en.wikipedia.org/wiki/Poisson_distribution#Kullback.E2.80.93Leibler_divergence</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Poison distributions. https://en.wikipedia.org/wiki/Poisson_distribution#Kullback.E2.80.93Leibler_divergence</span>
+
+<span class="sd">    .. math:: \mathrm{KL}(\mathrm{Poisson}(x), \mathrm{Poisson}(y)) = y - x + x \times \log(\frac{x}{y}).</span>
 
 <span class="sd">    &gt;&gt;&gt; klPoisson(3, 3)</span>
 <span class="sd">    0.0</span>
@@ -323,7 +331,14 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="klExp"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klExp">[docs]</a><span class="k">def</span> <span class="nf">klExp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for exponential distributions. https://en.wikipedia.org/wiki/Exponential_distribution#Kullback.E2.80.93Leibler_divergence</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for exponential distributions. https://en.wikipedia.org/wiki/Exponential_distribution#Kullback.E2.80.93Leibler_divergence</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathrm{KL}(\mathrm{Exp}(x), \mathrm{Exp}(y)) = \begin{cases}</span>
+<span class="sd">        \frac{x}{y} - 1 - \log(\frac{x}{y}) &amp; \text{if} x &gt; 0, y &gt; 0\\</span>
+<span class="sd">        +\infty &amp; \text{otherwise}</span>
+<span class="sd">        \end{cases}</span>
 
 <span class="sd">    &gt;&gt;&gt; klExp(3, 3)</span>
 <span class="sd">    0.0</span>
@@ -357,7 +372,18 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="klGamma"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klGamma">[docs]</a><span class="k">def</span> <span class="nf">klGamma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for gamma distributions. https://en.wikipedia.org/wiki/Gamma_distribution#Kullback.E2.80.93Leibler_divergence</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for gamma distributions. https://en.wikipedia.org/wiki/Gamma_distribution#Kullback.E2.80.93Leibler_divergence</span>
+
+<span class="sd">    - It is simply the a times :func:`klExp` on x and y.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathrm{KL}(\Gamma(x, a), \Gamma(y, a)) = \begin{cases}</span>
+<span class="sd">        a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &gt; 0, y &gt; 0\\</span>
+<span class="sd">        +\infty &amp; \text{otherwise}</span>
+<span class="sd">        \end{cases}</span>
+
+<span class="sd">    .. warning:: The two distributions must have the same parameter a.</span>
 
 <span class="sd">    &gt;&gt;&gt; klGamma(3, 3)</span>
 <span class="sd">    0.0</span>
@@ -391,7 +417,11 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="klNegBin"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klNegBin">[docs]</a><span class="k">def</span> <span class="nf">klNegBin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for negative binomial distributions. https://en.wikipedia.org/wiki/Gamma_distribution</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for negative binomial distributions. https://en.wikipedia.org/wiki/Negative_binomial_distribution</span>
+
+<span class="sd">    .. math:: \mathrm{KL}(\mathrm{NegBin}(x, r), \mathrm{NegBin}(y, r)) = r \times \log((r + x) / (r + y)) - x \times \log(y \times (r + x) / (x \times (r + y))).</span>
+
+<span class="sd">    .. warning:: The two distributions must have the same parameter r.</span>
 
 <span class="sd">    &gt;&gt;&gt; klNegBin(0.5, 0.5)</span>
 <span class="sd">    0.0</span>
@@ -436,6 +466,10 @@
 <span class="sd">    .. math:: \mathrm{KL}(\nu_1, \nu_2) = \frac{(x - y)^2}{2 \sigma_y^2} + \frac{1}{2}\left( \frac{\sigma_x^2}{\sigma_y^2} - 1 \log\left(\frac{\sigma_x^2}{\sigma_y^2}\right) \right).</span>
 
 <span class="sd">    See https://en.wikipedia.org/wiki/Normal_distribution#Other_properties</span>
+
+<span class="sd">    - By default, sig2y is assumed to be sig2x (same variance).</span>
+
+<span class="sd">    .. warning:: The C version does not support different variances.</span>
 
 <span class="sd">    &gt;&gt;&gt; klGauss(3, 3)</span>
 <span class="sd">    0.0</span>
@@ -510,7 +544,7 @@
 <span class="c1"># --- KL functions, for the KL-UCB policy</span>
 
 <span class="nd">@jit</span>
-<div class="viewcode-block" id="klucb"><a class="viewcode-back" href="../../docs/configuration_markovian.html#Policies.kullback.klucb">[docs]</a><span class="k">def</span> <span class="nf">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<div class="viewcode-block" id="klucb"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klucb">[docs]</a><span class="k">def</span> <span class="nf">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The generic KL-UCB index computation.</span>
 
 <span class="sd">    - x: value of the cum reward,</span>
@@ -522,7 +556,22 @@
 
 <span class="sd">    .. note:: It uses a **bisection search**, and one call to ``kl`` for each step of the bisection search.</span>
 
-<span class="sd">    .. note:: See below for examples for different KL divergence functions.</span>
+<span class="sd">    For example, for :func:`klucbBern`, the two steps are to first compute an upperbound (as precise as possible) and the compute the kl-UCB index:</span>
+
+<span class="sd">    &gt;&gt;&gt; x, d = 0.9, 0.2   # mean x, exploration term d</span>
+<span class="sd">    &gt;&gt;&gt; upperbound = min(1., klucbGauss(x, d, sig2x=0.25))  # variance 1/4 for [0,1] bounded distributions</span>
+<span class="sd">    &gt;&gt;&gt; upperbound  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.0</span>
+<span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-3, max_iterations=10)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.9941...</span>
+<span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-6, max_iterations=10)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.994482...  # doctest: +ELLIPSIS</span>
+<span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-3, max_iterations=50)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.9941...</span>
+<span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-6, max_iterations=100)  # more and more precise!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.994489...</span>
+
+<span class="sd">    .. note:: See below for more examples for different KL divergence functions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">)</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">upperbound</span>
@@ -901,7 +950,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Mar 2018, 11h.
+      Last updated on 21 Mar 2018, 12h.
 
     </p>
   </div>
