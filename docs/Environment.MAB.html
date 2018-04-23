@@ -107,7 +107,6 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="Environment.html">Environment package</a><ul class="current">
@@ -423,9 +422,9 @@
 <dd><p>Sum of the M best means.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Environment.MAB.MAB.sparsity">
-<code class="descname">sparsity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB.sparsity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB.sparsity" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sparsity</code><a class="headerlink" href="#Environment.MAB.MAB.sparsity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the sparsity of the problem, i.e., the number of arms with positive means.</p>
 </dd></dl>
 
@@ -438,7 +437,16 @@
 <dl class="method">
 <dt id="Environment.MAB.MAB.lowerbound">
 <code class="descname">lowerbound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB.lowerbound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB.lowerbound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the constant C(mu), for [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from kullback.py or kullback.so.</p>
+<dd><p>Compute the constant <span class="math">\(C(\mu)\)</span>, for the [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from <code class="docutils literal"><span class="pre">kullback.py</span></code> or <code class="docutils literal"><span class="pre">kullback.so</span></code> (see <a class="reference internal" href="Arms.kullback.html#module-Arms.kullback" title="Arms.kullback"><code class="xref py py-mod docutils literal"><span class="pre">Arms.kullback</span></code></a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.MAB.lowerbound_sparse">
+<code class="descname">lowerbound_sparse</code><span class="sig-paren">(</span><em>sparsity=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB.lowerbound_sparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB.lowerbound_sparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the constant <span class="math">\(C(\mu)\)</span>, for [Joon et al, 2017] lower-bound for sparse bandits for this MAB problem (complexity)</p>
+<ul class="simple">
+<li>I recomputed suboptimal solution to the optimization problem, and found the same as in [[&#8220;Sparse Stochastic Bandits&#8221;, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](<a class="reference external" href="https://arxiv.org/abs/1706.01383">https://arxiv.org/abs/1706.01383</a>)].</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -473,7 +481,7 @@
 
 <dl class="attribute">
 <dt id="Environment.MAB.MAB.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'Environment.MAB', '__doc__': &quot; Basic Multi-Armed Bandit problem, for stochastic and i.i.d. arms.\n\n    - configuration can be a dict with 'arm_type' and 'params' keys. 'arm_type' is a class from the Arms module, and 'params' is a dict, used as a list/tuple/iterable of named parameters given to 'arm_type'. Example::\n\n        configuration = {\n            'arm_type': Bernoulli,\n            'params':   [0.1, 0.5, 0.9]\n        }\n\n        configuration = {  # for fixed variance Gaussian\n            'arm_type': Gaussian,\n            'params':   [0.1, 0.5, 0.9]\n        }\n\n    - But it can also accept a list of already created arms::\n\n        configuration = [\n            Bernoulli(0.1),\n            Bernoulli(0.5),\n            Bernoulli(0.9),\n        ]\n\n    - Both will create three Bernoulli arms, of parameters (means) 0.1, 0.5 and 0.9.\n    &quot;, '__init__': &lt;function MAB.__init__&gt;, 'new_order_of_arm': &lt;function MAB.new_order_of_arm&gt;, '__repr__': &lt;function MAB.__repr__&gt;, 'reprarms': &lt;function MAB.reprarms&gt;, 'draw': &lt;function MAB.draw&gt;, 'draw_nparray': &lt;function MAB.draw_nparray&gt;, 'draw_each': &lt;function MAB.draw_each&gt;, 'draw_each_nparray': &lt;function MAB.draw_each_nparray&gt;, 'Mbest': &lt;function MAB.Mbest&gt;, 'Mworst': &lt;function MAB.Mworst&gt;, 'sumBestMeans': &lt;function MAB.sumBestMeans&gt;, 'sparsity': &lt;function MAB.sparsity&gt;, 'str_sparsity': &lt;function MAB.str_sparsity&gt;, 'lowerbound': &lt;function MAB.lowerbound&gt;, 'hoifactor': &lt;function MAB.hoifactor&gt;, 'lowerbound_multiplayers': &lt;function MAB.lowerbound_multiplayers&gt;, 'upperbound_collisions': &lt;function MAB.upperbound_collisions&gt;, 'plotComparison_our_anandkumar': &lt;function MAB.plotComparison_our_anandkumar&gt;, 'plotHistogram': &lt;function MAB.plotHistogram&gt;, '__dict__': &lt;attribute '__dict__' of 'MAB' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'MAB' objects&gt;})</em><a class="headerlink" href="#Environment.MAB.MAB.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'Environment.MAB', '__doc__': &quot; Basic Multi-Armed Bandit problem, for stochastic and i.i.d. arms.\n\n    - configuration can be a dict with 'arm_type' and 'params' keys. 'arm_type' is a class from the Arms module, and 'params' is a dict, used as a list/tuple/iterable of named parameters given to 'arm_type'. Example::\n\n        configuration = {\n            'arm_type': Bernoulli,\n            'params':   [0.1, 0.5, 0.9]\n        }\n\n        configuration = {  # for fixed variance Gaussian\n            'arm_type': Gaussian,\n            'params':   [0.1, 0.5, 0.9]\n        }\n\n    - But it can also accept a list of already created arms::\n\n        configuration = [\n            Bernoulli(0.1),\n            Bernoulli(0.5),\n            Bernoulli(0.9),\n        ]\n\n    - Both will create three Bernoulli arms, of parameters (means) 0.1, 0.5 and 0.9.\n    &quot;, '__init__': &lt;function MAB.__init__&gt;, 'new_order_of_arm': &lt;function MAB.new_order_of_arm&gt;, '__repr__': &lt;function MAB.__repr__&gt;, 'reprarms': &lt;function MAB.reprarms&gt;, 'draw': &lt;function MAB.draw&gt;, 'draw_nparray': &lt;function MAB.draw_nparray&gt;, 'draw_each': &lt;function MAB.draw_each&gt;, 'draw_each_nparray': &lt;function MAB.draw_each_nparray&gt;, 'Mbest': &lt;function MAB.Mbest&gt;, 'Mworst': &lt;function MAB.Mworst&gt;, 'sumBestMeans': &lt;function MAB.sumBestMeans&gt;, 'sparsity': &lt;property object&gt;, 'str_sparsity': &lt;function MAB.str_sparsity&gt;, 'lowerbound': &lt;function MAB.lowerbound&gt;, 'lowerbound_sparse': &lt;function MAB.lowerbound_sparse&gt;, 'hoifactor': &lt;function MAB.hoifactor&gt;, 'lowerbound_multiplayers': &lt;function MAB.lowerbound_multiplayers&gt;, 'upperbound_collisions': &lt;function MAB.upperbound_collisions&gt;, 'plotComparison_our_anandkumar': &lt;function MAB.plotComparison_our_anandkumar&gt;, 'plotHistogram': &lt;function MAB.plotHistogram&gt;, '__dict__': &lt;attribute '__dict__' of 'MAB' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'MAB' objects&gt;})</em><a class="headerlink" href="#Environment.MAB.MAB.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -655,7 +663,7 @@
 <dl class="method">
 <dt id="Environment.MAB.DynamicMAB.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New dynamic MAB.</p>
+<dd><p>New DynamicMAB.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -886,7 +894,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 04 Apr 2018, 18h.
+      Last updated on 23 Apr 2018, 10h.
 
     </p>
   </div>
