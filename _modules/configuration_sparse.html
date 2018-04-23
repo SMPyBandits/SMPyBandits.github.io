@@ -105,7 +105,6 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../docs/modules.html">SMPyBandits modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
@@ -362,32 +361,38 @@
     <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="p">[</span>  <span class="c1"># 1)  Bernoulli arms</span>
         <span class="c1"># {   # A easy problem, but it is used in a lot of articles</span>
         <span class="c1">#     &quot;arm_type&quot;: Bernoulli,</span>
-        <span class="c1">#     &quot;params&quot;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]</span>
+        <span class="c1">#     &quot;params&quot;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],</span>
+        <span class="c1">#     &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1"># },</span>
         <span class="c1"># {   # A very easy problem, but it is used in a lot of articles</span>
         <span class="c1">#     &quot;arm_type&quot;: Bernoulli,</span>
-        <span class="c1">#     &quot;params&quot;: MEANS</span>
+        <span class="c1">#     &quot;params&quot;: MEANS,</span>
+        <span class="c1">#     &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1"># },</span>
         <span class="c1"># &quot;environment&quot;: [  # 2)  custom arms</span>
         <span class="p">{</span>   <span class="c1"># A very easy problem, but it is used in a lot of articles</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">MEANS</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">MEANS</span><span class="p">,</span>
+            <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="c1"># # &quot;environment&quot;: [  # 3)  Gaussian arms</span>
         <span class="c1"># {   # A very easy problem, but it is used in a lot of articles</span>
         <span class="c1">#     &quot;arm_type&quot;: Gaussian,</span>
-        <span class="c1">#     &quot;params&quot;: MEANS</span>
+        <span class="c1">#     &quot;params&quot;: MEANS,</span>
+        <span class="c1">#     &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1"># },</span>
         <span class="c1"># {   # An example problem with 3 or 9 arms</span>
         <span class="c1">#     &quot;arm_type&quot;: Gaussian,</span>
-        <span class="c1">#     # &quot;params&quot;: [(mean, VARIANCE, MINI, MAXI) for mean in list(range(-8, 10, 2))]</span>
-        <span class="c1">#     # &quot;params&quot;: [(mean, VARIANCE) for mean in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]]</span>
-        <span class="c1">#     &quot;params&quot;: [(mean, VARIANCE) for mean in MEANS]</span>
-        <span class="c1">#     # &quot;params&quot;: [(mean, VARIANCE) for mean in [0.1, 0.5, 0.9]]</span>
+        <span class="c1">#     # &quot;params&quot;: [(mean, VARIANCE, MINI, MAXI) for mean in list(range(-8, 10, 2))],</span>
+        <span class="c1">#     # &quot;params&quot;: [(mean, VARIANCE) for mean in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]],</span>
+        <span class="c1">#     &quot;params&quot;: [(mean, VARIANCE) for mean in MEANS],</span>
+        <span class="c1">#     # &quot;params&quot;: [(mean, VARIANCE) for mean in [0.1, 0.5, 0.9]],</span>
+        <span class="c1">#     &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1"># },</span>
         <span class="c1"># {   # A non-Bayesian random problem</span>
         <span class="c1">#     &quot;arm_type&quot;: ARM_TYPE,</span>
-        <span class="c1">#     &quot;params&quot;: randomMeansWithSparsity(NB_ARMS, SPARSITY, mingap=None, lower=0., lowerNonZero=0.2, amplitude=1., isSorted=True)</span>
+        <span class="c1">#     &quot;params&quot;: randomMeansWithSparsity(NB_ARMS, SPARSITY, mingap=None, lower=0., lowerNonZero=0.2, amplitude=1., isSorted=True),</span>
+        <span class="c1">#     &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1"># },</span>
         <span class="c1"># # FIXED I need to do Bayesian problems for Gaussian arms also!</span>
         <span class="c1"># {   # A Bayesian problem: every repetition use a different mean vectors!</span>
@@ -405,7 +410,8 @@
         <span class="c1">#             &quot;isSorted&quot;: ISSORTED,</span>
         <span class="c1">#             &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1">#         }</span>
-        <span class="c1">#     }</span>
+        <span class="c1">#     },</span>
+        <span class="c1">#     &quot;sparsity&quot;: SPARSITY,</span>
         <span class="c1"># },</span>
     <span class="p">],</span>
 <span class="p">}</span>
@@ -426,14 +432,15 @@
                     <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
                     <span class="s2">&quot;isSorted&quot;</span><span class="p">:</span> <span class="n">ISSORTED</span><span class="p">,</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">]</span>
 <span class="k">elif</span> <span class="n">ARM_TYPE_str</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Gaussian&quot;</span><span class="p">,</span> <span class="s2">&quot;UnboundedGaussian&quot;</span><span class="p">]:</span>
     <span class="kn">from</span> <span class="nn">Policies.OSSB</span> <span class="k">import</span> <span class="n">solve_optimization_problem__sparse_bandits</span>
     <span class="n">means</span> <span class="o">=</span> <span class="n">uniformMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">NB_ARMS</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="n">LOWERNONZERO</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">AMPLITUDE</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="n">ISSORTED</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="n">SPARSITY</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">solve_optimization_problem__sparse_bandits</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">SPARSITY</span><span class="p">,</span> <span class="n">only_strong_or_weak</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">solve_optimization_problem__sparse_bandits</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">only_strong_or_weak</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
         <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
@@ -442,13 +449,15 @@
                     <span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">VARIANCE</span><span class="p">,</span> <span class="n">LOWER</span><span class="p">,</span> <span class="n">LOWER</span><span class="o">+</span><span class="n">AMPLITUDE</span><span class="p">)</span>
                     <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="n">means</span>
                 <span class="p">],</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
         <span class="p">},</span> <span class="p">],</span>
     <span class="p">})</span>
 <span class="c1"># else:</span>
 <span class="c1">#     configuration.update({</span>
 <span class="c1">#         &quot;environment&quot;: [ {</span>
 <span class="c1">#                 &quot;arm_type&quot;: ARM_TYPE,</span>
-<span class="c1">#                 &quot;params&quot;: uniformMeans(nbArms=NB_ARMS, delta=1./(1. + NB_ARMS), lower=LOWER, amplitude=AMPLITUDE)</span>
+<span class="c1">#                 &quot;params&quot;: uniformMeans(nbArms=NB_ARMS, delta=1./(1. + NB_ARMS), lower=LOWER, amplitude=AMPLITUDE),</span>
+<span class="c1">#                 &quot;sparsity&quot;: SPARSITY,</span>
 <span class="c1">#             }, ],</span>
 <span class="c1">#     })</span>
 
@@ -734,72 +743,72 @@
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
+        <span class="c1"># # --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.0,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.0,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY - 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.01,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.0,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY - 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.0,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.1,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY - 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.01,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.1,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY - 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># # --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.0,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.0,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY + 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.01,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.0,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY + 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.0,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.1,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY + 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: SparseOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.01,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.1,</span>
+        <span class="c1">#         &quot;sparsity&quot;: SPARSITY + 1,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
     <span class="p">]</span>
 <span class="p">})</span>
 
@@ -864,7 +873,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 04 Apr 2018, 18h.
+      Last updated on 23 Apr 2018, 10h.
 
     </p>
   </div>
