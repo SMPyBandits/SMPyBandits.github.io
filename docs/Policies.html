@@ -107,7 +107,6 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
@@ -173,6 +172,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10.html">Policies.UCBlog10 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost.html">Policies.UCBoost module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
@@ -351,8 +351,9 @@
 <li>A policy that implements a &#8220;smart doubling trick&#8221; to turn any horizon-dependent policy into a horizon-independent policy without loosing in performances: <a class="reference internal" href="Policies.DoublingTrickWrapper.html#module-Policies.DoublingTrickWrapper" title="Policies.DoublingTrickWrapper"><code class="xref py py-class docutils literal"><span class="pre">DoublingTrickWrapper</span></code></a>,</li>
 <li>An <em>experimental</em> policy, implementing a another kind of doubling trick to turn any policy that needs to know the range <span class="math">\([a,b]\)</span> of rewards a policy that don&#8217;t need to know the range, and that adapt dynamically from the new observations, <a class="reference internal" href="Policies.WrapRange.html#module-Policies.WrapRange" title="Policies.WrapRange"><code class="xref py py-class docutils literal"><span class="pre">WrapRange</span></code></a>,</li>
 <li>The <em>Optimal Sampling for Structured Bandits</em> (OSSB) policy: <a class="reference internal" href="Policies.OSSB.html#module-Policies.OSSB" title="Policies.OSSB"><code class="xref py py-class docutils literal"><span class="pre">OSSB</span></code></a> (it is more generic and can be applied to almost any kind of bandit problem, it works fine for classical stationary bandits but it is not optimal), a variant for gaussian problem <code class="xref py py-class docutils literal"><span class="pre">GaussianOSSB</span></code>, and a variant for sparse bandits <code class="xref py py-class docutils literal"><span class="pre">SparseOSSB</span></code>,</li>
-<li><strong>New!</strong> The Best Empirical Sampled Average (BESA) policy: <a class="reference internal" href="Policies.BESA.html#module-Policies.BESA" title="Policies.BESA"><code class="xref py py-class docutils literal"><span class="pre">BESA</span></code></a> (it works crazily well),</li>
-<li>Some are designed only for (fully decentralized) multi-player games: <a class="reference internal" href="Policies.MusicalChair.html#module-Policies.MusicalChair" title="Policies.MusicalChair"><code class="xref py py-class docutils literal"><span class="pre">MusicalChair</span></code></a>, <a class="reference internal" href="Policies.MEGA.html#module-Policies.MEGA" title="Policies.MEGA"><code class="xref py py-class docutils literal"><span class="pre">MEGA</span></code></a>.</li>
+<li>The Best Empirical Sampled Average (BESA) policy: <a class="reference internal" href="Policies.BESA.html#module-Policies.BESA" title="Policies.BESA"><code class="xref py py-class docutils literal"><span class="pre">BESA</span></code></a> (it works crazily well),</li>
+<li><strong>New!</strong> The UCBoost (Upper Confidence bounds with Boosting) policies, first with no boosting: <code class="xref py py-class docutils literal"><span class="pre">UCB_sq</span></code>, <code class="xref py py-class docutils literal"><span class="pre">UCB_bq</span></code>, <code class="xref py py-class docutils literal"><span class="pre">UCB_h</span></code>, <code class="xref py py-class docutils literal"><span class="pre">UCB_lb</span></code>, <code class="xref py py-class docutils literal"><span class="pre">UCB_t</span></code>, and then the ones with non-adaptive boosting: <code class="xref py py-class docutils literal"><span class="pre">UCBoost_bq_h_lb</span></code>, <code class="xref py py-class docutils literal"><span class="pre">UCBoost_bq_h_lb_t</span></code>, <code class="xref py py-class docutils literal"><span class="pre">UCBoost_bq_h_lb_t_sq</span></code>, <a class="reference internal" href="Policies.UCBoost.html#module-Policies.UCBoost" title="Policies.UCBoost"><code class="xref py py-class docutils literal"><span class="pre">UCBoost</span></code></a>, and finally the epsilon-approximation boosting with <code class="xref py py-class docutils literal"><span class="pre">UCBoostEpsilon</span></code>,</li>
+<li>Some are designed only for (fully decentralized) multi-player games: <a class="reference internal" href="Policies.MusicalChair.html#module-Policies.MusicalChair" title="Policies.MusicalChair"><code class="xref py py-class docutils literal"><span class="pre">MusicalChair</span></code></a>, <a class="reference internal" href="Policies.MEGA.html#module-Policies.MEGA" title="Policies.MEGA"><code class="xref py py-class docutils literal"><span class="pre">MEGA</span></code></a>...</li>
 </ul>
 <p>All policies have the same interface, as described in <a class="reference internal" href="Policies.BasePolicy.html#module-Policies.BasePolicy" title="Policies.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">BasePolicy</span></code></a>,
 in order to use them in any experiment with the following approach:</p>
@@ -447,6 +448,7 @@ in order to use them in any experiment with the following approach:</p>
 <li class="toctree-l1"><a class="reference internal" href="Policies.UCBlog10.html">Policies.UCBlog10 module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Policies.UCBoost.html">Policies.UCBoost module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
@@ -492,7 +494,7 @@ in order to use them in any experiment with the following approach:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 04 Apr 2018, 18h.
+      Last updated on 23 Apr 2018, 10h.
 
     </p>
   </div>
