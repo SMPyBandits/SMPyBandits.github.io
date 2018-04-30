@@ -105,6 +105,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">SMPyBandits modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
@@ -207,7 +208,10 @@
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
 
-<span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.usenumba</span> <span class="k">import</span> <span class="n">jit</span>  <span class="c1"># Import numba.jit or a dummy jit(f)=f</span>
@@ -216,8 +220,8 @@
 
 
 <span class="c1">#: Default value for the constant c used in the computation of the index</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mf">0.</span>  <span class="c1">#: Default value for better practical performance.</span>
 <span class="n">c</span> <span class="o">=</span> <span class="mf">3.</span>  <span class="c1">#: Default value for the theorems to hold.</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mf">0.</span>  <span class="c1">#: Default value for better practical performance.</span>
 
 
 <span class="c1">#: Tolerance when checking (with ``assert``) that the solution(s) of any convex problem are correct.</span>
@@ -290,7 +294,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
-        <span class="c1"># return solution_pb_sq(self.rewards[arm] / self.pulls[arm], log(self.t) / self.pulls[arm])  # XXX Faster if c=0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution_pb_sq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>  <span class="c1"># XXX Faster if c=0</span>
         <span class="k">return</span> <span class="n">solution_pb_sq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div></div>
 
     <span class="c1"># TODO make this vectorized function working!</span>
@@ -333,7 +338,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># p = min(max(p, eps), 1 - eps)  # XXX project [0,1] to [eps,1-eps]</span>
     <span class="c1"># DONE is it faster to precompute the constants ? yes, about 12% faster</span>
-    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">2.25</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">5.0625</span> <span class="o">+</span> <span class="mf">2.25</span> <span class="o">*</span> <span class="n">upperbound</span><span class="p">)))</span></div>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">2.25</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">5.0625</span> <span class="o">+</span> <span class="mf">2.25</span> <span class="o">*</span> <span class="n">upperbound</span><span class="p">)))</span></div>
 
     <span class="c1"># XXX useless checking of the solution, takes time</span>
     <span class="c1"># if check_solution and not np.all(biquadratic_distance(p, q_star) &lt;= tolerance_with_upperbound * upperbound):</span>
@@ -366,7 +371,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
-        <span class="c1"># return solution_pb_bq(self.rewards[arm] / self.pulls[arm], log(self.t) / self.pulls[arm])  # XXX Faster if c=0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution_pb_bq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>  <span class="c1"># XXX Faster if c=0</span>
         <span class="k">return</span> <span class="n">solution_pb_bq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div></div>
 
 
@@ -437,7 +443,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
-        <span class="c1"># return solution_pb_hellinger(self.rewards[arm] / self.pulls[arm], log(self.t) / self.pulls[arm])  # XXX Faster if c=0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution_pb_hellinger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>  <span class="c1"># XXX Faster if c=0</span>
         <span class="k">return</span> <span class="n">solution_pb_hellinger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div></div>
 
 
@@ -471,7 +478,7 @@
 
 <span class="nd">@jit</span>
 <div class="viewcode-block" id="solution_pb_kllb"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solution_pb_kllb">[docs]</a><span class="k">def</span> <span class="nf">solution_pb_kllb</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_{lb}` the proposed lower-bound on the Kullback-Leibler binary distance (:func:`XXX`) function:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_{lb}` the proposed lower-bound on the Kullback-Leibler binary distance (:func:`kullback_leibler_distance_lowerbound`) function:</span>
 
 <span class="sd">    .. math::</span>
 
@@ -520,7 +527,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
-        <span class="c1"># return solution_pb_kllb(self.rewards[arm] / self.pulls[arm], log(self.t) / self.pulls[arm])  # XXX Faster if c=0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution_pb_kllb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>  <span class="c1"># XXX Faster if c=0</span>
         <span class="k">return</span> <span class="n">solution_pb_kllb</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div></div>
 
 
@@ -597,7 +605,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
-        <span class="c1"># return solution_pb_t(self.rewards[arm] / self.pulls[arm], log(self.t) / self.pulls[arm])  # XXX Faster if c=0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">solution_pb_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>  <span class="c1"># XXX Faster if c=0</span>
         <span class="k">return</span> <span class="n">solution_pb_t</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div></div>
 
 
@@ -789,7 +798,7 @@
 <span class="c1"># --- New distance and algorithm: epsilon approximation on the Kullback-Leibler distance</span>
 
 <span class="c1"># @jit</span>
-<div class="viewcode-block" id="solutions_pb_from_epsilon"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solutions_pb_from_epsilon">[docs]</a><span class="k">def</span> <span class="nf">solutions_pb_from_epsilon</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
+<div class="viewcode-block" id="min_solutions_pb_from_epsilon"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.min_solutions_pb_from_epsilon">[docs]</a><span class="k">def</span> <span class="nf">min_solutions_pb_from_epsilon</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; List of closed-form solutions of the following optimisation problems, for :math:`d = d_s^k` approximation of :math:`d_{kl}` and any :math:`\tau_1(p) \leq k \leq \tau_2(p)`:</span>
 
 <span class="sd">    .. math::</span>
@@ -812,34 +821,19 @@
     <span class="n">eta</span> <span class="o">=</span> <span class="n">epsilon</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span>
     <span class="c1"># tau_1 and tau_2 depend on p, XXX cannot be precomputed!</span>
     <span class="n">p</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">eps</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>  <span class="c1"># XXX project [0,1] to [eps,1-eps]</span>
-    <span class="n">tau_1_p</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">((</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">eta</span><span class="p">)))</span>
-    <span class="n">tau_2_p</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">((</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">epsilon</span> <span class="o">/</span> <span class="n">p</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">eta</span><span class="p">)))</span>
+    <span class="n">tau_1_p</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">((</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">eta</span><span class="p">))))</span>
+    <span class="n">tau_2_p</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">((</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">epsilon</span> <span class="o">/</span> <span class="n">p</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">eta</span><span class="p">))))</span>
     <span class="c1"># if tau_1_p &gt; tau_2_p:</span>
     <span class="c1">#     print(&quot;Error: tau_1_p = {:.3g} should be &lt;= tau_2_p = {:.3g}...&quot;.format(tau_1_p, tau_2_p))  # DEBUG</span>
 
-    <span class="c1"># now construct all the k, and all the step kl functions</span>
-    <span class="c1"># WARNING yes we could inline all this for speedup, but this would require recomputing for the check_solution...</span>
-    <span class="n">list_of_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tau_1_p</span><span class="p">,</span> <span class="n">tau_2_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">list_of_qk</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">eta</span><span class="p">)</span> <span class="o">**</span> <span class="n">list_of_k</span>
-
-    <span class="n">list_of_solution_pb_step_kl</span> <span class="o">=</span> <span class="p">[</span>  <span class="c1"># q_k ** (indic(delta &lt;= kl(p, q_k)))</span>
-        <span class="n">qk</span>
-        <span class="k">if</span> <span class="n">upperbound</span> <span class="o">&lt;</span> <span class="n">kullback_leibler_distance_on_mean</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">qk</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
-        <span class="k">for</span> <span class="n">qk</span> <span class="ow">in</span> <span class="n">list_of_qk</span>
-    <span class="p">]</span>
-    <span class="c1"># XXX yes yes, we could write a generator, or directly return the minimum,</span>
-    <span class="c1"># but this is not the bottleneck of the efficiency of this code !</span>
-
-    <span class="c1"># XXX actually, we don&#39;t need to compute the step kl functions! only to check</span>
-
-    <span class="c1"># XXX useless checking of the solution, takes time</span>
-    <span class="c1"># if check_solution:</span>
-    <span class="c1">#     for k, qk, qk_star in zip(list_of_k, list_of_qk, list_of_solution_pb_step_kl):</span>
-    <span class="c1">#         distance_step_kl = lambda p, q: kullback_leibler_distance_on_mean(p, q) if q &gt;= qk else 0</span>
-    <span class="c1">#         if not np.all(distance_step_kl(p, qk_star) &lt;= tolerance_with_upperbound * upperbound):</span>
-    <span class="c1">#             print(&quot;Error: the solution to the optimisation problem P_1(d_s^k) for k = {} and q_k = {:.3g}, with p = {:.3g} and delta = {:.3g} was computed to be q^* = {:.3g} which seem incorrect (h(p,q^*) = {:.3g} &gt; {:.3g})...&quot;.format(k, qk, p, upperbound, qk_star, distance_t(p, qk_star), upperbound))  # DEBUG</span>
-
-    <span class="k">return</span> <span class="n">list_of_solution_pb_step_kl</span></div>
+    <span class="n">min_of_solutions</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tau_1_p</span><span class="p">,</span> <span class="n">tau_2_p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">eta</span><span class="p">)</span> <span class="o">**</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">upperbound</span> <span class="o">&lt;</span> <span class="n">kullback_leibler_distance_on_mean</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">):</span>
+            <span class="n">min_of_solutions</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_of_solutions</span><span class="p">,</span> <span class="n">temp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">min_of_solutions</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_of_solutions</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">min_of_solutions</span></div>
 
 
 <div class="viewcode-block" id="UCBoostEpsilon"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.UCBoostEpsilon">[docs]</a><span class="k">class</span> <span class="nc">UCBoostEpsilon</span><span class="p">(</span><span class="n">IndexPolicy</span><span class="p">):</span>
@@ -875,22 +869,14 @@
         <span class="c1"># upperbound = log(self.t) / self.pulls[arm]</span>
         <span class="n">upperbound</span> <span class="o">=</span> <span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
 
-        <span class="c1"># TODO find a way to check if sols won&#39;t be empty… without computing it?</span>
-        <span class="n">sols</span> <span class="o">=</span> <span class="n">solutions_pb_from_epsilon</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sols</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">min_solutions_pb_from_epsilon</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sols</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
-                <span class="nb">min</span><span class="p">(</span>
-                    <span class="n">solution_pb_kllb</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">),</span>
-                    <span class="n">solution_pb_sq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">)</span>
-                <span class="p">),</span>
-                <span class="n">min_solutions_pb_from_epsilon</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+        <span class="n">min_solutions</span> <span class="o">=</span> <span class="n">min_solutions_pb_from_epsilon</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+            <span class="nb">min</span><span class="p">(</span>
                 <span class="n">solution_pb_kllb</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">),</span>
                 <span class="n">solution_pb_sq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">)</span>
-            <span class="p">)</span></div></div>
+            <span class="p">),</span>
+            <span class="n">min_solutions</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -906,7 +892,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 23 Apr 2018, 10h.
+      Last updated on 30 Apr 2018, 20h.
 
     </p>
   </div>

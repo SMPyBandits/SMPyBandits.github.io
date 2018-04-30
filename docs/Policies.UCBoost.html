@@ -48,7 +48,7 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="SMPyBandits 0.9.2 documentation" href="../index.html"/>
         <link rel="up" title="Policies package" href="Policies.html"/>
-        <link rel="next" title="Policies.UCBplus module" href="Policies.UCBplus.html"/>
+        <link rel="next" title="Policies.UCBoost_cython module" href="Policies.UCBoost_cython.html"/>
         <link rel="prev" title="Policies.UCBmin module" href="Policies.UCBmin.html"/> 
 
   
@@ -107,6 +107,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
@@ -170,6 +171,9 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Policies.UCBoost module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost_cython.html">Policies.UCBoost_cython module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost_faster.html">Policies.UCBoost_faster module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost_faster_cython.html">Policies.UCBoost_faster_cython module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
@@ -186,6 +190,8 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog10.html">Policies.klUCBloglog10 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.kullback_cython.html">Policies.kullback_cython module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.setup.html">Policies.setup module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.usenumba.html">Policies.usenumba module</a></li>
 </ul>
 </li>
@@ -344,8 +350,8 @@
 </div>
 <dl class="data">
 <dt id="Policies.UCBoost.c">
-<code class="descclassname">Policies.UCBoost.</code><code class="descname">c</code><em class="property"> = 3.0</em><a class="headerlink" href="#Policies.UCBoost.c" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default value for the theorems to hold.</p>
+<code class="descclassname">Policies.UCBoost.</code><code class="descname">c</code><em class="property"> = 0.0</em><a class="headerlink" href="#Policies.UCBoost.c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for better practical performance.</p>
 </dd></dl>
 
 <dl class="data">
@@ -389,7 +395,7 @@
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCB_sq">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_sq</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_sq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_sq" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_sq</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_sq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_sq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCB(d_sq) policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -398,7 +404,7 @@
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCB_sq.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_sq.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_sq.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_sq.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_sq.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -453,7 +459,7 @@ I_k(t) &amp;= P_1(d_{sq})\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCB_bq">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_bq</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_bq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_bq" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_bq</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_bq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_bq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCB(d_bq) policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -462,7 +468,7 @@ I_k(t) &amp;= P_1(d_{sq})\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCB_bq.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_bq.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_bq.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_bq.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_bq.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -517,7 +523,7 @@ I_k(t) &amp;= P_1(d_{bq})\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCB_h">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_h</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_h" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_h</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_h" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCB(d_h) policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -526,7 +532,7 @@ I_k(t) &amp;= P_1(d_{bq})\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCB_h.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_h.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_h.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_h.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_h.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -581,7 +587,7 @@ I_k(t) &amp;= P_1(d_h)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N_k(
 <dl class="attribute">
 <dt id="Policies.UCBoost.solution_pb_kllb">
 <code class="descclassname">Policies.UCBoost.</code><code class="descname">solution_pb_kllb</code><a class="reference internal" href="../_modules/Policies/UCBoost.html#solution_pb_kllb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.solution_pb_kllb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Closed-form solution of the following optimisation problem, for <span class="math">\(d = d_{lb}\)</span> the proposed lower-bound on the Kullback-Leibler binary distance (<code class="xref py py-func docutils literal"><span class="pre">XXX()</span></code>) function:</p>
+<dd><p>Closed-form solution of the following optimisation problem, for <span class="math">\(d = d_{lb}\)</span> the proposed lower-bound on the Kullback-Leibler binary distance (<a class="reference internal" href="#Policies.UCBoost.kullback_leibler_distance_lowerbound" title="Policies.UCBoost.kullback_leibler_distance_lowerbound"><code class="xref py py-func docutils literal"><span class="pre">kullback_leibler_distance_lowerbound()</span></code></a>) function:</p>
 <div class="math">
 \[\begin{split}P_1(d_{lb})(p, \delta): &amp; \max_{q \in \Theta} q,\\
 \text{such that }  &amp; d_{lb}(p, q) \leq \delta.\end{split}\]</div>
@@ -597,7 +603,7 @@ I_k(t) &amp;= P_1(d_h)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N_k(
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCB_lb">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_lb</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_lb" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_lb</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_lb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCB(d_lb) policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -606,7 +612,7 @@ I_k(t) &amp;= P_1(d_h)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N_k(
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCB_lb.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_lb.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_lb.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_lb.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_lb.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -667,7 +673,7 @@ I_k(t) &amp;= P_1(d_{lb})\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCB_t">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_t</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_t" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCB_t</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCB(d_t) policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -680,7 +686,7 @@ I_k(t) &amp;= P_1(d_{lb})\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N
 </div>
 <dl class="method">
 <dt id="Policies.UCBoost.UCB_t.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_t.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_t.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCB_t.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCB_t.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -718,7 +724,7 @@ I_k(t) &amp;= P_1(d_t)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N_k(
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCBoost">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost</code><span class="sig-paren">(</span><em>nbArms</em>, <em>set_D=None</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost</code><span class="sig-paren">(</span><em>nbArms</em>, <em>set_D=None</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCBoost policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -728,7 +734,7 @@ I_k(t) &amp;= P_1(d_t)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\log(t))}{N_k(
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCBoost.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>set_D=None</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>set_D=None</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -766,7 +772,7 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCBoost_bq_h_lb">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost_bq_h_lb</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost_bq_h_lb</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.UCBoost.UCBoost" title="Policies.UCBoost.UCBoost"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBoost.UCBoost</span></code></a></p>
 <p>The UCBoost policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -776,7 +782,7 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCBoost_bq_h_lb.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -802,7 +808,7 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCBoost_bq_h_lb_t">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost_bq_h_lb_t</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost_bq_h_lb_t</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.UCBoost.UCBoost" title="Policies.UCBoost.UCBoost"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBoost.UCBoost</span></code></a></p>
 <p>The UCBoost policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -812,7 +818,7 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCBoost_bq_h_lb_t.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -838,7 +844,7 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCBoost_bq_h_lb_t_sq">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost_bq_h_lb_t_sq</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t_sq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t_sq" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoost_bq_h_lb_t_sq</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t_sq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t_sq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.UCBoost.UCBoost" title="Policies.UCBoost.UCBoost"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBoost.UCBoost</span></code></a></p>
 <p>The UCBoost policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
@@ -848,7 +854,7 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 </ul>
 <dl class="method">
 <dt id="Policies.UCBoost.UCBoost_bq_h_lb_t_sq.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t_sq.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t_sq.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoost_bq_h_lb_t_sq.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoost_bq_h_lb_t_sq.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -873,8 +879,8 @@ I_k(t) &amp;= \min_{d\in D} P_1(d)\left(\hat{\mu}_k(t), \frac{\log(t) + c\log(\l
 </dd></dl>
 
 <dl class="function">
-<dt id="Policies.UCBoost.solutions_pb_from_epsilon">
-<code class="descclassname">Policies.UCBoost.</code><code class="descname">solutions_pb_from_epsilon</code><span class="sig-paren">(</span><em>p</em>, <em>upperbound</em>, <em>epsilon=0.001</em>, <em>check_solution=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#solutions_pb_from_epsilon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.solutions_pb_from_epsilon" title="Permalink to this definition">¶</a></dt>
+<dt id="Policies.UCBoost.min_solutions_pb_from_epsilon">
+<code class="descclassname">Policies.UCBoost.</code><code class="descname">min_solutions_pb_from_epsilon</code><span class="sig-paren">(</span><em>p</em>, <em>upperbound</em>, <em>epsilon=0.001</em>, <em>check_solution=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#min_solutions_pb_from_epsilon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.min_solutions_pb_from_epsilon" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of closed-form solutions of the following optimisation problems, for <span class="math">\(d = d_s^k\)</span> approximation of <span class="math">\(d_{kl}\)</span> and any <span class="math">\(\tau_1(p) \leq k \leq \tau_2(p)\)</span>:</p>
 <div class="math">
 \[\begin{split}P_1(d_s^k)(p, \delta): &amp; \max_{q \in \Theta} q,\\
@@ -893,12 +899,12 @@ q_k &amp;:= 1 - \left( 1 - \frac{\varepsilon}{1 + \varepsilon} \right)^k.\end{sp
 
 <dl class="class">
 <dt id="Policies.UCBoost.UCBoostEpsilon">
-<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoostEpsilon</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.01</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoostEpsilon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoostEpsilon" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.UCBoost.</code><code class="descname">UCBoostEpsilon</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.01</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoostEpsilon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoostEpsilon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
 <p>The UCBoostEpsilon policy for bounded bandits (on [0, 1]).</p>
 <ul class="simple">
 <li>It is quite simple: using a set of kl-dominated and candidate semi-distances D, the UCB index for each arm (at each step) is computed as the <em>smallest</em> upper confidence bound given (for this arm at this time t) for each distance d.</li>
-<li>This variant uses <a class="reference internal" href="#Policies.UCBoost.solutions_pb_from_epsilon" title="Policies.UCBoost.solutions_pb_from_epsilon"><code class="xref py py-func docutils literal"><span class="pre">solutions_pb_from_epsilon()</span></code></a> to also compute the <span class="math">\(\varepsilon\)</span> approximation of the <a class="reference internal" href="#Policies.UCBoost.kullback_leibler_distance_on_mean" title="Policies.UCBoost.kullback_leibler_distance_on_mean"><code class="xref py py-func docutils literal"><span class="pre">kullback_leibler_distance_on_mean()</span></code></a> function (see the article for details, Th.3 p6).</li>
+<li>This variant uses <code class="xref py py-func docutils literal"><span class="pre">solutions_pb_from_epsilon()</span></code> to also compute the <span class="math">\(\varepsilon\)</span> approximation of the <a class="reference internal" href="#Policies.UCBoost.kullback_leibler_distance_on_mean" title="Policies.UCBoost.kullback_leibler_distance_on_mean"><code class="xref py py-func docutils literal"><span class="pre">kullback_leibler_distance_on_mean()</span></code></a> function (see the article for details, Th.3 p6).</li>
 <li>Reference: [Fang Liu et al, 2018](<a class="reference external" href="https://arxiv.org/abs/1804.05929">https://arxiv.org/abs/1804.05929</a>).</li>
 </ul>
 <dl class="attribute">
@@ -908,7 +914,7 @@ q_k &amp;:= 1 - \left( 1 - \frac{\varepsilon}{1 + \varepsilon} \right)^k.\end{sp
 
 <dl class="method">
 <dt id="Policies.UCBoost.UCBoostEpsilon.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.01</em>, <em>c=3.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoostEpsilon.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoostEpsilon.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>epsilon=0.01</em>, <em>c=0.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/UCBoost.html#UCBoostEpsilon.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.UCBoost.UCBoostEpsilon.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -951,7 +957,7 @@ I_k(t) &amp;= \min_{d\in D_{\varepsilon}} P_1(d)\left(\hat{\mu}_k(t), \frac{\log
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="Policies.UCBplus.html" class="btn btn-neutral float-right" title="Policies.UCBplus module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Policies.UCBoost_cython.html" class="btn btn-neutral float-right" title="Policies.UCBoost_cython module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="Policies.UCBmin.html" class="btn btn-neutral" title="Policies.UCBmin module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -964,7 +970,7 @@ I_k(t) &amp;= \min_{d\in D_{\varepsilon}} P_1(d)\left(\hat{\mu}_k(t), \frac{\log
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 23 Apr 2018, 10h.
+      Last updated on 30 Apr 2018, 20h.
 
     </p>
   </div>
