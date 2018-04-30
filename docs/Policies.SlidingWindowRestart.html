@@ -107,6 +107,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Environment.html">Environment package</a></li>
@@ -170,6 +171,9 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBlog10alpha.html">Policies.UCBlog10alpha module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBmin.html">Policies.UCBmin module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost.html">Policies.UCBoost module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost_cython.html">Policies.UCBoost_cython module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost_faster.html">Policies.UCBoost_faster module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.UCBoost_faster_cython.html">Policies.UCBoost_faster_cython module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBplus.html">Policies.UCBplus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBrandomInit.html">Policies.UCBrandomInit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.UCBwrong.html">Policies.UCBwrong module</a></li>
@@ -186,6 +190,8 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog10.html">Policies.klUCBloglog10 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.kullback_cython.html">Policies.kullback_cython module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.setup.html">Policies.setup module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.usenumba.html">Policies.usenumba module</a></li>
 </ul>
 </li>
@@ -503,12 +509,12 @@
 
 <dl class="class">
 <dt id="Policies.SlidingWindowRestart.SWR_klUCB">
-<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_klUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_klUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.klUCB.html#Policies.klUCB.klUCB" title="Policies.klUCB.klUCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.klUCB.klUCB</span></code></a></p>
 <p>An experimental policy, using a sliding window of for instance 100 draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
 <dl class="method">
 <dt id="Policies.SlidingWindowRestart.SWR_klUCB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -587,7 +593,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 23 Apr 2018, 10h.
+      Last updated on 30 Apr 2018, 20h.
 
     </p>
   </div>

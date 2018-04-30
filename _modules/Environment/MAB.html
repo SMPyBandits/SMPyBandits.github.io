@@ -105,6 +105,7 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">SMPyBandits modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
@@ -402,7 +403,7 @@
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">oneLR</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxArm</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arms</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxArm</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MAB.lowerbound_sparse"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.MAB.lowerbound_sparse">[docs]</a>    <span class="k">def</span> <span class="nf">lowerbound_sparse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the constant :math:`C(\mu)`, for [Joon et al, 2017] lower-bound for sparse bandits for this MAB problem (complexity)</span>
+        <span class="sd">&quot;&quot;&quot; Compute the constant :math:`C(\mu)`, for [Kwon et al, 2017] lower-bound for sparse bandits for this MAB problem (complexity)</span>
 
 <span class="sd">        - I recomputed suboptimal solution to the optimization problem, and found the same as in [[&quot;Sparse Stochastic Bandits&quot;, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](https://arxiv.org/abs/1706.01383)].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -411,11 +412,14 @@
         <span class="k">if</span> <span class="n">sparsity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sparsity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
 
-        <span class="kn">from</span> <span class="nn">Policies.OSSB</span> <span class="k">import</span> <span class="n">solve_optimization_problem__sparse_bandits</span>
-        <span class="n">ci</span> <span class="o">=</span> <span class="n">solve_optimization_problem__sparse_bandits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">sparsity</span><span class="p">,</span> <span class="n">only_strong_or_weak</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="c1"># now we use these ci to compute the lower-bound</span>
-        <span class="n">gaps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">maxArm</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arms</span><span class="p">]</span>
-        <span class="n">lowerbound</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gaps</span><span class="p">,</span> <span class="n">ci</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">Policies.OSSB</span> <span class="k">import</span> <span class="n">solve_optimization_problem__sparse_bandits</span>
+            <span class="n">ci</span> <span class="o">=</span> <span class="n">solve_optimization_problem__sparse_bandits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">means</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="n">sparsity</span><span class="p">,</span> <span class="n">only_strong_or_weak</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># now we use these ci to compute the lower-bound</span>
+            <span class="n">gaps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">maxArm</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arms</span><span class="p">]</span>
+            <span class="n">lowerbound</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">c</span> <span class="k">for</span> <span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gaps</span><span class="p">,</span> <span class="n">ci</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AssertionError</span><span class="p">):</span>  <span class="c1"># WARNING this is durty!</span>
+            <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
         <span class="k">return</span> <span class="n">lowerbound</span></div>
 
 <div class="viewcode-block" id="MAB.hoifactor"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.MAB.hoifactor">[docs]</a>    <span class="k">def</span> <span class="nf">hoifactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1061,7 +1065,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 23 Apr 2018, 10h.
+      Last updated on 30 Apr 2018, 20h.
 
     </p>
   </div>
