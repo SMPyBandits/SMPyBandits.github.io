@@ -204,10 +204,16 @@
 <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klucbBern</span>
 <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
 
-<span class="c1">#: Default value for the constant c used in the computation of KL-UCB index</span>
+<span class="c1">#: Default value for the constant c used in the computation of KL-UCB index.</span>
 <span class="n">c</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1">#: default value, as it was in pymaBandits v1.0</span>
 <span class="c1"># c = 1.  #: as suggested in the Theorem 1 in https://arxiv.org/pdf/1102.2490.pdf</span>
 
+
+<span class="c1">#: Default value for the tolerance for computing numerical approximations of the kl-UCB indexes.</span>
+<span class="n">TOLERANCE</span> <span class="o">=</span> <span class="mf">1e-4</span>
+
+
+<span class="c1"># --- Class</span>
 
 <div class="viewcode-block" id="klUCB"><a class="viewcode-back" href="../../docs/Policies.klUCB.html#Policies.klUCB.klUCB">[docs]</a><span class="k">class</span> <span class="nc">klUCB</span><span class="p">(</span><span class="n">IndexPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The generic KL-UCB policy for one-parameter exponential distributions.</span>
@@ -215,7 +221,7 @@
 <span class="sd">    Reference: [Garivier &amp; Cappé - COLT, 2011](https://arxiv.org/pdf/1102.2490.pdf).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="klUCB.__init__"><a class="viewcode-back" href="../../docs/Policies.klUCB.html#Policies.klUCB.klUCB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">klucb</span><span class="o">=</span><span class="n">klucbBern</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+<div class="viewcode-block" id="klUCB.__init__"><a class="viewcode-back" href="../../docs/Policies.klUCB.html#Policies.klUCB.klUCB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span> <span class="n">klucb</span><span class="o">=</span><span class="n">klucbBern</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">klUCB</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>  <span class="c1">#: Parameter c</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">klucb</span><span class="p">)</span>  <span class="c1">#: kl function to use</span>
@@ -267,7 +273,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 10 May 2018, 15h.
+      Last updated on 16 May 2018, 16h.
 
     </p>
   </div>
