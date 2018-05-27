@@ -187,7 +187,7 @@
             
   <h1>Source code for Policies.klUCBswitch</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot; The kl-UCB-switch policy, for bounded distributions.</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; The kl-UCB-switch policy, for bounded distributions.</span>
 
 <span class="sd">- Reference: [Garivier et al, 2018](https://arxiv.org/abs/1805.05071)</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -200,8 +200,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klucbBern</span>
-<span class="kn">from</span> <span class="nn">.klUCB</span> <span class="k">import</span> <span class="n">klUCB</span><span class="p">,</span> <span class="n">c</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klucbBern</span>
+    <span class="kn">from</span> <span class="nn">.klUCB</span> <span class="k">import</span> <span class="n">klUCB</span><span class="p">,</span> <span class="n">c</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klucbBern</span>
+    <span class="kn">from</span> <span class="nn">klUCB</span> <span class="k">import</span> <span class="n">klUCB</span><span class="p">,</span> <span class="n">c</span>
 
 
 <span class="c1">#: Default value for the tolerance for computing numerical approximations of the kl-UCB indexes.</span>
@@ -413,7 +417,7 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        I^{MOSS}_k(t) &amp;= \frac{X_k(t)}{N_k(t)} + \sqrt{\max\left(0, \frac{\log\left(\frac{t}{K N_k(t)}\right)}{N_k(t)}\right)}.</span>
+<span class="sd">        I^{MOSS}_k(t) = \frac{X_k(t)}{N_k(t)} + \sqrt{\max\left(0, \frac{\log\left(\frac{t}{K N_k(t)}\right)}{N_k(t)}\right)}.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">reward</span> <span class="o">/</span> <span class="n">pull</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">phi</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">pull</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pull</span><span class="p">))</span></div>
 
@@ -435,7 +439,7 @@
 <div class="viewcode-block" id="klUCBswitchAnytime"><a class="viewcode-back" href="../../docs/Policies.klUCBswitch.html#Policies.klUCBswitch.klUCBswitchAnytime">[docs]</a><span class="k">class</span> <span class="nc">klUCBswitchAnytime</span><span class="p">(</span><span class="n">klUCBswitch</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The anytime variant of the kl-UCB-switch policy, for bounded distributions.</span>
 
-<span class="sd">    - It does not use a doubling trick, but an augmented exploration function (replaces the :math:`\log_+` by :math:`\phi` in both :func:`klucb_index` and :func:`moss_index` from :math:`klucbplus_index` and :math:`mossplus_index`).</span>
+<span class="sd">    - It does not use a doubling trick, but an augmented exploration function (replaces the :math:`\log_+` by :math:`\phi` in both :func:`klucb_index` and :func:`moss_index` from :func:`klucbplus_index` and :func:`mossplus_index`).</span>
 <span class="sd">    - Reference: [Garivier et al, 2018](https://arxiv.org/abs/1805.05071)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -465,7 +469,9 @@
 <div class="viewcode-block" id="klUCBswitchAnytime.__str__"><a class="viewcode-back" href="../../docs/Policies.klUCBswitch.html#Policies.klUCBswitch.klUCBswitchAnytime.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span><span class="o">.</span><span class="vm">__name__</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="o">==</span> <span class="s2">&quot;Bern&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span><span class="o">.</span><span class="vm">__name__</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span>
         <span class="n">complement</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="sa">r</span><span class="s2">&quot;, $c=</span><span class="si">{:.3g}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">),</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threshold_switch_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="s2">&quot;, </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_threshold_switch_name</span><span class="p">))</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;kl-UCB-switch-Anytime(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">complement</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">complement</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">):</span> <span class="n">complement</span> <span class="o">=</span> <span class="n">complement</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">complement</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">complement</span><span class="p">)</span> <span class="k">if</span> <span class="n">complement</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;kl-UCB-switch</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">complement</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="klUCBswitchAnytime.computeIndex"><a class="viewcode-back" href="../../docs/Policies.klUCBswitch.html#Policies.klUCBswitch.klUCBswitchAnytime.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the current index, at time t and after :math:`N_k(t)` pulls of arm k:</span>
@@ -505,7 +511,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

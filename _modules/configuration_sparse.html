@@ -224,7 +224,7 @@
 <span class="c1"># HORIZON = 20000</span>
 <span class="c1"># HORIZON = 30000</span>
 <span class="c1"># # # HORIZON = 40000</span>
-<span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="c1"># HORIZON = 100000</span>
 <span class="n">HORIZON</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">HORIZON</span><span class="p">))</span>
 
 <span class="c1">#: REPETITIONS : number of repetitions of the experiments.</span>
@@ -280,8 +280,8 @@
 <span class="n">TEST_Aggregator</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># XXX do not let this = False if you want to test my Aggregator policy</span>
 
 <span class="c1">#: Should we cache rewards? The random rewards will be the same for all the REPETITIONS simulations for each algorithms.</span>
-<span class="n">CACHE_REWARDS</span> <span class="o">=</span> <span class="n">TEST_Aggregator</span>
 <span class="n">CACHE_REWARDS</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># XXX to disable manually this feature</span>
+<span class="n">CACHE_REWARDS</span> <span class="o">=</span> <span class="n">TEST_Aggregator</span>
 
 
 <span class="c1"># Parameters for the arms</span>
@@ -422,7 +422,7 @@
         <span class="p">{</span>   <span class="c1"># A Bayesian problem: every repetition use a different mean vectors!</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">randomMeans</span><span class="p">,</span>
+                <span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">randomMeansWithSparsity</span><span class="p">,</span>
                 <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;nbArms&quot;</span><span class="p">:</span> <span class="n">NB_ARMS</span><span class="p">,</span>
                     <span class="s2">&quot;mingap&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
@@ -430,8 +430,10 @@
                     <span class="c1"># &quot;mingap&quot;: 0.1,</span>
                     <span class="c1"># &quot;mingap&quot;: 1. / (3 * NB_ARMS),</span>
                     <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span>
+                    <span class="s2">&quot;lowerNonZero&quot;</span><span class="p">:</span> <span class="n">LOWERNONZERO</span><span class="p">,</span>
                     <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
                     <span class="s2">&quot;isSorted&quot;</span><span class="p">:</span> <span class="n">ISSORTED</span><span class="p">,</span>
+                    <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
@@ -543,7 +545,7 @@
         <span class="c1"># {</span>
         <span class="c1">#     &quot;archtype&quot;: Thompson,</span>
         <span class="c1">#     &quot;params&quot;: {</span>
-        <span class="c1">#         &quot;posterior&quot;: Gauss,</span>
+        <span class="c1">#         &quot;posterior&quot;: Gauss,   # WARNING Gaussian posterior is still experimental and VERY slow</span>
         <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
         <span class="c1">#     }</span>
         <span class="c1"># },</span>
@@ -702,15 +704,15 @@
         <span class="c1">#         &quot;gamma&quot;: 0.0,  # XXX test to change these values!</span>
         <span class="c1">#     }</span>
         <span class="c1"># },</span>
-        <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Gaussian bandits</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">GaussianOSSB</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-                <span class="s2">&quot;variance&quot;</span><span class="p">:</span> <span class="n">VARIANCE</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
+        <span class="c1"># # --- FIXME The new OSSB algorithm, tuned for Gaussian bandits</span>
+        <span class="c1"># {</span>
+        <span class="c1">#     &quot;archtype&quot;: GaussianOSSB,</span>
+        <span class="c1">#     &quot;params&quot;: {</span>
+        <span class="c1">#         &quot;epsilon&quot;: 0.0,</span>
+        <span class="c1">#         &quot;gamma&quot;: 0.0,</span>
+        <span class="c1">#         &quot;variance&quot;: VARIANCE,</span>
+        <span class="c1">#     }</span>
+        <span class="c1"># },</span>
         <span class="c1"># --- FIXME The new OSSB algorithm, tuned for Sparse bandits</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseOSSB</span><span class="p">,</span>
@@ -815,16 +817,17 @@
 
 
 <span class="n">NON_AGGR_POLICIES_1</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
-                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
-                <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
-            <span class="p">}</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
+            <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
+            <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">NB_ARMS</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="n">SPARSITY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SPARSITY</span><span class="p">,</span> <span class="n">SPARSITY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># for s in range(1, 1 + NB_ARMS)</span>
 <span class="p">]</span>
 
 
@@ -874,7 +877,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>
