@@ -212,8 +212,12 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
-<span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
-<span class="kn">from</span> <span class="nn">.UCBalpha</span> <span class="k">import</span> <span class="n">UCBalpha</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.UCBalpha</span> <span class="k">import</span> <span class="n">UCBalpha</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">UCBalpha</span> <span class="k">import</span> <span class="n">UCBalpha</span>
 
 <span class="c1">#: Default horizon-dependent policy</span>
 <span class="n">default_index_policy</span> <span class="o">=</span> <span class="n">UCBalpha</span>
@@ -287,14 +291,15 @@
 
 <div class="viewcode-block" id="SparseWrapper.__str__"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">ucb_for</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># FIXME use notations B_cJ, B_cK from my article?</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_K</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_J</span><span class="p">:</span>
-            <span class="n">ucb_for</span> <span class="o">=</span> <span class="s2">&quot;, UCB for &quot;</span>
+            <span class="n">ucb_for</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;, \mathrm</span><span class="si">{UCB}</span><span class="s2"> for &quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_J</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_K</span><span class="p">:</span>
-            <span class="n">ucb_for</span> <span class="o">+=</span> <span class="s2">&quot;K and J&quot;</span>
+            <span class="n">ucb_for</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{K}</span><span class="s2">$ and $\mathcal</span><span class="si">{J}</span><span class="s2">$&quot;</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_K</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_J</span><span class="p">:</span>
-            <span class="n">ucb_for</span> <span class="o">+=</span> <span class="s2">&quot;K&quot;</span>
+            <span class="n">ucb_for</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{K}</span><span class="s2">$&quot;</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_J</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_K</span><span class="p">:</span>
-            <span class="n">ucb_for</span> <span class="o">+=</span> <span class="s2">&quot;J&quot;</span>
+            <span class="n">ucb_for</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{J}</span><span class="s2">$&quot;</span>
         <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Sparse($s=</span><span class="si">{}</span><span class="s2">$)[</span><span class="si">{}{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sparsity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span> <span class="n">ucb_for</span><span class="p">)</span></div>
 
     <span class="c1"># --- Start game by creating new underlying policy</span>
@@ -326,13 +331,15 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           \hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\</span>
-<span class="sd">           U^{\mathcal{K}}_k(t) &amp;= I_k^{P}(t) - \hat{\mu}_k(t),\\</span>
-<span class="sd">           U^{\mathcal{J}}_k(t) &amp;= U^{\mathcal{K}}_k(t) \times \sqrt{\frac{\log(N_k(t))}{\log(t)}},\\</span>
-<span class="sd">           \mathcal{J}(t) &amp;= \left\{ k \in [1,...,K]\;, \hat{\mu}_k(t) \geq U^{\mathcal{J}}_k(t) - \hat{\mu}_k(t) \right\}.</span>
+<span class="sd">            \hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\</span>
+<span class="sd">            U^{\mathcal{K}}_k(t) &amp;= I_k^{P}(t) - \hat{\mu}_k(t),\\</span>
+<span class="sd">            U^{\mathcal{J}}_k(t) &amp;= U^{\mathcal{K}}_k(t) \times \sqrt{\frac{\log(N_k(t))}{\log(t)}},\\</span>
+<span class="sd">            \mathcal{J}(t) &amp;= \left\{ k \in [1,...,K]\;, \hat{\mu}_k(t) \geq U^{\mathcal{J}}_k(t) - \hat{\mu}_k(t) \right\}.</span>
 
 <span class="sd">        - Yes, this is a nothing but a *hack*, as there is no generic formula to retrieve the indexes used in the set :math:`\mathcal{J}(t)` from the indexes :math:`I_k^{P}(t)` of the underlying index policy :math:`P`.</span>
 <span class="sd">        - If ``use_ucb_for_set_J`` is ``True``, the same formula from :class:`Policies.SparseUCB` is used.</span>
+
+<span class="sd">        .. warning:: FIXME rewrite the above with LCB and UCB instead of this weird U - mean.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># assert np.all(self.pulls &gt;= 1), &quot;Error: at least one arm was not already pulled: pulls = {} ...&quot;.format(self.pulls)  # DEBUG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">force_to_see</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># faster than sets</span>
@@ -410,6 +417,7 @@
                     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">diff_of_set</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="c1"># 3rd case: UCB phase</span>
                 <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">!=</span> <span class="n">Phase</span><span class="o">.</span><span class="n">UCB</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: at time t = </span><span class="si">{}</span><span class="s2">, the set of good arms was identified as </span><span class="si">{}</span><span class="s2"> for the first time...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goods</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>  <span class="c1"># DEBUG</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">Phase</span><span class="o">.</span><span class="n">UCB</span>
                     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choiceFromSubSet</span><span class="p">(</span><span class="n">availableArms</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goods</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
 
@@ -467,7 +475,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

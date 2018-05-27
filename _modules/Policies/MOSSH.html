@@ -198,7 +198,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
-<span class="kn">from</span> <span class="nn">.MOSS</span> <span class="k">import</span> <span class="n">MOSS</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.MOSS</span> <span class="k">import</span> <span class="n">MOSS</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">MOSS</span> <span class="k">import</span> <span class="n">MOSS</span>
 
 
 <div class="viewcode-block" id="MOSSH"><a class="viewcode-back" href="../../docs/Policies.MOSSH.html#Policies.MOSSH.MOSSH">[docs]</a><span class="k">class</span> <span class="nc">MOSSH</span><span class="p">(</span><span class="n">MOSS</span><span class="p">):</span>
@@ -208,7 +211,7 @@
 
 <div class="viewcode-block" id="MOSSH.__init__"><a class="viewcode-back" href="../../docs/Policies.MOSSH.html#Policies.MOSSH.MOSSH.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MOSSH</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span> <span class="k">if</span> <span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>  <span class="c1">#: Parameter :math:`T` = known horizon of the experiment.</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>  <span class="c1">#: Parameter :math:`T` = known horizon of the experiment.</span></div>
 
 <div class="viewcode-block" id="MOSSH.__str__"><a class="viewcode-back" href="../../docs/Policies.MOSSH.html#Policies.MOSSH.MOSSH.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;MOSS-H($T=</span><span class="si">{}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">)</span></div>
@@ -243,7 +246,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

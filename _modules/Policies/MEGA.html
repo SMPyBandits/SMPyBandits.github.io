@@ -201,7 +201,13 @@
 <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
-<span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
 
 
 <span class="c1"># --- Class MEGA</span>
@@ -269,7 +275,7 @@
                 <span class="c1"># raise ValueError(&quot;FIXME MEGA.choice() should &#39;Refrain from transmitting in this round&#39; but my model does not allow this - YET&quot;)</span>
             <span class="k">else</span><span class="p">:</span>  <span class="c1"># There is some available arms</span>
                 <span class="n">epsilon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_epsilon_t</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>  <span class="c1"># With proba epsilon_t</span>
+                <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="n">epsilon</span><span class="p">):</span>  <span class="c1"># With proba epsilon_t</span>
                     <span class="n">newArm</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">availableArms</span><span class="p">)</span>  <span class="c1"># Explore valid arms</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chosenArm</span> <span class="o">!=</span> <span class="n">newArm</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p0</span>  <span class="c1"># Reinitialize proba p</span>
@@ -302,11 +308,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">chosenArm</span> <span class="o">==</span> <span class="n">arm</span><span class="p">,</span> <span class="s2">&quot;Error: a MEGA player can only see a collision on her chosenArm. Here, arm = </span><span class="si">{}</span><span class="s2"> != chosenArm = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chosenArm</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="c1"># print(&quot;- A MEGA player saw a collision on arm {}, and time t = {} ...&quot;.format(arm, self.t))  # DEBUG</span>
-        <span class="c1"># 1. With proba p, persist</span>
-        <span class="c1"># if random() &lt; self.p:</span>
-        <span class="c1">#     self.chosenArm = self.chosenArm</span>
+        <span class="c1"># # 1. With proba p, persist  XXX useless code</span>
+        <span class="c1"># # if with_proba(self.p):</span>
+        <span class="c1"># #     self.chosenArm = self.chosenArm</span>
         <span class="c1"># 2. With proba 1 - p, give up</span>
-        <span class="k">if</span> <span class="n">random</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">):</span>
             <span class="c1"># Random time offset until when this arm self.chosenArm is not sampled</span>
             <span class="n">delta_tnext_k</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tnext</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chosenArm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="n">delta_tnext_k</span>
@@ -336,7 +342,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

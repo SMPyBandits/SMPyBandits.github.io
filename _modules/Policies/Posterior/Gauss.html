@@ -202,7 +202,6 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -307,12 +306,12 @@
 
 <span class="sd">        .. note:: I recommend to NOT use :class:`BayesUCB` with Gauss posteriors...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># warn(&quot;Gauss.quantile() : Not implemented for a 2 dimensional distribution!&quot;, RuntimeWarning)</span>
+        <span class="c1"># print(&quot;WARNING: Gauss.quantile() : Not implemented for a 2 dimensional distribution!&quot;)  # DEBUG</span>
         <span class="n">quantile_on_sigma2</span> <span class="o">=</span> <span class="n">invgamma</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
         <span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span>  <span class="c1"># mean of the Inverse-gamma</span>
         <span class="n">quantile_on_x</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nu</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">quantile_on_x</span> <span class="o">*</span> <span class="n">quantile_on_sigma2</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gauss.quantile() : Not implemented for a 2 dimensional distribution!&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">quantile_on_x</span> <span class="o">*</span> <span class="n">quantile_on_sigma2</span></div>
+        <span class="c1"># raise ValueError(&quot;Gauss.quantile() : Not implemented for a 2 dimensional distribution!&quot;)</span>
 
 <div class="viewcode-block" id="Gauss.mean"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the mean of the Gauss posterior (should be useless).&quot;&quot;&quot;</span>
@@ -380,7 +379,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>
