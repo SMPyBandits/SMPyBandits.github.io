@@ -227,7 +227,10 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
-<span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
 
 
 <span class="c1"># Default values for the parameters</span>
@@ -330,7 +333,11 @@
             <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">($N=</span><span class="si">{}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">, $\eta=</span><span class="si">{:.3g}</span><span class="s2">$, $dRate=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">all_children</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learningRate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">decreaseRate</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">($N=</span><span class="si">{}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">, $\eta=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">all_children</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">learningRate</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_str</span></div>
+        <span class="c1"># usually information in extra_str gives information about N=...</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_str</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;($N=</span><span class="si">{}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">),</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_str</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">s</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_str</span></div>
 
     <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
     <span class="nd">@property</span>
@@ -520,7 +527,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

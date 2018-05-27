@@ -191,11 +191,7 @@
 
 <span class="sd">- Reference: [Fang Liu et al, 2018](https://arxiv.org/abs/1804.05929).</span>
 
-<span class="sd">.. warning:: FIXME, so far, ``lower=0`` and ``amplitude=1`` are the only possible parameters, I need to adapt this to generic range.</span>
-
-<span class="sd">.. warning:: FIXME, so far, :class:`UCBoostEpsilon` is VERY inefficient, I need to improve it and optimize it as much as possible! See [issue #122](https://github.com/SMPyBandits/SMPyBandits/issues/122#issuecomment-383417650).</span>
-
-<span class="sd">.. warning:: The whole goal of their paper is to provide a numerically efficient alternative to kl-UCB, so for my comparison to be fair, I should either use the Python versions of klUCB utility functions (using :mod:`kullback`) or write C or Cython versions of this UCBoost module. TODO!</span>
+<span class="sd">.. warning:: The whole goal of their paper is to provide a numerically efficient alternative to kl-UCB, so for my comparison to be fair, I should either use the Python versions of klUCB utility functions (using :mod:`kullback`) or write C or Cython versions of this UCBoost module. My conclusion is that kl-UCB is *always* faster than UCBoost.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -236,7 +232,7 @@
 
 <span class="c1"># --- New distance and algorithm: quadratic</span>
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="squadratic_distance"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.squadratic_distance">[docs]</a><span class="k">def</span> <span class="nf">squadratic_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The *quadratic distance*, :math:`d_{sq}(p, q) := 2 (p - q)^2`.&quot;&quot;&quot;</span>
     <span class="c1"># p = min(max(p, eps), 1 - eps)  # XXX project [0,1] to [eps,1-eps]</span>
@@ -244,7 +240,7 @@
     <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span></div>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="solution_pb_sq"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solution_pb_sq">[docs]</a><span class="k">def</span> <span class="nf">solution_pb_sq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_{sq}` the :func:`biquadratic_distance` function:</span>
 
@@ -282,7 +278,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>  <span class="c1">#: Parameter c</span></div>
 
 <div class="viewcode-block" id="UCB_sq.__str__"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.UCB_sq.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="si">{}</span><span class="s2">$($c=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\mathrm</span><span class="si">{UCB}</span><span class="s2">_{d=d_</span><span class="si">{sq}</span><span class="s2">}&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="si">{}</span><span class="s2">$($c=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;UCB_{d=d_</span><span class="si">{sq}</span><span class="s2">}&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="UCB_sq.computeIndex"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.UCB_sq.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the current index, at time t and after :math:`N_k(t)` pulls of arm k:</span>
@@ -308,7 +304,7 @@
 
 <span class="c1"># --- New distance and algorithm: biquadratic</span>
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="biquadratic_distance"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.biquadratic_distance">[docs]</a><span class="k">def</span> <span class="nf">biquadratic_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The *biquadratic distance*, :math:`d_{bq}(p, q) := 2 (p - q)^2 + (4/9) * (p - q)^4`.&quot;&quot;&quot;</span>
     <span class="c1"># return 2 * (p - q)**2 + (4./9) * (p - q)**4</span>
@@ -319,7 +315,7 @@
     <span class="k">return</span> <span class="n">d</span> <span class="o">+</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mf">9.</span></div>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="solution_pb_bq"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solution_pb_bq">[docs]</a><span class="k">def</span> <span class="nf">solution_pb_bq</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_{bq}` the :func:`biquadratic_distance` function:</span>
 
@@ -379,7 +375,7 @@
 <span class="c1"># --- New distance and algorithm: Hellinger</span>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="hellinger_distance"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.hellinger_distance">[docs]</a><span class="k">def</span> <span class="nf">hellinger_distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The *Hellinger distance*, :math:`d_{h}(p, q) := (\sqrt{p} - \sqrt{q})^2 + (\sqrt{1 - p} - \sqrt{1 - q})^2`.&quot;&quot;&quot;</span>
     <span class="c1"># p = min(max(p, eps), 1 - eps)  # XXX project [0,1] to [eps,1-eps]</span>
@@ -387,7 +383,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">q</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span></div>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="solution_pb_hellinger"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solution_pb_hellinger">[docs]</a><span class="k">def</span> <span class="nf">solution_pb_hellinger</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_{h}` the :func:`hellinger_distance` function:</span>
 
@@ -454,7 +450,7 @@
 <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-15</span>  <span class="c1">#: Threshold value: everything in [0, 1] is truncated to [eps, 1 - eps]</span>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="kullback_leibler_distance_on_mean"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.kullback_leibler_distance_on_mean">[docs]</a><span class="k">def</span> <span class="nf">kullback_leibler_distance_on_mean</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Bernoulli distributions. https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</span>
 
@@ -465,7 +461,7 @@
     <span class="k">return</span> <span class="n">p</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="n">q</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">))</span></div>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="kullback_leibler_distance_lowerbound"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.kullback_leibler_distance_lowerbound">[docs]</a><span class="k">def</span> <span class="nf">kullback_leibler_distance_lowerbound</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Lower-bound on the Kullback-Leibler divergence for Bernoulli distributions. https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</span>
 
@@ -476,7 +472,7 @@
     <span class="k">return</span> <span class="n">p</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">))</span></div>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="solution_pb_kllb"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solution_pb_kllb">[docs]</a><span class="k">def</span> <span class="nf">solution_pb_kllb</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_{lb}` the proposed lower-bound on the Kullback-Leibler binary distance (:func:`kullback_leibler_distance_lowerbound`) function:</span>
 
@@ -535,7 +531,7 @@
 <span class="c1"># --- New distance and algorithm: a shifted tangent line function of d_kl</span>
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="distance_t"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.distance_t">[docs]</a><span class="k">def</span> <span class="nf">distance_t</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A shifted tangent line function of :func:`kullback_leibler_distance_on_mean`.</span>
 
@@ -552,7 +548,7 @@
 
 
 
-<span class="nd">@jit</span>
+<span class="c1"># @jit</span>
 <div class="viewcode-block" id="solution_pb_t"><a class="viewcode-back" href="../../docs/Policies.UCBoost.html#Policies.UCBoost.solution_pb_t">[docs]</a><span class="k">def</span> <span class="nf">solution_pb_t</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">check_solution</span><span class="o">=</span><span class="n">CHECK_SOLUTION</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Closed-form solution of the following optimisation problem, for :math:`d = d_t` a shifted tangent line function of :func:`kullback_leibler_distance_on_mean` (:func:`distance_t`) function:</span>
 
@@ -892,7 +888,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

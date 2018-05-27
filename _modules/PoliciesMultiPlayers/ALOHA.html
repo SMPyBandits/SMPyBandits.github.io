@@ -200,12 +200,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
 
 
 <span class="c1"># --- Functions to define [t, t + tnext] intervals</span>
@@ -345,7 +342,7 @@
         <span class="c1"># print(&quot; ---------&gt; A oneALOHA player saw a collision on arm {}, at time t = {} ... Currently, p = {} ...&quot;.format(arm, self.t, self.p))  # DEBUG</span>
         <span class="c1"># self.getReward(arm, self.mother.lower)  # FIXED should we give a 0 reward ? Not in this model!</span>
         <span class="c1"># 1. With proba 1 - p, give up</span>
-        <span class="k">if</span> <span class="n">random</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">):</span>
             <span class="c1"># Random time offset until when this arm self.chosenArm is not sampled</span>
             <span class="n">delta_tnext_k</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ftnext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tnext</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chosenArm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">delta_tnext_k</span>
@@ -448,7 +445,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

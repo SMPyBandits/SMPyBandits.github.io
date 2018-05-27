@@ -201,13 +201,19 @@
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
 
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span>
-<span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klBern</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
 
 
 <span class="c1">#: Variant: with this set to false, use a less aggressive list pruning criterion corresponding to the version called DMED in [Garivier &amp; Cappé, COLT 2011]; the default is the original proposal of [Honda &amp; Takemura, COLT 2010] (called DMED+ in [Garivier &amp; Cappé, COLT 2011])</span>
+<span class="c1"># GENUINE = True</span>
 <span class="n">GENUINE</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">GENUINE</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <div class="viewcode-block" id="DMED"><a class="viewcode-back" href="../../docs/Policies.DMED.html#Policies.DMED.DMED">[docs]</a><span class="k">class</span> <span class="nc">DMED</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
@@ -304,7 +310,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>
