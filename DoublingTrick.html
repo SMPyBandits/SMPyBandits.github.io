@@ -247,18 +247,18 @@
 <h2>For geometric sequences<a class="headerlink" href="#For-geometric-sequences" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>It works for minimax regret bounds (in RT = O(sqrt(T))), with a constant multiplicative loss &lt;= 4, but not for logarithmic regret bounds (in RT = O(log(T))).</div></blockquote>
-<p><img alt="https://hal.inria.fr/hal-XXX" src="_images/DoublingTrick_theorem1.png" /></p>
+<p><img alt="https://hal.inria.fr/hal-01736357" src="_images/DoublingTrick_theorem1.png" /></p>
 </div>
 <div class="section" id="For-exponential-sequences">
 <h2>For exponential sequences<a class="headerlink" href="#For-exponential-sequences" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div>It works for logarithmic regret bounds (in RT = O(log(T))), but not for minimax regret bounds (in RT = O(sqrt(T))).</div></blockquote>
-<p><img alt="https://hal.inria.fr/hal-XXX" src="_images/DoublingTrick_theorem2.png" /></p>
+<p><img alt="https://hal.inria.fr/hal-01736357" src="_images/DoublingTrick_theorem2.png" /></p>
 </div>
 <hr class="docutils" />
 <div class="section" id="Article">
 <h2>Article<a class="headerlink" href="#Article" title="Permalink to this headline">¶</a></h2>
-<p>I wrote a research article on that topic, it will be a better introduction as a self-contained document to explain this idea and the algorithms. Reference: <a class="reference external" href="https://hal.inria.fr/hal-XXX">[What the Doubling Trick Can or Can&#8217;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]</a>, to be presented soon.</p>
+<p>I wrote a research article on that topic, it is a better introduction as a self-contained document to explain this idea and the algorithms. Reference: <a class="reference external" href="https://hal.inria.fr/hal-01736357">[What the Doubling Trick Can or Can&#8217;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]</a>.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="Configuration">
@@ -286,14 +286,14 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Then add a <a class="reference external" href="docs/Policies.DoublingTrickWrapper.html">Doubling-Trick</a> bandit algorithm (SMPyBandits/<a class="reference external" href="docs/Policies.DoublingTrickWrapper.html"><code class="docutils literal"><span class="pre">DoublingTrickWrapper</span></code> class</a>), you can use this piece of code:</p>
+<p>Then add a <a class="reference external" href="docs/Policies.DoublingTrickWrapper.html">Doubling-Trick</a> bandit algorithm (<a class="reference external" href="docs/Policies.DoublingTrickWrapper.html"><code class="docutils literal"><span class="pre">DoublingTrickWrapper</span></code> class</a>), you can use this piece of code:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;policies&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
     <span class="p">{</span>
         <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DoublingTrickWrapper</span><span class="p">,</span>
         <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;next_horizon&quot;</span><span class="p">:</span> <span class="n">next_horizon</span><span class="p">,</span>
             <span class="s2">&quot;full_restart&quot;</span><span class="p">:</span> <span class="n">full_restart</span><span class="p">,</span>
-            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCBPlusPlus</span><span class="p">,</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">for</span> <span class="n">full_restart</span> <span class="ow">in</span> <span class="p">[</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span> <span class="p">]</span>
@@ -364,7 +364,7 @@ As expected, <a class="reference external" href="docs/Policies.klUCBPlusPlus.htm
 <p>K=9 <a class="reference external" href="docs/Arms.Bernoulli.html">Bernoulli arms</a> with µ1,…,µK evenly spaced in [0,1]^K.
 On easy problems like this one, both <a class="reference external" href="docs/Policies.klUCB.html">kl-UCB</a> and <a class="reference external" href="docs/Policies.klUCBPlusPlus.html">kl-UCB++</a> are very efficient, and here the geometric allows the <a class="reference external" href="docs/Policies.DoublingTrickWrapper.html">Doubling-Trick</a> no-restart anytime version of <a class="reference external" href="docs/Policies.klUCBPlusPlus.html">kl-UCB++</a> to outperform both <a class="reference external" href="docs/Policies.klUCB.html">kl-UCB</a> and <a class="reference external" href="docs/Policies.klUCBPlusPlus.html">kl-UCB++</a>.</p>
 <blockquote>
-<div>These illustrations come from my article, <a class="reference external" href="https://hal.inria.fr/hal-XXX">[What the Doubling Trick Can or Can&#8217;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]</a>, to be presented soon.</div></blockquote>
+<div>These illustrations come from my article, <a class="reference external" href="https://hal.inria.fr/hal-01736357">[What the Doubling Trick Can or Can&#8217;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]</a>.</div></blockquote>
 </div>
 <hr class="docutils" />
 <div class="section" id="📜-License-?-GitHub-license">
@@ -406,7 +406,7 @@ On easy problems like this one, both <a class="reference external" href="docs/Po
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 04 Apr 2018, 18h.
+      Last updated on 22 May 2018, 01h.
 
     </p>
   </div>

@@ -196,6 +196,8 @@
 
 <span class="sd">- The :class:`OSSB` is for Bernoulli stochastic bandits, and :class:`GaussianOSSB` is for Gaussian stochastic bandits, with a direct application of the result from their paper.</span>
 <span class="sd">- The :class:`SparseOSSB` is for sparse Gaussian (or sub-Gaussian) stochastic bandits, of known variance.</span>
+
+<span class="sd">- I also added support for non-constant :math:`\varepsilon` and :math:`\gamma` rates, as suggested in a talk given by Combes, 24th of May 2018, Rotterdam (Workshop, &quot;Learning while Earning&quot;). See :class:`OSSB_DecreasingRate` and :class:`OSSB_AutoDecreasingRate`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -205,10 +207,13 @@
 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>  <span class="c1"># For the different phases</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
 
-
-<span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">klGauss</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">klGauss</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">klGauss</span>
 <span class="n">klBern_vect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">klBern</span><span class="p">)</span>
 
 <span class="c1"># WARNING using np.vectorize gave weird result on klGauss</span>
@@ -447,6 +452,89 @@
         <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;sparsity&#39;</span><span class="p">:</span> <span class="n">sparsity</span><span class="p">})</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SparseOSSB</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">solve_optimization_problem</span><span class="o">=</span><span class="s2">&quot;sparse&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_info_on_solver</span> <span class="o">+=</span> <span class="s2">&quot;, $s=</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sparsity</span><span class="p">)</span></div></div>
+
+
+<span class="c1">#: Default value for the constant for the decreasing rate</span>
+<span class="n">DECREASINGRATE</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+
+<div class="viewcode-block" id="OSSB_DecreasingRate"><a class="viewcode-back" href="../../docs/Policies.OSSB.html#Policies.OSSB.OSSB_DecreasingRate">[docs]</a><span class="k">class</span> <span class="nc">OSSB_DecreasingRate</span><span class="p">(</span><span class="n">OSSB</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Optimal Sampling for Structured Bandits (OSSB) algorithm, with decreasing rates for both :math:`\varepsilon` and :math:`\gamma`.</span>
+
+<span class="sd">    .. warning:: This is purely experimental, the paper does not talk about how to chose decreasing rates. It is inspired by the rates for Exp3 algorithm, cf [Bubeck &amp; Cesa-Bianchi, 2012](http://sbubeck.com/SurveyBCB12.pdf).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OSSB_DecreasingRate.__init__"><a class="viewcode-back" href="../../docs/Policies.OSSB.html#Policies.OSSB.OSSB_DecreasingRate.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">EPSILON</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">GAMMA</span><span class="p">,</span> <span class="n">decreasingRate</span><span class="o">=</span><span class="n">DECREASINGRATE</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OSSB_DecreasingRate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># new parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decreasingRate</span> <span class="o">=</span> <span class="n">decreasingRate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">=</span> <span class="n">gamma</span></div>
+
+<div class="viewcode-block" id="OSSB_DecreasingRate.__str__"><a class="viewcode-back" href="../../docs/Policies.OSSB.html#Policies.OSSB.OSSB_DecreasingRate.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; -&gt; str&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;OSSB(decreasing $\varepsilon(t),\gamma(t)$</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info_on_solver</span><span class="p">)</span></div>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decreasing :math:`\varepsilon(t) = \min(1, \varepsilon_0 \exp(- t \tau))`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_epsilon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decreasingRate</span><span class="p">))</span>
+
+    <span class="c1"># https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@epsilon</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decreasing :math:`\gamma(t) = \min(1, \gamma_0 \exp(- t \tau))`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_decreasingRate</span><span class="p">))</span>
+
+    <span class="c1"># https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@gamma</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="OSSB_AutoDecreasingRate"><a class="viewcode-back" href="../../docs/Policies.OSSB.html#Policies.OSSB.OSSB_AutoDecreasingRate">[docs]</a><span class="k">class</span> <span class="nc">OSSB_AutoDecreasingRate</span><span class="p">(</span><span class="n">OSSB</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Optimal Sampling for Structured Bandits (OSSB) algorithm, with automatically-tuned decreasing rates for both :math:`\varepsilon` and :math:`\gamma`.</span>
+
+<span class="sd">    .. warning:: This is purely experimental, the paper does not talk about how to chose decreasing rates. It is inspired by the rates for Exp3++ algorithm, [[One practical algorithm for both stochastic and adversarial bandits, S.Seldin &amp; A.Slivkins, ICML, 2014](http://www.jmlr.org/proceedings/papers/v32/seldinb14-supp.pdf)].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OSSB_AutoDecreasingRate.__init__"><a class="viewcode-back" href="../../docs/Policies.OSSB.html#Policies.OSSB.OSSB_AutoDecreasingRate.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OSSB_AutoDecreasingRate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">EPSILON</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">GAMMA</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OSSB_AutoDecreasingRate.__str__"><a class="viewcode-back" href="../../docs/Policies.OSSB.html#Policies.OSSB.OSSB_AutoDecreasingRate.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; -&gt; str&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;OSSB(auto decreasing $\varepsilon(t),\gamma(t)$</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info_on_solver</span><span class="p">)</span></div>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decreasing :math:`\varepsilon(t) = \frac{1}{2} \sqrt{\frac{\log(K)}{t K}}`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span>
+
+    <span class="c1"># https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@epsilon</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decreasing :math:`\gamma(t) = \frac{1}{2} \sqrt{\frac{\log(K)}{t K}}`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span>
+
+    <span class="c1"># https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@gamma</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
 </pre></div>
 
            </div>
@@ -462,7 +550,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

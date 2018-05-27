@@ -115,6 +115,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Arms.Bernoulli.html">Arms.Bernoulli module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Arms.Binomial.html">Arms.Binomial module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Arms.Constant.html">Arms.Constant module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Arms.DiscreteArm.html">Arms.DiscreteArm module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Arms.Exponential.html">Arms.Exponential module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Arms.Gamma.html">Arms.Gamma module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Arms.Gaussian.html">Arms.Gaussian module</a></li>
@@ -262,7 +263,7 @@
 <div class="section" id="Arms-package">
 <h1>Arms package<a class="headerlink" href="#Arms-package" title="Permalink to this headline">¶</a></h1>
 <p>Arms : contains different types of bandit arms:
-<a class="reference internal" href="Arms.Constant.html#module-Arms.Constant" title="Arms.Constant"><code class="xref py py-class docutils literal"><span class="pre">Constant</span></code></a>, <a class="reference internal" href="Arms.UniformArm.html#module-Arms.UniformArm" title="Arms.UniformArm"><code class="xref py py-class docutils literal"><span class="pre">UniformArm</span></code></a>, <a class="reference internal" href="Arms.Bernoulli.html#module-Arms.Bernoulli" title="Arms.Bernoulli"><code class="xref py py-class docutils literal"><span class="pre">Bernoulli</span></code></a>, <a class="reference internal" href="Arms.Binomial.html#module-Arms.Binomial" title="Arms.Binomial"><code class="xref py py-class docutils literal"><span class="pre">Binomial</span></code></a>, <a class="reference internal" href="Arms.Poisson.html#module-Arms.Poisson" title="Arms.Poisson"><code class="xref py py-class docutils literal"><span class="pre">Poisson</span></code></a>, <a class="reference internal" href="Arms.Gaussian.html#module-Arms.Gaussian" title="Arms.Gaussian"><code class="xref py py-class docutils literal"><span class="pre">Gaussian</span></code></a>, <a class="reference internal" href="Arms.Exponential.html#module-Arms.Exponential" title="Arms.Exponential"><code class="xref py py-class docutils literal"><span class="pre">Exponential</span></code></a>, <a class="reference internal" href="Arms.Gamma.html#module-Arms.Gamma" title="Arms.Gamma"><code class="xref py py-class docutils literal"><span class="pre">Gamma</span></code></a>.</p>
+<a class="reference internal" href="Arms.Constant.html#module-Arms.Constant" title="Arms.Constant"><code class="xref py py-class docutils literal"><span class="pre">Constant</span></code></a>, <a class="reference internal" href="Arms.UniformArm.html#module-Arms.UniformArm" title="Arms.UniformArm"><code class="xref py py-class docutils literal"><span class="pre">UniformArm</span></code></a>, <a class="reference internal" href="Arms.Bernoulli.html#module-Arms.Bernoulli" title="Arms.Bernoulli"><code class="xref py py-class docutils literal"><span class="pre">Bernoulli</span></code></a>, <a class="reference internal" href="Arms.Binomial.html#module-Arms.Binomial" title="Arms.Binomial"><code class="xref py py-class docutils literal"><span class="pre">Binomial</span></code></a>, <a class="reference internal" href="Arms.Poisson.html#module-Arms.Poisson" title="Arms.Poisson"><code class="xref py py-class docutils literal"><span class="pre">Poisson</span></code></a>, <a class="reference internal" href="Arms.Gaussian.html#module-Arms.Gaussian" title="Arms.Gaussian"><code class="xref py py-class docutils literal"><span class="pre">Gaussian</span></code></a>, <a class="reference internal" href="Arms.Exponential.html#module-Arms.Exponential" title="Arms.Exponential"><code class="xref py py-class docutils literal"><span class="pre">Exponential</span></code></a>, <a class="reference internal" href="Arms.Gamma.html#module-Arms.Gamma" title="Arms.Gamma"><code class="xref py py-class docutils literal"><span class="pre">Gamma</span></code></a>, <a class="reference internal" href="Arms.DiscreteArm.html#module-Arms.DiscreteArm" title="Arms.DiscreteArm"><code class="xref py py-class docutils literal"><span class="pre">DiscreteArm</span></code></a>.</p>
 <p>Each arm class follows the same interface:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span> <span class="o">=</span> <span class="n">Arm</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1">#: doctest: +SKIP</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">mean</span>  <span class="c1">#: doctest: +SKIP</span>
@@ -305,7 +306,7 @@
 
 <dl class="function">
 <dt id="Arms.uniformMeans">
-<code class="descclassname">Arms.</code><code class="descname">uniformMeans</code><span class="sig-paren">(</span><em>nbArms=3</em>, <em>delta=0.1</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#uniformMeans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.uniformMeans" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Arms.</code><code class="descname">uniformMeans</code><span class="sig-paren">(</span><em>nbArms=3</em>, <em>delta=0.05</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#uniformMeans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.uniformMeans" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of means of arms, well spaced:</p>
 <ul class="simple">
 <li>in [lower, lower + amplitude],</li>
@@ -325,7 +326,7 @@
 
 <dl class="function">
 <dt id="Arms.uniformMeansWithSparsity">
-<code class="descclassname">Arms.</code><code class="descname">uniformMeansWithSparsity</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>sparsity=3</em>, <em>delta=0.1</em>, <em>lower=0.0</em>, <em>lowerNonZero=0.5</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#uniformMeansWithSparsity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.uniformMeansWithSparsity" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Arms.</code><code class="descname">uniformMeansWithSparsity</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>sparsity=3</em>, <em>delta=0.05</em>, <em>lower=0.0</em>, <em>lowerNonZero=0.5</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#uniformMeansWithSparsity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.uniformMeansWithSparsity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of means of arms, well spaced, in [lower, lower + amplitude].</p>
 <ul class="simple">
 <li>Exactly <code class="docutils literal"><span class="pre">nbArms-sparsity</span></code> arms will have a mean = <code class="docutils literal"><span class="pre">lower</span></code> and the others are randomly sampled uniformly in [lowerNonZero, lower + amplitude].</li>
@@ -381,7 +382,7 @@
 
 <dl class="function">
 <dt id="Arms.randomMeansWithSparsity">
-<code class="descclassname">Arms.</code><code class="descname">randomMeansWithSparsity</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>sparsity=3</em>, <em>mingap=0.01</em>, <em>lower=0.0</em>, <em>lowerNonZero=0.5</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#randomMeansWithSparsity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.randomMeansWithSparsity" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Arms.</code><code class="descname">randomMeansWithSparsity</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>sparsity=3</em>, <em>mingap=0.01</em>, <em>delta=0.05</em>, <em>lower=0.0</em>, <em>lowerNonZero=0.5</em>, <em>amplitude=1.0</em>, <em>isSorted=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#randomMeansWithSparsity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.randomMeansWithSparsity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</p>
 <ul class="simple">
 <li>Exactly <code class="docutils literal"><span class="pre">nbArms-sparsity</span></code> arms will have a mean = <code class="docutils literal"><span class="pre">lower</span></code> and the others are randomly sampled uniformly in <code class="docutils literal"><span class="pre">[lowerNonZero,</span> <span class="pre">lower</span> <span class="pre">+</span> <span class="pre">amplitude]</span></code>.</li>
@@ -514,6 +515,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Arms.Bernoulli.html">Arms.Bernoulli module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Arms.Binomial.html">Arms.Binomial module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Arms.Constant.html">Arms.Constant module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Arms.DiscreteArm.html">Arms.DiscreteArm module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Arms.Exponential.html">Arms.Exponential module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Arms.Gamma.html">Arms.Gamma module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Arms.Gaussian.html">Arms.Gaussian module</a></li>
@@ -549,7 +551,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>

@@ -205,6 +205,11 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+
+
+
+<span class="c1"># --- Utility functions</span>
 
 
 <div class="viewcode-block" id="DepRound"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.DepRound.html#PoliciesMultiPlayers.DepRound.DepRound">[docs]</a><span class="k">def</span> <span class="nf">DepRound</span><span class="p">(</span><span class="n">weights_p</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -273,7 +278,7 @@
         <span class="c1"># Set alpha, beta</span>
         <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">pi</span><span class="p">,</span> <span class="n">pj</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pj</span><span class="p">)</span>
         <span class="n">proba</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">proba</span><span class="p">:</span>  <span class="c1"># with probability = proba = alpha/(alpha+beta)</span>
+        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="n">proba</span><span class="p">):</span>  <span class="c1"># with probability = proba = alpha/(alpha+beta)</span>
             <span class="n">pi</span><span class="p">,</span> <span class="n">pj</span> <span class="o">=</span> <span class="n">pi</span> <span class="o">+</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">pj</span> <span class="o">-</span> <span class="n">alpha</span>
         <span class="k">else</span><span class="p">:</span>            <span class="c1"># with probability = 1 - proba = beta/(alpha+beta)</span>
             <span class="n">pi</span><span class="p">,</span> <span class="n">pj</span> <span class="o">=</span> <span class="n">pi</span> <span class="o">-</span> <span class="n">beta</span><span class="p">,</span> <span class="n">pj</span> <span class="o">+</span> <span class="n">beta</span>
@@ -314,7 +319,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 16 May 2018, 16h.
+      Last updated on 27 May 2018, 14h.
 
     </p>
   </div>
