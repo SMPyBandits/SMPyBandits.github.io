@@ -134,6 +134,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.GenericAggregation.html">Policies.GenericAggregation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.IMED.html">Policies.IMED module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
@@ -143,6 +144,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OCUCBH.html">Policies.OCUCBH module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowRestart.html">Policies.SlidingWindowRestart module</a></li>
@@ -671,13 +673,15 @@ a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &g
 <code class="descclassname">Policies.kullback.</code><code class="descname">klucb</code><a class="headerlink" href="#Policies.kullback.klucb" title="Permalink to this definition">¶</a></dt>
 <dd><p>The generic KL-UCB index computation.</p>
 <ul class="simple">
-<li>x: value of the cum reward,</li>
-<li>d: upper bound on the divergence,</li>
-<li>kl: the KL divergence to be used (<a class="reference internal" href="#Policies.kullback.klBern" title="Policies.kullback.klBern"><code class="xref py py-func docutils literal"><span class="pre">klBern()</span></code></a>, <a class="reference internal" href="#Policies.kullback.klGauss" title="Policies.kullback.klGauss"><code class="xref py py-func docutils literal"><span class="pre">klGauss()</span></code></a>, etc),</li>
-<li>upperbound, lowerbound=float(&#8216;-inf&#8217;): the known bound of the values x,</li>
-<li>precision=1e-6: the threshold from where to stop the research,</li>
-<li>max_iterations: max number of iterations of the loop (safer to bound it to reduce time complexity).</li>
+<li><code class="docutils literal"><span class="pre">x</span></code>: value of the cum reward,</li>
+<li><code class="docutils literal"><span class="pre">d</span></code>: upper bound on the divergence,</li>
+<li><code class="docutils literal"><span class="pre">kl</span></code>: the KL divergence to be used (<a class="reference internal" href="#Policies.kullback.klBern" title="Policies.kullback.klBern"><code class="xref py py-func docutils literal"><span class="pre">klBern()</span></code></a>, <a class="reference internal" href="#Policies.kullback.klGauss" title="Policies.kullback.klGauss"><code class="xref py py-func docutils literal"><span class="pre">klGauss()</span></code></a>, etc),</li>
+<li><code class="docutils literal"><span class="pre">upperbound</span></code>, <code class="docutils literal"><span class="pre">lowerbound=float('-inf')</span></code>: the known bound of the values <code class="docutils literal"><span class="pre">x</span></code>,</li>
+<li><code class="docutils literal"><span class="pre">precision=1e-6</span></code>: the threshold from where to stop the research,</li>
+<li><code class="docutils literal"><span class="pre">max_iterations</span></code>: max number of iterations of the loop (safer to bound it to reduce time complexity).</li>
 </ul>
+<div class="math">
+\[\mathrm{klucb}(x, d) \simeq \sup_{\mathrm{lowerbound} \leq y \leq \mathrm{upperbound}} \{ y : \mathrm{kl}(x, y) &lt; d \}.\]</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">It uses a <strong>bisection search</strong>, and one call to <code class="docutils literal"><span class="pre">kl</span></code> for each step of the bisection search.</p>
@@ -976,7 +980,7 @@ a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &g
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 May 2018, 14h.
+      Last updated on 11 Jun 2018, 19h.
 
     </p>
   </div>

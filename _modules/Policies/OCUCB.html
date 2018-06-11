@@ -190,13 +190,12 @@
 <span class="sd">&quot;&quot;&quot; The Optimally Confident UCB (OC-UCB) policy for bounded stochastic bandits, with sub-Gaussian noise.</span>
 
 <span class="sd">- Reference: [Lattimore, 2016](https://arxiv.org/pdf/1603.08661.pdf).</span>
-
-<span class="sd">.. warning:: FIXME also implement the horizon-dependent version, from [Lattimore, 2015](https://arxiv.org/pdf/1507.07880.pdf)</span>
+<span class="sd">- There is also a horizon-dependent version, :class:`OCUCBH.OCUCBH`, from [Lattimore, 2015](https://arxiv.org/pdf/1507.07880.pdf).</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -235,8 +234,8 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           B_k(t) &amp;= \max\Big\{ \exp(1), \log(t), t \log(t) / C_k(t) \Big\},\\</span>
-<span class="sd">           \text{where}\; C_k(t) &amp;= \sum_{j=1}^{K} \min\left\{ T_k(t), T_j(t)^{\rho} T_k(t)^{1 - \rho} \right\}</span>
+<span class="sd">            B_k(t) &amp;= \max\Big\{ \exp(1), \log(t), t \log(t) / C_k(t) \Big\},\\</span>
+<span class="sd">            \text{where}\; C_k(t) &amp;= \sum_{j=1}^{K} \min\left\{ T_k(t), T_j(t)^{\rho} T_k(t)^{1 - \rho} \right\}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
         <span class="n">T_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span>
@@ -260,7 +259,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Bterm</span><span class="p">(</span><span class="n">arm</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div></div>
 
-    <span class="c1"># FIXME it does not work so far?! Why?!!</span>
+    <span class="c1"># FIXME it does not work so far!</span>
     <span class="c1"># def computeAllIndex(self):</span>
     <span class="c1">#     &quot;&quot;&quot; Compute the current indexes for all arms, in a vectorized manner.&quot;&quot;&quot;</span>
     <span class="c1">#     indexes = (self.rewards / self.pulls) + np.sqrt(2 * self.eta * np.log(self._Bterms()) / self.pulls)</span>
@@ -281,7 +280,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 May 2018, 14h.
+      Last updated on 11 Jun 2018, 19h.
 
     </p>
   </div>
