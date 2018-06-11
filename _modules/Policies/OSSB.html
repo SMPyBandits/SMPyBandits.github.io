@@ -271,7 +271,7 @@
 
 <span class="sd">    - I recomputed suboptimal solution to the optimization problem, and found the same as in [[&quot;Sparse Stochastic Bandits&quot;, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](https://arxiv.org/abs/1706.01383)].</span>
 
-<span class="sd">    - If only_strong_or_weak is True, the solution :math:`c_i` are not returned, but instead ``strong_or_weak, k`` is returned (to know if the problem is strongly sparse or not, and if not, the k that satisfy the required constraint).</span>
+<span class="sd">    - If only_strong_or_weak is ``True``, the solution :math:`c_i` are not returned, but instead ``strong_or_weak, k`` is returned (to know if the problem is strongly sparse or not, and if not, the k that satisfy the required constraint).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># print(&quot;Calling &#39;solve_optimization_problem__sparse_bandits&#39; with thetas = {} and sparsity = {}...&quot;.format(thetas, sparsity))  # DEBUG</span>
 
@@ -291,11 +291,16 @@
     <span class="n">gaps</span> <span class="o">=</span> <span class="n">best_theta</span> <span class="o">-</span> <span class="n">sorted_thetas</span>
     <span class="c1"># assert np.all(gaps &gt;= 0), &quot;Error in the computation of gaps = {}, they should be &gt; 0.&quot;.format(gaps)  # DEBUG</span>
 
-    <span class="n">strong_sparsity</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">best_theta</span><span class="p">)</span> <span class="o">-</span> <span class="nb">sum</span><span class="p">(</span><span class="n">gaps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">sorted_thetas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">sparsity</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">strong_sparsity</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="n">left_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">best_theta</span><span class="p">)</span> <span class="k">if</span> <span class="n">best_theta</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">right_term</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">sparsity</span><span class="p">):</span>
+            <span class="n">right_term</span> <span class="o">+=</span> <span class="n">gaps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">sorted_thetas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">sorted_thetas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">left_term</span> <span class="o">-</span> <span class="n">right_term</span>
+
     <span class="n">ci</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 
     <span class="c1"># # DEBUG</span>
-    <span class="c1"># print()</span>
     <span class="c1"># print(&quot;    We have d =&quot;, d, &quot;sparsity =&quot;, sparsity, &quot;permutation =&quot;, permutation)  # DEBUG</span>
     <span class="c1"># print(&quot;    and sorted_thetas =&quot;, sorted_thetas, &quot;with best_theta =&quot;, best_theta)  # DEBUG</span>
     <span class="c1"># print(&quot;    gaps =&quot;, gaps)  # DEBUG</span>
@@ -364,7 +369,7 @@
         <span class="c1"># WARNING the option is a string to keep the configuration hashable and pickable</span>
         <span class="k">if</span> <span class="n">solve_optimization_problem</span> <span class="o">==</span> <span class="s2">&quot;sparse&quot;</span><span class="p">:</span>
             <span class="c1"># self._info_on_solver = &quot;, sparse Gauss&quot;  # XXX</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_info_on_solver</span> <span class="o">=</span> <span class="s2">&quot;, Gauss&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_info_on_solver</span> <span class="o">=</span> <span class="s2">&quot;, sGauss&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_solve_optimization_problem</span> <span class="o">=</span> <span class="n">solve_optimization_problem__sparse_bandits</span>
         <span class="k">elif</span> <span class="n">solve_optimization_problem</span> <span class="o">==</span> <span class="s2">&quot;gaussian&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_info_on_solver</span> <span class="o">=</span> <span class="s2">&quot;, Gauss&quot;</span>
@@ -412,7 +417,11 @@
             <span class="c1"># we don&#39;t just take argmin because of possible non-uniqueness</span>
             <span class="n">least_explored</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">ratios</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">/</span> <span class="n">values_c_x_mt</span>
-            <span class="n">least_probable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">ratios</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ratios</span><span class="p">))[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">min_ratios_non_inf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">ratios</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">ratios</span><span class="p">)])</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">min_ratios_non_inf</span><span class="p">):</span>
+                <span class="n">least_probable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">least_probable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">ratios</span> <span class="o">==</span> <span class="n">min_ratios_non_inf</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
             <span class="c1"># print(&quot;Using ratio of pulls / values_c_x_mt = {}, and least probable arm(s) are {}...&quot;.format(ratios, least_probable))  # DEBUG</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">least_explored</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter_s_no_exploitation_phase</span><span class="p">:</span>
@@ -550,7 +559,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 May 2018, 14h.
+      Last updated on 11 Jun 2018, 19h.
 
     </p>
   </div>
