@@ -197,8 +197,8 @@
 <span class="sd">    policy_server.py --version</span>
 
 <span class="sd">Options:</span>
-<span class="sd">    -h --help   Show this screen.</span>
-<span class="sd">    --version   Show version.</span>
+<span class="sd">    -h --help       Show this screen.</span>
+<span class="sd">    --version       Show version.</span>
 <span class="sd">    --port=&lt;PORT&gt;   Port to use for the TCP connection [default: 10000].</span>
 <span class="sd">    --host=&lt;HOST&gt;   Address to use for the TCP connection [default: 0.0.0.0].</span>
 <span class="sd">    --means=&lt;MEANS&gt; Means of arms used by the environment, to print regret [default: None].</span>
@@ -206,8 +206,8 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.7&quot;</span>
-<span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;MAB Policy server v</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__version__</span><span class="p">)</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+<span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;SMPyBandits MAB policy server v</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__version__</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">socket</span>
@@ -301,17 +301,17 @@
                         <span class="n">reward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">chosen_arm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Passing reward </span><span class="si">{}</span><span class="s2"> on arm </span><span class="si">{}</span><span class="s2"> to the policy&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">chosen_arm</span><span class="p">))</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Passing reward </span><span class="si">{}</span><span class="s2"> on arm </span><span class="si">{}</span><span class="s2"> to the policy...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">chosen_arm</span><span class="p">))</span>
                             <span class="n">policy</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">chosen_arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
                     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to convert message = </span><span class="si">{!r}</span><span class="s2"> to a float reward...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to convert message = &#39;</span><span class="si">{!r}</span><span class="s2">&#39; to a float reward...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
                     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to use policy&#39;s choice() method... playing the (t+1)%K-th arm...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
                         <span class="n">chosen_arm</span> <span class="o">=</span> <span class="p">(</span><span class="n">policy</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">policy</span><span class="o">.</span><span class="n">nbArms</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to use policy&#39;s choice() method... playing the (t+1)%K-th = </span><span class="si">{}</span><span class="s2"> arm...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chosen_arm</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
                     <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">chosen_arm</span><span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Send: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sending: &#39;</span><span class="si">{!r}</span><span class="s2">&#39;...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
                     <span class="n">connection</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 
             <span class="k">except</span> <span class="ne">ConnectionResetError</span><span class="p">:</span>
@@ -393,7 +393,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 May 2018, 14h.
+      Last updated on 11 Jun 2018, 19h.
 
     </p>
   </div>

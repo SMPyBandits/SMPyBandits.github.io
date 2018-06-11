@@ -197,8 +197,6 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.5&quot;</span>
 
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
-
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
     <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
@@ -267,7 +265,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># Create it here!</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">SelfishChildPointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">],</span> <span class="s1">&#39;handleCollision&#39;</span><span class="p">):</span>  <span class="c1"># XXX they should not have such method!</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Selfish found a player #</span><span class="si">{}</span><span class="s2"> which has a method &#39;handleCollision&#39; : Selfish should NOT be used with bandit algorithms aware of collision-avoidance!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">playerId</span><span class="p">),</span> <span class="ne">RuntimeWarning</span><span class="p">)</span></div>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Selfish found a player #</span><span class="si">{}</span><span class="s2"> which has a method &#39;handleCollision&#39; : Selfish should NOT be used with bandit algorithms aware of collision-avoidance!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">playerId</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
                 <span class="c1"># raise ValueError(&quot;Invalid child policy {} for Selfish algorithm! It should not have a collision avoidance protocol!&quot;.format(self._players[playerId]))</span>
 
 <div class="viewcode-block" id="Selfish.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.Selfish.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -306,7 +304,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 May 2018, 14h.
+      Last updated on 11 Jun 2018, 19h.
 
     </p>
   </div>

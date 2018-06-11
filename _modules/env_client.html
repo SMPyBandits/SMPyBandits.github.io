@@ -189,28 +189,27 @@
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Client to play multi-armed bandits problem against.</span>
-<span class="sd">Many distribution of arms are supported, default to Bernoulli.</span>
+<span class="sd">Client to play multi-armed bandits problem against. Many distribution of arms are supported, default to Bernoulli.</span>
 
 <span class="sd">Usage:</span>
-<span class="sd">    env_client.py [markovian | dynamic] [--port=&lt;PORT&gt;] [--host=&lt;HOST&gt;] [--speed=&lt;SPEED&gt;] &lt;json_configuration&gt;</span>
+<span class="sd">    env_client.py [--markovian | --dynamic] [--port=&lt;PORT&gt;] [--host=&lt;HOST&gt;] [--speed=&lt;SPEED&gt;] &lt;json_configuration&gt;</span>
 <span class="sd">    env_client.py (-h|--help)</span>
 <span class="sd">    env_client.py --version</span>
 
 <span class="sd">Options:</span>
-<span class="sd">    -h --help   Show this screen.</span>
-<span class="sd">    --version   Show version.</span>
-<span class="sd">    markovian   Whether to use a Markovian MAB problem (default is simple MAB problems).</span>
-<span class="sd">    dynamic     Whether to use a Dynamic MAB problem (default is simple MAB problems).</span>
+<span class="sd">    -h --help       Show this screen.</span>
+<span class="sd">    --version       Show version.</span>
+<span class="sd">    --markovian     Whether to use a Markovian MAB problem (default is simple MAB problems).</span>
+<span class="sd">    --dynamic       Whether to use a Dynamic MAB problem (default is simple MAB problems).</span>
 <span class="sd">    --port=&lt;PORT&gt;   Port to use for the TCP connection [default: 10000].</span>
 <span class="sd">    --host=&lt;HOST&gt;   Address to use for the TCP connection [default: 0.0.0.0].</span>
-<span class="sd">    --speed=&lt;SPEED&gt;   Speed of emission in milliseconds [default: 1000].</span>
+<span class="sd">    --speed=&lt;SPEED&gt; Speed of emission, in milliseconds [default: 1000].</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.7&quot;</span>
-<span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;MAB environment client v</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__version__</span><span class="p">)</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+<span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;SMPyBandits MAB environment client v</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__version__</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">socket</span>
@@ -244,7 +243,7 @@
 
 <div class="viewcode-block" id="send_message"><a class="viewcode-back" href="../docs/env_client.html#env_client.send_message">[docs]</a><span class="k">def</span> <span class="nf">send_message</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Send this message to the socket.&quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sending </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sending &#39;</span><span class="si">{!r}</span><span class="s2">&#39;...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">sock</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 
 
@@ -319,8 +318,8 @@
     <span class="n">host</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;--host&#39;</span><span class="p">]</span>
     <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;--port&#39;</span><span class="p">])</span>
     <span class="n">speed</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;--speed&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
-    <span class="n">is_markovian</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;markovian&#39;</span><span class="p">]</span>
-    <span class="n">is_dynamic</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;dynamic&#39;</span><span class="p">]</span>
+    <span class="n">is_markovian</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;--markovian&#39;</span><span class="p">]</span>
+    <span class="n">is_dynamic</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;--dynamic&#39;</span><span class="p">]</span>
     <span class="n">json_configuration</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s1">&#39;&lt;json_configuration&gt;&#39;</span><span class="p">]</span>
     <span class="n">configuration</span> <span class="o">=</span> <span class="n">read_configuration_env</span><span class="p">(</span><span class="n">json_configuration</span><span class="p">)</span>
     <span class="n">transform_str</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
@@ -354,7 +353,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 May 2018, 14h.
+      Last updated on 11 Jun 2018, 19h.
 
     </p>
   </div>
