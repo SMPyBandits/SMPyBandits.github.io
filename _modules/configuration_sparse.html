@@ -644,19 +644,33 @@
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="c1"># {</span>
-        <span class="c1">#     &quot;archtype&quot;: Thompson,</span>
-        <span class="c1">#     &quot;params&quot;: {</span>
-        <span class="c1">#         &quot;posterior&quot;: Gauss,   # WARNING Gaussian posterior is still experimental and VERY slow</span>
-        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
-        <span class="c1">#     }</span>
-        <span class="c1"># },</span>
         <span class="c1"># --- SparseWrapper algorithm, 4 different versions whether using old UCB for sets J(t) and K(t) or not</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
                 <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span>
+                <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- Thompson algorithm, with Gaussian posterior</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Gauss</span><span class="p">,</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="c1"># --- SparseWrapper algorithm, 4 different versions whether using old UCB for sets J(t) and K(t) or not</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Gauss</span><span class="p">,</span>   <span class="c1"># WARNING Gaussian posterior is still experimental and VERY slow</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
@@ -666,21 +680,33 @@
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="c1"># &quot;posterior&quot;: Beta,</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span>
                 <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="c1"># {</span>
-        <span class="c1">#     &quot;archtype&quot;: BayesUCB,</span>
-        <span class="c1">#     &quot;params&quot;: {</span>
-        <span class="c1">#         &quot;posterior&quot;: Gauss,  # XXX does not work yet!</span>
-        <span class="c1">#         &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
-        <span class="c1">#     }</span>
-        <span class="c1"># },</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+                <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span>
+                <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Gauss</span><span class="p">,</span>  <span class="c1"># XXX does not work yet!</span>
+                <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">LOWER</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="n">AMPLITUDE</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="n">SPARSITY</span><span class="p">,</span>
+                <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Gauss</span><span class="p">,</span>  <span class="c1"># XXX does not work yet!</span>
                 <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -802,7 +828,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 11 Jun 2018, 19h.
+      Last updated on 16 Jul 2018, 14h.
 
     </p>
   </div>
