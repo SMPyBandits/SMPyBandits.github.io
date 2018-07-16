@@ -290,7 +290,10 @@
             <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">availableArms</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span>
             <span class="c1"># Uniform choice among the best arms</span>
-            <span class="k">return</span> <span class="n">availableArms</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">availableArms</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">availableArms</span><span class="p">]))[</span><span class="mi">0</span><span class="p">])]</span></div>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">availableArms</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">availableArms</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">availableArms</span><span class="p">]))[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">availableArms</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="IndexPolicy.choiceMultiple"><a class="viewcode-back" href="../../docs/Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy.choiceMultiple">[docs]</a>    <span class="k">def</span> <span class="nf">choiceMultiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; In an index policy, choose nb arms with maximal indexes (uniformly at random).&quot;&quot;&quot;</span>
@@ -359,7 +362,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 11 Jun 2018, 19h.
+      Last updated on 16 Jul 2018, 14h.
 
     </p>
   </div>
