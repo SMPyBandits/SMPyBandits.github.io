@@ -257,71 +257,27 @@
 </style>
 <div class="section" id="Policies.Posterior.Gauss-module">
 <h1>Policies.Posterior.Gauss module<a class="headerlink" href="#Policies.Posterior.Gauss-module" title="Permalink to this headline">¶</a></h1>
-<p>Manipulate a posterior of Gaussian experiments, i.e., a Normal-Inverse gamma distribution.</p>
-<p>Cf. <a class="reference external" href="https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution">https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution</a>
-No need for tricks to handle non-binary rewards.</p>
-<ul class="simple">
-<li>See <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#With_unknown_mean_and_unknown_variance">https://en.wikipedia.org/wiki/Normal_distribution#With_unknown_mean_and_unknown_variance</a></li>
-<li>And <a class="reference external" href="https://en.wikipedia.org/wiki/Conjugate_prior#Continuous_distributions">https://en.wikipedia.org/wiki/Conjugate_prior#Continuous_distributions</a></li>
-</ul>
+<p>Manipulate a posterior of Gaussian experiments, which happens to also be a Gaussian distribution if the prior is Gaussian. <em>Easy peasy!</em></p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">It is computationally really slower than <code class="xref py py-class docutils literal"><span class="pre">Posterior.Beta</span></code>! About 10 to 50 times slower.</p>
-</div>
-<dl class="data">
-<dt id="Policies.Posterior.Gauss.VARIANCE">
-<code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">VARIANCE</code><em class="property"> = 0.05</em><a class="headerlink" href="#Policies.Posterior.Gauss.VARIANCE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default value for the variance of a [0, 1] Gaussian arm</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.Posterior.Gauss.inverse_gamma">
-<code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">inverse_gamma</code><span class="sig-paren">(</span><em>alpha=1.0</em>, <em>beta=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#inverse_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.inverse_gamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sample sigma2 from an Inverse Gamma distribution of parameters <span class="math">\(\alpha, \beta\)</span>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">inverse_gamma</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
-<span class="go">1.6666...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">inverse_gamma</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
-<span class="go">0.9470...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">inverse_gamma</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  
-<span class="go">3.9507...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">inverse_gamma</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  
-<span class="go">1.2996...</span>
-</pre></div>
+<p class="last">TODO I have to test it!</p>
 </div>
 <ul class="simple">
-<li>Cf. <a class="reference external" href="https://en.wikipedia.org/wiki/Inverse-gamma_distribution">https://en.wikipedia.org/wiki/Inverse-gamma_distribution</a></li>
+<li>Reference: [[<em>Further optimal regret bounds for Thompson sampling</em>, S. Agrawal and N. Goyal, In Artificial Intelligence and Statistics, pages 99–107, 2013.](XXX)]</li>
 </ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.Posterior.Gauss.normal_inverse_gamma">
-<code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">normal_inverse_gamma</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>nu=1.0</em>, <em>alpha=1.0</em>, <em>beta=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#normal_inverse_gamma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.normal_inverse_gamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sample (x, sigma2) from a Normal-Inverse Gamma distribution of four parameters <span class="math">\(\mu, \nu, \alpha, \beta\)</span>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">normal_inverse_gamma</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
-<span class="go">(1.2359..., 1.6666...)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">normal_inverse_gamma</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
-<span class="go">(-17.4424..., 1.6469...)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">normal_inverse_gamma</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
-<span class="go">(19.0187..., 1.1643...)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li>Cf. <a class="reference external" href="https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution#Generating_normal-inverse-gamma_random_variates">https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution#Generating_normal-inverse-gamma_random_variates</a></li>
-</ul>
-</dd></dl>
-
 <dl class="class">
 <dt id="Policies.Posterior.Gauss.Gauss">
-<em class="property">class </em><code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">Gauss</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>nu=0.05</em>, <em>alpha=1.0</em>, <em>beta=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">Gauss</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.Posterior.Posterior.html#Policies.Posterior.Posterior.Posterior" title="Policies.Posterior.Posterior.Posterior"><code class="xref py py-class docutils literal"><span class="pre">Policies.Posterior.Posterior.Posterior</span></code></a></p>
-<p>Manipulate a posterior of Gaussian experiments, i.e., a Normal-Inverse gamma distribution.</p>
-<p>Cf. <a class="reference external" href="https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution">https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution</a></p>
+<p>Manipulate a posterior of Gaussian experiments, which happens to also be a Gaussian distribution if the prior is Gaussian.</p>
+<p>The posterior distribution is a <span class="math">\(\mathcal{N}(\hat{\mu_k}(t), \hat{\sigma_k}^2(t))\)</span>, where</p>
+<div class="math">
+\[\hat{\mu_k}(t) &amp;= \frac{X_k(t)}{N_k(t)},
+\hat{\sigma_k}^2(t) &amp;= \frac{1}{N_k(t)}.\]</div>
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>nu=0.05</em>, <em>alpha=1.0</em>, <em>beta=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a posterior assuming the default is <span class="math">\(\mathcal{N}(\mu, \nu)\)</span> with <cite>loc = mu</cite> and <cite>scale**2 = nu</cite>.</p>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a posterior assuming the default is <span class="math">\(\mathcal{N}(0, 1)\)</span>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -331,21 +287,9 @@ No need for tricks to handle non-binary rewards.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Policies.Posterior.Gauss.Gauss.nu">
-<code class="descname">nu</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.nu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(\nu\)</span> of the posterior</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.Posterior.Gauss.Gauss.alpha">
-<code class="descname">alpha</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.alpha" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(\alpha\)</span> of the posterior</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.Posterior.Gauss.Gauss.beta">
-<code class="descname">beta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.beta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(\beta\)</span> of the posterior</p>
+<dt id="Policies.Posterior.Gauss.Gauss.sigma">
+<code class="descname">sigma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math">\(\sigma\)</span> of the posterior</p>
 </dd></dl>
 
 <dl class="method">
@@ -355,8 +299,8 @@ No need for tricks to handle non-binary rewards.</p>
 
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><em>mu=None</em>, <em>nu=None</em>, <em>alpha=None</em>, <em>beta=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset the for parameters <span class="math">\(\mu, \nu, \alpha, \beta\)</span>, as when creating a new Gauss posterior.</p>
+<code class="descname">reset</code><span class="sig-paren">(</span><em>mu=None</em>, <em>sigma=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the for parameters <span class="math">\(\mu, \sigma\)</span>, as when creating a new Gauss posterior.</p>
 </dd></dl>
 
 <dl class="method">
@@ -372,37 +316,28 @@ No need for tricks to handle non-binary rewards.</p>
 <dt id="Policies.Posterior.Gauss.Gauss.quantile">
 <code class="descname">quantile</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.quantile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.quantile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the p-quantile of the Gauss posterior.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Very experimental, I am not sure of what I did here...</p>
-</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">I recommend to NOT use <code class="xref py py-class docutils literal"><span class="pre">BayesUCB</span></code> with Gauss posteriors...</p>
+<p class="last">It now works fine with <a class="reference internal" href="Policies.BayesUCB.html#module-Policies.BayesUCB" title="Policies.BayesUCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.BayesUCB</span></code></a> with Gauss posteriors, even if it is MUCH SLOWER than the Bernoulli posterior (<code class="xref py py-class docutils literal"><span class="pre">Gamma</span></code>).</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.mean">
 <code class="descname">mean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the mean of the Gauss posterior (should be useless).</p>
+<dd><p>Compute the mean, <span class="math">\(\mu\)</span> of the Gauss posterior (should be useless).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Posterior.Gauss.Gauss.variance">
+<code class="descname">variance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.variance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the variance, <span class="math">\(\sigma\)</span>, of the Gauss posterior (should be useless).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.update">
 <code class="descname">update</code><span class="sig-paren">(</span><em>obs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an observation <span class="math">\(x\)</span> or a vector of observations, assumed to be drawn from an unknown normal distribution.</p>
-<ul class="simple">
-<li>Initial mean was estimated from <cite>nu</cite> observations with sample mean <span class="math">\(\mu _{0}\)</span>;</li>
-<li>Initial variance was estimated from <span class="math">\(2\alpha\)</span> observations with sample mean <span class="math">\(\mu _{0}\)</span> and sum of squared deviations <span class="math">\(2\beta\)</span>.</li>
-</ul>
-<p>Let <span class="math">\(n\)</span> the size of <span class="math">\(x\)</span> and <span class="math">\(\overline{x} = \frac{1}{n} \sum_{i=1}^{n} x_i\)</span> the mean of the observations <span class="math">\(x\)</span> (can be one sample, or more).</p>
-<p>Then the four parameters <span class="math">\(\mu, \nu, \alpha, \beta\)</span> are updated like this:</p>
-<div class="math">
-\[\begin{split}\mu' &amp;:= \frac{\nu \mu + n \overline{x}}{\nu + n}, \\
-\nu' &amp;:= \nu + n, \\
-\alpha' &amp;:= \alpha + \frac{n}{2}, \\
-\beta' &amp;:= \beta + \frac{1}{2} \sum_{i=1}^{n} (x_i - \overline{x})^2 + \frac{n \nu}{\nu + n} \frac{(\overline{x} - \mu)^2}{2}.\\\end{split}\]</div>
 </dd></dl>
 
 <dl class="method">
@@ -528,7 +463,7 @@ the probability density function:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 11 Jun 2018, 19h.
+      Last updated on 16 Jul 2018, 14h.
 
     </p>
   </div>

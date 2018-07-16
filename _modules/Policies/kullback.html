@@ -190,7 +190,7 @@
 <span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence functions and klUCB utilities.</span>
 
 <span class="sd">- Faster implementation can be found in a C file, in ``Policies/C``, and should be compiled to speedup computations.</span>
-<span class="sd">- However, the version here have examples, doctests, and are jit compiled on the file (with numba, cf. http://numba.pydata.org/).</span>
+<span class="sd">- However, the version here have examples, doctests, and are jit compiled on the fly (with numba, cf. http://numba.pydata.org/).</span>
 <span class="sd">- Cf. https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence</span>
 <span class="sd">- Reference: [Filippi, Cappé &amp; Garivier - Allerton, 2011](https://arxiv.org/pdf/1004.5229.pdf) and [Garivier &amp; Cappé, 2011](https://arxiv.org/pdf/1102.2490.pdf)</span>
 
@@ -544,15 +544,22 @@
 <span class="c1"># --- KL functions, for the KL-UCB policy</span>
 
 <span class="nd">@jit</span>
-<div class="viewcode-block" id="klucb"><a class="viewcode-back" href="../../docs/Policies.kullback.html#Policies.kullback.klucb">[docs]</a><span class="k">def</span> <span class="nf">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; The generic KL-UCB index computation.</span>
+<div class="viewcode-block" id="klucb"><a class="viewcode-back" href="../../docs/configuration_markovian.html#Policies.kullback.klucb">[docs]</a><span class="k">def</span> <span class="nf">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span>
+        <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span>
+        <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span>
+    <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The generic KL-UCB index computation.</span>
 
-<span class="sd">    - x: value of the cum reward,</span>
-<span class="sd">    - d: upper bound on the divergence,</span>
-<span class="sd">    - kl: the KL divergence to be used (:func:`klBern`, :func:`klGauss`, etc),</span>
-<span class="sd">    - upperbound, lowerbound=float(&#39;-inf&#39;): the known bound of the values x,</span>
-<span class="sd">    - precision=1e-6: the threshold from where to stop the research,</span>
-<span class="sd">    - max_iterations: max number of iterations of the loop (safer to bound it to reduce time complexity).</span>
+<span class="sd">    - ``x``: value of the cum reward,</span>
+<span class="sd">    - ``d``: upper bound on the divergence,</span>
+<span class="sd">    - ``kl``: the KL divergence to be used (:func:`klBern`, :func:`klGauss`, etc),</span>
+<span class="sd">    - ``upperbound``, ``lowerbound=float(&#39;-inf&#39;)``: the known bound of the values ``x``,</span>
+<span class="sd">    - ``precision=1e-6``: the threshold from where to stop the research,</span>
+<span class="sd">    - ``max_iterations``: max number of iterations of the loop (safer to bound it to reduce time complexity).</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathrm{klucb}(x, d) \simeq \sup_{\mathrm{lowerbound} \leq y \leq \mathrm{upperbound}} \{ y : \mathrm{kl}(x, y) &lt; d \}.</span>
 
 <span class="sd">    .. note:: It uses a **bisection search**, and one call to ``kl`` for each step of the bisection search.</span>
 
@@ -950,7 +957,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Mar 2018, 12h.
+      Last updated on 16 Jul 2018, 14h.
 
     </p>
   </div>
