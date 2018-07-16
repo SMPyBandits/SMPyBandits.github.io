@@ -200,25 +200,24 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="k">import</span> <span class="n">Integral</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">cPickle</span> <span class="k">as</span> <span class="nn">pickle</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pickle</span>
 
 <span class="kn">from</span> <span class="nn">._multiprocessing_helpers</span> <span class="k">import</span> <span class="n">mp</span>
 
 <span class="kn">from</span> <span class="nn">.format_stack</span> <span class="k">import</span> <span class="n">format_outer_frames</span>
 <span class="kn">from</span> <span class="nn">.logger</span> <span class="k">import</span> <span class="n">Logger</span><span class="p">,</span> <span class="n">short_format_time</span>
-<span class="kn">from</span> <span class="nn">.my_exceptions</span> <span class="k">import</span> <span class="n">TransportableException</span><span class="p">,</span> <span class="n">_mk_exception</span>
+<span class="kn">from</span> <span class="nn">.my_exceptions</span> <span class="k">import</span> <span class="n">TransportableException</span>
 <span class="kn">from</span> <span class="nn">.disk</span> <span class="k">import</span> <span class="n">memstr_to_bytes</span>
 <span class="kn">from</span> <span class="nn">._parallel_backends</span> <span class="k">import</span> <span class="p">(</span><span class="n">FallbackToBackend</span><span class="p">,</span> <span class="n">MultiprocessingBackend</span><span class="p">,</span>
-                                 <span class="n">ThreadingBackend</span><span class="p">,</span> <span class="n">SequentialBackend</span><span class="p">)</span>
+                                 <span class="n">ThreadingBackend</span><span class="p">,</span> <span class="n">SequentialBackend</span><span class="p">,</span>
+                                 <span class="n">LokyBackend</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">._compat</span> <span class="k">import</span> <span class="n">_basestring</span>
+<span class="kn">from</span> <span class="nn">.externals.cloudpickle</span> <span class="k">import</span> <span class="n">dumps</span><span class="p">,</span> <span class="n">loads</span>
+<span class="kn">from</span> <span class="nn">.externals</span> <span class="k">import</span> <span class="n">loky</span>
 
 <span class="c1"># Make sure that those two classes are part of the public joblib.parallel API</span>
 <span class="c1"># so that 3rd party backend implementers can import them from here.</span>
@@ -229,37 +228,107 @@
     <span class="s1">&#39;multiprocessing&#39;</span><span class="p">:</span> <span class="n">MultiprocessingBackend</span><span class="p">,</span>
     <span class="s1">&#39;threading&#39;</span><span class="p">:</span> <span class="n">ThreadingBackend</span><span class="p">,</span>
     <span class="s1">&#39;sequential&#39;</span><span class="p">:</span> <span class="n">SequentialBackend</span><span class="p">,</span>
+    <span class="s1">&#39;loky&#39;</span><span class="p">:</span> <span class="n">LokyBackend</span><span class="p">,</span>
 <span class="p">}</span>
-
 <span class="c1"># name of the backend used by default by Parallel outside of any context</span>
 <span class="c1"># managed by ``parallel_backend``.</span>
-<span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s1">&#39;multiprocessing&#39;</span>
+<span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s1">&#39;loky&#39;</span>
 <span class="n">DEFAULT_N_JOBS</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">DEFAULT_THREAD_BACKEND</span> <span class="o">=</span> <span class="s1">&#39;threading&#39;</span>
 
-<span class="c1"># Thread local value that can be overriden by the ``parallel_backend`` context</span>
+<span class="c1"># Thread local value that can be overridden by the ``parallel_backend`` context</span>
 <span class="c1"># manager</span>
 <span class="n">_backend</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
 
+<span class="n">VALID_BACKEND_HINTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;processes&#39;</span><span class="p">,</span> <span class="s1">&#39;threads&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">VALID_BACKEND_CONSTRAINTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;sharedmem&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">get_active_backend</span><span class="p">():</span>
+
+<span class="k">def</span> <span class="nf">_register_dask</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Register Dask Backend if called with parallel_backend(&quot;dask&quot;) &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">distributed.joblib</span>  <span class="c1"># noqa: #F401</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;To use the dask.distributed backend you must install both &quot;</span>
+               <span class="s2">&quot;the `dask` and distributed modules.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+               <span class="s2">&quot;See http://dask.pydata.org/en/latest/install.html for more &quot;</span>
+               <span class="s2">&quot;information.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+<span class="n">EXTERNAL_BACKENDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;dask&#39;</span><span class="p">:</span> <span class="n">_register_dask</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">get_active_backend</span><span class="p">(</span><span class="n">prefer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the active default backend&quot;&quot;&quot;</span>
-    <span class="n">active_backend_and_jobs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;backend_and_jobs&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">active_backend_and_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">active_backend_and_jobs</span>
+    <span class="k">if</span> <span class="n">prefer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_BACKEND_HINTS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;prefer=</span><span class="si">%r</span><span class="s2"> is not a valid backend hint, &quot;</span>
+                         <span class="s2">&quot;expected one of </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefer</span><span class="p">,</span> <span class="n">VALID_BACKEND_HINTS</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">require</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_BACKEND_CONSTRAINTS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;require=</span><span class="si">%r</span><span class="s2"> is not a valid backend constraint, &quot;</span>
+                         <span class="s2">&quot;expected one of </span><span class="si">%r</span><span class="s2">&quot;</span>
+                         <span class="o">%</span> <span class="p">(</span><span class="n">require</span><span class="p">,</span> <span class="n">VALID_BACKEND_CONSTRAINTS</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">prefer</span> <span class="o">==</span> <span class="s1">&#39;processes&#39;</span> <span class="ow">and</span> <span class="n">require</span> <span class="o">==</span> <span class="s1">&#39;sharedmem&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;prefer == &#39;processes&#39; and require == &#39;sharedmem&#39;&quot;</span>
+                         <span class="s2">&quot; are inconsistent settings&quot;</span><span class="p">)</span>
+    <span class="n">backend_and_jobs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;backend_and_jobs&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">backend_and_jobs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Try to use the backend set by the user with the context manager.</span>
+        <span class="n">backend</span><span class="p">,</span> <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">backend_and_jobs</span>
+        <span class="n">supports_sharedmem</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="s1">&#39;supports_sharedmem&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">require</span> <span class="o">==</span> <span class="s1">&#39;sharedmem&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">supports_sharedmem</span><span class="p">:</span>
+            <span class="c1"># This backend does not match the shared memory constraint:</span>
+            <span class="c1"># fallback to the default thead-based backend.</span>
+            <span class="n">sharedmem_backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">DEFAULT_THREAD_BACKEND</span><span class="p">]()</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using </span><span class="si">%s</span><span class="s2"> as joblib.Parallel backend instead of </span><span class="si">%s</span><span class="s2"> &quot;</span>
+                      <span class="s2">&quot;as the latter does not provide shared memory semantics.&quot;</span>
+                      <span class="o">%</span> <span class="p">(</span><span class="n">sharedmem_backend</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                         <span class="n">backend</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">sharedmem_backend</span><span class="p">,</span> <span class="n">DEFAULT_N_JOBS</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">backend_and_jobs</span>
+
     <span class="c1"># We are outside of the scope of any parallel_backend context manager,</span>
-    <span class="c1"># create the default backend instance now</span>
-    <span class="n">active_backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">DEFAULT_BACKEND</span><span class="p">]()</span>
-    <span class="k">return</span> <span class="n">active_backend</span><span class="p">,</span> <span class="n">DEFAULT_N_JOBS</span>
+    <span class="c1"># create the default backend instance now.</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">DEFAULT_BACKEND</span><span class="p">]()</span>
+    <span class="n">supports_sharedmem</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="s1">&#39;supports_sharedmem&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">uses_threads</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="s1">&#39;uses_threads&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">require</span> <span class="o">==</span> <span class="s1">&#39;sharedmem&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">supports_sharedmem</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="p">(</span><span class="n">prefer</span> <span class="o">==</span> <span class="s1">&#39;threads&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">uses_threads</span><span class="p">)):</span>
+        <span class="c1"># Make sure the selected default backend match the soft hints and</span>
+        <span class="c1"># hard constraints:</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">DEFAULT_THREAD_BACKEND</span><span class="p">]()</span>
+    <span class="k">return</span> <span class="n">backend</span><span class="p">,</span> <span class="n">DEFAULT_N_JOBS</span>
 
 
-<span class="nd">@contextmanager</span>
-<span class="k">def</span> <span class="nf">parallel_backend</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">backend_params</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">parallel_backend</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Change the default backend used by Parallel inside a with block.</span>
 
 <span class="sd">    If ``backend`` is a string it must match a previously registered</span>
 <span class="sd">    implementation using the ``register_parallel_backend`` function.</span>
 
-<span class="sd">    Alternatively backend can be passed directly as an instance.</span>
+<span class="sd">    By default the following backends are available:</span>
+
+<span class="sd">    - &#39;loky&#39;: single-host, process-based parallelism (used by default),</span>
+<span class="sd">    - &#39;threading&#39;: single-host, thread-based parallelism,</span>
+<span class="sd">    - &#39;multiprocessing&#39;: legacy single-host, process-based parallelism.</span>
+
+<span class="sd">    &#39;loky&#39; is recommended to run functions that manipulate Python objects.</span>
+<span class="sd">    &#39;threading&#39; is a low-overhead alternative that is most efficient for</span>
+<span class="sd">    functions that release the Global Interpreter Lock: e.g. I/O-bound code or</span>
+<span class="sd">    CPU-bound code in a few calls to native code that explicitly releases the</span>
+<span class="sd">    GIL.</span>
+
+<span class="sd">    In addition, if the `dask` and `distributed` Python packages are installed,</span>
+<span class="sd">    it is possible to use the &#39;dask&#39; backend for better scheduling of nested</span>
+<span class="sd">    parallel calls without over-subscription and potentially distribute</span>
+<span class="sd">    parallel calls over a networked cluster of several hosts.</span>
+
+<span class="sd">    Alternatively the backend can be passed directly as an instance.</span>
 
 <span class="sd">    By default all available workers will be used (``n_jobs=-1``) unless the</span>
 <span class="sd">    caller passes an explicit value for the ``n_jobs`` parameter.</span>
@@ -281,19 +350,31 @@
 <span class="sd">    .. versionadded:: 0.10</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">_basestring</span><span class="p">):</span>
-        <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">backend</span><span class="p">](</span><span class="o">**</span><span class="n">backend_params</span><span class="p">)</span>
-    <span class="n">old_backend_and_jobs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;backend_and_jobs&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">backend_params</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">_basestring</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">backend</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">BACKENDS</span> <span class="ow">and</span> <span class="n">backend</span> <span class="ow">in</span> <span class="n">EXTERNAL_BACKENDS</span><span class="p">:</span>
+                <span class="n">register</span> <span class="o">=</span> <span class="n">EXTERNAL_BACKENDS</span><span class="p">[</span><span class="n">backend</span><span class="p">]</span>
+                <span class="n">register</span><span class="p">()</span>
+
+            <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">backend</span><span class="p">](</span><span class="o">**</span><span class="n">backend_params</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_backend_and_jobs</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;backend_and_jobs&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_backend_and_jobs</span> <span class="o">=</span> <span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+
         <span class="n">_backend</span><span class="o">.</span><span class="n">backend_and_jobs</span> <span class="o">=</span> <span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
-        <span class="c1"># return the backend instance to make it easier to write tests</span>
-        <span class="k">yield</span> <span class="n">backend</span><span class="p">,</span> <span class="n">n_jobs</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">old_backend_and_jobs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_backend_and_jobs</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unregister</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">unregister</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_backend_and_jobs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;backend_and_jobs&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">del</span> <span class="n">_backend</span><span class="o">.</span><span class="n">backend_and_jobs</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">_backend</span><span class="o">.</span><span class="n">backend_and_jobs</span> <span class="o">=</span> <span class="n">old_backend_and_jobs</span>
+            <span class="n">_backend</span><span class="o">.</span><span class="n">backend_and_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_backend_and_jobs</span>
 
 
 <span class="c1"># Under Linux or OS X the default start method of multiprocessing</span>
@@ -308,18 +389,65 @@
     <span class="n">DEFAULT_MP_CONTEXT</span> <span class="o">=</span> <span class="kc">None</span>
 
 
+<span class="k">class</span> <span class="nc">CloudpickledObjectWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pickled_obj</span> <span class="o">=</span> <span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">loads</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pickled_obj</span><span class="p">,)</span>
+
+
 <span class="k">class</span> <span class="nc">BatchedCalls</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wrap a sequence of (func, args, kwargs) tuples as a single callable&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterator_slice</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterator_slice</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">pickle_cache</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterator_slice</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">backend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span> <span class="o">=</span> <span class="n">pickle_cache</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_wrap_non_picklable_objects</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pickle_cache</span><span class="p">):</span>
+        <span class="n">need_wrap</span> <span class="o">=</span> <span class="s2">&quot;__main__&quot;</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__module__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="c1"># Need wrap if the object is a function defined in a local scope of</span>
+            <span class="c1"># another function.</span>
+            <span class="n">func_code</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__code__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">need_wrap</span> <span class="o">|=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func_code</span><span class="p">,</span> <span class="s2">&quot;co_flags&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">inspect</span><span class="o">.</span><span class="n">CO_NESTED</span>
+
+            <span class="c1"># Need wrap if the obj is a lambda expression</span>
+            <span class="n">func_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">need_wrap</span> <span class="o">|=</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span> <span class="ow">in</span> <span class="n">func_name</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">need_wrap</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">obj</span>
+
+        <span class="n">wrapped_obj</span> <span class="o">=</span> <span class="n">pickle_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wrapped_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">wrapped_obj</span> <span class="o">=</span> <span class="n">CloudpickledObjectWrapper</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">pickle_cache</span><span class="p">[</span><span class="n">obj</span><span class="p">]</span> <span class="o">=</span> <span class="n">wrapped_obj</span>
+        <span class="k">return</span> <span class="n">wrapped_obj</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrap_non_picklable_objects</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span><span class="p">),</span>
+                  <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrap_non_picklable_objects</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">],</span>
+                  <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_non_picklable_objects</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span><span class="p">)</span>
+                   <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                  <span class="p">)</span>
+                 <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">state</span>
 
 
 <span class="c1">###############################################################################</span>
@@ -329,7 +457,8 @@
     <span class="sd">&quot;&quot;&quot;Return the number of CPUs.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">mp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">loky</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 
 
 <span class="c1">###############################################################################</span>
@@ -354,21 +483,15 @@
 
 
 <span class="c1">###############################################################################</span>
-<div class="viewcode-block" id="delayed"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.delayed">[docs]</a><span class="k">def</span> <span class="nf">delayed</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">check_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Decorator used to capture the arguments of a function.</span>
-
-<span class="sd">    Pass `check_pickle=False` when:</span>
-
-<span class="sd">    - performing a possibly repeated check is too costly and has been done</span>
-<span class="sd">      already once outside of the call to delayed.</span>
-
-<span class="sd">    - when used in conjunction `Parallel(backend=&#39;threading&#39;)`.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="delayed"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.delayed">[docs]</a><span class="k">def</span> <span class="nf">delayed</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">check_pickle</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decorator used to capture the arguments of a function.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">check_pickle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;check_pickle is deprecated in joblib 0.12 and will be&#39;</span>
+                      <span class="s1">&#39; removed in 0.13&#39;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
     <span class="c1"># Try to pickle the input function, to catch the problems early when</span>
     <span class="c1"># using with multiprocessing:</span>
     <span class="k">if</span> <span class="n">check_pickle</span><span class="p">:</span>
-        <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+        <span class="n">dumps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">delayed_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">function</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span>
@@ -403,8 +526,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">batch_completed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                                                <span class="n">this_batch_duration</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">print_progress</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">_original_iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">dispatch_next</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">_original_iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span><span class="o">.</span><span class="n">dispatch_next</span><span class="p">()</span>
 
 
 <span class="c1">###############################################################################</span>
@@ -433,18 +557,18 @@
 <span class="k">def</span> <span class="nf">effective_n_jobs</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Determine the number of jobs that can actually run in parallel</span>
 
-<span class="sd">    n_jobs is the is the number of workers requested by the callers.</span>
-<span class="sd">    Passing n_jobs=-1 means requesting all available workers for instance</span>
-<span class="sd">    matching the number of CPU cores on the worker host(s).</span>
+<span class="sd">    n_jobs is the number of workers requested by the callers. Passing n_jobs=-1</span>
+<span class="sd">    means requesting all available workers for instance matching the number of</span>
+<span class="sd">    CPU cores on the worker host(s).</span>
 
 <span class="sd">    This method should return a guesstimate of the number of workers that can</span>
 <span class="sd">    actually perform work concurrently with the currently enabled default</span>
 <span class="sd">    backend. The primary use case is to make it possible for the caller to know</span>
 <span class="sd">    in how many chunks to slice the work.</span>
 
-<span class="sd">    In general working on larger data chunks is more efficient (less</span>
-<span class="sd">    scheduling overhead and better use of CPU cache prefetching heuristics)</span>
-<span class="sd">    as long as all the workers have enough work to do.</span>
+<span class="sd">    In general working on larger data chunks is more efficient (less scheduling</span>
+<span class="sd">    overhead and better use of CPU cache prefetching heuristics) as long as all</span>
+<span class="sd">    the workers have enough work to do.</span>
 
 <span class="sd">    Warning: this function is experimental and subject to change in a future</span>
 <span class="sd">    version of joblib.</span>
@@ -460,9 +584,11 @@
 <div class="viewcode-block" id="Parallel"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.Parallel">[docs]</a><span class="k">class</span> <span class="nc">Parallel</span><span class="p">(</span><span class="n">Logger</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39; Helper class for readable parallel mapping.</span>
 
+<span class="sd">        Read more in the :ref:`User Guide &lt;parallel&gt;`.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        -----------</span>
-<span class="sd">        n_jobs: int, default: 1</span>
+<span class="sd">        n_jobs: int, default: None</span>
 <span class="sd">            The maximum number of concurrently running jobs, such as the number</span>
 <span class="sd">            of Python worker processes when backend=&quot;multiprocessing&quot;</span>
 <span class="sd">            or the size of the thread-pool when backend=&quot;threading&quot;.</span>
@@ -470,14 +596,19 @@
 <span class="sd">            is used at all, which is useful for debugging. For n_jobs below -1,</span>
 <span class="sd">            (n_cpus + 1 + n_jobs) are used. Thus for n_jobs = -2, all</span>
 <span class="sd">            CPUs but one are used.</span>
-<span class="sd">        backend: str, ParallelBackendBase instance or None, \</span>
-<span class="sd">                default: &#39;multiprocessing&#39;</span>
+<span class="sd">            None is a marker for &#39;unset&#39; that will be interpreted as n_jobs=1</span>
+<span class="sd">            (sequential execution) unless the call is performed under a</span>
+<span class="sd">            parallel_backend context manager that sets another value for</span>
+<span class="sd">            n_jobs.</span>
+<span class="sd">        backend: str, ParallelBackendBase instance or None, default: &#39;loky&#39;</span>
 <span class="sd">            Specify the parallelization backend implementation.</span>
 <span class="sd">            Supported backends are:</span>
 
-<span class="sd">            - &quot;multiprocessing&quot; used by default, can induce some</span>
+<span class="sd">            - &quot;loky&quot; used by default, can induce some</span>
 <span class="sd">              communication and memory overhead when exchanging input and</span>
 <span class="sd">              output data with the worker Python processes.</span>
+<span class="sd">            - &quot;multiprocessing&quot; previous process-based backend based on</span>
+<span class="sd">              `multiprocessing.Pool`. Less robust than `loky`.</span>
 <span class="sd">            - &quot;threading&quot; is a very low-overhead backend but it suffers</span>
 <span class="sd">              from the Python Global Interpreter Lock if the called function</span>
 <span class="sd">              relies a lot on Python objects. &quot;threading&quot; is mostly useful</span>
@@ -488,6 +619,22 @@
 <span class="sd">            - finally, you can register backends by calling</span>
 <span class="sd">              register_parallel_backend. This will allow you to implement</span>
 <span class="sd">              a backend of your liking.</span>
+
+<span class="sd">            It is not recommended to hard-code the backend name in a call to</span>
+<span class="sd">            Parallel in a library. Instead it is recommended to set soft hints</span>
+<span class="sd">            (prefer) or hard constraints (require) so as to make it possible</span>
+<span class="sd">            for library users to change the backend from the outside using the</span>
+<span class="sd">            parallel_backend context manager.</span>
+<span class="sd">        prefer: str in {&#39;processes&#39;, &#39;threads&#39;} or None, default: None</span>
+<span class="sd">            Soft hint to choose the default backend if no specific backend</span>
+<span class="sd">            was selected with the parallel_backend context manager. The</span>
+<span class="sd">            default process-based backend is &#39;loky&#39; and the default</span>
+<span class="sd">            thread-based backend is &#39;threading&#39;.</span>
+<span class="sd">        require: &#39;sharedmem&#39; or None, default None</span>
+<span class="sd">            Hard constraint to select the backend. If set to &#39;sharedmem&#39;,</span>
+<span class="sd">            the selected backend will be single-host and thread-based even</span>
+<span class="sd">            if the user asked for a non-thread based backend with</span>
+<span class="sd">            parallel_backend.</span>
 <span class="sd">        verbose: int, optional</span>
 <span class="sd">            The verbosity level: if non zero, progress messages are</span>
 <span class="sd">            printed. Above 50, the output is sent to stdout.</span>
@@ -499,12 +646,13 @@
 <span class="sd">        pre_dispatch: {&#39;all&#39;, integer, or expression, as in &#39;3*n_jobs&#39;}</span>
 <span class="sd">            The number of batches (of tasks) to be pre-dispatched.</span>
 <span class="sd">            Default is &#39;2*n_jobs&#39;. When batch_size=&quot;auto&quot; this is reasonable</span>
-<span class="sd">            default and the multiprocessing workers should never starve.</span>
+<span class="sd">            default and the workers should never starve.</span>
 <span class="sd">        batch_size: int or &#39;auto&#39;, default: &#39;auto&#39;</span>
 <span class="sd">            The number of atomic tasks to dispatch at once to each</span>
-<span class="sd">            worker. When individual evaluations are very fast, multiprocessing</span>
-<span class="sd">            can be slower than sequential computation because of the overhead.</span>
-<span class="sd">            Batching fast computations together can mitigate this.</span>
+<span class="sd">            worker. When individual evaluations are very fast, dispatching</span>
+<span class="sd">            calls to workers can be slower than sequential computation because</span>
+<span class="sd">            of the overhead. Batching fast computations together can mitigate</span>
+<span class="sd">            this.</span>
 <span class="sd">            The ``&#39;auto&#39;`` strategy keeps track of the time it takes for a batch</span>
 <span class="sd">            to complete, and dynamically adjusts the batch size to keep the time</span>
 <span class="sd">            on the order of half a second, using a heuristic. The initial batch</span>
@@ -514,26 +662,26 @@
 <span class="sd">            very little overhead and using larger batch size has not proved to</span>
 <span class="sd">            bring any gain in that case.</span>
 <span class="sd">        temp_folder: str, optional</span>
-<span class="sd">            Folder to be used by the pool for memmaping large arrays</span>
+<span class="sd">            Folder to be used by the pool for memmapping large arrays</span>
 <span class="sd">            for sharing memory with worker processes. If None, this will try in</span>
 <span class="sd">            order:</span>
 
 <span class="sd">            - a folder pointed by the JOBLIB_TEMP_FOLDER environment</span>
 <span class="sd">              variable,</span>
 <span class="sd">            - /dev/shm if the folder exists and is writable: this is a</span>
-<span class="sd">              RAMdisk filesystem available by default on modern Linux</span>
+<span class="sd">              RAM disk filesystem available by default on modern Linux</span>
 <span class="sd">              distributions,</span>
 <span class="sd">            - the default system temporary folder that can be</span>
 <span class="sd">              overridden with TMP, TMPDIR or TEMP environment</span>
 <span class="sd">              variables, typically /tmp under Unix operating systems.</span>
 
-<span class="sd">            Only active when backend=&quot;multiprocessing&quot;.</span>
+<span class="sd">            Only active when backend=&quot;loky&quot; or &quot;multiprocessing&quot;.</span>
 <span class="sd">        max_nbytes int, str, or None, optional, 1M by default</span>
 <span class="sd">            Threshold on the size of arrays passed to the workers that</span>
 <span class="sd">            triggers automated memory mapping in temp_folder. Can be an int</span>
 <span class="sd">            in Bytes, or a human-readable string, e.g., &#39;1M&#39; for 1 megabyte.</span>
-<span class="sd">            Use None to disable memmaping of large arrays.</span>
-<span class="sd">            Only active when backend=&quot;multiprocessing&quot;.</span>
+<span class="sd">            Use None to disable memmapping of large arrays.</span>
+<span class="sd">            Only active when backend=&quot;loky&quot; or &quot;multiprocessing&quot;.</span>
 <span class="sd">        mmap_mode: {None, &#39;r+&#39;, &#39;r&#39;, &#39;w+&#39;, &#39;c&#39;}</span>
 <span class="sd">            Memmapping mode for numpy arrays passed to workers.</span>
 <span class="sd">            See &#39;max_nbytes&#39; parameter documentation for more details.</span>
@@ -541,10 +689,10 @@
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 
-<span class="sd">        This object uses the multiprocessing module to compute in</span>
-<span class="sd">        parallel the application of a function to many different</span>
-<span class="sd">        arguments. The main functionality it brings in addition to</span>
-<span class="sd">        using the raw multiprocessing API are (see examples for details):</span>
+<span class="sd">        This object uses workers to compute in parallel the application of a</span>
+<span class="sd">        function to many different arguments. The main functionality it brings</span>
+<span class="sd">        in addition to using the raw multiprocessing or concurrent.futures API</span>
+<span class="sd">        are (see examples for details):</span>
 
 <span class="sd">        * More readable code, in particular since it avoids</span>
 <span class="sd">          constructing list of arguments.</span>
@@ -593,12 +741,10 @@
 
 <span class="sd">        &gt;&gt;&gt; from time import sleep</span>
 <span class="sd">        &gt;&gt;&gt; from joblib import Parallel, delayed</span>
-<span class="sd">        &gt;&gt;&gt; r = Parallel(n_jobs=2, verbose=5)(delayed(sleep)(.1) for _ in range(10)) #doctest: +SKIP</span>
-<span class="sd">        [Parallel(n_jobs=2)]: Done   1 out of  10 | elapsed:    0.1s remaining:    0.9s</span>
-<span class="sd">        [Parallel(n_jobs=2)]: Done   3 out of  10 | elapsed:    0.2s remaining:    0.5s</span>
-<span class="sd">        [Parallel(n_jobs=2)]: Done   6 out of  10 | elapsed:    0.3s remaining:    0.2s</span>
-<span class="sd">        [Parallel(n_jobs=2)]: Done   9 out of  10 | elapsed:    0.5s remaining:    0.1s</span>
-<span class="sd">        [Parallel(n_jobs=2)]: Done  10 out of  10 | elapsed:    0.5s finished</span>
+<span class="sd">        &gt;&gt;&gt; r = Parallel(n_jobs=2, verbose=10)(delayed(sleep)(.2) for _ in range(10)) #doctest: +SKIP</span>
+<span class="sd">        [Parallel(n_jobs=2)]: Done   1 tasks      | elapsed:    0.6s</span>
+<span class="sd">        [Parallel(n_jobs=2)]: Done   4 tasks      | elapsed:    0.8s</span>
+<span class="sd">        [Parallel(n_jobs=2)]: Done  10 out of  10 | elapsed:    1.4s finished</span>
 
 <span class="sd">        Traceback example, note how the line of the error is indicated</span>
 <span class="sd">        as well as the values of the parameter passed to the function that</span>
@@ -633,8 +779,7 @@
 <span class="sd">        Using pre_dispatch in a producer/consumer situation, where the</span>
 <span class="sd">        data is generated on the fly. Note how the producer is first</span>
 <span class="sd">        called 3 times before the parallel loop is initiated, and then</span>
-<span class="sd">        called to generate new data on the fly. In this case the total</span>
-<span class="sd">        number of iterations cannot be reported in the progress messages:</span>
+<span class="sd">        called to generate new data on the fly:</span>
 
 <span class="sd">        &gt;&gt;&gt; from math import sqrt</span>
 <span class="sd">        &gt;&gt;&gt; from joblib import Parallel, delayed</span>
@@ -654,18 +799,24 @@
 <span class="sd">        [Parallel(n_jobs=2)]: Done 3 jobs     | elapsed:  0.0s</span>
 <span class="sd">        Produced 5</span>
 <span class="sd">        [Parallel(n_jobs=2)]: Done 4 jobs     | elapsed:  0.0s</span>
-<span class="sd">        [Parallel(n_jobs=2)]: Done 5 out of 6 | elapsed:  0.0s remaining: 0.0s</span>
+<span class="sd">        [Parallel(n_jobs=2)]: Done 6 out of 6 | elapsed:  0.0s remaining: 0.0s</span>
 <span class="sd">        [Parallel(n_jobs=2)]: Done 6 out of 6 | elapsed:  0.0s finished</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
-<div class="viewcode-block" id="Parallel.__init__"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.Parallel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Parallel.__init__"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.Parallel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2 * n_jobs&#39;</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
-                 <span class="n">temp_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_nbytes</span><span class="o">=</span><span class="s1">&#39;1M&#39;</span><span class="p">,</span> <span class="n">mmap_mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">):</span>
-        <span class="n">active_backend</span><span class="p">,</span> <span class="n">default_n_jobs</span> <span class="o">=</span> <span class="n">get_active_backend</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">backend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                 <span class="n">temp_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_nbytes</span><span class="o">=</span><span class="s1">&#39;1M&#39;</span><span class="p">,</span> <span class="n">mmap_mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                 <span class="n">prefer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">active_backend</span><span class="p">,</span> <span class="n">context_n_jobs</span> <span class="o">=</span> <span class="n">get_active_backend</span><span class="p">(</span>
+            <span class="n">prefer</span><span class="o">=</span><span class="n">prefer</span><span class="p">,</span> <span class="n">require</span><span class="o">=</span><span class="n">require</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">backend</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># If we are under a parallel_backend context manager, look up</span>
             <span class="c1"># the default number of jobs and use that instead:</span>
-            <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">default_n_jobs</span>
+            <span class="n">n_jobs</span> <span class="o">=</span> <span class="n">context_n_jobs</span>
+        <span class="k">if</span> <span class="n">n_jobs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No specific context override and no specific value request:</span>
+            <span class="c1"># default to 1.</span>
+            <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
@@ -678,6 +829,8 @@
             <span class="n">max_nbytes</span><span class="o">=</span><span class="n">max_nbytes</span><span class="p">,</span>
             <span class="n">mmap_mode</span><span class="o">=</span><span class="n">mmap_mode</span><span class="p">,</span>
             <span class="n">temp_folder</span><span class="o">=</span><span class="n">temp_folder</span><span class="p">,</span>
+            <span class="n">prefer</span><span class="o">=</span><span class="n">prefer</span><span class="p">,</span>
+            <span class="n">require</span><span class="o">=</span><span class="n">require</span><span class="p">,</span>
             <span class="n">verbose</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">-</span> <span class="mi">50</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">DEFAULT_MP_CONTEXT</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -702,6 +855,11 @@
                                  <span class="o">%</span> <span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">BACKENDS</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
             <span class="n">backend</span> <span class="o">=</span> <span class="n">backend_factory</span><span class="p">()</span>
 
+        <span class="k">if</span> <span class="p">(</span><span class="n">require</span> <span class="o">==</span> <span class="s1">&#39;sharedmem&#39;</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="s1">&#39;supports_sharedmem&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Backend </span><span class="si">%s</span><span class="s2"> does not support shared memory&quot;</span>
+                             <span class="o">%</span> <span class="n">backend</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="n">batch_size</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">Integral</span><span class="p">)</span> <span class="ow">and</span>
                 <span class="n">batch_size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
@@ -717,7 +875,7 @@
 
         <span class="c1"># This lock is used coordinate the main thread of this process with</span>
         <span class="c1"># the async callback thread of our the pool.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Parallel.__enter__"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.Parallel.__enter__">[docs]</a>    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_managed_backend</span> <span class="o">=</span> <span class="kc">True</span>
@@ -773,8 +931,14 @@
 
         <span class="n">dispatch_timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">cb</span> <span class="o">=</span> <span class="n">BatchCompletionCallBack</span><span class="p">(</span><span class="n">dispatch_timestamp</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job</span><span class="p">)</span></div>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="n">job_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">)</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+            <span class="c1"># A job can complete so quickly than its callback is</span>
+            <span class="c1"># called before we get here, causing self._jobs to</span>
+            <span class="c1"># grow. To ensure correct results ordering, .insert is</span>
+            <span class="c1"># used (rather than .append) in the following line</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">job_idx</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Parallel.dispatch_next"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.Parallel.dispatch_next">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dispatch more data for parallel processing</span>
@@ -805,7 +969,9 @@
             <span class="n">batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
 
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
-            <span class="n">tasks</span> <span class="o">=</span> <span class="n">BatchedCalls</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">))</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="n">BatchedCalls</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">),</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">get_nested_backend</span><span class="p">(),</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># No more tasks available in the iterator: tell caller to stop.</span>
                 <span class="k">return</span> <span class="kc">False</span>
@@ -908,24 +1074,14 @@
                     <span class="n">ensure_ready</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managed_backend</span>
                     <span class="n">backend</span><span class="o">.</span><span class="n">abort_everything</span><span class="p">(</span><span class="n">ensure_ready</span><span class="o">=</span><span class="n">ensure_ready</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">TransportableException</span><span class="p">):</span>
-                    <span class="k">raise</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">TransportableException</span><span class="p">):</span>
                     <span class="c1"># Capture exception to add information on the local</span>
                     <span class="c1"># stack in addition to the distant stack</span>
                     <span class="n">this_report</span> <span class="o">=</span> <span class="n">format_outer_frames</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                                                       <span class="n">stack_start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                    <span class="n">report</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Multiprocessing exception:</span>
-<span class="si">%s</span><span class="s2"></span>
-<span class="s2">---------------------------------------------------------------------------</span>
-<span class="s2">Sub-process traceback:</span>
-<span class="s2">---------------------------------------------------------------------------</span>
-<span class="si">%s</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">this_report</span><span class="p">,</span> <span class="n">exception</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-                    <span class="c1"># Convert this to a JoblibException</span>
-                    <span class="n">exception_type</span> <span class="o">=</span> <span class="n">_mk_exception</span><span class="p">(</span><span class="n">exception</span><span class="o">.</span><span class="n">etype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">exception</span> <span class="o">=</span> <span class="n">exception_type</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
-
-                    <span class="k">raise</span> <span class="n">exception</span></div>
+                    <span class="k">raise</span> <span class="n">exception</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">this_report</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span></div>
 
 <div class="viewcode-block" id="Parallel.__call__"><a class="viewcode-back" href="../../docs/Environment.usejoblib.html#Environment.usejoblib.Parallel.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">:</span>
@@ -933,11 +1089,15 @@
         <span class="c1"># A flag used to abort the dispatching of jobs in case an</span>
         <span class="c1"># exception is found</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_aborting</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managed_backend</span><span class="p">:</span>
             <span class="n">n_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_backend</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">n_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_effective_n_jobs</span><span class="p">()</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="s2">&quot;Using backend </span><span class="si">%s</span><span class="s2"> with </span><span class="si">%d</span><span class="s2"> concurrent workers.&quot;</span><span class="p">,</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;start_call&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">start_call</span><span class="p">()</span>
         <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
         <span class="n">pre_dispatch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_dispatch</span>
 
@@ -960,30 +1120,46 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dispatched_batches</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dispatched_tasks</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_completed_tasks</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Use a caching dict for callables that are pickled with cloudpickle to</span>
+        <span class="c1"># improve performances. This cache is used only in the case of</span>
+        <span class="c1"># functions that are defined in the __main__ module, functions that are</span>
+        <span class="c1"># defined locally (inside another function) and lambda expressions.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Only set self._iterating to True if at least a batch</span>
             <span class="c1"># was dispatched. In particular this covers the edge</span>
-            <span class="c1"># case of Parallel used with an exhausted iterator.</span>
+            <span class="c1"># case of Parallel used with an exhausted iterator. If</span>
+            <span class="c1"># self._original_iterator is None, then this means either</span>
+            <span class="c1"># that pre_dispatch == &quot;all&quot;, n_jobs == 1 or that the first batch</span>
+            <span class="c1"># was very quick and its callback already dispatched all the</span>
+            <span class="c1"># remaining jobs.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_iterator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_one_batch</span><span class="p">(</span><span class="n">iterator</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">pass</span>
 
             <span class="k">if</span> <span class="n">pre_dispatch</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span> <span class="ow">or</span> <span class="n">n_jobs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># The iterable was consumed all at once by the above for loop.</span>
                 <span class="c1"># No need to wait for async callbacks to trigger to</span>
                 <span class="c1"># consumption.</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_iterating</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
+
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">retrieval_context</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
             <span class="c1"># Make sure that we get a last message telling us we are done</span>
             <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_time</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="s1">&#39;Done </span><span class="si">%3i</span><span class="s1"> out of </span><span class="si">%3i</span><span class="s1"> | elapsed: </span><span class="si">%s</span><span class="s1"> finished&#39;</span><span class="p">,</span>
                         <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output</span><span class="p">),</span>
                          <span class="n">short_format_time</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">)))</span>
         <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">,</span> <span class="s1">&#39;stop_call&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">stop_call</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_managed_backend</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_terminate_backend</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pickle_cache</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">output</span></div>
@@ -1005,7 +1181,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 11 Jun 2018, 19h.
+      Last updated on 16 Jul 2018, 14h.
 
     </p>
   </div>
