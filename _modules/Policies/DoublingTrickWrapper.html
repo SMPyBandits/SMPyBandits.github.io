@@ -190,7 +190,7 @@
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A policy that acts as a wrapper on another policy `P`, assumed to be *horizon dependent* (has to known :math:`T`), by implementing a &quot;doubling trick&quot;:</span>
 
 <span class="sd">- starts to assume that :math:`T=T_0=1000`, and run the policy :math:`P(T_0)`, from :math:`t=1` to :math:`t=T_0`,</span>
-<span class="sd">- if :math:`t &gt; T_0`, then the &quot;doubling trick&quot; is performed, by either reinitializing or just changing the parameter `horizon` of the policy P, for instance with :math:`T_2 = 10 \times T_0`,</span>
+<span class="sd">- if :math:`t &gt; T_0`, then the &quot;doubling trick&quot; is performed, by either re-initializing or just changing the parameter `horizon` of the policy P, for instance with :math:`T_2 = 10 \times T_0`,</span>
 <span class="sd">- and keep doing this until :math:`t = T`.</span>
 
 <span class="sd">.. note::</span>
@@ -200,14 +200,14 @@
 
 <span class="sd">.. note::</span>
 
-<span class="sd">   My guess is that this &quot;doubling trick&quot; wrapping policy can only be efficient if:</span>
+<span class="sd">   My guess is that this &quot;doubling trick&quot; wrapping policy can only be efficient (for stochastic problems) if:</span>
 
-<span class="sd">   - the underlying policy `P` is a very efficient horizon-dependent algorithm, e.g., the :class:`Policies.DoublingTrickWrapper`,</span>
+<span class="sd">   - the underlying policy `P` is a very efficient horizon-dependent algorithm, e.g., the :class:`Policies.ApproximatedFHGittins`,</span>
 <span class="sd">   - the growth function `next_horizon` is growing faster than any geometric rate, so that the number of refresh is :math:`o(\log T)` and not :math:`O(\log T)`.</span>
 
 <span class="sd">.. seealso::</span>
 
-<span class="sd">   Reference: [[What the Doubling Trick Can or Can&#39;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](https://hal.inria.fr/hal-XXX), to be presented soon.</span>
+<span class="sd">   Reference: [[What the Doubling Trick Can or Can&#39;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](https://hal.inria.fr/hal-01736357), to be presented soon.</span>
 
 <span class="sd">.. warning::</span>
 
@@ -440,12 +440,245 @@
     <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="n">gap</span></div>
 
 
+<span class="c1"># --- Experimental code to plot some doubling sequences and</span>
+<span class="c1"># check numerically some inequalities :</span>
+<span class="c1"># like controlling a sum Sigma_i=0^n u_i by a constant times to last term u_n</span>
+<span class="c1"># and controlling the last term u_{L_T} as a function of T.</span>
+
+
+<span class="c1">#: The constant c in front of the function f.</span>
+<span class="n">constant_c_for_the_functions_f</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">constant_c_for_the_functions_f</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">constant_c_for_the_functions_f</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<div class="viewcode-block" id="function_f__for_geometric_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_geometric_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_geometric_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For the *geometric* doubling sequences, :math:`f(i) = c \times \log(i)`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="function_f__for_exponential_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_exponential_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_exponential_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For the *exponential* doubling sequences, :math:`f(i) = c \times i`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">i</span></div>
+
+
+<div class="viewcode-block" id="function_f__for_generic_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_generic_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For a certain *generic* family of doubling sequences, :math:`f(i) = c \times i^{d} \times (\log(i))^{e}`.</span>
+
+<span class="sd">    - ``d, e = 0, 1`` gives :func:`function_f__for_geometric_sequences`,</span>
+<span class="sd">    - ``d, e = 1, 0`` gives :func:`function_f__for_geometric_sequences`,</span>
+<span class="sd">    - ``d, e = 0.5, 0`` gives an intermediate sequence, growing faster than any geometric sequence and slower than any exponential sequence,</span>
+<span class="sd">    - any other combination has not been studied yet.</span>
+
+<span class="sd">    .. warning:: ``d`` should most probably be smaller than 1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: invalid value of d = </span><span class="si">{}</span><span class="s2"> for function_f__for_generic_sequences.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">**</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: invalid value of e = </span><span class="si">{}</span><span class="s2"> for function_f__for_generic_sequences.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">**</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">**</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">**</span> <span class="n">e</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="function_f__for_intermediate_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_intermediate_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_intermediate_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="function_f__for_intermediate2_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_intermediate2_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_intermediate2_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.3333</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="function_f__for_intermediate3_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_intermediate3_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_intermediate3_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.6667</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="function_f__for_intermediate4_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.function_f__for_intermediate4_sequences">[docs]</a><span class="k">def</span> <span class="nf">function_f__for_intermediate4_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span></div>
+
+
+<span class="c1">#: Value of the parameter :math:`\alpha` for the :func:`Ti_from_f` function.</span>
+<span class="n">alpha_for_Ti</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">alpha_for_Ti</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">alpha_for_Ti</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<div class="viewcode-block" id="Ti_from_f"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.Ti_from_f">[docs]</a><span class="k">def</span> <span class="nf">Ti_from_f</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha_for_Ti</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For any non-negative and increasing function :math:`f: i \mapsto f(i)`, the corresponding sequence is defined by:</span>
+
+<span class="sd">    .. math:: \forall i\in\mathbb{N},\; T_i := \lfloor \exp(\alpha \times \exp(f(i))) \rfloor.</span>
+
+<span class="sd">    .. warning:: :math:`f(i)` can need other parameters, see the examples above. They can be given as ``*args`` or ``**kwargs`` to :func:`Ti_from_f`.</span>
+
+<span class="sd">    .. warning:: it should be computed otherwise, I should give :math:`i \mapsto \exp(f(i))` instead of :math:`f: i \mapsto f(i)`. I need to try as much as possible to reduce the risk of overflow errors!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># WARNING don&#39;t forget the floor!</span>
+    <span class="k">def</span> <span class="nf">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+        <span class="n">this_Ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">this_Ti</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">this_Ti</span><span class="p">)):</span>
+            <span class="n">this_Ti</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">this_Ti</span><span class="p">)</span>
+        <span class="c1"># print(&quot;    For f = {}, i = {} gives Ti = {}&quot;.format(f, i, this_Ti))  # DEBUG</span>
+        <span class="k">return</span> <span class="n">this_Ti</span>
+    <span class="k">return</span> <span class="n">Ti</span></div>
+
+
+<div class="viewcode-block" id="last_term_operator_LT"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.last_term_operator_LT">[docs]</a><span class="k">def</span> <span class="nf">last_term_operator_LT</span><span class="p">(</span><span class="n">Ti</span><span class="p">,</span> <span class="n">max_i</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For a certain function representing a doubling sequence, :math:`T: i \mapsto T_i`, this :func:`last_term_operator_LT` function returns the function :math:`L: T \mapsto L_T`, defined as:</span>
+
+<span class="sd">    .. math:: \forall T\in\mathbb{N},\; L_T := \min\{ i \in\mathbb{N},\; T \leq T_i \}.</span>
+
+<span class="sd">    :math:`L_T` is the only integer which satisfies :math:`T_{L_T - 1} &lt; T \leq T_{L_T}`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">LT</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">max_i</span><span class="o">=</span><span class="n">max_i</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">max_i</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LT(T=</span><span class="si">{T}</span><span class="s2">) was unable to find a i &lt;= </span><span class="si">{max_i}</span><span class="s2"> such that T_i &gt;= T.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">max_i</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">assert</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T</span> <span class="o">&lt;=</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s2">&quot;Error: i = </span><span class="si">{}</span><span class="s2"> was computed as LT for T = </span><span class="si">{}</span><span class="s2"> and Ti = </span><span class="si">{}</span><span class="s2"> but does not satisfy T_(i-1) &lt; T &lt;= T(i)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Ti</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="c1"># print(&quot;  For LT: i = {} was computed as LT for T = {} and Ti = {} and satisfies T(i-1) = {} &lt; T &lt;= T(i) = {}&quot;.format(i, T, Ti, Ti(i-1), Ti(i)))  # DEBUG</span>
+        <span class="k">return</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">LT</span></div>
+
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+
+<div class="viewcode-block" id="plot_doubling_sequences"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.plot_doubling_sequences">[docs]</a><span class="k">def</span> <span class="nf">plot_doubling_sequences</span><span class="p">(</span>
+        <span class="n">i_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">i_max</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">list_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">function_f__for_geometric_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate2_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate3_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate4_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_exponential_sequences</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="n">label_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Geometric    doubling (d=0, e=1)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=2/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=1/2)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Exponential  doubling (d=1, e=0)&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Display a plot to illustrate the values of the :math:`T_i` as a function of :math:`i` for some i.</span>
+
+<span class="sd">    - Can accept many functions f (and labels).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Make unique markers</span>
+    <span class="n">nb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">)</span>
+    <span class="n">allmarkers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">]</span>
+    <span class="n">longlist</span> <span class="o">=</span> <span class="n">allmarkers</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allmarkers</span><span class="p">))))</span>  <span class="c1"># Cycle the good number of time</span>
+    <span class="n">markers</span> <span class="o">=</span> <span class="n">longlist</span><span class="p">[:</span><span class="n">nb</span><span class="p">]</span>  <span class="c1"># Truncate</span>
+    <span class="c1"># Make unique colors</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">hls_palette</span><span class="p">(</span><span class="n">nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="n">nb</span><span class="p">]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="c1"># plt.hold(True)</span>
+
+    <span class="n">i_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i_min</span><span class="p">,</span> <span class="n">i_max</span><span class="p">)</span>
+    <span class="c1"># now for each function f</span>
+    <span class="k">for</span> <span class="n">num_f</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">la</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">,</span> <span class="n">label_of_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The </span><span class="si">{}</span><span class="s2">th function is referred to as </span><span class="si">{}</span><span class="s2"> and is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_f</span><span class="p">,</span> <span class="n">la</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+
+        <span class="n">Ti</span> <span class="o">=</span> <span class="n">Ti_from_f</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">values_of_Ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">i_s</span> <span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i_s</span><span class="p">,</span> <span class="n">values_of_Ti</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">la</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">num_f</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">num_f</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Value of the time horizon $i = </span><span class="si">{}</span><span class="s2">,...,</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i_min</span><span class="p">,</span> <span class="n">i_max</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Comparison of the values of $T_i$&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="plot_quality_first_upper_bound"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.plot_quality_first_upper_bound">[docs]</a><span class="k">def</span> <span class="nf">plot_quality_first_upper_bound</span><span class="p">(</span>
+        <span class="n">Tmin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e8</span><span class="p">),</span> <span class="n">nbTs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">gamma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># XXX bound in RT &lt;= log(T)</span>
+        <span class="c1"># gamma=0.5, delta=0.0,  # XXX bound in RT &lt;= sqrt(T)</span>
+        <span class="c1"># gamma=0.5, delta=0.5,  # XXX bound in RT &lt;= sqrt(T * log(T))</span>
+        <span class="c1"># gamma=0.66667, delta=1.0,  # XXX another weird bound in RT &lt;= T^2/3 * log(T)</span>
+        <span class="n">list_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">function_f__for_geometric_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate2_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate3_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate4_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_exponential_sequences</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="n">label_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Geometric    doubling (d=0, e=1)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=2/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=1/2)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Exponential  doubling (d=1, e=0)&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="c1"># show_Ti_m_Tim1=False,  # DEBUG</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Display a plot to compare numerically between the following sum :math:`S` and the upper-bound we hope to have, :math:`T^{\gamma} (\log T)^{\delta}`, as a function of :math:`T` for some values between :math:`T_{\min}` and :math:`T_{\max}`:</span>
+
+<span class="sd">    .. math:: S := \sum_{i=0}^{L_T} (T_i - T_{i-1})^{\gamma} (\log (T_i - T_{i-1}))^{\delta}.</span>
+
+<span class="sd">    - Can accept many functions f (and labels).</span>
+<span class="sd">    - Can use :math:`T_i` instead of :math:`T_i - T_{i-1}` if ``show_Ti_m_Tim1=False`` (default is to use the smaller possible bound, with difference of sequence lengths, :math:`T_i - T_{i-1}`).</span>
+
+<span class="sd">    .. warning:: This is still ON GOING WORK.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Make unique markers</span>
+    <span class="n">nb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">)</span>
+    <span class="n">allmarkers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">]</span>
+    <span class="n">longlist</span> <span class="o">=</span> <span class="n">allmarkers</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allmarkers</span><span class="p">))))</span>  <span class="c1"># Cycle the good number of time</span>
+    <span class="n">markers</span> <span class="o">=</span> <span class="n">longlist</span><span class="p">[:</span><span class="n">nb</span><span class="p">]</span>  <span class="c1"># Truncate</span>
+    <span class="c1"># Make unique colors</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">hls_palette</span><span class="p">(</span><span class="n">nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="n">nb</span><span class="p">]</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="c1"># plt.hold(True)</span>
+
+    <span class="n">Ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">Tmin</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">nbTs</span><span class="p">))</span>
+    <span class="n">the_bound_we_want</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ts</span> <span class="o">**</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Ts</span><span class="p">)</span> <span class="o">**</span> <span class="n">delta</span><span class="p">)</span>
+
+    <span class="c1"># plt.plot(Ts, the_bound_we_want, label=r&quot;$T^{\gamma} (\log T)^{\delta}$&quot;, lw=3, ms=3, color=colors[0], marker=markers[0])</span>
+    <span class="c1"># compute the sequence lengths to use, either T_i or T_i - T_{i-1}</span>
+    <span class="n">Ts_for_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Ts</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">show_Ti_m_Tim1</span><span class="p">:</span> <span class="n">Ts_for_f</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Ts</span><span class="p">)</span>
+
+    <span class="c1"># now for each function f</span>
+    <span class="k">for</span> <span class="n">num_f</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">la</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">,</span> <span class="n">label_of_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The </span><span class="si">{}</span><span class="s2">th function is referred to as </span><span class="si">{}</span><span class="s2"> and is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_f</span><span class="p">,</span> <span class="n">la</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="n">Ti</span> <span class="o">=</span> <span class="n">Ti_from_f</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">LT</span> <span class="o">=</span> <span class="n">last_term_operator_LT</span><span class="p">(</span><span class="n">Ti</span><span class="p">)</span>
+        <span class="n">the_sum_we_have</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">Ts_for_f</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">Tj</span><span class="p">,</span> <span class="n">dTj</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">Ts_for_f</span><span class="p">)):</span>
+            <span class="n">LTj</span> <span class="o">=</span> <span class="n">LT</span><span class="p">(</span><span class="n">Tj</span><span class="p">)</span>
+            <span class="n">the_sum_we_have</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">dTj</span> <span class="o">**</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dTj</span><span class="p">)</span> <span class="o">**</span> <span class="n">delta</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">LTj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For j = </span><span class="si">{}</span><span class="s2">, Tj = </span><span class="si">{}</span><span class="s2">, dTj = </span><span class="si">{}</span><span class="s2">, gives LTj = </span><span class="si">{}</span><span class="s2">, and the value of the sum from i=0 to LTj is = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">Tj</span><span class="p">,</span> <span class="n">dTj</span><span class="p">,</span> <span class="n">LTj</span><span class="p">,</span> <span class="n">the_sum_we_have</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>  <span class="c1"># DEBUG</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the_sum_we_have =&quot;</span><span class="p">,</span> <span class="n">the_sum_we_have</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">the_sum_we_have</span> <span class="o">/</span> <span class="n">the_bound_we_want</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">la</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">num_f</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">num_f</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Value of the time horizon $T = </span><span class="si">{}</span><span class="s2">,...,</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Tmin</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">))</span>
+    <span class="n">str_of_Tj_or_dTj</span> <span class="o">=</span> <span class="s2">&quot;T_i - T_{i-1}&quot;</span> <span class="k">if</span> <span class="n">show_Ti_m_Tim1</span> <span class="k">else</span> <span class="s2">&quot;T_i&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Ratio of the sum $\sum_{i=0}^</span><span class="si">{L_T}</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)^{\gamma} (\log(</span><span class="si">%s</span><span class="s2">))^{\delta}$ and the upper-bound $T^{\gamma} \log(T)^{\delta}$, for $\gamma=</span><span class="si">%.3g</span><span class="s2">$, $\delta=</span><span class="si">%.3g</span><span class="s2">$.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">str_of_Tj_or_dTj</span><span class="p">,</span> <span class="n">str_of_Tj_or_dTj</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+
 <span class="c1"># --- The interesting class</span>
 
 <div class="viewcode-block" id="DoublingTrickWrapper"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper">[docs]</a><span class="k">class</span> <span class="nc">DoublingTrickWrapper</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A policy that acts as a wrapper on another policy `P`, assumed to be *horizon dependent* (has to known :math:`T`), by implementing a &quot;doubling trick&quot;.</span>
 
-<span class="sd">    - Reference: [[What the Doubling Trick Can or Can&#39;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](https://hal.inria.fr/hal-XXX), to be presented soon.</span>
+<span class="sd">    - Reference: [[What the Doubling Trick Can or Can&#39;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](https://hal.inria.fr/hal-01736357), to be presented soon.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="DoublingTrickWrapper.__init__"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
@@ -585,6 +818,20 @@
 <span class="c1"># # --- Debugging</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="k">if</span> <span class="s2">&quot;plot&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+        <span class="c1"># plot_doubling_sequences()</span>
+        <span class="k">for</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>  <span class="c1"># XXX bound in RT &lt;= log(T)</span>
+            <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>  <span class="c1"># XXX bound in RT &lt;= sqrt(T)</span>
+            <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>  <span class="c1"># XXX bound in RT &lt;= sqrt(T * log(T))</span>
+            <span class="p">(</span><span class="mf">0.66667</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>  <span class="c1"># XXX another weird bound in RT &lt;= T^2/3 * log(T)</span>
+        <span class="p">]:</span>
+            <span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
     <span class="c1"># Code for debugging purposes.</span>
     <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
@@ -604,7 +851,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 30 Aug 2018, 18h.
+      Last updated on 19 Sep 2018, 14h.
 
     </p>
   </div>
