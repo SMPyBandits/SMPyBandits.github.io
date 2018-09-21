@@ -1,0 +1,520 @@
+ - Setting dpi of all figures to 110 ...
+ - Setting 'figsize' of all figures to (19.8, 10.8) ...
+Info: Using the regular tqdm() decorator ...
+Info: numba.jit seems to be available.
+Info: numba.jit seems to be available.
+Loaded experiments configuration from 'configuration.py' :
+configuration = {'successive_players': [[RandTopM(KLUCB), RandTopM(KLUCB)], [MCTopM(KLUCB), MCTopM(KLUCB)], [MCTopMCautious(KLUCB), MCTopMCautious(KLUCB)], [MCTopMExtraCautious(KLUCB), MCTopMExtraCautious(KLUCB)], [rhoRand(KLUCB), rhoRand(KLUCB)], [Selfish(KLUCB), Selfish(KLUCB)]], 'players': [Selfish(UCB), Selfish(UCB)], 'finalRanksOnAverage': True, 'n_jobs': 4, 'averageOn': 0.001, 'repetitions': 50, 'collisionModel': <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>, 'horizon': 100, 'verbosity': 6, 'delta_t_save': 1, 'environment': [{'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>}]}
+====> TURNING DEBUG MODE ON <=====
+plots/ is already a directory here...
+
+
+
+Considering the list of players :
+ [RandTopM(KLUCB), RandTopM(KLUCB)]
+Number of players in the multi-players game: 2
+Time horizon: 100
+Number of repetitions: 50
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. [Liu & Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.
+    - The numpy array 'choices' is increased according to the number of users who collided (it is NOT binary).
+    
+Using accurate regrets and last regrets ? True
+  Special MAB problem, changing at every repetitions, read from a dictionnary 'configuration' = {'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>} ...
+ - with 'arm_type' = <class 'Arms.Bernoulli.Bernoulli'>
+ - with 'params' = {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}
+ - with 'function' = <function randomMeans at 0x7fdf38bbbb70>
+ - with 'args' = {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}
+
+
+ ==> Creating the dynamic arms ...
+   - drawing a random set of arms
+   - with 'nbArms' = 3
+   - with 'arms' = [B(0.0396), B(0.592), B(0.71)]
+ - Example of initial draw of 'means' = [ 0.03963097  0.59189322  0.71035246]
+   - with 'maxArm' = 0.71035246085
+   - with 'minArm' = 0.0396309721821
+Number of environments to try: 1
+
+
+Evaluating environment: DynamicMAB(nbArms: 3, arms: [B(0.0396), B(0.592), B(0.71)], minArm: 0.0396, maxArm: 0.71)
+- Adding player #1 = #1<RandTopM-KLUCB> ...
+  Using this already created player 'player' = #1<RandTopM-KLUCB> ...
+- Adding player #2 = #2<RandTopM-KLUCB> ...
+  Using this already created player 'player' = #2<RandTopM-KLUCB> ...
+
+Estimated order by the policy #1<RandTopM-KLUCB, $M$-best: $[0, 2]$, arm: $2$> after 100 steps: [1 0 2] ...
+  ==> Optimal arm identification: 63.78% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==> Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==> Mean distance from optimal ordering: 48.85% (relative success)...
+
+Estimated order by the policy #2<RandTopM-KLUCB, $M$-best: $[1, 2]$, arm: $1$> after 100 steps: [0 1 2] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==> Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==> Mean distance from optimal ordering: 97.07% (relative success)...
+
+
+Giving the final ranks ...
+
+Final ranking for this environment #0 :
+- Player #1, '#1<RandTopM-KLUCB>'	was ranked	1 / 2 for this simulation (last rewards = 0.42).
+- Player #2, '#2<RandTopM-KLUCB>'	was ranked	2 / 2 for this simulation (last rewards = 0.38).
+
+
+Giving the vector of final regrets ...
+
+For evaluator #1/1 : [<Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers object at 0x7fdf6362a0f0>] ...
+  Last regrets vector (for all repetitions) is:
+Shape of  last regrets R_T = (50,)
+Min of    last regrets R_T = 4.05015275804
+Mean of   last regrets R_T = 22.7933193879
+Median of last regrets R_T = 19.6273703728
+Max of    last regrets R_T = 69.2141697553
+STD of    last regrets R_T = 13.9585706719
+
+
+
+Considering the list of players :
+ [MCTopM(KLUCB), MCTopM(KLUCB)]
+Number of players in the multi-players game: 2
+Time horizon: 100
+Number of repetitions: 50
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. [Liu & Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.
+    - The numpy array 'choices' is increased according to the number of users who collided (it is NOT binary).
+    
+Using accurate regrets and last regrets ? True
+  Special MAB problem, changing at every repetitions, read from a dictionnary 'configuration' = {'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>} ...
+ - with 'arm_type' = <class 'Arms.Bernoulli.Bernoulli'>
+ - with 'params' = {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}
+ - with 'function' = <function randomMeans at 0x7fdf38bbbb70>
+ - with 'args' = {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}
+
+
+ ==> Creating the dynamic arms ...
+   - drawing a random set of arms
+   - with 'nbArms' = 3
+   - with 'arms' = [B(0.158), B(0.283), B(0.502)]
+ - Example of initial draw of 'means' = [ 0.15784234  0.28345815  0.50229507]
+   - with 'maxArm' = 0.502295072113
+   - with 'minArm' = 0.157842336929
+Number of environments to try: 1
+
+
+Evaluating environment: DynamicMAB(nbArms: 3, arms: [B(0.158), B(0.283), B(0.502)], minArm: 0.158, maxArm: 0.502)
+- Adding player #1 = #1<MCTopM-KLUCB> ...
+  Using this already created player 'player' = #1<MCTopM-KLUCB> ...
+- Adding player #2 = #2<MCTopM-KLUCB> ...
+  Using this already created player 'player' = #2<MCTopM-KLUCB> ...
+
+Estimated order by the policy #1<MCTopM-KLUCB, $M$-best: $[0, 2]$, arm: $0$> after 100 steps: [1 0 2] ...
+  ==> Optimal arm identification: 82.91% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==> Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==> Mean distance from optimal ordering: 48.85% (relative success)...
+
+Estimated order by the policy #2<MCTopM-KLUCB, $M$-best: $[1, 2]$, arm: $2$> after 100 steps: [0 1 2] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==> Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==> Mean distance from optimal ordering: 97.07% (relative success)...
+
+
+Giving the final ranks ...
+
+Final ranking for this environment #0 :
+- Player #1, '#1<MCTopM-KLUCB>'	was ranked	1 / 2 for this simulation (last rewards = 0.42).
+- Player #2, '#2<MCTopM-KLUCB>'	was ranked	2 / 2 for this simulation (last rewards = 0.26).
+
+
+Giving the vector of final regrets ...
+
+For evaluator #1/1 : [<Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers object at 0x7fdf3e2f97f0>] ...
+  Last regrets vector (for all repetitions) is:
+Shape of  last regrets R_T = (50,)
+Min of    last regrets R_T = 2.22130901948
+Mean of   last regrets R_T = 25.0720531222
+Median of last regrets R_T = 25.3586347938
+Max of    last regrets R_T = 55.1095310206
+STD of    last regrets R_T = 12.2625723674
+
+
+
+Considering the list of players :
+ [MCTopMCautious(KLUCB), MCTopMCautious(KLUCB)]
+Number of players in the multi-players game: 2
+Time horizon: 100
+Number of repetitions: 50
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. [Liu & Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.
+    - The numpy array 'choices' is increased according to the number of users who collided (it is NOT binary).
+    
+Using accurate regrets and last regrets ? True
+  Special MAB problem, changing at every repetitions, read from a dictionnary 'configuration' = {'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>} ...
+ - with 'arm_type' = <class 'Arms.Bernoulli.Bernoulli'>
+ - with 'params' = {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}
+ - with 'function' = <function randomMeans at 0x7fdf38bbbb70>
+ - with 'args' = {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}
+
+
+ ==> Creating the dynamic arms ...
+   - drawing a random set of arms
+   - with 'nbArms' = 3
+   - with 'arms' = [B(0.111), B(0.64), B(0.688)]
+ - Example of initial draw of 'means' = [ 0.1111987   0.64022875  0.68842861]
+   - with 'maxArm' = 0.688428608247
+   - with 'minArm' = 0.111198703958
+Number of environments to try: 1
+
+
+Evaluating environment: DynamicMAB(nbArms: 3, arms: [B(0.111), B(0.64), B(0.688)], minArm: 0.111, maxArm: 0.688)
+- Adding player #1 = #1<MCTopMCautious-KLUCB> ...
+  Using this already created player 'player' = #1<MCTopMCautious-KLUCB> ...
+- Adding player #2 = #2<MCTopMCautious-KLUCB> ...
+  Using this already created player 'player' = #2<MCTopMCautious-KLUCB> ...
+
+Estimated order by the policy #1<MCTopMCautious-KLUCB, $M$-best: $[2, 1]$, arm: $1$> after 100 steps: [0 2 1] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==> Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==> Mean distance from optimal ordering: 48.85% (relative success)...
+
+Estimated order by the policy #2<MCTopMCautious-KLUCB, $M$-best: $[1, 2]$, arm: $2$> after 100 steps: [0 1 2] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==> Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==> Mean distance from optimal ordering: 97.07% (relative success)...
+
+
+Giving the final ranks ...
+
+Final ranking for this environment #0 :
+- Player #1, '#1<MCTopMCautious-KLUCB>'	was ranked	1 / 2 for this simulation (last rewards = 0.4).
+- Player #2, '#2<MCTopMCautious-KLUCB>'	was ranked	2 / 2 for this simulation (last rewards = 0.28).
+
+
+Giving the vector of final regrets ...
+
+For evaluator #1/1 : [<Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers object at 0x7fdf35d6b710>] ...
+  Last regrets vector (for all repetitions) is:
+Shape of  last regrets R_T = (50,)
+Min of    last regrets R_T = 1.69628570437
+Mean of   last regrets R_T = 11.8935844933
+Median of last regrets R_T = 10.2316797689
+Max of    last regrets R_T = 35.5828233132
+STD of    last regrets R_T = 8.09671122704
+
+
+
+Considering the list of players :
+ [MCTopMExtraCautious(KLUCB), MCTopMExtraCautious(KLUCB)]
+Number of players in the multi-players game: 2
+Time horizon: 100
+Number of repetitions: 50
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. [Liu & Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.
+    - The numpy array 'choices' is increased according to the number of users who collided (it is NOT binary).
+    
+Using accurate regrets and last regrets ? True
+  Special MAB problem, changing at every repetitions, read from a dictionnary 'configuration' = {'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>} ...
+ - with 'arm_type' = <class 'Arms.Bernoulli.Bernoulli'>
+ - with 'params' = {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}
+ - with 'function' = <function randomMeans at 0x7fdf38bbbb70>
+ - with 'args' = {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}
+
+
+ ==> Creating the dynamic arms ...
+   - drawing a random set of arms
+   - with 'nbArms' = 3
+   - with 'arms' = [B(0.0599), B(0.649), B(0.846)]
+ - Example of initial draw of 'means' = [ 0.05989907  0.64923072  0.84602924]
+   - with 'maxArm' = 0.846029242925
+   - with 'minArm' = 0.0598990653752
+Number of environments to try: 1
+
+
+Evaluating environment: DynamicMAB(nbArms: 3, arms: [B(0.0599), B(0.649), B(0.846)], minArm: 0.0599, maxArm: 0.846)
+- Adding player #1 = #1<MCTopMExtraCautious-KLUCB> ...
+  Using this already created player 'player' = #1<MCTopMExtraCautious-KLUCB> ...
+- Adding player #2 = #2<MCTopMExtraCautious-KLUCB> ...
+  Using this already created player 'player' = #2<MCTopMExtraCautious-KLUCB> ...
+
+Estimated order by the policy #1<MCTopMExtraCautious-KLUCB, $M$-best: $[2, 1]$, arm: $2$> after 100 steps: [0 2 1] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==> Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==> Mean distance from optimal ordering: 48.85% (relative success)...
+
+Estimated order by the policy #2<MCTopMExtraCautious-KLUCB, $M$-best: $[0, 2]$, arm: $1$> after 100 steps: [1 0 2] ...
+  ==> Optimal arm identification: 66.97% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 55.56% (relative success)...
+  ==> Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==> Mean distance from optimal ordering: 48.85% (relative success)...
+
+
+Giving the final ranks ...
+
+Final ranking for this environment #0 :
+- Player #2, '#2<MCTopMExtraCautious-KLUCB>'	was ranked	1 / 2 for this simulation (last rewards = 0.38).
+- Player #1, '#1<MCTopMExtraCautious-KLUCB>'	was ranked	2 / 2 for this simulation (last rewards = 0.34).
+
+
+Giving the vector of final regrets ...
+
+For evaluator #1/1 : [<Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers object at 0x7fdf38ba96d8>] ...
+  Last regrets vector (for all repetitions) is:
+Shape of  last regrets R_T = (50,)
+Min of    last regrets R_T = 0.976290293886
+Mean of   last regrets R_T = 13.2431492822
+Median of last regrets R_T = 12.2347966521
+Max of    last regrets R_T = 40.0713837919
+STD of    last regrets R_T = 9.58737830227
+
+
+
+Considering the list of players :
+ [rhoRand(KLUCB), rhoRand(KLUCB)]
+Number of players in the multi-players game: 2
+Time horizon: 100
+Number of repetitions: 50
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. [Liu & Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.
+    - The numpy array 'choices' is increased according to the number of users who collided (it is NOT binary).
+    
+Using accurate regrets and last regrets ? True
+  Special MAB problem, changing at every repetitions, read from a dictionnary 'configuration' = {'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>} ...
+ - with 'arm_type' = <class 'Arms.Bernoulli.Bernoulli'>
+ - with 'params' = {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}
+ - with 'function' = <function randomMeans at 0x7fdf38bbbb70>
+ - with 'args' = {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}
+
+
+ ==> Creating the dynamic arms ...
+   - drawing a random set of arms
+   - with 'nbArms' = 3
+   - with 'arms' = [B(0.544), B(0.594), B(0.779)]
+ - Example of initial draw of 'means' = [ 0.5441792   0.59418167  0.77863201]
+   - with 'maxArm' = 0.778632013627
+   - with 'minArm' = 0.544179196995
+Number of environments to try: 1
+
+
+Evaluating environment: DynamicMAB(nbArms: 3, arms: [B(0.544), B(0.594), B(0.779)], minArm: 0.544, maxArm: 0.779)
+- Adding player #1 = #1<RhoRand-KLUCB> ...
+  Using this already created player 'player' = #1<RhoRand-KLUCB> ...
+- Adding player #2 = #2<RhoRand-KLUCB> ...
+  Using this already created player 'player' = #2<RhoRand-KLUCB> ...
+
+Estimated order by the policy #1<RhoRand-KLUCB, rank:2> after 100 steps: [0 1 2] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==> Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==> Mean distance from optimal ordering: 97.07% (relative success)...
+
+Estimated order by the policy #2<RhoRand-KLUCB, rank:1> after 100 steps: [0 1 2] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==> Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==> Mean distance from optimal ordering: 97.07% (relative success)...
+
+
+Giving the final ranks ...
+
+Final ranking for this environment #0 :
+- Player #2, '#2<RhoRand-KLUCB>'	was ranked	1 / 2 for this simulation (last rewards = 0.36).
+- Player #1, '#1<RhoRand-KLUCB>'	was ranked	2 / 2 for this simulation (last rewards = 0.24).
+
+
+Giving the vector of final regrets ...
+
+For evaluator #1/1 : [<Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers object at 0x7fdf6362a4e0>] ...
+  Last regrets vector (for all repetitions) is:
+Shape of  last regrets R_T = (50,)
+Min of    last regrets R_T = 6.99025797101
+Mean of   last regrets R_T = 18.3246886014
+Median of last regrets R_T = 16.6141375149
+Max of    last regrets R_T = 43.2770757988
+STD of    last regrets R_T = 8.22222154378
+
+
+
+Considering the list of players :
+ [Selfish(KLUCB), Selfish(KLUCB)]
+Number of players in the multi-players game: 2
+Time horizon: 100
+Number of repetitions: 50
+Sampling rate for saving, delta_t_save: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 4
+Using collision model onlyUniqUserGetsReward (function <function onlyUniqUserGetsReward at 0x7fdf3e2cb840>).
+More details:
+ Simple collision model where only the players alone on one arm samples it and receives the reward.
+
+    - This is the default collision model, cf. [Liu & Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.
+    - The numpy array 'choices' is increased according to the number of users who collided (it is NOT binary).
+    
+Using accurate regrets and last regrets ? True
+  Special MAB problem, changing at every repetitions, read from a dictionnary 'configuration' = {'params': {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}, 'arm_type': <class 'Arms.Bernoulli.Bernoulli'>} ...
+ - with 'arm_type' = <class 'Arms.Bernoulli.Bernoulli'>
+ - with 'params' = {'function': <function randomMeans at 0x7fdf38bbbb70>, 'args': {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}}
+ - with 'function' = <function randomMeans at 0x7fdf38bbbb70>
+ - with 'args' = {'amplitude': 1.0, 'mingap': None, 'lower': 0.0, 'isSorted': True, 'nbArms': 3}
+
+
+ ==> Creating the dynamic arms ...
+   - drawing a random set of arms
+   - with 'nbArms' = 3
+   - with 'arms' = [B(0.124), B(0.393), B(0.931)]
+ - Example of initial draw of 'means' = [ 0.12440045  0.39305307  0.93056687]
+   - with 'maxArm' = 0.930566866302
+   - with 'minArm' = 0.124400448486
+Number of environments to try: 1
+
+
+Evaluating environment: DynamicMAB(nbArms: 3, arms: [B(0.124), B(0.393), B(0.931)], minArm: 0.124, maxArm: 0.931)
+- Adding player #1 = #1<Selfish-KLUCB> ...
+  Using this already created player 'player' = #1<Selfish-KLUCB> ...
+- Adding player #2 = #2<Selfish-KLUCB> ...
+  Using this already created player 'player' = #2<Selfish-KLUCB> ...
+
+Estimated order by the policy #1<Selfish-KLUCB> after 100 steps: [0 1 2] ...
+  ==> Optimal arm identification: 100.00% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 100.00% (relative success)...
+  ==> Spearman    distance from optimal ordering: 100.00% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 100.00% (relative success)...
+  ==> Mean distance from optimal ordering: 97.07% (relative success)...
+
+Estimated order by the policy #2<Selfish-KLUCB> after 100 steps: [2 0 1] ...
+  ==> Optimal arm identification: 43.50% (relative success)...
+  ==> Manhattan   distance from optimal ordering: 11.11% (relative success)...
+  ==> Spearman    distance from optimal ordering: 33.33% (relative success)...
+  ==> Gestalt     distance from optimal ordering: 66.67% (relative success)...
+  ==> Mean distance from optimal ordering: 37.74% (relative success)...
+
+
+Giving the final ranks ...
+
+Final ranking for this environment #0 :
+- Player #2, '#2<Selfish-KLUCB>'	was ranked	1 / 2 for this simulation (last rewards = 0.36).
+- Player #1, '#1<Selfish-KLUCB>'	was ranked	2 / 2 for this simulation (last rewards = 0.34).
+
+
+Giving the vector of final regrets ...
+
+For evaluator #1/1 : [<Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers object at 0x7fdf3e013400>] ...
+  Last regrets vector (for all repetitions) is:
+Shape of  last regrets R_T = (50,)
+Min of    last regrets R_T = 5.6839033778
+Mean of   last regrets R_T = 25.2373221755
+Median of last regrets R_T = 21.8778845043
+Max of    last regrets R_T = 70.1865520225
+STD of    last regrets R_T = 14.8108868008
+
+
+- Plotting the centralized regret for all 'players' values
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.7 ...
+ -  For 2 players, our lower bound gave = 3.41 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.13 ...
+
+This MAB problem has: 
+ - a [Lai & Robbins] complexity constant C(mu) = 0.548 for 1-player problem ... 
+ - a Optimal Arm Identification factor H_OI(mu) = 44.83% ...
+ - [Anandtharam et al] centralized lower-bound = 1.7,
+ - [Anandkumar et al] decentralized lower-bound = 2.13
+ - Our better (larger) decentralized lower-bound = 3.41,
+
+
+- Plotting the centralized regret for all 'players' values, in semilogx scale
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.7 ...
+ -  For 2 players, our lower bound gave = 3.41 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.13 ...
+
+This MAB problem has: 
+ - a [Lai & Robbins] complexity constant C(mu) = 0.548 for 1-player problem ... 
+ - a Optimal Arm Identification factor H_OI(mu) = 44.83% ...
+ - [Anandtharam et al] centralized lower-bound = 1.7,
+ - [Anandkumar et al] decentralized lower-bound = 2.13
+ - Our better (larger) decentralized lower-bound = 3.41,
+
+
+- Plotting the centralized regret for all 'players' values, in semilogy scale
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.7 ...
+ -  For 2 players, our lower bound gave = 3.41 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.13 ...
+
+This MAB problem has: 
+ - a [Lai & Robbins] complexity constant C(mu) = 0.548 for 1-player problem ... 
+ - a Optimal Arm Identification factor H_OI(mu) = 44.83% ...
+ - [Anandtharam et al] centralized lower-bound = 1.7,
+ - [Anandkumar et al] decentralized lower-bound = 2.13
+ - Our better (larger) decentralized lower-bound = 3.41,
+
+
+- Plotting the centralized regret for all 'players' values, in loglog scale
+ -  For 2 players, Anandtharam et al. centralized lower-bound gave = 1.7 ...
+ -  For 2 players, our lower bound gave = 3.41 ...
+ -  For 2 players, the initial lower bound in Theorem 6 from [Anandkumar et al., 2010] gave = 2.13 ...
+
+This MAB problem has: 
+ - a [Lai & Robbins] complexity constant C(mu) = 0.548 for 1-player problem ... 
+ - a Optimal Arm Identification factor H_OI(mu) = 44.83% ...
+ - [Anandtharam et al] centralized lower-bound = 1.7,
+ - [Anandkumar et al] decentralized lower-bound = 2.13
+ - Our better (larger) decentralized lower-bound = 3.41,
+
+
+- Plotting the centralized fairness (STD)
+
+- Plotting the total nb of collision as a function of time for all 'players' values
+No upper bound for the non-cumulated number of collisions...
+
+- Plotting the cumulated total nb of collision as a function of time for all 'players' values
+No upper bound for the non-cumulated number of collisions...
+
+
+- Plotting the number of switches as a function of time for all 'players' values
+
+- Plotting the histograms of regrets
+Done for simulations main_multiplayers.py ...
