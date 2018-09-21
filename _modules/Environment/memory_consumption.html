@@ -241,6 +241,7 @@
 <span class="sd">    Consumed 63.9 KiB more memory</span>
 
 <span class="sd">    .. warning:: This is still experimental for multi-threaded code.</span>
+<<<<<<< HEAD
 <span class="sd">    .. warning:: It can break on some systems, see for instance [the issue #142](https://github.com/SMPyBandits/SMPyBandits/issues/142).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">thread</span><span class="p">:</span>
@@ -254,6 +255,18 @@
             <span class="c1"># https://docs.python.org/3/library/resource.html#resource.RUSAGE_BOTH</span>
             <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_BOTH</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+=======
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">thread</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_THREAD</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: resource.RUSAGE_THREAD is not available.&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">if</span> <span class="n">both</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_BOTH</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: resource.RUSAGE_BOTH is not available.&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
     <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_SELF</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span></div>
 
@@ -404,7 +417,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+<<<<<<< HEAD
       Last updated on 21 Sep 2018, 15h.
+=======
+      Last updated on 30 Aug 2018, 18h.
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
     </p>
   </div>

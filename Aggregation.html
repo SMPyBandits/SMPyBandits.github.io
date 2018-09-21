@@ -118,7 +118,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#Configuration:">Configuration:</a></li>
+<<<<<<< HEAD
 <li class="toctree-l2"><a class="reference internal" href="#How-to-run-the-experiments-?"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+=======
+<li class="toctree-l2"><a class="reference internal" href="#How-to-run-the-experiments-?">How to run the experiments ?</a></li>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 <li class="toctree-l2"><a class="reference internal" href="#Some-illustrations">Some illustrations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#On-a-&quot;simple&quot;-Bernoulli-problem-(semi-log-y-scale)">On a &#8220;simple&#8221; Bernoulli problem (semi-log-y scale)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#On-a-&quot;harder&quot;-Bernoulli-problem">On a &#8220;harder&#8221; Bernoulli problem</a></li>
@@ -245,18 +249,32 @@
 </ul>
 <div class="section" id="Idea">
 <h2>Idea<a class="headerlink" href="#Idea" title="Permalink to this headline">¶</a></h2>
+<<<<<<< HEAD
 <p>The basic idea of a policy aggregation algorithm is to run in parallel some online learning algorithms, denoted <span class="math">\(A_1,\ldots,A_N\)</span> (<span class="math">\(A_i\)</span>), and make them all vote at each step, and use some probabilistic scheme to select a decision from their votes.</p>
 <p>Hopefully, if all the algorithms <span class="math">\(A_i\)</span> are not too bad and at least one of them is efficient for the problem at hand, the aggregation algorithm will learn to mainly trust the efficient one(s) and discard the votes from the others.
 An efficient aggregation algorithm should have performances similar to the best child algorithm <span class="math">\(A_i\)</span>, in any problem.</p>
+=======
+<p>The basic idea of a policy aggregation algorithm is to run in parallel some online learning algorithms, denoted <code class="docutils literal"><span class="pre">A_1</span></code>,...,<code class="docutils literal"><span class="pre">A_N</span></code> (<code class="docutils literal"><span class="pre">A_i</span></code>), and make them all vote at each step, and use some probabilistic scheme to select a decision from their votes.</p>
+<p>Hopefully, if all the algorithms <code class="docutils literal"><span class="pre">A_i</span></code> are not too bad and at least one of them is efficient for the problem at hand, the aggregation algorithm will learn to mainly trust the efficient one(s) and discard the votes from the others.
+An efficient aggregation algorithm should have performances similar to the best child algorithm <code class="docutils literal"><span class="pre">A_i</span></code>, in any problem.</p>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 <p>The <a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">Exp4 algorithm</a> by [Auer et al, 2002] is the first aggregation algorithm for online bandit algorithms, and recently other algorithms include <a class="reference external" href="docs/Policies.LearnExp.html">LearnExp</a> ([<a class="reference external" href="https://arxiv.org/abs/1702.04825">Singla et al, 2017</a>]) and <a class="reference external" href="docs/Policies.CORRAL.html">CORRAL</a> ([<a class="reference external" href="https://arxiv.org/abs/1612.06246v2">Agarwal et al, 2017</a>]).</p>
 <hr class="docutils" />
 <div class="section" id="Mathematical-explanations">
 <h3>Mathematical explanations<a class="headerlink" href="#Mathematical-explanations" title="Permalink to this headline">¶</a></h3>
+<<<<<<< HEAD
 <p>Initially, every child algorithms <span class="math">\(A_i\)</span> has the same &#8220;trust&#8221; probability <span class="math">\(p_i\)</span>, and at every step, the aggregated bandit first listen to the decision from all its children <span class="math">\(A_i\)</span> (<span class="math">\(a_{i,t}\)</span> in <span class="math">\(\{1,\ldots,K\}\)</span>), and then decide which arm to select by a probabilistic vote: the probability of selecting arm <span class="math">\(k\)</span> is the sum of the trust probability of the children who voted for arm <span class="math">\(k\)</span>.
 It could also be done the other way: the aggregated bandit could first decide which children to listen to, then trust him.</p>
 <p>But we want to update the trust probability of all the children algorithms, not only one, when it was wised to trust them.
 Mathematically, when the aggregated arm choose to pull the arm <span class="math">\(k\)</span> at step <span class="math">\(t\)</span>, if it yielded a positive reward <span class="math">\(r_{k,t}\)</span>, then the probability of all children algorithms <span class="math">\(A_i\)</span> who decided (independently) to chose <span class="math">\(k\)</span> (i.e., <span class="math">\(a_{i,t} = k\)</span>) are increased multiplicatively: <span class="math">\(p_i \leftarrow p_i * \exp(+ \beta * r_{k,t})\)</span> where <span class="math">\(\beta\)</span> is a positive <em>learning rate</em>, e.g., <span class="math">\(\beta = 0.1\)</span>.</p>
 <p>It is also possible to decrease multiplicatively the trust of all the children algorithms who did not decided to chose the arm <span class="math">\(k\)</span> at every step <span class="math">\(t\)</span>: if <span class="math">\(a_{i,t} \neq k\)</span> then <span class="math">\(p_i \leftarrow p_i * \exp(- \beta * r_{k,t})\)</span>. I did not observe any difference of behavior between these two options (implemented with the Boolean parameter <code class="docutils literal"><span class="pre">updateAllChildren</span></code>).</p>
+=======
+<p>Initially, every child algorithms <code class="docutils literal"><span class="pre">A_i</span></code> has the same &#8220;trust&#8221; probability <code class="docutils literal"><span class="pre">p_i</span></code>, and at every step, the aggregated bandit first listen to the decision from all its children <code class="docutils literal"><span class="pre">A_i</span></code> (<code class="docutils literal"><span class="pre">a_{i,t}</span></code> in <code class="docutils literal"><span class="pre">1</span> <span class="pre">..</span> <span class="pre">K</span></code>), and then decide which arm to select by a probabilistic vote: the probability of selecting arm <code class="docutils literal"><span class="pre">k</span></code> is the sum of the trust probability of the children who voted for arm <code class="docutils literal"><span class="pre">k</span></code>.
+It could also be done the other way: the aggregated bandit could first decide which children to listen to, then trust him.</p>
+<p>But we want to update the trust probability of all the children algorithms, not only one, when it was wised to trust them.
+Mathematically, when the aggregated arm choose to pull the arm <code class="docutils literal"><span class="pre">k</span></code> at step <code class="docutils literal"><span class="pre">t</span></code>, if it yielded a positive reward <code class="docutils literal"><span class="pre">r_{k,t}</span></code>, then the probability of all children algorithms <code class="docutils literal"><span class="pre">A_i</span></code> who decided (independently) to chose <code class="docutils literal"><span class="pre">k</span></code> (i.e., <code class="docutils literal"><span class="pre">a_{i,t}</span> <span class="pre">=</span> <span class="pre">k</span></code>) are increased multiplicatively: <code class="docutils literal"><span class="pre">p_i</span> <span class="pre">&lt;-</span> <span class="pre">p_i</span> <span class="pre">*</span> <span class="pre">exp(+</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">r_{k,t})</span></code> where <code class="docutils literal"><span class="pre">beta</span></code> is a positive <em>learning rate</em>, e.g., <code class="docutils literal"><span class="pre">beta</span> <span class="pre">=</span> <span class="pre">0.1</span></code>.</p>
+<p>It is also possible to decrease multiplicatively the trust of all the children algorithms who did not decided to chose the arm <code class="docutils literal"><span class="pre">k</span></code> at every step <code class="docutils literal"><span class="pre">t</span></code>: if <code class="docutils literal"><span class="pre">a_{i,t}</span> <span class="pre">!=</span> <span class="pre">k</span></code> then <code class="docutils literal"><span class="pre">p_i</span> <span class="pre">&lt;-</span> <span class="pre">p_i</span> <span class="pre">*</span> <span class="pre">exp(-</span> <span class="pre">beta</span> <span class="pre">*</span> <span class="pre">r_{k,t})</span></code>. I did not observe any difference of behavior between these two options (implemented with the Boolean parameter <code class="docutils literal"><span class="pre">updateAllChildren</span></code>).</p>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 </div>
 <div class="section" id="Ensemble-voting-for-MAB-algorithms">
 <h3>Ensemble voting for MAB algorithms<a class="headerlink" href="#Ensemble-voting-for-MAB-algorithms" title="Permalink to this headline">¶</a></h3>
@@ -272,7 +290,11 @@ Mathematically, when the aggregated arm choose to pull the arm <span class="math
 <hr class="docutils" />
 <div class="section" id="Configuration:">
 <h2>Configuration:<a class="headerlink" href="#Configuration:" title="Permalink to this headline">¶</a></h2>
+<<<<<<< HEAD
 <p>A simple python file, <a class="reference external" href="docs/configuration_comparing_aggregation_algorithms.html"><code class="docutils literal"><span class="pre">configuration_comparing_aggregation_algorithms.py</span></code></a>, is used to import the <a class="reference external" href="Arms">arm classes</a>, the <a class="reference external" href="Policies">policy classes</a> and define the problems and the experiments.</p>
+=======
+<p>A simple python file, <a class="reference external" href="docs/configuration_comparing_aggregation_algorithms.html"><code class="docutils literal"><span class="pre">configuration_comparing_aggregation_algorithms.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.</p>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 <p>For example, this will compare the classical MAB algorithms <a class="reference external" href="docs/Policies.UCB.html"><code class="docutils literal"><span class="pre">UCB</span></code></a>, <a class="reference external" href="docs/Policies.Thompson.html"><code class="docutils literal"><span class="pre">Thompson</span></code></a>, <a class="reference external" href="docs/Policies.BayesUCB.html"><code class="docutils literal"><span class="pre">BayesUCB</span></code></a>, <a class="reference external" href="docs/Policies.klUCB.html"><code class="docutils literal"><span class="pre">klUCB</span></code></a> algorithms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>    <span class="c1"># Finite horizon of the simulation</span>
@@ -309,11 +331,19 @@ Mathematically, when the aggregated arm choose to pull the arm <span class="math
     <span class="p">}]</span>
 </pre></div>
 </div>
+<<<<<<< HEAD
 <p>The learning rate can be tuned automatically, by using the heuristic proposed by [<a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">Bubeck and Cesa-Bianchi</a>, Theorem 4.2], without knowledge of the horizon, a decreasing learning rate <span class="math">\(\eta_t = \sqrt(\frac{\log(N)}{t * K})\)</span>.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="How-to-run-the-experiments-?">
 <h2><a class="reference internal" href="How_to_run_the_code.html"><span class="doc">How to run the experiments ?</span></a><a class="headerlink" href="#How-to-run-the-experiments-?" title="Permalink to this headline">¶</a></h2>
+=======
+<p>The learning rate can be tuned automatically, by using the heuristic proposed by [<a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">Bubeck and Cesa-Bianchi</a>, Theorem 4.2], without knowledge of the horizon, a decreasing learning rate <code class="docutils literal"><span class="pre">\eta_t</span> <span class="pre">=</span> <span class="pre">sqrt(log(N)</span> <span class="pre">/</span> <span class="pre">(t</span> <span class="pre">*</span> <span class="pre">K))</span></code>.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="How-to-run-the-experiments-?">
+<h2><a class="reference external" href="How_to_run_the_code.html">How to run the experiments ?</a><a class="headerlink" href="#How-to-run-the-experiments-?" title="Permalink to this headline">¶</a></h2>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 <p>You should use the provided <a class="reference external" href="Makefile"><code class="docutils literal"><span class="pre">Makefile</span></code></a> file to do this simply:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install  <span class="c1"># install the requirements ONLY ONCE</span>
 make comparing_aggregation_algorithms   <span class="c1"># run and log the main.py script</span>
@@ -323,7 +353,11 @@ make comparing_aggregation_algorithms   <span class="c1"># run and log the main.
 <hr class="docutils" />
 <div class="section" id="Some-illustrations">
 <h2>Some illustrations<a class="headerlink" href="#Some-illustrations" title="Permalink to this headline">¶</a></h2>
+<<<<<<< HEAD
 <p>Here are some plots illustrating the performances of the different <a class="reference external" href="SMPyBandits/Policies">policies</a> implemented in this project, against various problems (with <a class="reference external" href="docs/Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> arms only):</p>
+=======
+<p>Here are some plots illustrating the performances of the different <a class="reference external" href="SMPyBandits/Policies/">policies</a> implemented in this project, against various problems (with <a class="reference external" href="docs/Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> arms only):</p>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 <div class="section" id="On-a-&quot;simple&quot;-Bernoulli-problem-(semi-log-y-scale)">
 <h3>On a &#8220;simple&#8221; Bernoulli problem (semi-log-y scale)<a class="headerlink" href="#On-a-"simple"-Bernoulli-problem-(semi-log-y-scale)" title="Permalink to this headline">¶</a></h3>
 <p><img alt="On a &quot;simple&quot; Bernoulli problem (semi-log-y scale)." src="_images/main_semilogy____env1-4_932221613383548446.png" /></p>
@@ -390,7 +424,11 @@ CORRAL and LearnExp clearly appears sub-efficient.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+<<<<<<< HEAD
       Last updated on 21 Sep 2018, 15h.
+=======
+      Last updated on 16 Jul 2018, 14h.
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
     </p>
   </div>

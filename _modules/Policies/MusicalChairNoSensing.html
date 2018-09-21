@@ -210,12 +210,16 @@
 
 <span class="c1"># --- Utility functions</span>
 
+<<<<<<< HEAD
 <span class="c1">#: A *crazy* large constant to get all the theoretical results working. The paper suggests :math:`C = 128`.</span>
 <span class="c1">#:</span>
 <span class="c1">#: .. warning:: One can choose a much smaller value in order to (try to) have reasonable empirical performances! I have tried :math:`C = 1`. *BUT* the algorithm DOES NOT work better with a much smaller constant: every single simulations I tried end up with a linear regret for :class:`MusicalChairNoSensing`.</span>
 <span class="n">ConstantC</span> <span class="o">=</span> <span class="mi">128</span>
 <span class="n">ConstantC</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">ConstantC</span> <span class="o">=</span> <span class="mi">1</span>
+=======
+<span class="n">ConstantC</span> <span class="o">=</span> <span class="mi">128</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
 
 <div class="viewcode-block" id="parameter_g"><a class="viewcode-back" href="../../docs/Policies.MusicalChairNoSensing.html#Policies.MusicalChairNoSensing.parameter_g">[docs]</a><span class="k">def</span> <span class="nf">parameter_g</span><span class="p">(</span><span class="n">K</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
@@ -370,7 +374,11 @@
             <span class="c1"># If the player is already sit, nothing to do</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">Sitted</span>  <span class="c1"># We can stay sitted: no collision right after we sit</span>
             <span class="c1"># If we can choose this chair like this, it&#39;s because we were already sitted, without seeing a collision</span>
+<<<<<<< HEAD
             <span class="c1"># print(&quot;\n- A MusicalChairNoSensing player chose arm {} because it&#39;s his chair, and time t = {} ...&quot;.format(self.chair, self.t))  # DEBUG</span>
+=======
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- A MusicalChairNoSensing player chose arm </span><span class="si">{}</span><span class="s2"> because it&#39;s his chair, and time t = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chair</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chair</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">InitialPhase</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">UniformWaitPhase2</span><span class="p">:</span>
             <span class="c1"># Play as initial phase: choose a random arm, uniformly among all the K arms</span>
@@ -381,7 +389,11 @@
             <span class="c1"># Play as musical chair: choose a random arm, among the M bests</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>  <span class="c1"># Random arm among the M bests</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">chair</span> <span class="o">=</span> <span class="n">i</span>  <span class="c1"># Assume that it would be a good chair</span>
+<<<<<<< HEAD
             <span class="c1"># print(&quot;\n- A MusicalChairNoSensing player chose a random arm i={} among the {}-best arms in [1,...,{}] as it is in state MusicalChairNoSensing, and time t = {} ...&quot;.format(i, self.nbPlayers, self.nbArms, self.t))  # DEBUG</span>
+=======
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- A MusicalChairNoSensing player chose a random arm i=</span><span class="si">{}</span><span class="s2"> among the </span><span class="si">{}</span><span class="s2">-best arms in [1,...,</span><span class="si">{}</span><span class="s2">] as it is in state MusicalChairNoSensing, and time t = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
             <span class="k">return</span> <span class="n">i</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;MusicalChairNoSensing.choice() should never be in this case. Fix this code, quickly!&quot;</span><span class="p">)</span></div>
@@ -391,7 +403,11 @@
 
 <span class="sd">        - If not collision, receive a reward after pulling the arm.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+<<<<<<< HEAD
         <span class="c1"># print(&quot;- A MusicalChairNoSensing player receive reward = {} on arm {}, in state {} and time t = {}...&quot;.format(reward, arm, self.state, self.t))  # DEBUG</span>
+=======
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- A MusicalChairNoSensing player receive reward = </span><span class="si">{}</span><span class="s2"> on arm </span><span class="si">{}</span><span class="s2">, in state </span><span class="si">{}</span><span class="s2"> and time t = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
         <span class="c1"># If not collision, receive a reward after pulling the arm</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">InitialPhase</span><span class="p">:</span>
             <span class="c1"># Count the observation, update arm cumulated reward</span>
@@ -401,11 +417,19 @@
             <span class="c1"># we sort the empirical means, and compare the m-th and (m+1)-th ones</span>
             <span class="n">empiricalMeans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumulatedRewards</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbObservations</span>
             <span class="n">sortedMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">empiricalMeans</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># XXX decreasing order!</span>
+<<<<<<< HEAD
             <span class="c1"># print(&quot;Sorting empirical means… sortedMeans = {}&quot;.format(sortedMeans))  # DEBUG</span>
             <span class="n">gap_Mbest_Mworst</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">]</span> <span class="o">-</span> <span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
             <span class="c1"># print(&quot;Gap between M-best and M-worst set (with M = {}) is {}, compared to {}...&quot;.format(self.nbPlayers, gap_Mbest_Mworst, self.constant_in_testing_the_gap / np.sqrt(self.t)))</span>
             <span class="k">if</span> <span class="n">gap_Mbest_Mworst</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_in_testing_the_gap</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">):</span>
                 <span class="c1"># print(&quot;Gap was larger than the threshold, so this player switch to uniform phase 2!&quot;)</span>
+=======
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sorting empirical means… sortedMeans = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sortedMeans</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="n">gap_Mbest_Mworst</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">]</span> <span class="o">-</span> <span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gap between M-best and M-worst set (with M = </span><span class="si">{}</span><span class="s2">) is </span><span class="si">{}</span><span class="s2">, compared to </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">gap_Mbest_Mworst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_in_testing_the_gap</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">gap_Mbest_Mworst</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_in_testing_the_gap</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gap was larger than the threshold, so this player switch to uniform phase 2!&quot;</span><span class="p">)</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
                 <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">UniformWaitPhase2</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tau_phase_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
 
@@ -419,7 +443,11 @@
 
 <div class="viewcode-block" id="MusicalChairNoSensing._endPhase2"><a class="viewcode-back" href="../../docs/Policies.MusicalChairNoSensing.html#Policies.MusicalChairNoSensing.MusicalChairNoSensing._endPhase2">[docs]</a>    <span class="k">def</span> <span class="nf">_endPhase2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Small computation needed at the end of the initial random exploration phase.&quot;&quot;&quot;</span>
+<<<<<<< HEAD
         <span class="c1"># print(&quot;\n- A MusicalChairNoSensing player has to switch from InitialPhase to MusicalChairNoSensing ...&quot;)  # DEBUG</span>
+=======
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- A MusicalChairNoSensing player has to switch from InitialPhase to MusicalChairNoSensing ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">MusicalChair</span>  <span class="c1"># Switch ONCE to phase 3</span>
 
         <span class="c1"># First, we compute the empirical means mu_i</span>
@@ -450,7 +478,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+<<<<<<< HEAD
       Last updated on 21 Sep 2018, 15h.
+=======
+      Last updated on 30 Aug 2018, 18h.
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
     </p>
   </div>

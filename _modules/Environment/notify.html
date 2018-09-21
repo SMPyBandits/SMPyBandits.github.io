@@ -193,8 +193,11 @@
 
 <span class="sd">- Only tested on Ubuntu and Debian desktops.</span>
 <span class="sd">- Should work on any FreeDesktop compatible desktop, see https://wiki.ubuntu.com/NotifyOSD.</span>
+<<<<<<< HEAD
 
 <span class="sd">.. warning:: Experimental support of Mac OS X has been added since #143 (https://github.com/SMPyBandits/SMPyBandits/issues/143).</span>
+=======
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -260,11 +263,17 @@
 
 
 <span class="c1"># Define the first notify function, with gi.repository.Notify</span>
+<<<<<<< HEAD
 <div class="viewcode-block" id="notify_gi"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify_gi">[docs]</a><span class="k">def</span> <span class="nf">notify_gi</span><span class="p">(</span><span class="n">body</span><span class="p">,</span>
         <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span>
         <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
     <span class="p">):</span>
+=======
+<div class="viewcode-block" id="notify_gi"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify_gi">[docs]</a><span class="k">def</span> <span class="nf">notify_gi</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
+              <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
+              <span class="p">):</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
     <span class="sd">&quot;&quot;&quot; Send a notification, with gi.repository.Notify.</span>
 
 <span class="sd">    - icon can be &quot;dialog-information&quot;, &quot;dialog-warn&quot;, &quot;dialog-error&quot;.</span>
@@ -301,16 +310,23 @@
 
 
 <span class="c1"># Define the second notify function, with a subprocess call to &#39;notify-send&#39;</span>
+<<<<<<< HEAD
 <div class="viewcode-block" id="notify_cli"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify_cli">[docs]</a><span class="k">def</span> <span class="nf">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span>
         <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span>
         <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># In seconds,</span>
         <span class="n">gnulinux</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
+=======
+<div class="viewcode-block" id="notify_cli"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify_cli">[docs]</a><span class="k">def</span> <span class="nf">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
+               <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
+               <span class="p">):</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
     <span class="sd">&quot;&quot;&quot; Send a notification, with a subprocess call to &#39;notify-send&#39;.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): Trying to use the command line program &#39;notify-send&#39; ...&quot;</span><span class="p">)</span>
         <span class="n">icon</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">icon</span><span class="p">)</span>
+<<<<<<< HEAD
         <span class="k">if</span> <span class="n">gnulinux</span><span class="p">:</span>
             <span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;notify-send&quot;</span><span class="p">,</span> <span class="s2">&quot;--expire-time=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span> <span class="s2">&quot;--icon=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">icon</span><span class="p">,</span> <span class="n">summary</span><span class="p">,</span> <span class="n">body</span><span class="p">])</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): A notification have been sent, with summary = &#39;</span><span class="si">%s</span><span class="s2">&#39;, body = &#39;</span><span class="si">%s</span><span class="s2">&#39;, expire-time=&#39;</span><span class="si">%s</span><span class="s2">&#39; and icon=&#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">icon</span><span class="p">))</span>
@@ -334,6 +350,21 @@
         <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
     <span class="p">):</span>
+=======
+        <span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;notify-send&quot;</span><span class="p">,</span> <span class="s2">&quot;--expire-time=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span> <span class="s2">&quot;--icon=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">icon</span><span class="p">,</span> <span class="n">summary</span><span class="p">,</span> <span class="n">body</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): A notification have been sent, with summary = &#39;</span><span class="si">%s</span><span class="s2">&#39;, body = &#39;</span><span class="si">%s</span><span class="s2">&#39;, expire-time=&#39;</span><span class="si">%s</span><span class="s2">&#39; and icon=&#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">icon</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="c1"># Ugly! XXX Catches too general exception</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">notify.notify(): notify-send : not-found ! Returned exception is </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<span class="c1"># Define the unified notify.notify() function</span>
+<div class="viewcode-block" id="notify"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify">[docs]</a><span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
+           <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
+           <span class="p">):</span>
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
     <span class="sd">&quot;&quot;&quot; Send a notification, using one of the previously defined method, until it works. Usually it works.&quot;&quot;&quot;</span>
     <span class="c1"># print(&quot;Notification: &#39;{}&#39;, from &#39;{}&#39; with icon &#39;{}&#39;.&quot;.format(body, summary, icon))  # DEBUG</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">has_Notify</span><span class="p">:</span>
@@ -366,7 +397,11 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+<<<<<<< HEAD
       Last updated on 21 Sep 2018, 15h.
+=======
+      Last updated on 30 Aug 2018, 18h.
+>>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
     </p>
   </div>
