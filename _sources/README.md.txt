@@ -27,6 +27,7 @@ A complete [Sphinx](http://sphinx-doc.org/) documentation for each algorithms an
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity)
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/Naereen/ama)
 [![Documentation Status](https://readthedocs.org/projects/smpybandits/badge/?version=latest)](https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master)](https://travis-ci.org/SMPyBandits/SMPyBandits)
 
 > [I (Lilian Besson)](http://perso.crans.org/besson/) have [started my PhD](http://perso.crans.org/besson/phd/) in October 2016, and this is a part of my **on going** research since December 2016.
 >
@@ -60,11 +61,7 @@ The paper can be consulted [here on my website](https://perso.crans.org/besson/a
 I designed and added the [`Aggregator`](SMPyBandits/Policies/Aggregator.py) policy, in order to test its validity and performance.
 
 It is a "simple" **voting algorithm to combine multiple bandit algorithms into one**.
-<<<<<<< HEAD
 Basically, it behaves like a simple MAB bandit just based on empirical means (even simpler than UCB), where *arms* are the child algorithms `$A_1,\ldots, A_N$`, each running in "parallel".
-=======
-Basically, it behaves like a simple MAB bandit just based on empirical means (even simpler than UCB), where *arms* are the child algorithms `A_1 .. A_N`, each running in "parallel".
->>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
 > **For more details**, refer to this file: [`Aggregation.md`](Aggregation.md) and [this research article](https://hal.inria.fr/hal-01705292).
 
@@ -72,26 +69,16 @@ Basically, it behaves like a simple MAB bandit just based on empirical means (ev
 
 ### 2nd article, using [**Multi-players simulation environment**](MultiPlayers.md)
 There is another point of view: instead of comparing different single-player policies on the same problem, we can make them play against each other, in a multi-player setting.
-<<<<<<< HEAD
 The basic difference is about **collisions** : at each time `$t$`, if two or more user chose to sense the same channel, there is a *collision*. Collisions can be handled in different way from the base station point of view, and from each player point of view. The simpler collision model implies that each colliding user get a `$0$` reward instead of the actual reward.
-=======
-The basic difference is about **collisions** : at each time `t`, if two or more user chose to sense the same channel, there is a *collision*. Collisions can be handled in different way from the base station point of view, and from each player point of view.
->>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
 > **For more details**, refer to this file: [`MultiPlayers.md`](MultiPlayers.md) and [this research article](https://hal.inria.fr/hal-01629733).
 
 ----
 
 ### 3rd article, using [**Doubling Trick for Multi-Armed Bandits**](DoublingTrick.md)
-<<<<<<< HEAD
 I studied what Doubling Trick can and can't do to obtain efficient anytime version of non-anytime optimal Multi-Armed Bandits algorithms. It's an interesting work, go check it out!
 
 > **For more details**, refer to this file: [`DoublingTrick.md`](DoublingTrick.md) and [this research article](https://hal.inria.fr/hal-01736357).
-=======
-I studied what Doubling Trick can and can't do to obtain efficient anytime version of non-anytime optimal Multi-Armed Bandits algorithms.
-
-> **For more details**, refer to this file: [`DoublingTrick.md`](DoublingTrick.md) and [this research article](https://hal.inria.fr/hal-XXX).
->>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
 
 ----
 

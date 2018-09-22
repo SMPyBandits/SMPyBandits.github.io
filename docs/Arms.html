@@ -265,14 +265,14 @@
 <p>Arms : contains different types of bandit arms:
 <a class="reference internal" href="Arms.Constant.html#module-Arms.Constant" title="Arms.Constant"><code class="xref py py-class docutils literal"><span class="pre">Constant</span></code></a>, <a class="reference internal" href="Arms.UniformArm.html#module-Arms.UniformArm" title="Arms.UniformArm"><code class="xref py py-class docutils literal"><span class="pre">UniformArm</span></code></a>, <a class="reference internal" href="Arms.Bernoulli.html#module-Arms.Bernoulli" title="Arms.Bernoulli"><code class="xref py py-class docutils literal"><span class="pre">Bernoulli</span></code></a>, <a class="reference internal" href="Arms.Binomial.html#module-Arms.Binomial" title="Arms.Binomial"><code class="xref py py-class docutils literal"><span class="pre">Binomial</span></code></a>, <a class="reference internal" href="Arms.Poisson.html#module-Arms.Poisson" title="Arms.Poisson"><code class="xref py py-class docutils literal"><span class="pre">Poisson</span></code></a>, <a class="reference internal" href="Arms.Gaussian.html#module-Arms.Gaussian" title="Arms.Gaussian"><code class="xref py py-class docutils literal"><span class="pre">Gaussian</span></code></a>, <a class="reference internal" href="Arms.Exponential.html#module-Arms.Exponential" title="Arms.Exponential"><code class="xref py py-class docutils literal"><span class="pre">Exponential</span></code></a>, <a class="reference internal" href="Arms.Gamma.html#module-Arms.Gamma" title="Arms.Gamma"><code class="xref py py-class docutils literal"><span class="pre">Gamma</span></code></a>, <a class="reference internal" href="Arms.DiscreteArm.html#module-Arms.DiscreteArm" title="Arms.DiscreteArm"><code class="xref py py-class docutils literal"><span class="pre">DiscreteArm</span></code></a>.</p>
 <p>Each arm class follows the same interface:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span> <span class="o">=</span> <span class="n">Arm</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1">#: doctest: +SKIP</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">mean</span>  <span class="c1">#: doctest: +SKIP</span>
-<span class="go">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>  <span class="c1"># one random draw  #: doctest: +SKIP</span>
-<span class="go">0.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_arm</span><span class="o">.</span><span class="n">draw_nparray</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># or ((3, 10)), many draw  #: doctest: +SKIP</span>
-<span class="go">array([ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  1.,  1.,  0.,  1.,  0.,  0.,</span>
-<span class="go">        1.,  0.,  0.,  0.,  1.,  1.,  1.])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">my_arm</span> <span class="o">=</span> <span class="n">Arm</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="n">my_arm</span><span class="o">.</span><span class="n">mean</span>
+<span class="mf">0.5</span>
+<span class="o">&gt;</span> <span class="n">my_arm</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>  <span class="c1"># one random draw</span>
+<span class="mf">0.0</span>
+<span class="o">&gt;</span> <span class="n">my_arm</span><span class="o">.</span><span class="n">draw_nparray</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>  <span class="c1"># or ((3, 10)), many draw</span>
+<span class="n">array</span><span class="p">([</span> <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>
+        <span class="mf">1.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">0.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Also contains:</p>
@@ -315,11 +315,11 @@
 <li>and there is nbArms arms.</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uniformMeans</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
-<span class="go">array([ 0.1,  0.9])</span>
+<span class="go">array([0.1, 0.9])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uniformMeans</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
-<span class="go">array([ 0.1,  0.5,  0.9])</span>
+<span class="go">array([0.1, 0.5, 0.9])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uniformMeans</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="mi">9</span><span class="p">)))</span>
-<span class="go">array([ 0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9])</span>
+<span class="go">array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -358,7 +358,7 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  
 <span class="go">[0.191..., 0.437..., 0.622...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>  
 <span class="go">[0.276..., 0.801..., 0.958...]</span>
 </pre></div>
 </div>
@@ -366,9 +366,9 @@
 <li>Means are sorted, except if <code class="docutils literal"><span class="pre">isSorted=False</span></code>.</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
 <span class="go">[0.006..., 0.229..., 0.416..., 0.535..., 0.899...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
 <span class="go">[0.419..., 0.932..., 0.072..., 0.755..., 0.650...]</span>
 </pre></div>
 </div>
@@ -391,7 +391,7 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.595..., 0.811...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.718..., 0.892...]</span>
 </pre></div>
 </div>
@@ -399,9 +399,9 @@
 <li>Means are sorted, except if <code class="docutils literal"><span class="pre">isSorted=False</span></code>.</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
 </pre></div>
 </div>
@@ -418,7 +418,7 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.595..., 0.811...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.718..., 0.892...]</span>
 </pre></div>
 </div>
@@ -426,9 +426,9 @@
 <li>Means are sorted, except if <code class="docutils literal"><span class="pre">isSorted=False</span></code>.</li>
 </ul>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>  <span class="c1"># reproducible results</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
 <span class="go">[0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
 </pre></div>
 </div>
@@ -439,11 +439,11 @@
 <code class="descclassname">Arms.</code><code class="descname">array_from_str</code><span class="sig-paren">(</span><em>my_str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms.html#array_from_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.array_from_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a string like &#8220;[0.1, 0.2, 0.3]&#8221; to a numpy array <cite>[0.1, 0.2, 0.3]</cite>, using safe <cite>json.loads</cite> instead of <cite>exec</cite>.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">array_from_str</span><span class="p">(</span><span class="s2">&quot;[0.1, 0.2, 0.3]&quot;</span><span class="p">)</span>
-<span class="go">array([ 0.1,  0.2,  0.3])</span>
+<span class="go">array([0.1,  0.2,  0.3])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">array_from_str</span><span class="p">(</span><span class="s2">&quot;0.1, 0.2, 0.3&quot;</span><span class="p">)</span>
-<span class="go">array([ 0.1,  0.2,  0.3])</span>
+<span class="go">array([0.1,  0.2,  0.3])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">array_from_str</span><span class="p">(</span><span class="s2">&quot;0.9&quot;</span><span class="p">)</span>
-<span class="go">array(0.9)</span>
+<span class="go">array([0.9])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -486,19 +486,19 @@
 </div>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimal_selection_probabilities</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.1</span><span class="p">])</span>
-<span class="go">array([ 0.33333333,  0.33333333,  0.33333333])</span>
+<span class="go">array([0.33333333,  0.33333333,  0.33333333])</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimal_selection_probabilities</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">])</span>  <span class="c1"># weird ? not really...</span>
-<span class="go">array([ 0.        ,  0.43055556,  0.56944444])</span>
+<span class="go">array([0.        ,  0.43055556,  0.56944444])</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimal_selection_probabilities</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mf">0.9</span><span class="p">])</span>  <span class="c1"># weird ? not really...</span>
-<span class="go">array([ 0.        ,  0.45061728,  0.54938272])</span>
+<span class="go">array([0.        ,  0.45061728,  0.54938272])</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimal_selection_probabilities</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.9</span><span class="p">])</span>
-<span class="go">array([ 0.15631866,  0.35405647,  0.48962487])</span>
+<span class="go">array([0.15631866,  0.35405647,  0.48962487])</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -551,11 +551,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-<<<<<<< HEAD
-      Last updated on 21 Sep 2018, 15h.
-=======
-      Last updated on 30 Aug 2018, 18h.
->>>>>>> 76b6f4f64371ded36ab07ca6948224d95b8c20ee
+      Last updated on 22 Sep 2018, 17h.
 
     </p>
   </div>
