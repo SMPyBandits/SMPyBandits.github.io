@@ -330,7 +330,7 @@
 <span class="sd">        &gt;&gt;&gt; configuration[&quot;players&quot;] = [ MusicalChairNoSensing(nbPlayers=nbPlayers, nbArms=nbArms, horizon=horizon) for _ in range(NB_PLAYERS) ]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MusicalChairNoSensing</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">nbPlayers</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; for MusicalChairNoSensing class has to be None or &gt; 0.&quot;</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">nbPlayers</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; = </span><span class="si">{}</span><span class="s2"> for MusicalChairNoSensing class has to be None or &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">NotStarted</span>  <span class="c1">#: Current state</span>
         <span class="c1"># Store parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="n">nbPlayers</span>  <span class="c1">#: Number of players</span>
@@ -402,7 +402,10 @@
             <span class="n">empiricalMeans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumulatedRewards</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbObservations</span>
             <span class="n">sortedMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">empiricalMeans</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># XXX decreasing order!</span>
             <span class="c1"># print(&quot;Sorting empirical means… sortedMeans = {}&quot;.format(sortedMeans))  # DEBUG</span>
-            <span class="n">gap_Mbest_Mworst</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">]</span> <span class="o">-</span> <span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>
+                <span class="n">gap_Mbest_Mworst</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">]</span> <span class="o">-</span> <span class="n">sortedMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gap_Mbest_Mworst</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="c1"># print(&quot;Gap between M-best and M-worst set (with M = {}) is {}, compared to {}...&quot;.format(self.nbPlayers, gap_Mbest_Mworst, self.constant_in_testing_the_gap / np.sqrt(self.t)))</span>
             <span class="k">if</span> <span class="n">gap_Mbest_Mworst</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_in_testing_the_gap</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">):</span>
                 <span class="c1"># print(&quot;Gap was larger than the threshold, so this player switch to uniform phase 2!&quot;)</span>
@@ -450,7 +453,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 22 Sep 2018, 17h.
+      Last updated on 24 Sep 2018, 19h.
 
     </p>
   </div>
