@@ -19,7 +19,7 @@
             </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Environment.MAB module &mdash; SMPyBandits 0.9.2 documentation</title>
+  <title>Environment.MAB module &mdash; SMPyBandits 0.9.3 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.2 documentation" href="../index.html"/>
+    <link rel="top" title="SMPyBandits 0.9.3 documentation" href="../index.html"/>
         <link rel="up" title="Environment package" href="Environment.html"/>
         <link rel="next" title="Environment.Result module" href="Environment.Result.html"/>
         <link rel="prev" title="Environment.EvaluatorSparseMultiPlayers module" href="Environment.EvaluatorSparseMultiPlayers.html"/> 
@@ -164,8 +164,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../CONTRIBUTING.html">On Github Issues and Pull Requests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../CODE_OF_CONDUCT.html">Contributor Covenant Code of Conduct</a></li>
 </ul>
 
             
@@ -269,13 +267,17 @@
 </style>
 <div class="section" id="Environment.MAB-module">
 <h1>Environment.MAB module<a class="headerlink" href="#Environment.MAB-module" title="Permalink to this headline">¶</a></h1>
-<p>MAB, MarkovianMAB, DynamicMAB, and IncreasingMAB classes to wrap the arms of some Multi-Armed Bandit problems.</p>
+<p><a class="reference internal" href="#Environment.MAB.MAB" title="Environment.MAB.MAB"><code class="xref py py-class docutils literal"><span class="pre">MAB</span></code></a>, <a class="reference internal" href="#Environment.MAB.MarkovianMAB" title="Environment.MAB.MarkovianMAB"><code class="xref py py-class docutils literal"><span class="pre">MarkovianMAB</span></code></a>, <a class="reference internal" href="#Environment.MAB.ChangingAtEachRepMAB" title="Environment.MAB.ChangingAtEachRepMAB"><code class="xref py py-class docutils literal"><span class="pre">ChangingAtEachRepMAB</span></code></a>, <a class="reference internal" href="#Environment.MAB.IncreasingMAB" title="Environment.MAB.IncreasingMAB"><code class="xref py py-class docutils literal"><span class="pre">IncreasingMAB</span></code></a>, and <a class="reference internal" href="#Environment.MAB.NonStationaryMAB" title="Environment.MAB.NonStationaryMAB"><code class="xref py py-class docutils literal"><span class="pre">NonStationaryMAB</span></code></a> classes to wrap the arms of some Multi-Armed Bandit problems.</p>
 <p>Such class has to have <em>at least</em> these methods:</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">draw(armId,</span> <span class="pre">t)</span></code> to draw <em>one</em> sample from that <code class="docutils literal"><span class="pre">armId</span></code> at time <code class="docutils literal"><span class="pre">t</span></code>,</li>
 <li>and <code class="docutils literal"><span class="pre">reprarms()</span></code> to pretty print the arms (for titles of a plot),</li>
 <li>and more, see below.</li>
 </ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME it is still a work in progress, I need to add piecewise stationary environments, as well as continuously varying environments. See <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/71">https://github.com/SMPyBandits/SMPyBandits/issues/71</a></p>
+</div>
 <dl class="class">
 <dt id="Environment.MAB.MAB">
 <em class="property">class </em><code class="descclassname">Environment.MAB.</code><code class="descname">MAB</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB" title="Permalink to this definition">¶</a></dt>
@@ -311,6 +313,12 @@
 <dt id="Environment.MAB.MAB.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New MAB.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.MAB.isChangingAtEachRepetition">
+<code class="descname">isChangingAtEachRepetition</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.MAB.isChangingAtEachRepetition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know if the problem is changing at each repetition or not.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -360,9 +368,13 @@
 <code class="descname">new_order_of_arm</code><span class="sig-paren">(</span><em>arms</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB.new_order_of_arm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB.new_order_of_arm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Feed a new order of the arms to the environment.</p>
 <ul class="simple">
-<li>Updates self.means correctly.</li>
+<li>Updates <code class="docutils literal"><span class="pre">self.means</span></code> correctly.</li>
 <li>Return the new position(s) of the best arm (to count and plot <code class="docutils literal"><span class="pre">BestArmPulls</span></code> correctly).</li>
 </ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This is a very limited support of non-stationary environment: only permutations of the arms are allowed, see <a class="reference internal" href="#Environment.MAB.NonStationaryMAB" title="Environment.MAB.NonStationaryMAB"><code class="xref py py-class docutils literal"><span class="pre">NonStationaryMAB</span></code></a> for more.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -460,7 +472,7 @@
 <dl class="method">
 <dt id="Environment.MAB.MAB.lowerbound_multiplayers">
 <code class="descname">lowerbound_multiplayers</code><span class="sig-paren">(</span><em>nbPlayers=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MAB.lowerbound_multiplayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MAB.lowerbound_multiplayers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute our multi-players lower bound for this MAB problem (complexity), using functions from kullback.py or kullback.so.</p>
+<dd><p>Compute our multi-players lower bound for this MAB problem (complexity), using functions from <code class="xref py py-mod docutils literal"><span class="pre">kullback</span></code>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -523,9 +535,9 @@
 <dd><p>Bases: <a class="reference internal" href="#Environment.MAB.MAB" title="Environment.MAB.MAB"><code class="xref py py-class docutils literal"><span class="pre">Environment.MAB.MAB</span></code></a></p>
 <p>Classic MAB problem but the rewards are drawn from a rested/restless Markov chain.</p>
 <ul class="simple">
-<li>configuration is a dict with &#8216;rested&#8217; and &#8216;transitions&#8217; keys.</li>
-<li>&#8216;rested&#8217; is a Boolean. See [Kalathil et al., 2012](<a class="reference external" href="https://arxiv.org/abs/1206.3582">https://arxiv.org/abs/1206.3582</a>) page 2 for a description.</li>
-<li>&#8216;transitions&#8217; is list of K transition matrices <em>or</em> dictionary (to specify non-integer states), one for each arm.</li>
+<li>configuration is a dict with <code class="docutils literal"><span class="pre">rested</span></code> and <code class="docutils literal"><span class="pre">transitions</span></code> keys.</li>
+<li><code class="docutils literal"><span class="pre">rested</span></code> is a Boolean. See [Kalathil et al., 2012](<a class="reference external" href="https://arxiv.org/abs/1206.3582">https://arxiv.org/abs/1206.3582</a>) page 2 for a description.</li>
+<li><code class="docutils literal"><span class="pre">transitions</span></code> is list of K transition matrices <em>or</em> dictionary (to specify non-integer states), one for each arm.</li>
 </ul>
 <p>Example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
@@ -555,12 +567,6 @@
 <dt id="Environment.MAB.MarkovianMAB.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#MarkovianMAB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.MarkovianMAB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New MarkovianMAB.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Environment.MAB.MarkovianMAB.isDynamic">
-<code class="descname">isDynamic</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.MarkovianMAB.isDynamic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flag to know if the problem is static or not.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -647,84 +653,84 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="Environment.MAB.DynamicMAB">
-<em class="property">class </em><code class="descclassname">Environment.MAB.</code><code class="descname">DynamicMAB</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB">
+<em class="property">class </em><code class="descclassname">Environment.MAB.</code><code class="descname">ChangingAtEachRepMAB</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Environment.MAB.MAB" title="Environment.MAB.MAB"><code class="xref py py-class docutils literal"><span class="pre">Environment.MAB.MAB</span></code></a></p>
-<p>Like a static MAB problem, but the arms are (randomly) regenerated for each repetition, with the newRandomArms() method.</p>
+<p>Like a static MAB problem, but the arms are (randomly) regenerated for each repetition, with the <a class="reference internal" href="#Environment.MAB.ChangingAtEachRepMAB.newRandomArms" title="Environment.MAB.ChangingAtEachRepMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a> method.</p>
 <ul class="simple">
-<li>M.arms and M.means is changed after each call to <code class="docutils literal"><span class="pre">newRandomArms()</span></code>, but not nbArm. All the other methods are carefully written to still make sense (Mbest, Mworst, minArm, maxArm).</li>
+<li><code class="docutils literal"><span class="pre">M.arms</span></code> and <code class="docutils literal"><span class="pre">M.means</span></code> is changed after each call to <a class="reference internal" href="#Environment.MAB.ChangingAtEachRepMAB.newRandomArms" title="Environment.MAB.ChangingAtEachRepMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a>, but not <code class="docutils literal"><span class="pre">nbArm</span></code>. All the other methods are carefully written to still make sense (<code class="docutils literal"><span class="pre">Mbest</span></code>, <code class="docutils literal"><span class="pre">Mworst</span></code>, <code class="docutils literal"><span class="pre">minArm</span></code>, <code class="docutils literal"><span class="pre">maxArm</span></code>).</li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">It works but it is still experimental, be careful when using this feature.</p>
+<p class="last">It works perfectly fine, but it is still experimental, be careful when using this feature.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">When testing bandit algorithms against randomly generated problems at each repetitions is usually referred to as <em>&#8220;Bayesian problems&#8221;</em> in the literature: a prior is set on problems (eg. uniform on <span class="math">\([0,1]^K\)</span> or less obvious for instance if a <code class="docutils literal"><span class="pre">mingap</span></code> is set), and the performance is assessed against this prior. It differs from the <em>frequentist</em> point of view of having one fixed problem and doing eg. 1000 repetitions on the same problem.</p>
+<p class="last">Testing bandit algorithms against randomly generated problems at each repetitions is usually referred to as <em>&#8220;Bayesian problems&#8221;</em> in the literature: a prior is set on problems (eg. uniform on <span class="math">\([0,1]^K\)</span> or less obvious for instance if a <code class="docutils literal"><span class="pre">mingap</span></code> is set), and the performance is assessed against this prior. It differs from the <em>frequentist</em> point of view of having one fixed problem and doing eg. <code class="docutils literal"><span class="pre">n=1000</span></code> repetitions on the same problem.</p>
 </div>
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New DynamicMAB.</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New ChangingAtEachRepMAB.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.isDynamic">
-<code class="descname">isDynamic</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.DynamicMAB.isDynamic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flag to know if the problem is static or not.</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.isChangingAtEachRepetition">
+<code class="descname">isChangingAtEachRepetition</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.isChangingAtEachRepetition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know if the problem is changing at each repetition or not.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.arm_type">
-<code class="descname">arm_type</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.DynamicMAB.arm_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kind of arm (DynamicMAB are homogeneous)</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.arm_type">
+<code class="descname">arm_type</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.arm_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kind of arm (ChangingAtEachRepMAB are homogeneous)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.function">
-<code class="descname">function</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.DynamicMAB.function" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.newMeans">
+<code class="descname">newMeans</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.newMeans" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to generate the means</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.args">
-<code class="descname">args</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.DynamicMAB.args" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.args">
+<code class="descname">args</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Args to give to function</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.nbArms">
-<code class="descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.DynamicMAB.nbArms" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.nbArms">
+<code class="descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.nbArms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Means of arms</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.__repr__">
-<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.__repr__" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.reprarms">
-<code class="descname">reprarms</code><span class="sig-paren">(</span><em>nbPlayers=None</em>, <em>openTag=''</em>, <em>endTag='^*'</em>, <em>latex=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.reprarms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.reprarms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cannot represent the dynamic arms, so print the DynamicMAB object</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.reprarms">
+<code class="descname">reprarms</code><span class="sig-paren">(</span><em>nbPlayers=None</em>, <em>openTag=''</em>, <em>endTag='^*'</em>, <em>latex=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.reprarms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.reprarms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cannot represent the dynamic arms, so print the ChangingAtEachRepMAB object</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.newRandomArms">
-<code class="descname">newRandomArms</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.newRandomArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.newRandomArms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a new list of arms, from <code class="docutils literal"><span class="pre">arm_type(params['function](*params['args']))</span></code>.</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.newRandomArms">
+<code class="descname">newRandomArms</code><span class="sig-paren">(</span><em>t=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.newRandomArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.newRandomArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new list of arms, from <code class="docutils literal"><span class="pre">arm_type(params['newMeans'](*params['args']))</span></code>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.arms">
-<code class="descname">arms</code><a class="headerlink" href="#Environment.MAB.DynamicMAB.arms" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.arms">
+<code class="descname">arms</code><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.arms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <em>current</em> list of arms.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.means">
-<code class="descname">means</code><a class="headerlink" href="#Environment.MAB.DynamicMAB.means" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the list of means of arms for this DynamicMAB: after <span class="math">\(x\)</span> calls to <a class="reference internal" href="#Environment.MAB.DynamicMAB.newRandomArms" title="Environment.MAB.DynamicMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a>, the return mean of arm <span class="math">\(k\)</span> is the mean of the <span class="math">\(x\)</span> means of that arm.</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.means">
+<code class="descname">means</code><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.means" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of means of arms for this ChangingAtEachRepMAB: after <span class="math">\(x\)</span> calls to <a class="reference internal" href="#Environment.MAB.ChangingAtEachRepMAB.newRandomArms" title="Environment.MAB.ChangingAtEachRepMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a>, the return mean of arm <span class="math">\(k\)</span> is the mean of the <span class="math">\(x\)</span> means of that arm.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Highly experimental!</p>
@@ -732,50 +738,202 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.Mbest">
-<code class="descname">Mbest</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.Mbest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.Mbest" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.Mbest">
+<code class="descname">Mbest</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.Mbest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.Mbest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set of M best means (averaged on all the draws of new means).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.Mworst">
-<code class="descname">Mworst</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.Mworst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.Mworst" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.Mworst">
+<code class="descname">Mworst</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.Mworst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.Mworst" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set of M worst means (averaged on all the draws of new means).</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.minArm">
-<code class="descname">minArm</code><a class="headerlink" href="#Environment.MAB.DynamicMAB.minArm" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.minArm">
+<code class="descname">minArm</code><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.minArm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the smallest mean of the arms, for a dynamic MAB (averaged on all the draws of new means).</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.maxArm">
-<code class="descname">maxArm</code><a class="headerlink" href="#Environment.MAB.DynamicMAB.maxArm" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.maxArm">
+<code class="descname">maxArm</code><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.maxArm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the largest mean of the arms, for a dynamic MAB (averaged on all the draws of new means).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.lowerbound">
-<code class="descname">lowerbound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.lowerbound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.lowerbound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the constant C(mu), for [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from kullback.py or kullback.so (averaged on all the draws of new means).</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.lowerbound">
+<code class="descname">lowerbound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.lowerbound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.lowerbound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the constant C(mu), for [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from <code class="xref py py-mod docutils literal"><span class="pre">kullback</span></code> (averaged on all the draws of new means).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.hoifactor">
-<code class="descname">hoifactor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.hoifactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.hoifactor" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.hoifactor">
+<code class="descname">hoifactor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.hoifactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.hoifactor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the HOI factor H_OI(mu), the Optimal Arm Identification (OI) factor, for this MAB problem (complexity). Cf. (3.3) in Navikkumar MODI&#8217;s thesis, &#8220;Machine Learning and Statistical Decision Making for Green Radio&#8221; (2017) (averaged on all the draws of new means).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.MAB.DynamicMAB.lowerbound_multiplayers">
-<code class="descname">lowerbound_multiplayers</code><span class="sig-paren">(</span><em>nbPlayers=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#DynamicMAB.lowerbound_multiplayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.DynamicMAB.lowerbound_multiplayers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute our multi-players lower bound for this MAB problem (complexity), using functions from kullback.py or kullback.so.</p>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.lowerbound_multiplayers">
+<code class="descname">lowerbound_multiplayers</code><span class="sig-paren">(</span><em>nbPlayers=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#ChangingAtEachRepMAB.lowerbound_multiplayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.lowerbound_multiplayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute our multi-players lower bound for this MAB problem (complexity), using functions from <code class="xref py py-mod docutils literal"><span class="pre">kullback</span></code>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Environment.MAB.DynamicMAB.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Environment.MAB'</em><a class="headerlink" href="#Environment.MAB.DynamicMAB.__module__" title="Permalink to this definition">¶</a></dt>
+<dt id="Environment.MAB.ChangingAtEachRepMAB.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Environment.MAB'</em><a class="headerlink" href="#Environment.MAB.ChangingAtEachRepMAB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Environment.MAB.NonStationaryMAB">
+<em class="property">class </em><code class="descclassname">Environment.MAB.</code><code class="descname">NonStationaryMAB</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Environment.MAB.MAB" title="Environment.MAB.MAB"><code class="xref py py-class docutils literal"><span class="pre">Environment.MAB.MAB</span></code></a></p>
+<p>Like a static MAB problem, but the arms <em>can</em> be modified <em>at each time step</em>, with the <a class="reference internal" href="#Environment.MAB.NonStationaryMAB.newRandomArms" title="Environment.MAB.NonStationaryMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a> method.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">M.arms</span></code> and <code class="docutils literal"><span class="pre">M.means</span></code> is changed after each call to <a class="reference internal" href="#Environment.MAB.NonStationaryMAB.newRandomArms" title="Environment.MAB.NonStationaryMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a>, but not <code class="docutils literal"><span class="pre">nbArm</span></code>. All the other methods are carefully written to still make sense (<code class="docutils literal"><span class="pre">Mbest</span></code>, <code class="docutils literal"><span class="pre">Mworst</span></code>, <code class="docutils literal"><span class="pre">minArm</span></code>, <code class="docutils literal"><span class="pre">maxArm</span></code>).</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This is a generic class to implement different kinds of non-stationary bandits:</p>
+<ul class="last simple">
+<li>Abruptly changing non-stationary bandits, in different variants: changepoints are fixed and decided in advanced, or changepoints are randomly drawn (once for all <code class="docutils literal"><span class="pre">n</span></code> repetitions or at different location fo each repetition).</li>
+<li>Slowly varying non-stationary bandits, where the underlying mean of each arm is slowing randomly modified and a bound on the speed of change (e.g., Lipschitz constant of <span class="math">\(t \mapsto \mu_i(t)\)</span>) is known.</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME finish this! It works fine, but it is still experimental, be careful when using this feature.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The number of arms is fixed, see <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/123">https://github.com/SMPyBandits/SMPyBandits/issues/123</a> if you are curious about bandit problems with a varying number of arms (or sleeping bandits where some arms can be enabled or disabled at each time).</p>
+</div>
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New ChangingAtEachRepMAB.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.isDynamic">
+<code class="descname">isDynamic</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.isDynamic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know if the problem is static or not.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.arm_type">
+<code class="descname">arm_type</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.arm_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kind of arm (ChangingAtEachRepMAB are homogeneous)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.newMeans">
+<code class="descname">newMeans</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.newMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to generate the means</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.changePoints">
+<code class="descname">changePoints</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.changePoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to generate the means</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.args">
+<code class="descname">args</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Args to give to function</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.nbArms">
+<code class="descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Means of arms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.__repr__">
+<code class="descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.reprarms">
+<code class="descname">reprarms</code><span class="sig-paren">(</span><em>nbPlayers=None</em>, <em>openTag=''</em>, <em>endTag='^*'</em>, <em>latex=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.reprarms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.reprarms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cannot represent the dynamic arms, so print the ChangingAtEachRepMAB object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.newRandomArms">
+<code class="descname">newRandomArms</code><span class="sig-paren">(</span><em>t=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.newRandomArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.newRandomArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new list of arms, from <code class="docutils literal"><span class="pre">arm_type(params['newMeans'](t,</span> <span class="pre">**params['args']))</span></code>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.arms">
+<code class="descname">arms</code><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.arms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <em>current</em> list of arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.means">
+<code class="descname">means</code><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.means" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of means of arms for this ChangingAtEachRepMAB: after <span class="math">\(x\)</span> calls to <a class="reference internal" href="#Environment.MAB.NonStationaryMAB.newRandomArms" title="Environment.MAB.NonStationaryMAB.newRandomArms"><code class="xref py py-meth docutils literal"><span class="pre">newRandomArms()</span></code></a>, the return mean of arm <span class="math">\(k\)</span> is the mean of the <span class="math">\(x\)</span> means of that arm.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Highly experimental!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.Mbest">
+<code class="descname">Mbest</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.Mbest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.Mbest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set of M best means (averaged on all the draws of new means).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.Mworst">
+<code class="descname">Mworst</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.Mworst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.Mworst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set of M worst means (averaged on all the draws of new means).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.minArm">
+<code class="descname">minArm</code><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.minArm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the smallest mean of the arms, for a dynamic MAB (averaged on all the draws of new means).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.maxArm">
+<code class="descname">maxArm</code><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.maxArm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the largest mean of the arms, for a dynamic MAB (averaged on all the draws of new means).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.lowerbound">
+<code class="descname">lowerbound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.lowerbound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.lowerbound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the constant C(mu), for [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from <code class="xref py py-mod docutils literal"><span class="pre">kullback</span></code> (averaged on all the draws of new means).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.hoifactor">
+<code class="descname">hoifactor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.hoifactor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.hoifactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the HOI factor H_OI(mu), the Optimal Arm Identification (OI) factor, for this MAB problem (complexity). Cf. (3.3) in Navikkumar MODI&#8217;s thesis, &#8220;Machine Learning and Statistical Decision Making for Green Radio&#8221; (2017) (averaged on all the draws of new means).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.MAB.NonStationaryMAB.lowerbound_multiplayers">
+<code class="descname">lowerbound_multiplayers</code><span class="sig-paren">(</span><em>nbPlayers=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/MAB.html#NonStationaryMAB.lowerbound_multiplayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.lowerbound_multiplayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute our multi-players lower bound for this MAB problem (complexity), using functions from <code class="xref py py-mod docutils literal"><span class="pre">kullback</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.NonStationaryMAB.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Environment.MAB'</em><a class="headerlink" href="#Environment.MAB.NonStationaryMAB.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -835,6 +993,12 @@
 <dt id="Environment.MAB.IncreasingMAB.__module__">
 <code class="descname">__module__</code><em class="property"> = 'Environment.MAB'</em><a class="headerlink" href="#Environment.MAB.IncreasingMAB.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.MAB.IncreasingMAB.isDynamic">
+<code class="descname">isDynamic</code><em class="property"> = None</em><a class="headerlink" href="#Environment.MAB.IncreasingMAB.isDynamic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know if the problem is static or not.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Environment.MAB.IncreasingMAB.draw">
@@ -896,7 +1060,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 24 Sep 2018, 19h.
+      Last updated on 05 Oct 2018, 10h.
 
     </p>
   </div>
@@ -918,7 +1082,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.9.2',
+            VERSION:'0.9.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

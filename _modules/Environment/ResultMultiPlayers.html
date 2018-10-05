@@ -19,7 +19,7 @@
             </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Environment.ResultMultiPlayers &mdash; SMPyBandits 0.9.2 documentation</title>
+  <title>Environment.ResultMultiPlayers &mdash; SMPyBandits 0.9.3 documentation</title>
   
 
   
@@ -46,7 +46,7 @@
         <link rel="index" title="Index"
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.2 documentation" href="../../index.html"/>
+    <link rel="top" title="SMPyBandits 0.9.3 documentation" href="../../index.html"/>
         <link rel="up" title="Module code" href="../index.html"/> 
 
   
@@ -200,7 +200,7 @@
     <span class="c1"># , delta_t_save=1</span>
 <div class="viewcode-block" id="ResultMultiPlayers.__init__"><a class="viewcode-back" href="../../docs/Environment.ResultMultiPlayers.html#Environment.ResultMultiPlayers.ResultMultiPlayers.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">means</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create ResultMultiPlayers.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_means</span> <span class="o">=</span> <span class="n">means</span>  <span class="c1"># Keep the means for DynamicMAB cases</span>
+        <span class="c1"># self._means = means  # Keep the means for ChangingAtEachRepMAB cases</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">horizon</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Store all the choices of all the players</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">horizon</span><span class="p">))</span>  <span class="c1">#: Store all the rewards of all the players, to compute the mean</span>
         <span class="c1"># self.rewardsSquared = np.zeros((nbPlayers, horizon))  #: Store all the rewards**2 of all the players, to compute the variance  # XXX uncomment if needed</span>
@@ -218,12 +218,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">+=</span> <span class="n">pulls</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">allPulls</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">pulls</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">[:,</span> <span class="n">time</span><span class="p">]</span> <span class="o">=</span> <span class="n">collisions</span></div></div>
-
-    <span class="c1"># def saveondisk(self, filepath=&#39;/tmp/saveondisk.hdf5&#39;, delta_t_save=None):</span>
-    <span class="c1">#     &quot;&quot;&quot; Save the content of the result files into a HDF5 file on the disk.&quot;&quot;&quot;</span>
-    <span class="c1">#     if delta_t_save is None:</span>
-    <span class="c1">#         delta_t_save = self.delta_t_save</span>
-    <span class="c1">#     raise ValueError(&quot;FIXME finish to write this function saveondisk() for ResultMultiPlayers!&quot;)</span>
 </pre></div>
 
            </div>
@@ -239,7 +233,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 26 Sep 2018, 17h.
+      Last updated on 05 Oct 2018, 10h.
 
     </p>
   </div>
@@ -261,7 +255,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'0.9.2',
+            VERSION:'0.9.3',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
