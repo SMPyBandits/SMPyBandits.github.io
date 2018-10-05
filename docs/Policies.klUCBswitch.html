@@ -211,6 +211,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
@@ -358,7 +360,7 @@
 
 <dl class="function">
 <dt id="Policies.klUCBswitch.klucbplus_index">
-<code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klucbplus_index</code><span class="sig-paren">(</span><em>reward</em>, <em>pull</em>, <em>horizon</em>, <em>nbArms</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>tolerance=0.0001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klucbplus_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klucbplus_index" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klucbplus_index</code><span class="sig-paren">(</span><em>reward</em>, <em>pull</em>, <em>horizon</em>, <em>nbArms</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>tolerance=0.0001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klucbplus_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klucbplus_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>One kl-UCB+ index, from [Cappé et al. 13](<a class="reference external" href="https://arxiv.org/pdf/1210.1136.pdf">https://arxiv.org/pdf/1210.1136.pdf</a>):</p>
 <div class="math">
 \[\begin{split}\hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\
@@ -375,7 +377,7 @@ I^{KL+}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}
 
 <dl class="class">
 <dt id="Policies.klUCBswitch.klUCBswitch">
-<em class="property">class </em><code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klUCBswitch</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>threshold='best'</em>, <em>tolerance=0.0001</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klUCBswitch</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>threshold='best'</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.klUCB.html#Policies.klUCB.klUCB" title="Policies.klUCB.klUCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.klUCB.klUCB</span></code></a></p>
 <p>The kl-UCB-switch policy, for bounded distributions.</p>
 <ul class="simple">
@@ -383,7 +385,7 @@ I^{KL+}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}
 </ul>
 <dl class="method">
 <dt id="Policies.klUCBswitch.klUCBswitch.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>threshold='best'</em>, <em>tolerance=0.0001</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>threshold='best'</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -448,7 +450,7 @@ I^{KL+}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}
 
 <dl class="function">
 <dt id="Policies.klUCBswitch.klucb_index">
-<code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klucb_index</code><span class="sig-paren">(</span><em>reward</em>, <em>pull</em>, <em>t</em>, <em>nbArms</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>tolerance=0.0001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klucb_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klucb_index" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klucb_index</code><span class="sig-paren">(</span><em>reward</em>, <em>pull</em>, <em>t</em>, <em>nbArms</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>tolerance=0.0001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klucb_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klucb_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>One kl-UCB index, from [Garivier &amp; Cappé - COLT, 2011](<a class="reference external" href="https://arxiv.org/pdf/1102.2490.pdf">https://arxiv.org/pdf/1102.2490.pdf</a>):</p>
 <div class="math">
 \[\begin{split}\hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\
@@ -465,7 +467,7 @@ I^{KL}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}_
 
 <dl class="class">
 <dt id="Policies.klUCBswitch.klUCBswitchAnytime">
-<em class="property">class </em><code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klUCBswitchAnytime</code><span class="sig-paren">(</span><em>nbArms</em>, <em>threshold='delayed'</em>, <em>tolerance=0.0001</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.klUCBswitch.</code><code class="descname">klUCBswitchAnytime</code><span class="sig-paren">(</span><em>nbArms</em>, <em>threshold='delayed'</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.klUCBswitch.klUCBswitch" title="Policies.klUCBswitch.klUCBswitch"><code class="xref py py-class docutils literal"><span class="pre">Policies.klUCBswitch.klUCBswitch</span></code></a></p>
 <p>The anytime variant of the kl-UCB-switch policy, for bounded distributions.</p>
 <ul class="simple">
@@ -479,7 +481,7 @@ I^{KL}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}_
 
 <dl class="method">
 <dt id="Policies.klUCBswitch.klUCBswitchAnytime.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>threshold='delayed'</em>, <em>tolerance=0.0001</em>, <em>klucb=&lt;built-in function klucbBern&gt;</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>threshold='delayed'</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -534,7 +536,7 @@ I^{KL}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}_
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Oct 2018, 10h.
+      Last updated on 05 Oct 2018, 15h.
 
     </p>
   </div>
