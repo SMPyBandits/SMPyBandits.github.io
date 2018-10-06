@@ -137,7 +137,7 @@
 <li class="toctree-l1"><a class="reference internal" href="notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -238,7 +238,7 @@
 <div class="section" id="Non-Stationary-Stochastic-Multi-Armed-Bandits">
 <h1><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong><a class="headerlink" href="#Non-Stationary-Stochastic-Multi-Armed-Bandits" title="Permalink to this headline">¶</a></h1>
 <p>A well-known and well-studied variant of the <a class="reference external" href="https://en.wikipedia.org/wiki/Multi-armed_bandit">stochastic Multi-Armed Bandits</a> is the so-called <strong>Non-Stationary Stochastic Multi-Armed Bandits</strong>.
-I give here a short introduction, with references below. If you are in a hurry, please read the first two pages of <a class="reference external" href="https://arxiv.org/pdf/1802.08380">this article instead</a>.</p>
+I give here a short introduction, with references below. If you are in a hurry, please read the first two pages of <a class="reference external" href="https://arxiv.org/pdf/1802.08380">this recent article instead (arXiv:1802.08380)</a>.</p>
 <ul class="simple">
 <li>The first studied variant considers <em>piece-wise</em> stationary problems, also referred to as <strong>abruptly changing</strong>, where the distributions of the <code class="docutils literal"><span class="pre">$K$</span></code> arms are stationary on some intervals <code class="docutils literal"><span class="pre">$[T_i,\ldots,T_{i+1}]$</span></code> with some abrupt change points <code class="docutils literal"><span class="pre">$(T_i)$</span></code>.<ul>
 <li>It is always assumed that the location of the change points are unknown to the user, otherwise the problem is not harder: just play your <a class="reference external" href="docs/Policies.html">favorite algorithm</a>, and restart it at each change point.</li>
@@ -251,14 +251,14 @@ I give here a short introduction, with references below. If you are in a hurry, 
 <li>Another variant is the <strong>slowly varying</strong> problem, where the rewards <code class="docutils literal"><span class="pre">$r(t)</span> <span class="pre">=</span> <span class="pre">r_{A(t),t}$</span></code> is sampled at each time from a parametric distribution, and the parameter(s) change at each time (usually parametrized by its mean). If we focus on 1D exponential families, or any family of distributions parametrized by their mean <code class="docutils literal"><span class="pre">$\mu$</span></code>, we denote this by having <code class="docutils literal"><span class="pre">$r(t)</span> <span class="pre">\sim</span> <span class="pre">D(\mu_{A(t)}(t))$</span></code> where <code class="docutils literal"><span class="pre">$\mu_k(t)$</span></code> can be varying with the time. The slowly varying hypothesis is that every time step can be a break point, and that the speed of change <code class="docutils literal"><span class="pre">$|\mu_k(t+1)</span> <span class="pre">-</span> <span class="pre">\mu_k(t)|$</span></code> is bounded.</li>
 <li>Other variants include harder settings.<ul>
 <li>For instance, we can consider that an adversarial is deciding the change points, by being adaptative to the user&#8217;s actions. I consider it harder, as always with adversarial problems, and not very useful to model real-world problems.</li>
-<li>Another harder setting is a &#8220;pseudo-Markovian rested&#8221; point-of-view: the mean (or parameters) of an arm&#8217;s distribution can change only when it is sampled, either from time to time or at each time step. It makes sense for some applications (see <a class="reference external" href="https://www.linkedin.com/in/julien-seznec-29364a104/">Julien&#8217;s work</a>), but for others it doesn&#8217;t really make sense (e.g., cognitive radio applications).</li>
+<li>Another harder setting is a &#8220;pseudo-Markovian rested&#8221; point-of-view: the mean (or parameters) of an arm&#8217;s distribution can change only when it is sampled, either from time to time or at each time step. It makes sense for some applications, for instance <a class="reference external" href="https://www.linkedin.com/in/julien-seznec-29364a104/">Julien&#8217;s work (in SequeL Inria team)</a>, but for others it doesn&#8217;t really make sense (e.g., cognitive radio applications).</li>
 </ul>
 </li>
 </ul>
 <p>TODO fix notations more!</p>
 <div class="section" id="Applications">
 <h2>Applications<a class="headerlink" href="#Applications" title="Permalink to this headline">¶</a></h2>
-<p>TL;DR: the world is non stationary, so it makes sense to study this!</p>
+<p><em>TL;DR</em>: the world is non stationary, so it makes sense to study this!</p>
 <p>TODO write more justifications about applications, mainly for IoT networks (like when I studied <a class="reference external" href="MultiPlayers">multi-player bandits</a>).</p>
 </div>
 <div class="section" id="References">
@@ -267,7 +267,7 @@ I give here a short introduction, with references below. If you are in a hurry, 
 <div class="section" id="Main-references">
 <h3>Main references<a class="headerlink" href="#Main-references" title="Permalink to this headline">¶</a></h3>
 <ol class="simple">
-<li>[<a class="reference external" href="https://epubs.siam.org/doi/pdf/10.1137/S0097539701398375">&#8220;The Non-Stochastic Multi-Armed Bandit Problem&#8221;. P. Auer, N. Cesa-Bianchi, Y. Freund and R. Schapire. SIAM journal on computing, 32(1), 48-77, 2002</a>] is apparently the first reference (historically).</li>
+<li>It is not on non-stationary but on non-stochastic (i.e., adversary) bandits, but it can be a good reading for the curious reader. [<a class="reference external" href="https://epubs.siam.org/doi/pdf/10.1137/S0097539701398375">&#8220;The Non-Stochastic Multi-Armed Bandit Problem&#8221;. P. Auer, N. Cesa-Bianchi, Y. Freund and R. Schapire. SIAM journal on computing, 32(1), 48-77, 2002</a>].</li>
 <li>The Sliding-Window and Discounted UCB algorithms were given in [<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">&#8220;On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems&#8221;. Aurélien Garivier and Éric Moulines, ALT 2011</a>].<ul>
 <li>They are implemented in <a class="reference external" href="docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCB"><code class="docutils literal"><span class="pre">Policies.SlidingWindowUCB.SWUCB</span></code></a> and <a class="reference external" href="docs/Policies.DiscountedUCB.html"><code class="docutils literal"><span class="pre">Policies.DiscountedUCB</span></code></a>.</li>
 <li>Note that I also implemented the non-anytime heuristic given by the author, <a class="reference external" href="docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCBPlus"><code class="docutils literal"><span class="pre">Policies.SlidingWindowUCB.SWUCBPlus</span></code></a> which uses the knowledge of the horizon <code class="docutils literal"><span class="pre">$T$</span></code> to <em>try to</em> guess a correct value for <code class="docutils literal"><span class="pre">$\tau$</span></code> the sliding window size.</li>
@@ -289,28 +289,42 @@ I give here a short introduction, with references below. If you are in a hurry, 
 <p>More recent articles include the following:</p>
 <ol class="simple">
 <li>[<a class="reference external" href="https://arxiv.org/pdf/1802.08380">&#8220;On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems&#8221;. L. Wei and V. Srivastav. arXiv preprint arXiv:1802.08380, 2018</a>], introduced the first algorithms that can (try to) tackle the two problems simultaneously, <a class="reference external" href="XXX"><code class="docutils literal"><span class="pre">LM-DSEE</span></code></a> and <a class="reference external" href="XXX"><code class="docutils literal"><span class="pre">SW-UCB#</span></code></a>.<ul>
+<li>They require to know the rate of change but not the number of changes. They either assume that the number of break points <code class="docutils literal"><span class="pre">$\Upsilon_T$</span></code> is <code class="docutils literal"><span class="pre">$\mathcal{O}(T^\nu)$</span></code> for some <code class="docutils literal"><span class="pre">$\nu\in(0,1)$</span></code> (for abruptly-changing), or that the rate of change is <code class="docutils literal"><span class="pre">$\max_t</span> <span class="pre">|\mu_{t+1}</span> <span class="pre">-</span> <span class="pre">\mu_{t}|</span> <span class="pre">\leq</span> <span class="pre">\varepsilon_T</span> <span class="pre">=</span> <span class="pre">\mathcal{O}(T^{-\kappa})$</span></code>. In both cases, their model assumes to know <code class="docutils literal"><span class="pre">$\nu$</span></code> or <code class="docutils literal"><span class="pre">$\kappa$</span></code>, or an upper-bound on it.</li>
+<li>One advantage of their algorithms is their simplicity and ability to tackle both cases!</li>
 <li>TODO code it!</li>
 </ul>
 </li>
 <li>[<a class="reference external" href="https://ewrl.files.wordpress.com/2018/09/ewrl_14_2018_paper_28.pdf">&#8220;Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes&#8221;. Peter Auer, Pratik Gajane and Ronald Ortner. EWRL 2018, Lille</a>], introduced the <a class="reference external" href="XXX"><code class="docutils literal"><span class="pre">AdSwitch</span></code></a> algorithm, which does not require to know the number <code class="docutils literal"><span class="pre">$\Upsilon_T$</span></code> of change points.<ul>
 <li>TODO code it!</li>
+<li>Be sure how to adapt it to <code class="docutils literal"><span class="pre">$K\geq2$</span></code> arms and not just <code class="docutils literal"><span class="pre">$K=2$</span></code> (it shouldn&#8217;t be hard).</li>
 <li>TODO adapt it to unknown horizon (using <a class="reference external" href="DoublingTrick.html">doubling tricks?</a>!</li>
 </ul>
 </li>
 <li>[<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01811697/document">&#8220;Memory Bandits: a Bayesian approach for the Switching Bandit Problem&#8221;. Réda Alami, Odalric Maillard, Raphaël Féraud. 31st Conference on Neural Information Processing Systems (NIPS 2017), hal-01811697</a>], introduced the <a class="reference external" href="XXX"><code class="docutils literal"><span class="pre">MemoryBandit</span></code></a> algorithm, which does not require to know the number <code class="docutils literal"><span class="pre">$\Upsilon_T$</span></code> of change points.<ul>
+<li>They use a generic idea of <a class="reference external" href="Aggregation.html">expert aggregation</a> with <a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01615424/">an efficient tracking of a growing number of expert</a>. The basic idea is the following: a new expert is started <em>at every time</em>, and at a breakpoint, the expert started just after the breakpoint will essentially be the most efficient one (and we need efficient tracking to know it).</li>
+<li>Their <code class="docutils literal"><span class="pre">MemoryBandit</span></code> algorithm is very efficient empirically, but not easy to implement and it requires a large memory (although some discussion is given in their article&#8217;s appendix, as they evoke an heuristic that reduces the storage requirement).</li>
 <li>TODO code it!</li>
 </ul>
 </li>
-<li>🇫🇷 [<a class="reference external" href="http://oatao.univ-toulouse.fr/17130/1/louedec_17130.pdf">&#8220;Algorithme de bandit et obsolescence : un modèle pour la recommandation&#8221;. Jonhathan Louëdec, Laurent Rossi, Max Chevalier, Aurélien Garivier and Josiane Mothe. 18ème Conférence francophone sur l&#8217;Apprentissage Automatique, 2016 (Marseille, France)</a>] (🇫🇷 <em>in French</em>), introduces and justifies the possible applications of slowly-varying to recommender systems. They studies and present a model with exponential decrease of the means, and the <a class="reference external" href="XXX"><code class="docutils literal"><span class="pre">FadingUCB</span></code></a> that is efficient if a bound on the speed of the exponential decrease is known.</li>
+<li>🇫🇷 [<a class="reference external" href="http://oatao.univ-toulouse.fr/17130/1/louedec_17130.pdf">&#8220;Algorithme de bandit et obsolescence : un modèle pour la recommandation&#8221;. Jonhathan Louëdec, Laurent Rossi, Max Chevalier, Aurélien Garivier and Josiane Mothe. 18ème Conférence francophone sur l&#8217;Apprentissage Automatique, 2016 (Marseille, France)</a>] (🇫🇷 <em>in French</em>), introduces and justifies the possible applications of slowly-varying to recommender systems. They studies and present a model with an exponential decrease of the means, and the <a class="reference external" href="XXX"><code class="docutils literal"><span class="pre">FadingUCB</span></code></a> that is efficient if a bound on the speed of the exponential decrease is known.</li>
 </ol>
 <ul class="simple">
 <li>FIXME give more!</li>
 </ul>
 <p>References that seem interesting but I haven&#8217;t read them yet:</p>
 <ol class="simple">
-<li>[<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01575000/document">&#8220;The non-stationary stochastic multi-armed bandit problem&#8221;. R. Allesiardo, Raphaël Féraud and Odalric-Ambrym Maillard. International Journal of Data Science and Analytics, 3(4), 267-283. 2017</a>]</li>
-<li>[<a class="reference external" href="https://arxiv.org/pdf/1711.03539">&#8220;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&#8221;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017</a>]</li>
-<li>[<a class="reference external" href="https://arxiv.org/pdf/1707.09727">&#8220;Taming non-stationary bandits: A Bayesian approach&#8221;. V. Raj and S. Kalyani. arXiv preprint arXiv:1707.09727, 2017</a>]</li>
+<li>[<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01575000/document">&#8220;The Non-Stationary Stochastic Multi Armed Bandit Problem&#8221;. R. Allesiardo, Raphaël Féraud and Odalric-Ambrym Maillard. International Journal of Data Science and Analytics, 3(4), 267-283. 2017</a>]<ul>
+<li>It is a long journal article, I&#8217;m sure there is so many interesting to discover in it!</li>
+</ul>
+</li>
+<li>[<a class="reference external" href="https://arxiv.org/pdf/1707.09727">&#8220;Taming non-stationary bandits: A Bayesian approach&#8221;. V. Raj and S. Kalyani. arXiv preprint arXiv:1707.09727, 2017</a>]<ul>
+<li>TODO A shorter arXiv paper, I need to read it!</li>
+</ul>
+</li>
+<li>[<a class="reference external" href="https://arxiv.org/pdf/1711.03539">&#8220;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&#8221;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017</a>]<ul>
+<li>TODO A second short arXiv paper.</li>
+</ul>
+</li>
 </ol>
 </div>
 </div>
@@ -335,7 +349,8 @@ I give here a short introduction, with references below. If you are in a hurry, 
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;newMeans&quot;</span><span class="p">:</span> <span class="n">randomContinuouslyVaryingMeans</span><span class="p">,</span>
-                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">geometricChangePoints</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">proba</span><span class="o">=</span><span class="n">nb_random_events</span><span class="o">/</span><span class="n">horizon</span><span class="p">),</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">geometricChangePoints</span><span class="p">(</span>
+                    <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">proba</span><span class="o">=</span><span class="n">nb_random_events</span><span class="o">/</span><span class="n">horizon</span><span class="p">),</span>
                 <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;nbArms&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
                     <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -387,14 +402,17 @@ make nonstationary   <span class="c1"># run and log the main.py script FIXME</sp
 <h3>📜 License ? <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg" /></a><a class="headerlink" href="#📜-License-?-GitHub-license" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://lbesson.mit-license.org/">MIT Licensed</a> (file <a class="reference external" href="LICENSE">LICENSE</a>).</p>
 <p>© 2016-2018 <a class="reference external" href="https://GitHub.com/Naereen">Lilian Besson</a>.</p>
-<p><a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
+<p><a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/"><a class="reference external" href="https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github">Open Source? Yes!</a></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
 <a class="reference external" href="https://GitHub.com/Naereen/ama"><img alt="Ask Me Anything !" src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" /></a>
 <a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/"><img alt="Analytics" src="https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel" /></a>
 <img alt="PyPI version" src="https://img.shields.io/pypi/v/smpybandits.svg" />
-<img alt="PyPI implementation" src="https://img.shields.io/pypi/implementation/SMPyBandits.svg" />
-<img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/SMPyBandits.svg" />
-<a class="reference external" href="http://ForTheBadge.com"><img alt="ForTheBadge uses-badges" src="http://ForTheBadge.com/images/badges/uses-badges.svg" /></a>
-<a class="reference external" href="https://GitHub.com/"><img alt="ForTheBadge uses-git" src="http://ForTheBadge.com/images/badges/uses-git.svg" /></a></p>
+<img alt="PyPI implementation" src="https://img.shields.io/pypi/implementation/smpybandits.svg" />
+<img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/smpybandits.svg" />
+<a class="reference external" href="https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/smpybandits/badge/?version=latest" /></a>
+<a class="reference external" href="https://travis-ci.org/SMPyBandits/SMPyBandits"><img alt="Build Status" src="https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/stargazers"><img alt="Stars of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/stars/SMPyBandits/SMPyBandits" /></a>
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/releases"><img alt="Releases of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/release/SMPyBandits/SMPyBandits" /></a></p>
 </div>
 </div>
 </div>
@@ -422,7 +440,7 @@ make nonstationary   <span class="c1"># run and log the main.py script FIXME</sp
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Oct 2018, 15h.
+      Last updated on 06 Oct 2018, 10h.
 
     </p>
   </div>
