@@ -49,6 +49,8 @@ For policy #2 called 'kl-UCB' ...
     2.59 s ± 284 ms per loop (mean ± std. dev. of 10 runs)
 ```
 
+![Demo_of_automatic_time_consumption_measure_between_algorithms](../plots/Demo_of_automatic_time_consumption_measure_between_algorithms.png)
+
 ### Memory consumption
 Note that [I had added an experimental support](https://github.com/SMPyBandits/SMPyBandits/issues/129) for time consumption measures, every simulation script will output (as the end) some lines looking like this:
 
@@ -66,6 +68,8 @@ For players called '3 x MCNoSensing($M=3$, $T=1000$)' ...
     12 B ± 0 B (mean ± std. dev. of 10 runs)
 ```
 
+![Demo_of_automatic_memory_consumption_measure_between_algorithms](../plots/Demo_of_automatic_memory_consumption_measure_between_algorithms.png)
+
 > It is still experimental!
 
 ---
@@ -73,3 +77,22 @@ For players called '3 x MCNoSensing($M=3$, $T=1000$)' ...
 ## Other examples
 ### Example of output of a script
 For the [`complete_tree_exploration_for_MP_bandits`](../docs/complete_tree_exploration_for_MP_bandits.html) script, see the file [`complete_tree_exploration_for_MP_bandits_py3_log.txt`](complete_tree_exploration_for_MP_bandits_py3_log.txt).
+
+----
+
+### :scroll: License ? [![GitHub license](https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg)](https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE)
+[MIT Licensed](https://lbesson.mit-license.org/) (file [LICENSE](LICENSE)).
+
+© 2016-2018 [Lilian Besson](https://GitHub.com/Naereen).
+
+[![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/SMPyBandits/SMPyBandits/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity)
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/Naereen/ama)
+[![Analytics](https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel)](https://GitHub.com/SMPyBandits/SMPyBandits/)
+![PyPI version](https://img.shields.io/pypi/v/smpybandits.svg)
+![PyPI implementation](https://img.shields.io/pypi/implementation/smpybandits.svg)
+![PyPI pyversions](https://img.shields.io/pypi/pyversions/smpybandits.svg)
+[![Documentation Status](https://readthedocs.org/projects/smpybandits/badge/?version=latest)](https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master)](https://travis-ci.org/SMPyBandits/SMPyBandits)
+[![Stars of https://github.com/SMPyBandits/SMPyBandits/](https://badgen.net/github/stars/SMPyBandits/SMPyBandits)](https://GitHub.com/SMPyBandits/SMPyBandits/stargazers)
+[![Releases of https://github.com/SMPyBandits/SMPyBandits/](https://badgen.net/github/release/SMPyBandits/SMPyBandits)](https://github.com/SMPyBandits/SMPyBandits/releases)

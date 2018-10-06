@@ -113,6 +113,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Some illustrations for this project</a><ul>
@@ -129,13 +131,19 @@
 <li class="toctree-l3"><a class="reference internal" href="#Saving-simulation-data-to-HDF5-file">Saving simulation data to HDF5 file</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#Graph-of-time-and-memory-consumptions">Graph of time and memory consumptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Time-consumption">Time consumption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Memory-consumption">Memory consumption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#📜-License-?-GitHub-license">📜 License ? </a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs/</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -335,6 +343,63 @@ See the example:
 <img alt="Example of exploring this 'example.hdf5' file using HDFCompass" src="../_images/example_HDF5_exploration_with_HDFCompass.png" /></div></blockquote>
 </div>
 </div>
+<hr class="docutils" />
+<div class="section" id="Graph-of-time-and-memory-consumptions">
+<h2>Graph of time and memory consumptions<a class="headerlink" href="#Graph-of-time-and-memory-consumptions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Time-consumption">
+<h3>Time consumption<a class="headerlink" href="#Time-consumption" title="Permalink to this headline">¶</a></h3>
+<p>Note that <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/94">I had added a very clean support</a> for time consumption measures, every simulation script will output (as the end) some lines looking like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>Giving the mean and std running times ...
+For policy #0 called &#39;UCB($\alpha=1$)&#39; ...
+    84.3 ms ± 7.54 ms per loop (mean ± std. dev. of 10 runs)
+For policy #1 called &#39;Thompson&#39; ...
+    89.6 ms ± 17.7 ms per loop (mean ± std. dev. of 10 runs)
+For policy #3 called &#39;kl-UCB$^{++}$($T=1000$)&#39; ...
+    2.52 s ± 29.3 ms per loop (mean ± std. dev. of 10 runs)
+For policy #2 called &#39;kl-UCB&#39; ...
+    2.59 s ± 284 ms per loop (mean ± std. dev. of 10 runs)
+</pre></div>
+</div>
+<p><img alt="Demo_of_automatic_time_consumption_measure_between_algorithms" src="../_images/Demo_of_automatic_time_consumption_measure_between_algorithms1.png" /></p>
+</div>
+<div class="section" id="Memory-consumption">
+<h3>Memory consumption<a class="headerlink" href="#Memory-consumption" title="Permalink to this headline">¶</a></h3>
+<p>Note that <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/129">I had added an experimental support</a> for time consumption measures, every simulation script will output (as the end) some lines looking like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>Giving the mean and std memory consumption ...
+For players called &#39;3 x RhoRand-kl-UCB, rank:1&#39; ...
+    23.6 KiB ± 52 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x RandTopM-kl-UCB&#39; ...
+    1.1 KiB ± 0 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x Selfish-kl-UCB&#39; ...
+    12 B ± 0 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x MCTopM-kl-UCB&#39; ...
+    4.9 KiB ± 86 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x MCNoSensing($M=3$, $T=1000$)&#39; ...
+    12 B ± 0 B (mean ± std. dev. of 10 runs)
+</pre></div>
+</div>
+<p><img alt="Demo_of_automatic_memory_consumption_measure_between_algorithms" src="../_images/Demo_of_automatic_memory_consumption_measure_between_algorithms1.png" /></p>
+<blockquote>
+<div>It is still experimental!</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="📜-License-?-GitHub-license">
+<h3>📜 License ? <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg" /></a><a class="headerlink" href="#📜-License-?-GitHub-license" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://lbesson.mit-license.org/">MIT Licensed</a> (file <a class="reference external" href="LICENSE">LICENSE</a>).</p>
+<p>© 2016-2018 <a class="reference external" href="https://GitHub.com/Naereen">Lilian Besson</a>.</p>
+<p><a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/"><img alt="Open Source? Yes!" src="https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
+<a class="reference external" href="https://GitHub.com/Naereen/ama"><img alt="Ask Me Anything !" src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/"><img alt="Analytics" src="https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel" /></a>
+<img alt="PyPI version" src="https://img.shields.io/pypi/v/smpybandits.svg" />
+<img alt="PyPI implementation" src="https://img.shields.io/pypi/implementation/smpybandits.svg" />
+<img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/smpybandits.svg" />
+<a class="reference external" href="https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/smpybandits/badge/?version=latest" /></a>
+<a class="reference external" href="https://travis-ci.org/SMPyBandits/SMPyBandits"><img alt="Build Status" src="https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/stargazers"><img alt="Stars of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/stars/SMPyBandits/SMPyBandits" /></a>
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/releases"><img alt="Releases of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/release/SMPyBandits/SMPyBandits" /></a></p>
+</div>
+</div>
 </div>
 
 
@@ -360,7 +425,7 @@ See the example:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Oct 2018, 10h.
+      Last updated on 06 Oct 2018, 10h.
 
     </p>
   </div>
