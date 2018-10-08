@@ -294,7 +294,10 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING for the MCTopM variant using the &#39;pickPrevWorstFirst&#39; optimization, it should ever find an empty set &#39;prev_WorstThenChair&#39; ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
             <span class="k">return</span> <span class="n">current_Mbest</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">current_Mbest</span><span class="p">,</span> <span class="n">prev_WorstThenChair</span><span class="p">)</span></div>
+            <span class="n">intersection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">current_Mbest</span><span class="p">,</span> <span class="n">prev_WorstThenChair</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">current_Mbest</span>
+            <span class="k">return</span> <span class="n">intersection</span></div>
 
 <div class="viewcode-block" id="oneRandTopM.handleCollision"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.RandTopM.html#PoliciesMultiPlayers.RandTopM.oneRandTopM.handleCollision">[docs]</a>    <span class="k">def</span> <span class="nf">handleCollision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get a new random arm from the current estimate of Mbest, and give reward to the algorithm if not None.&quot;&quot;&quot;</span>
@@ -667,7 +670,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 06 Oct 2018, 10h.
+      Last updated on 08 Oct 2018, 15h.
 
     </p>
   </div>

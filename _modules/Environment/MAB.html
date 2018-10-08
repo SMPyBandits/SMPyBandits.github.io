@@ -597,9 +597,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="MarkovianMAB.__init__"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.MarkovianMAB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; New MarkovianMAB.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;New MarkovianMAB.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Creating a new MarkovianMAB problem ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">isMarkovian</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: Flag to know if the problem is Markovian or not.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isChangingAtEachRepetition</span>   <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The problem is not changing at each repetition.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isDynamic</span>   <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The problem is static.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isMarkovian</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: The problem is Markovian.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sparsity</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">&quot;Error: &#39;configuration&#39; for a MarkovianMAB must be a dictionary.&quot;</span>  <span class="c1"># DEBUG</span>
@@ -730,6 +732,7 @@
 <span class="c1"># --- ChangingAtEachRepMAB</span>
 
 <span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Whether to be verbose when generating new arms for Dynamic MAB</span>
+<span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: FIXME remove this</span>
 
 <div class="viewcode-block" id="ChangingAtEachRepMAB"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.ChangingAtEachRepMAB">[docs]</a><span class="k">class</span> <span class="nc">ChangingAtEachRepMAB</span><span class="p">(</span><span class="n">MAB</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Like a static MAB problem, but the arms are (randomly) regenerated for each repetition, with the :meth:`newRandomArms` method.</span>
@@ -743,7 +746,9 @@
 
 <div class="viewcode-block" id="ChangingAtEachRepMAB.__init__"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.ChangingAtEachRepMAB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;New ChangingAtEachRepMAB.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">isChangingAtEachRepetition</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: Flag to know if the problem is changing at each repetition or not.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isChangingAtEachRepetition</span>   <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: The problem is changing at each repetition or not.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isDynamic</span>   <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The problem is static.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isMarkovian</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The problem is not Markovian.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sparsity</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> \
@@ -811,7 +816,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># new draw!</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">one_draw_of_means</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  - Creating a new dynamic list of means = </span><span class="si">{}</span><span class="s2"> for arms: ChangingAtEachRepMAB = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">one_draw_of_means</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>  <span class="c1"># DEBUG</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  - Creating a new dynamic list of means = </span><span class="si">{}</span><span class="s2"> for arms: ChangingAtEachRepMAB = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">one_draw_of_means</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>  <span class="c1"># DEBUG</span>
             <span class="c1"># print(&quot;Currently self._t = {} and self._historyOfMeans = {} ...&quot;.format(self._t, self._historyOfMeans))  # DEBUG</span>
         <span class="k">return</span> <span class="n">one_draw_of_means</span></div>
 
@@ -942,8 +947,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NonStationaryMAB.__init__"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;New ChangingAtEachRepMAB.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">isDynamic</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: Flag to know if the problem is static or not.</span>
+        <span class="sd">&quot;&quot;&quot;New NonStationaryMAB.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isChangingAtEachRepetition</span>   <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The problem is not changing at each repetition.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isDynamic</span>   <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: The problem is dynamic.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isMarkovian</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The problem is not Markovian.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sparsity</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> \
@@ -962,7 +969,9 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - with &#39;params&#39; =&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">newMeans</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;newMeans&quot;</span><span class="p">]</span>  <span class="c1">#: Function to generate the means</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - with &#39;newMeans&#39; =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">newMeans</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;changePoints&quot;</span><span class="p">]</span>  <span class="c1">#: Function to generate the means</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;changePoints&quot;</span><span class="p">]</span>  <span class="c1">#: List of the change points</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - with &#39;changePoints&#39; =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onlyOneArm</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;onlyOneArm&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1">#: None by default, but can be &quot;uniform&quot; to only change *one* arm at each change point.</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - with &#39;changePoints&#39; =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span>  <span class="c1">#: Args to give to function</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - with &#39;args&#39; =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
@@ -971,9 +980,10 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2"> ==&gt; Creating the dynamic arms ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="c1"># Keep track of the successive mean vectors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># Historic of the means vectors, storing time of {changepoint: newMeans}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfChangePoints</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Historic of the change points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># nb of calls to the function for generating new arms</span>
         <span class="c1"># Generate a first mean vector</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">newRandomArms</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newRandomArms</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - drawing a random set of arms&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arms</span><span class="p">)</span>  <span class="c1">#: Means of arms</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - with &#39;nbArms&#39; =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
@@ -1007,19 +1017,35 @@
     <span class="c1">#</span>
     <span class="c1"># --- Dynamic arms and means</span>
 
-<div class="viewcode-block" id="NonStationaryMAB.newRandomArms"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.newRandomArms">[docs]</a>    <span class="k">def</span> <span class="nf">newRandomArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
+<div class="viewcode-block" id="NonStationaryMAB.newRandomArms"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.newRandomArms">[docs]</a>    <span class="k">def</span> <span class="nf">newRandomArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">onlyOneArm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a new list of arms, from ``arm_type(params[&#39;newMeans&#39;](t, **params[&#39;args&#39;]))``.</span>
 
-<span class="sd">        .. warning:: FIXME</span>
+<span class="sd">        - If ``onlyOneArm`` is given and is an integer, the change of mean only occurs for this arm and the others stay the same.</span>
+<span class="sd">        - If ``onlyOneArm=&quot;uniform&quot;``, the change of mean only occurs for one arm and the others stay the same, and the changing arm is chosen uniformly at random.</span>
+
+<span class="sd">        .. note:: Only the *means* of the arms change (and so, their order), not their family.</span>
+
+<span class="sd">        .. warning:: TODO? So far the only change points we consider is when the means of arms change, but the family of distributions stay the same. I could implement a more generic way, for instance to be able to test algorithms that detect change between different families of distribution (e.g., from a Gaussian of variance=1 to a Gaussian of variance=2, with different or not means).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">means</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">t</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span><span class="p">:</span>
+            <span class="c1"># return self.means</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfChangePoints</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfChangePoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
         <span class="n">one_draw_of_means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">newMeans</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># new draw!</span>
+        <span class="c1"># Handling the option to change only one arm</span>
+        <span class="k">if</span> <span class="n">onlyOneArm</span> <span class="o">==</span> <span class="s2">&quot;uniform&quot;</span><span class="p">:</span>
+            <span class="n">onlyOneArm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+        <span class="c1"># If only one arm, and not the first random means, change only one</span>
+        <span class="k">if</span> <span class="n">onlyOneArm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">arm</span> <span class="o">!=</span> <span class="n">onlyOneArm</span><span class="p">:</span>
+                    <span class="n">one_draw_of_means</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">arm</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">one_draw_of_means</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_arms</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">arm_type</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span> <span class="k">for</span> <span class="n">mean</span> <span class="ow">in</span> <span class="n">one_draw_of_means</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_arms</span><span class="p">)</span>  <span class="c1"># useless</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_t</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># new draw!</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">one_draw_of_means</span>
         <span class="k">if</span> <span class="n">verbose</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  - Creating a new dynamic list of means = </span><span class="si">{}</span><span class="s2"> for arms: ChangingAtEachRepMAB = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">one_draw_of_means</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>  <span class="c1"># DEBUG</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  - Creating a new dynamic list of means = </span><span class="si">{}</span><span class="s2"> for arms: NonStationaryMAB = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">one_draw_of_means</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)))</span>  <span class="c1"># DEBUG</span>
             <span class="c1"># print(&quot;Currently self._t = {} and self._historyOfMeans = {} ...&quot;.format(self._t, self._historyOfMeans))  # DEBUG</span>
         <span class="k">return</span> <span class="n">one_draw_of_means</span></div>
 
@@ -1032,50 +1058,50 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">means</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the list of means of arms for this ChangingAtEachRepMAB: after :math:`x` calls to :meth:`newRandomArms`, the return mean of arm :math:`k` is the mean of the :math:`x` means of that arm.</span>
+        <span class="sd">&quot;&quot;&quot; Return the list of means of arms for this NonStationaryMAB: after :math:`x` calls to :meth:`newRandomArms`, the return mean of arm :math:`k` is the mean of the :math:`x` means of that arm.</span>
 
 <span class="sd">        .. warning:: Highly experimental!</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">())),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="c1">#</span>
     <span class="c1"># --- Helper to compute sets Mbest and Mworst</span>
 
 <div class="viewcode-block" id="NonStationaryMAB.Mbest"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.Mbest">[docs]</a>    <span class="k">def</span> <span class="nf">Mbest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Set of M best means (averaged on all the draws of new means).&quot;&quot;&quot;</span>
-        <span class="n">sortedMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">sortedMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">())),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sortedMeans</span><span class="p">[</span><span class="o">-</span><span class="n">M</span><span class="p">:]</span></div>
 
 <div class="viewcode-block" id="NonStationaryMAB.Mworst"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.Mworst">[docs]</a>    <span class="k">def</span> <span class="nf">Mworst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Set of M worst means (averaged on all the draws of new means).&quot;&quot;&quot;</span>
-        <span class="n">sortedMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">sortedMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">())),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sortedMeans</span><span class="p">[:</span><span class="o">-</span><span class="n">M</span><span class="p">]</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">minArm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the smallest mean of the arms, for a dynamic MAB (averaged on all the draws of new means).&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">()))))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">maxArm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the largest mean of the arms, for a dynamic MAB (averaged on all the draws of new means).&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_historyOfMeans</span><span class="o">.</span><span class="n">values</span><span class="p">()))))</span></div>
 
     <span class="c1">#</span>
     <span class="c1"># --- Compute lower bounds</span>
     <span class="c1"># TODO</span>
 
-<div class="viewcode-block" id="NonStationaryMAB.lowerbound"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.lowerbound">[docs]</a>    <span class="k">def</span> <span class="nf">lowerbound</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the constant C(mu), for [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from :mod:`kullback` (averaged on all the draws of new means).&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+    <span class="c1"># def lowerbound(self):</span>
+    <span class="c1">#     &quot;&quot;&quot; Compute the constant C(mu), for [Lai &amp; Robbins] lower-bound for this MAB problem (complexity), using functions from :mod:`kullback` (averaged on all the draws of new means).&quot;&quot;&quot;</span>
+    <span class="c1">#     raise NotImplementedError</span>
 
-<div class="viewcode-block" id="NonStationaryMAB.hoifactor"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.hoifactor">[docs]</a>    <span class="k">def</span> <span class="nf">hoifactor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute the HOI factor H_OI(mu), the Optimal Arm Identification (OI) factor, for this MAB problem (complexity). Cf. (3.3) in Navikkumar MODI&#39;s thesis, &quot;Machine Learning and Statistical Decision Making for Green Radio&quot; (2017) (averaged on all the draws of new means).&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+    <span class="c1"># def hoifactor(self):</span>
+    <span class="c1">#     &quot;&quot;&quot; Compute the HOI factor H_OI(mu), the Optimal Arm Identification (OI) factor, for this MAB problem (complexity). Cf. (3.3) in Navikkumar MODI&#39;s thesis, &quot;Machine Learning and Statistical Decision Making for Green Radio&quot; (2017) (averaged on all the draws of new means).&quot;&quot;&quot;</span>
+    <span class="c1">#     raise NotImplementedError</span>
 
-<div class="viewcode-block" id="NonStationaryMAB.lowerbound_multiplayers"><a class="viewcode-back" href="../../docs/Environment.MAB.html#Environment.MAB.NonStationaryMAB.lowerbound_multiplayers">[docs]</a>    <span class="k">def</span> <span class="nf">lowerbound_multiplayers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Compute our multi-players lower bound for this MAB problem (complexity), using functions from :mod:`kullback`. &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+    <span class="c1"># def lowerbound_multiplayers(self, nbPlayers=1):</span>
+    <span class="c1">#     &quot;&quot;&quot; Compute our multi-players lower bound for this MAB problem (complexity), using functions from :mod:`kullback`. &quot;&quot;&quot;</span>
+    <span class="c1">#     raise NotImplementedError</span>
 
 
 
@@ -1233,7 +1259,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 06 Oct 2018, 10h.
+      Last updated on 08 Oct 2018, 15h.
 
     </p>
   </div>
