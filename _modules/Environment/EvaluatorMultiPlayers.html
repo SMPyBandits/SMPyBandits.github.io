@@ -349,7 +349,7 @@
 
 <div class="viewcode-block" id="EvaluatorMultiPlayers.__initPlayers__"><a class="viewcode-back" href="../../docs/Environment.EvaluatorMultiPlayers.html#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__initPlayers__">[docs]</a>    <span class="k">def</span> <span class="nf">__initPlayers__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create or initialize players.&quot;&quot;&quot;</span>
-        <span class="n">playersId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;playersId&#39;</span><span class="p">]</span>
+        <span class="n">playersId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;playersId&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">playerId</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;players&#39;</span><span class="p">]):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- Adding player #</span><span class="si">{:&gt;2}</span><span class="s2"> = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">player</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>  <span class="c1"># Either the &#39;player&#39; is a config dict</span>
@@ -1235,6 +1235,8 @@
                 <span class="n">text</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$</span><span class="si">{}</span><span class="s1"> \times$ </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">listStrPlayers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">text</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> x </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">listStrPlayers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># FIXME change this after this week simulations</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">listStrPlayers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">listStrPlayers</span><span class="p">)</span>
         <span class="n">text</span> <span class="o">=</span> <span class="n">wraptext</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -1391,7 +1393,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 08 Oct 2018, 15h.
+      Last updated on 09 Oct 2018, 10h.
 
     </p>
   </div>
