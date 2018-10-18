@@ -344,7 +344,7 @@
 
 <dl class="class">
 <dt id="Policies.DiscountedUCB.DiscountedUCB">
-<em class="property">class </em><code class="descclassname">Policies.DiscountedUCB.</code><code class="descname">DiscountedUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>alpha=4</em>, <em>gamma=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.DiscountedUCB.</code><code class="descname">DiscountedUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>alpha=4</em>, <em>gamma=1.0</em>, <em>useRealDiscount=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a></p>
 <p>The Discounted-UCB index policy, with a discount factor of <span class="math">\(\gamma\in(0,1]\)</span>.</p>
 <ul class="simple">
@@ -352,7 +352,7 @@
 </ul>
 <dl class="method">
 <dt id="Policies.DiscountedUCB.DiscountedUCB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>alpha=4</em>, <em>gamma=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>alpha=4</em>, <em>gamma=1.0</em>, <em>useRealDiscount=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -365,6 +365,18 @@
 <dt id="Policies.DiscountedUCB.DiscountedUCB.gamma">
 <code class="descname">gamma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameter gamma</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.delta_time_steps">
+<code class="descname">delta_time_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.delta_time_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep memory of the <span class="math">\(\Delta_k(t)\)</span> for each time step.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.useRealDiscount">
+<code class="descname">useRealDiscount</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.useRealDiscount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know if the real update should be used, the one with a multiplication by <span class="math">\(\gamma^{1+\Delta_k(t)}\)</span> and not simply a multiplication by <span class="math">\(\gamma\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -383,11 +395,11 @@
 \[\begin{split}N_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} N_k(s), \\
 X_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} X_k(s).\end{split}\]</div>
 <ul class="simple">
-<li>Instead of keeping the whole history of rewards, as expressed in the math formula, we keep the sum of discounted rewards from <cite>s=0</cite> to <cite>s=t</cite>, because updating it is easy (2 operations instead of just 1 for classical <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a>, and 2 operations instead of <span class="math">\(\mathcal{O}(t)\)</span> as expressed mathematically).</li>
+<li>Instead of keeping the whole history of rewards, as expressed in the math formula, we keep the sum of discounted rewards from <code class="docutils literal"><span class="pre">s=0</span></code> to <code class="docutils literal"><span class="pre">s=t</span></code>, because updating it is easy (2 operations instead of just 1 for classical <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a>, and 2 operations instead of <span class="math">\(\mathcal{O}(t)\)</span> as expressed mathematically). Denote <span class="math">\(\Delta_k(t)\)</span> the number of time steps during which the arm <code class="docutils literal"><span class="pre">k</span></code> was <em>not</em> selected (maybe 0 if it is selected twice in a row). Then the update can be done easily by multiplying by <span class="math">\(\gamma^{1+\Delta_k(t)}\)</span>:</li>
 </ul>
 <div class="math">
-\[\begin{split}N_{k,\gamma}(t+1) &amp;= \gamma \times N_{k,\gamma}(t) + \mathbb{1}(A(t+1) = k), \\
-X_{k,\gamma}(t+1) &amp;= \gamma \times X_{k,\gamma}(t) + X_k(t+1).\end{split}\]</div>
+\[\begin{split}N_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times N_{k,\gamma}(t) + \mathbb{1}(A(t+1) = k), \\
+X_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times X_{k,\gamma}(t) + X_k(t+1).\end{split}\]</div>
 </dd></dl>
 
 <dl class="method">
@@ -463,7 +475,7 @@ X_{k,\gamma}(t+1) &amp;= \gamma \times X_{k,\gamma}(t) + X_k(t+1).\end{split}\]<
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 09 Oct 2018, 10h.
+      Last updated on 18 Oct 2018, 11h.
 
     </p>
   </div>

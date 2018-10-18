@@ -196,7 +196,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -223,6 +223,7 @@
 
 <div class="viewcode-block" id="DiscountedUCB.__init__"><a class="viewcode-back" href="../../docs/Policies.DiscountedUCB.html#Policies.DiscountedUCB.DiscountedUCB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
                  <span class="n">alpha</span><span class="o">=</span><span class="n">ALPHA</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">GAMMA</span><span class="p">,</span>
+                 <span class="n">useRealDiscount</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DiscountedUCB</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: the &#39;alpha&#39; parameter for DiscountedUCB class has to be &gt;= 0.&quot;</span>  <span class="c1"># DEBUG</span>
@@ -230,10 +231,15 @@
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">gamma</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: the &#39;gamma&#39; parameter for DiscountedUCB class has to be 0 &lt; gamma &lt;= 1.&quot;</span>  <span class="c1"># DEBUG</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: using DiscountedUCB with &#39;gamma&#39; too close to 1 will result in UCBalpha, you should rather use it...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>  <span class="c1">#: Parameter gamma</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>  <span class="c1">#: Parameter gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep memory of the :math:`\Delta_k(t)` for each time step.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">useRealDiscount</span> <span class="o">=</span> <span class="n">useRealDiscount</span>  <span class="c1">#: Flag to know if the real update should be used, the one with a multiplication by :math:`\gamma^{1+\Delta_k(t)}` and not simply a multiplication by :math:`\gamma`.</span></div>
 
 <div class="viewcode-block" id="DiscountedUCB.__str__"><a class="viewcode-back" href="../../docs/Policies.DiscountedUCB.html#Policies.DiscountedUCB.DiscountedUCB.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;D-UCB($\alpha=</span><span class="si">{:.3g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.5g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;D-UCB(</span><span class="si">{}</span><span class="s2">$\alpha=</span><span class="si">{:.3g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.5g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;no delay, &quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">useRealDiscount</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="DiscountedUCB.getReward"><a class="viewcode-back" href="../../docs/Policies.DiscountedUCB.html#Policies.DiscountedUCB.DiscountedUCB.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Give a reward: increase t, pulls, and update cumulated sum of rewards for that arm (normalized in [0, 1]).</span>
@@ -242,29 +248,34 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           N_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} N_k(s), \\</span>
-<span class="sd">           X_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} X_k(s).</span>
+<span class="sd">            N_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} N_k(s), \\</span>
+<span class="sd">            X_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} X_k(s).</span>
 
-<span class="sd">        - Instead of keeping the whole history of rewards, as expressed in the math formula, we keep the sum of discounted rewards from `s=0` to `s=t`, because updating it is easy (2 operations instead of just 1 for classical :class:`Policies.UCBalpha.UCBalpha`, and 2 operations instead of :math:`\mathcal{O}(t)` as expressed mathematically).</span>
+<span class="sd">        - Instead of keeping the whole history of rewards, as expressed in the math formula, we keep the sum of discounted rewards from ``s=0`` to ``s=t``, because updating it is easy (2 operations instead of just 1 for classical :class:`Policies.UCBalpha.UCBalpha`, and 2 operations instead of :math:`\mathcal{O}(t)` as expressed mathematically). Denote :math:`\Delta_k(t)` the number of time steps during which the arm ``k`` was *not* selected (maybe 0 if it is selected twice in a row). Then the update can be done easily by multiplying by :math:`\gamma^{1+\Delta_k(t)}`:</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           N_{k,\gamma}(t+1) &amp;= \gamma \times N_{k,\gamma}(t) + \mathbb{1}(A(t+1) = k), \\</span>
-<span class="sd">           X_{k,\gamma}(t+1) &amp;= \gamma \times X_{k,\gamma}(t) + X_k(t+1).</span>
+<span class="sd">            N_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times N_{k,\gamma}(t) + \mathbb{1}(A(t+1) = k), \\</span>
+<span class="sd">            X_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times X_{k,\gamma}(t) + X_k(t+1).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># FIXED we should multiply by gamma^delta where delta is the number of time steps where we didn&#39;t play this arm, +1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span><span class="p">[</span><span class="n">arm</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="c1"># XXX self.pulls[arm] += 1  # if we were using N_k(t) and not N_{k,gamma}(t).</span>
         <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="n">reward</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span><span class="p">[</span><span class="n">arm</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="n">reward</span>
+        <span class="c1"># Ok and we saw this arm so no delta now</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useRealDiscount</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># increase delay for each algorithms</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="DiscountedUCB.computeIndex"><a class="viewcode-back" href="../../docs/Policies.DiscountedUCB.html#Policies.DiscountedUCB.DiscountedUCB.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the current index, at time :math:`t` and after :math:`N_{k,\gamma}(t)` *&quot;discounted&quot;* pulls of arm k, and :math:`n_{\gamma}(t)` *&quot;discounted&quot;* pulls of all arms:</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           I_k(t) &amp;:= \frac{X_{k,\gamma}(t)}{N_{k,\gamma}(t)} + \sqrt{\frac{\alpha \log(n_{\gamma}(t))}{2 N_{k,\gamma}(t)}}, \\</span>
-<span class="sd">           \text{where}\;\; n_{\gamma}(t) &amp;:= \sum_{k=1}^{K} N_{k,\gamma}(t).</span>
+<span class="sd">            I_k(t) &amp;:= \frac{X_{k,\gamma}(t)}{N_{k,\gamma}(t)} + \sqrt{\frac{\alpha \log(n_{\gamma}(t))}{2 N_{k,\gamma}(t)}}, \\</span>
+<span class="sd">            \text{where}\;\; n_{\gamma}(t) &amp;:= \sum_{k=1}^{K} N_{k,\gamma}(t).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
@@ -321,7 +332,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 09 Oct 2018, 10h.
+      Last updated on 18 Oct 2018, 11h.
 
     </p>
   </div>

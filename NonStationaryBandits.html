@@ -244,7 +244,7 @@ I give here a short introduction, with references below. If you are in a hurry, 
 <li>The first studied variant considers <em>piece-wise</em> stationary problems, also referred to as <strong>abruptly changing</strong>, where the distributions of the <code class="docutils literal"><span class="pre">$K$</span></code> arms are stationary on some intervals <code class="docutils literal"><span class="pre">$[T_i,\ldots,T_{i+1}]$</span></code> with some abrupt change points <code class="docutils literal"><span class="pre">$(T_i)$</span></code>.<ul>
 <li>It is always assumed that the location of the change points are unknown to the user, otherwise the problem is not harder: just play your <a class="reference external" href="docs/Policies.html">favorite algorithm</a>, and restart it at each change point.</li>
 <li>The change points can be fixed or randomly generated, but it is assumed that they are generated with a random source being oblivious of the user&#8217;s actions, so we can always consider that they were already generated before the game starts.</li>
-<li>For instance, <a class="reference external" href="docs/Arms.html#Arms.geometricChangePoints"><code class="docutils literal"><span class="pre">Arms.geometricChangePoints()</span></code></a> generate some change point if we assume that at every time step <code class="docutils literal"><span class="pre">$t=1,\ldots,T]$</span></code>, there is a (small) probability p to have a change point.</li>
+<li>For instance, <a class="reference external" href="docs/Arms.html#Arms.geometricChangePoints"><code class="docutils literal"><span class="pre">Arms.geometricChangePoints()</span></code></a> generates some change point if we assume that at every time step <code class="docutils literal"><span class="pre">$t=1,\ldots,T]$</span></code>, there is a (small) probability p to have a change point.</li>
 <li>The number of change points is usually denoted <code class="docutils literal"><span class="pre">$L$</span></code> or <code class="docutils literal"><span class="pre">$\Upsilon_T$</span></code>, and should not be a constant w.r.t. <code class="docutils literal"><span class="pre">$T$</span></code> (otherwise when <code class="docutils literal"><span class="pre">$T\to\infty$</span></code> only the last section counts and give a stationary problem so it is not harder). Some algorithms require to know the value of <code class="docutils literal"><span class="pre">$\Upsilon_T$</span></code>, or at least an upper-bound, and some algorithms try to be efficient without knowing it (this is what we want!).</li>
 <li>The goal is to have an efficient algorithm, but of course if <code class="docutils literal"><span class="pre">$\Upsilon_T</span> <span class="pre">=</span> <span class="pre">\mathcal{O}(T)$</span></code> the problem is too hard to hope to be efficient and any algorithm will suffer a linear regret (i.e., be as efficient as a naive random strategy).</li>
 </ul>
@@ -345,8 +345,8 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 <p>FIXME finish implementation!</p>
 <blockquote>
 <div>See <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/71">issue #71</a> and <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/146">issue #146</a>.</div></blockquote>
-<p>A simple python file, <a class="reference external" href="docs/configuration_sparse.html"><code class="docutils literal"><span class="pre">configuration_sparse.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.</p>
-<p>For example, we can compare the standard <a class="reference external" href="docs/Policies.UCB.html"><code class="docutils literal"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="docs/Policies.BayesUCB.html"><code class="docutils literal"><span class="pre">BayesUCB</span></code></a> algorithms, non aware of the sparsity, against the sparsity-aware <a class="reference external" href="docs/Policies.SparseUCB.html"><code class="docutils literal"><span class="pre">SparseUCB</span></code></a> algorithm, as well as 4 versions of <a class="reference external" href="docs/Policies.SparseWrapper.html"><code class="docutils literal"><span class="pre">SparseWrapper</span></code></a> applied to <a class="reference external" href="docs/Policies.BayesUCB.html"><code class="docutils literal"><span class="pre">BayesUCB</span></code></a>.</p>
+<p>A simple python file, <a class="reference external" href="docs/configuration_nonstationary.html"><code class="docutils literal"><span class="pre">configuration_nonstationary.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.</p>
+<p>For example, we can compare the standard <a class="reference external" href="docs/Policies.UCB.html"><code class="docutils literal"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="docs/Policies.Thompson.html"><code class="docutils literal"><span class="pre">Thompson</span></code></a> algorithms, non aware of the non-stationarity, against the non-stationarity aware <a class="reference external" href="docs/Policies.DiscountedUCB.html"><code class="docutils literal"><span class="pre">DiscountedUCB</span></code></a> and <a class="reference external" href="docs/Policies.SlidingWindowUCB.html"><code class="docutils literal"><span class="pre">SWUCB</span></code></a> algorithms.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">nb_random_events</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
@@ -374,6 +374,7 @@ TODO what are the lower-bounds given in the more recent articles?</p>
     <span class="c1"># Policies that should be simulated, and their parameters.</span>
     <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="mi">100</span> <span class="p">}</span> <span class="p">},</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="mi">500</span> <span class="p">}</span> <span class="p">},</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="mi">1000</span> <span class="p">}</span> <span class="p">},</span>
@@ -393,14 +394,14 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 <h2><a class="reference external" href="How_to_run_the_code.html">How to run the experiments ?</a><a class="headerlink" href="#How-to-run-the-experiments-?" title="Permalink to this headline">¶</a></h2>
 <p>You should use the provided <a class="reference external" href="Makefile"><code class="docutils literal"><span class="pre">Makefile</span></code></a> file to do this simply:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>make install         <span class="c1"># install the requirements ONLY ONCE</span>
-make nonstationary   <span class="c1"># run and log the main.py script FIXME</span>
+make nonstationary   <span class="c1"># run and log the main.py script</span>
 </pre></div>
 </div>
 </div>
 <hr class="docutils" />
 <div class="section" id="Some-illustrations">
 <h2>Some illustrations<a class="headerlink" href="#Some-illustrations" title="Permalink to this headline">¶</a></h2>
-<p>Here are some plots illustrating the performances of the different <a class="reference external" href="SMPyBandits/Policies/">policies</a> implemented in this project, against various sparse problems (with <a class="reference external" href="docs/Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> or <a class="reference external" href="docs/Arms.Gaussian.html"><code class="docutils literal"><span class="pre">UnboundedGaussian</span></code></a> arms only):</p>
+<p>Here are some plots illustrating the performances of the different <a class="reference external" href="SMPyBandits/Policies/">policies</a> implemented in this project, against various non-stationary problems (with <a class="reference external" href="docs/Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> only).</p>
 <p>FIXME do some plots!</p>
 </div>
 <hr class="docutils" />
@@ -451,7 +452,7 @@ make nonstationary   <span class="c1"># run and log the main.py script FIXME</sp
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 09 Oct 2018, 10h.
+      Last updated on 10 Oct 2018, 19h.
 
     </p>
   </div>
