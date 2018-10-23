@@ -119,9 +119,11 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.ApproximatedFHGittins.html">Policies.ApproximatedFHGittins module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BESA.html">Policies.BESA module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BasePolicy.html">Policies.BasePolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BaseWrapperPolicy.html">Policies.BaseWrapperPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BayesUCB.html">Policies.BayesUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BayesianIndexPolicy.html">Policies.BayesianIndexPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BoltzmannGumbel.html">Policies.BoltzmannGumbel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CD_UCB.html">Policies.CD_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
@@ -136,18 +138,22 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IMED.html">Policies.IMED module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.LM_DSEE.html">Policies.LM_DSEE module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSS.html">Policies.MOSS module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSAnytime.html">Policies.MOSSAnytime module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSExperimental.html">Policies.MOSSExperimental module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Monitored_UCB.html">Policies.Monitored_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChairNoSensing.html">Policies.MusicalChairNoSensing module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCBH.html">Policies.OCUCBH module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SIC_MMAB.html">Policies.SIC_MMAB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SWHash_UCB.html">Policies.SWHash_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowRestart.html">Policies.SlidingWindowRestart module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowUCB.html">Policies.SlidingWindowUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Softmax.html">Policies.Softmax module</a></li>
@@ -398,8 +404,8 @@ X_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} X_k(s).\end{split}\]</di
 <li>Instead of keeping the whole history of rewards, as expressed in the math formula, we keep the sum of discounted rewards from <code class="docutils literal"><span class="pre">s=0</span></code> to <code class="docutils literal"><span class="pre">s=t</span></code>, because updating it is easy (2 operations instead of just 1 for classical <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a>, and 2 operations instead of <span class="math">\(\mathcal{O}(t)\)</span> as expressed mathematically). Denote <span class="math">\(\Delta_k(t)\)</span> the number of time steps during which the arm <code class="docutils literal"><span class="pre">k</span></code> was <em>not</em> selected (maybe 0 if it is selected twice in a row). Then the update can be done easily by multiplying by <span class="math">\(\gamma^{1+\Delta_k(t)}\)</span>:</li>
 </ul>
 <div class="math">
-\[\begin{split}N_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times N_{k,\gamma}(t) + \mathbb{1}(A(t+1) = k), \\
-X_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times X_{k,\gamma}(t) + X_k(t+1).\end{split}\]</div>
+\[\begin{split}N_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times N_{k,\gamma}(\text{last pull}) + \mathbb{1}(A(t+1) = k), \\
+X_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times X_{k,\gamma}(\text{last pull}) + X_k(t+1).\end{split}\]</div>
 </dd></dl>
 
 <dl class="method">
@@ -475,7 +481,7 @@ X_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times X_{k,\gamma}(t) + X_k(t+1
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 18 Oct 2018, 11h.
+      Last updated on 23 Oct 2018, 08h.
 
     </p>
   </div>

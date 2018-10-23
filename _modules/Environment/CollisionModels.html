@@ -232,7 +232,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># player.handleCollision(arm) is called to inform the user that there were a collision</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s1">&#39;handleCollision&#39;</span><span class="p">):</span>
-        <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">lower</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># XXX Should player.getReward() be called with a reward = 0 when there is collisions (to change the internals memory of the player) ?</span>
         <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">lower</span><span class="p">)</span>  <span class="c1"># XXX Strong assumption on the model</span>
@@ -328,7 +328,7 @@
         <span class="k">if</span> <span class="n">nbCollisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># If collision</span>
             <span class="c1"># print(&quot;  - 1 collision on channel {} : {} other users chose it at time t = {} ...&quot;.format(choices[i], nbCollisions[choices[i]], t))  # DEBUG</span>
             <span class="n">collisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Should be counted here, allGetRewardsAndUseCollision</span>
-            <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># FIXED</span></div>
+            <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># FIXED</span></div>
 
 
 <div class="viewcode-block" id="noCollision"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.noCollision">[docs]</a><span class="k">def</span> <span class="nf">noCollision</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">):</span>
@@ -477,7 +477,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 18 Oct 2018, 11h.
+      Last updated on 23 Oct 2018, 08h.
 
     </p>
   </div>

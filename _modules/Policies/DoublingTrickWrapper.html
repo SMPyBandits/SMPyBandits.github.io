@@ -224,10 +224,10 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.BaseWrapperPolicy</span> <span class="k">import</span> <span class="n">BaseWrapperPolicy</span>
     <span class="kn">from</span> <span class="nn">.UCBH</span> <span class="k">import</span> <span class="n">UCBH</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">BaseWrapperPolicy</span> <span class="k">import</span> <span class="n">BaseWrapperPolicy</span>
     <span class="kn">from</span> <span class="nn">UCBH</span> <span class="k">import</span> <span class="n">UCBH</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.usenumba</span> <span class="k">import</span> <span class="n">jit</span>  <span class="c1"># Import numba.jit or a dummy jit(f)=f</span>
@@ -739,7 +739,7 @@
 <span class="n">MAX_NB_OF_TRIALS</span> <span class="o">=</span> <span class="mi">500</span>
 
 
-<div class="viewcode-block" id="DoublingTrickWrapper"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper">[docs]</a><span class="k">class</span> <span class="nc">DoublingTrickWrapper</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+<div class="viewcode-block" id="DoublingTrickWrapper"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper">[docs]</a><span class="k">class</span> <span class="nc">DoublingTrickWrapper</span><span class="p">(</span><span class="n">BaseWrapperPolicy</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A policy that acts as a wrapper on another policy `P`, assumed to be *horizon dependent* (has to known :math:`T`), by implementing a &quot;doubling trick&quot;.</span>
 
 <span class="sd">    - Reference: [[What the Doubling Trick Can or Can&#39;t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](https://hal.inria.fr/hal-01736357), to be presented soon.</span>
@@ -752,16 +752,8 @@
                  <span class="n">first_horizon</span><span class="o">=</span><span class="n">DEFAULT_FIRST_HORIZON</span><span class="p">,</span>
                  <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DoublingTrickWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DoublingTrickWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">full_restart</span> <span class="o">=</span> <span class="n">full_restart</span>  <span class="c1">#: Constant to know how to refresh the underlying policy.</span>
-        <span class="c1"># --- Policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span> <span class="o">=</span> <span class="n">policy</span>  <span class="c1"># Class to create the underlying policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">args</span>  <span class="c1"># To keep them</span>
-        <span class="k">if</span> <span class="s1">&#39;params&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
-            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>  <span class="c1"># To keep them</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Underlying policy</span>
         <span class="c1"># --- Horizon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_i</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_next_horizon</span> <span class="o">=</span> <span class="n">next_horizon</span>  <span class="c1"># Function for the growing horizon</span>
@@ -784,7 +776,8 @@
 
 <div class="viewcode-block" id="DoublingTrickWrapper.startGame"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Initialize the policy for a new game.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">DoublingTrickWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BaseWrapperPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
+        <span class="c1"># super(DoublingTrickWrapper, self).startGame()  # WARNING no</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_i</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># reinitialize this</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_first_horizon</span>  <span class="c1">#: Last guess for the horizon</span>
         <span class="k">try</span><span class="p">:</span>
@@ -793,9 +786,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Received exception </span><span class="si">{}</span><span class="s2"> when trying to create the underlying policy... maybe the &#39;horizon=</span><span class="si">{}</span><span class="s2">&#39; keyword argument was not understood correctly? Retrying without it...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
         <span class="c1"># now also start game for the underlying policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span>  <span class="c1"># just pointers to the underlying arrays!</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span>      <span class="c1"># just pointers to the underlying arrays!</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span></div>
 
     <span class="c1"># --- Pass the call to the subpolicy</span>
 
@@ -835,55 +826,11 @@
                     <span class="k">try</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span>
                     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                        <span class="k">pass</span></div>
+                        <span class="k">pass</span></div></div>
                         <span class="c1"># print(&quot;Warning: unable to update the parameter &#39;horizon&#39; of the underlying policy {}... Trying &#39;_horizon&#39; ...&quot;.format(self.policy))  # DEBUG</span>
                     <span class="c1"># print(&quot;   ==&gt; Just updating the horizon parameter of the underlying policy... Now it is = {} ...&quot;.format(self.policy))  # DEBUG</span>
                 <span class="c1"># else:</span>
                 <span class="c1">#     print(&quot;   ==&gt; Nothing to do, as the underlying policy DOES NOT have a &#39;horizon&#39; or &#39;_horizon&#39; parameter that could have been updated... Maybe you are not using a good policy? I suggest UCBH or ApproximatedFHGittins.&quot;)  # DEBUG</span>
-
-    <span class="c1"># --- Sub methods</span>
-
-    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Get attribute ``index`` from the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">index</span>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.choice"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choice`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.choiceWithRank"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceWithRank">[docs]</a>    <span class="k">def</span> <span class="nf">choiceWithRank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceWithRank`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceWithRank</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.choiceFromSubSet"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceFromSubSet">[docs]</a>    <span class="k">def</span> <span class="nf">choiceFromSubSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">availableArms</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceFromSubSet`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceFromSubSet</span><span class="p">(</span><span class="n">availableArms</span><span class="o">=</span><span class="n">availableArms</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.choiceMultiple"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceMultiple">[docs]</a>    <span class="k">def</span> <span class="nf">choiceMultiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceMultiple`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceMultiple</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">nb</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.choiceIMP"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.choiceIMP">[docs]</a>    <span class="k">def</span> <span class="nf">choiceIMP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">startWithChoiceMultiple</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceIMP`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceIMP</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">nb</span><span class="p">,</span> <span class="n">startWithChoiceMultiple</span><span class="o">=</span><span class="n">startWithChoiceMultiple</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.estimatedOrder"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.estimatedOrder">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``estimatedOrder`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">estimatedOrder</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.estimatedBestArms"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.estimatedBestArms">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedBestArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``estimatedBestArms`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">estimatedBestArms</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.computeIndex"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``computeIndex`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="DoublingTrickWrapper.computeAllIndex"><a class="viewcode-back" href="../../docs/Policies.DoublingTrickWrapper.html#Policies.DoublingTrickWrapper.DoublingTrickWrapper.computeAllIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeAllIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``computeAllIndex`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">computeAllIndex</span><span class="p">()</span></div></div>
 
 
 <span class="c1"># # --- Debugging</span>
@@ -922,7 +869,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 18 Oct 2018, 11h.
+      Last updated on 23 Oct 2018, 08h.
 
     </p>
   </div>

@@ -205,7 +205,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.7&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>  <span class="c1"># For the different states</span>
@@ -213,10 +213,10 @@
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.BaseWrapperPolicy</span> <span class="k">import</span> <span class="n">BaseWrapperPolicy</span>
     <span class="kn">from</span> <span class="nn">.UCBalpha</span> <span class="k">import</span> <span class="n">UCBalpha</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">BaseWrapperPolicy</span> <span class="k">import</span> <span class="n">BaseWrapperPolicy</span>
     <span class="kn">from</span> <span class="nn">UCBalpha</span> <span class="k">import</span> <span class="n">UCBalpha</span>
 
 <span class="c1">#: Default horizon-dependent policy</span>
@@ -250,20 +250,22 @@
 <span class="c1"># --- The interesting class</span>
 
 
-<div class="viewcode-block" id="SparseWrapper"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper">[docs]</a><span class="k">class</span> <span class="nc">SparseWrapper</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+<div class="viewcode-block" id="SparseWrapper"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper">[docs]</a><span class="k">class</span> <span class="nc">SparseWrapper</span><span class="p">(</span><span class="n">BaseWrapperPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; The SparseWrapper policy, designed to tackle sparse stochastic bandit problems.</span>
 
 <span class="sd">    - By default, assume ``sparsity`` = ``nbArms``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SparseWrapper.__init__"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">use_ucb_for_set_K</span><span class="o">=</span><span class="n">USE_UCB_FOR_SET_K</span><span class="p">,</span>
-                 <span class="n">use_ucb_for_set_J</span><span class="o">=</span><span class="n">USE_UCB_FOR_SET_J</span><span class="p">,</span>
-                 <span class="n">alpha</span><span class="o">=</span><span class="n">ALPHA</span><span class="p">,</span>
-                 <span class="n">policy</span><span class="o">=</span><span class="n">default_index_policy</span><span class="p">,</span>
-                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SparseWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+<div class="viewcode-block" id="SparseWrapper.__init__"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+            <span class="n">sparsity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">use_ucb_for_set_K</span><span class="o">=</span><span class="n">USE_UCB_FOR_SET_K</span><span class="p">,</span>
+            <span class="n">use_ucb_for_set_J</span><span class="o">=</span><span class="n">USE_UCB_FOR_SET_J</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">ALPHA</span><span class="p">,</span>
+            <span class="n">policy</span><span class="o">=</span><span class="n">default_index_policy</span><span class="p">,</span>
+            <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SparseWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">sparsity</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sparsity</span> <span class="o">==</span> <span class="n">nbArms</span><span class="p">:</span>
             <span class="n">sparsity</span> <span class="o">=</span> <span class="n">nbArms</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: regular klUCB should be used instead of SparseWrapper if &#39;sparsity&#39; = &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
@@ -273,14 +275,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">use_ucb_for_set_J</span> <span class="o">=</span> <span class="n">use_ucb_for_set_J</span>  <span class="c1">#: Whether the usual UCB indexes are used for the set :math:`\mathcal{J}(t)`.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>  <span class="c1">#: Parameter :math:`\alpha` for the UCB indexes for the two sets, if not using the indexes of the underlying policy.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">Phase</span><span class="o">.</span><span class="n">RoundRobin</span>  <span class="c1">#: Current phase of the algorithm.</span>
-        <span class="c1"># --- Policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span> <span class="o">=</span> <span class="n">policy</span>  <span class="c1"># Class to create the underlying policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">args</span>  <span class="c1"># To keep them</span>
-        <span class="k">if</span> <span class="s1">&#39;params&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
-            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>  <span class="c1"># To keep them</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Underlying policy</span>
         <span class="c1"># --- internal memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">force_to_see</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>  <span class="c1">#: Binary array for the set :math:`\mathcal{J}(t)`.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">goods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>  <span class="c1">#: Binary array for the set :math:`\mathcal{K}(t)`.</span>
@@ -310,19 +304,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">Phase</span><span class="o">.</span><span class="n">RoundRobin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">force_to_see</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># faster than sets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">goods</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># faster than sets</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="c1"># now for the underlying policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
-        <span class="c1"># now also start game for the underlying policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span></div>
-
-    <span class="c1"># --- Pass the call to the subpolicy</span>
-
-<div class="viewcode-block" id="SparseWrapper.getReward"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Pass the reward, as usual, update t and sometimes restart the underlying policy.&quot;&quot;&quot;</span>
-        <span class="c1"># print(&quot; - At time t = {}, got a reward = {} from arm {} ...&quot;.format(self.t, arm, reward))  # DEBUG</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SparseWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span></div>
 
     <span class="c1"># --- Update the two sets</span>
 
@@ -363,7 +345,7 @@
 
 <span class="sd">           \hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\</span>
 <span class="sd">           U^{\mathcal{K}}_k(t) &amp;= I_k^{P}(t) - \hat{\mu}_k(t),\\</span>
-<span class="sd">           \mathcal{J}(t) &amp;= \left\{ k \in [1,...,K]\;, \hat{\mu}_k(t) \geq U^{\mathcal{K}}_k(t) - \hat{\mu}_k(t) \right\}.</span>
+<span class="sd">           \mathcal{K}(t) &amp;= \left\{ k \in [1,...,K]\;, \hat{\mu}_k(t) \geq U^{\mathcal{K}}_k(t) - \hat{\mu}_k(t) \right\}.</span>
 
 <span class="sd">        - If ``use_ucb_for_set_K`` is ``True``, the same formula from :class:`Policies.SparseUCB` is used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -419,47 +401,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># if self.phase != Phase.UCB: print(&quot;{}: at time t = {}, the set of good arms was identified as {} for the first time...&quot;.format(self, self.t, np.nonzero(self.goods)[0]))  # DEBUG</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">Phase</span><span class="o">.</span><span class="n">UCB</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choiceFromSubSet</span><span class="p">(</span><span class="n">availableArms</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goods</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
-
-    <span class="c1"># --- Sub methods</span>
-
-    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/2/library/functions.html#property</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Get attribute ``index`` from the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">index</span>
-
-<div class="viewcode-block" id="SparseWrapper.choiceWithRank"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.choiceWithRank">[docs]</a>    <span class="k">def</span> <span class="nf">choiceWithRank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceWithRank`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceWithRank</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.choiceFromSubSet"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.choiceFromSubSet">[docs]</a>    <span class="k">def</span> <span class="nf">choiceFromSubSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">availableArms</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceFromSubSet`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceFromSubSet</span><span class="p">(</span><span class="n">availableArms</span><span class="o">=</span><span class="n">availableArms</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.choiceMultiple"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.choiceMultiple">[docs]</a>    <span class="k">def</span> <span class="nf">choiceMultiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceMultiple`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceMultiple</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">nb</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.choiceIMP"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.choiceIMP">[docs]</a>    <span class="k">def</span> <span class="nf">choiceIMP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">startWithChoiceMultiple</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``choiceIMP`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceIMP</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">nb</span><span class="p">,</span> <span class="n">startWithChoiceMultiple</span><span class="o">=</span><span class="n">startWithChoiceMultiple</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.estimatedOrder"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.estimatedOrder">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``estimatedOrder`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">estimatedOrder</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.estimatedBestArms"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.estimatedBestArms">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedBestArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``estimatedBestArms`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">estimatedBestArms</span><span class="p">(</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.computeIndex"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``computeIndex`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SparseWrapper.computeAllIndex"><a class="viewcode-back" href="../../docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper.computeAllIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeAllIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Pass the call to ``computeAllIndex`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">computeAllIndex</span><span class="p">()</span></div></div>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choiceFromSubSet</span><span class="p">(</span><span class="n">availableArms</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">goods</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div></div>
 </pre></div>
 
            </div>
@@ -475,7 +417,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 18 Oct 2018, 11h.
+      Last updated on 23 Oct 2018, 08h.
 
     </p>
   </div>

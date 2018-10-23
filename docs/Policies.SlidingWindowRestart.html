@@ -49,7 +49,7 @@
     <link rel="top" title="SMPyBandits 0.9.3 documentation" href="../index.html"/>
         <link rel="up" title="Policies package" href="Policies.html"/>
         <link rel="next" title="Policies.SlidingWindowUCB module" href="Policies.SlidingWindowUCB.html"/>
-        <link rel="prev" title="Policies.ProbabilityPursuit module" href="Policies.ProbabilityPursuit.html"/> 
+        <link rel="prev" title="Policies.SWHash_UCB module" href="Policies.SWHash_UCB.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -119,9 +119,11 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.ApproximatedFHGittins.html">Policies.ApproximatedFHGittins module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BESA.html">Policies.BESA module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BasePolicy.html">Policies.BasePolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.BaseWrapperPolicy.html">Policies.BaseWrapperPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BayesUCB.html">Policies.BayesUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BayesianIndexPolicy.html">Policies.BayesianIndexPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.BoltzmannGumbel.html">Policies.BoltzmannGumbel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CD_UCB.html">Policies.CD_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
@@ -136,18 +138,22 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IMED.html">Policies.IMED module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IndexPolicy.html">Policies.IndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.LM_DSEE.html">Policies.LM_DSEE module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.LearnExp.html">Policies.LearnExp module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MEGA.html">Policies.MEGA module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSS.html">Policies.MOSS module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSAnytime.html">Policies.MOSSAnytime module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSExperimental.html">Policies.MOSSExperimental module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MOSSH.html">Policies.MOSSH module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Monitored_UCB.html">Policies.Monitored_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChair.html">Policies.MusicalChair module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.MusicalChairNoSensing.html">Policies.MusicalChairNoSensing module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCBH.html">Policies.OCUCBH module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SIC_MMAB.html">Policies.SIC_MMAB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.SWHash_UCB.html">Policies.SWHash_UCB module</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Policies.SlidingWindowRestart module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SlidingWindowUCB.html">Policies.SlidingWindowUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Softmax.html">Policies.Softmax module</a></li>
@@ -328,9 +334,8 @@
 <ul>
 <li><p class="first">Reference: none yet, idea from Rémi Bonnefoi and Lilian Besson.</p>
 </li>
-<li><p class="first">It runs on top of a simple policy, e.g., <code class="xref py py-class docutils literal"><span class="pre">Policy.UCB.UCB</span></code>, and <a class="reference internal" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Policies.SlidingWindowRestart.SlidingWindowRestart"><code class="xref py py-func docutils literal"><span class="pre">SlidingWindowRestart()</span></code></a> is a function, transforming a base policy into a version implementing this &#8220;sliding window&#8221; trick:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SWR_UCB</span> <span class="o">=</span> <span class="n">SlidingWindowRestart</span><span class="p">(</span><span class="n">UCB</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">SWR_UCB</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>
+<li><p class="first">It runs on top of a simple policy, e.g., <code class="xref py py-class docutils literal"><span class="pre">Policy.UCB.UCB</span></code>, and <a class="reference internal" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Policies.SlidingWindowRestart.SlidingWindowRestart"><code class="xref py py-func docutils literal"><span class="pre">SlidingWindowRestart()</span></code></a> is a generic policy using any simple policy with this &#8220;sliding window&#8221; trick:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">SlidingWindowRestart</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">UCB</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
 </pre></div>
 </div>
@@ -344,11 +349,11 @@
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">It can only work on basic index policy based on empirical averages (and an exploration bias), like <code class="xref py py-class docutils literal"><span class="pre">Policy.UCB.UCB</span></code>, and cannot work on Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history) !</p>
+<p class="last">It can only work on basic index policy based on empirical averages (and an exploration bias), like <code class="xref py py-class docutils literal"><span class="pre">Policy.UCB.UCB</span></code>, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)! Note that it works on <a class="reference internal" href="Policies.Thompson.html#Policies.Thompson.Thompson" title="Policies.Thompson.Thompson"><code class="xref py py-class docutils literal"><span class="pre">Policies.Thompson.Thompson</span></code></a>.</p>
 </div>
 <dl class="data">
 <dt id="Policies.SlidingWindowRestart.TAU">
-<code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">TAU</code><em class="property"> = 300</em><a class="headerlink" href="#Policies.SlidingWindowRestart.TAU" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">TAU</code><em class="property"> = 100</em><a class="headerlink" href="#Policies.SlidingWindowRestart.TAU" title="Permalink to this definition">¶</a></dt>
 <dd><p>Size of the sliding window.</p>
 </dd></dl>
 
@@ -364,27 +369,61 @@
 <dd><p>Should we fully restart the algorithm or simply reset one arm empirical average ?</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="class">
 <dt id="Policies.SlidingWindowRestart.SlidingWindowRestart">
-<code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SlidingWindowRestart</code><span class="sig-paren">(</span><em>Policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SlidingWindowRestart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function implementing this algorithm, for a generic base policy <code class="docutils literal"><span class="pre">Policy</span></code>.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p>It works fine, but the return class is not a manually defined class, and it is not pickable, so cannot be used with joblib.Parallel:</p>
-<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="ne">AttributeError</span><span class="p">:</span> <span class="n">Can</span><span class="s1">&#39;t pickle local object &#39;</span><span class="n">SlidingWindowRestart</span><span class="o">.&lt;</span><span class="nb">locals</span><span class="o">&gt;.</span><span class="n">SlidingWindowsRestart_Policy</span><span class="s1">&#39;</span>
-</pre></div>
-</div>
-</div>
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SlidingWindowRestart</code><span class="sig-paren">(</span><em>nbArms</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SlidingWindowRestart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
+<p>An experimental policy, using a sliding window of for instance <span class="math">\(\tau=100\)</span> draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<dl class="method">
+<dt id="Policies.SlidingWindowRestart.SlidingWindowRestart.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SlidingWindowRestart.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.SlidingWindowRestart.SlidingWindowRestart.last_rewards">
+<code class="descname">last_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart.last_rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep in memory all the rewards obtained in the last <span class="math">\(\tau\)</span> steps.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.SlidingWindowRestart.SlidingWindowRestart.last_pulls">
+<code class="descname">last_pulls</code><em class="property"> = None</em><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart.last_pulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep in memory the times where each arm was last seen. Start with -1 (never seen)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.SlidingWindowRestart.SlidingWindowRestart.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SlidingWindowRestart.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.SlidingWindowRestart.SlidingWindowRestart.getReward">
+<code class="descname">getReward</code><span class="sig-paren">(</span><em>arm</em>, <em>reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SlidingWindowRestart.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give a reward: increase t, pulls, and update cumulated sum of rewards and update small history (sliding window) for that arm (normalized in [0, 1]).</p>
+<ul class="simple">
+<li>Reset the whole empirical average if the small average is too far away from it.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.SlidingWindowRestart.SlidingWindowRestart.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.SlidingWindowRestart'</em><a class="headerlink" href="#Policies.SlidingWindowRestart.SlidingWindowRestart.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.SlidingWindowRestart.SWR_UCB">
-<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_UCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_UCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.UCB.html#Policies.UCB.UCB" title="Policies.UCB.UCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCB.UCB</span></code></a></p>
-<p>An experimental policy, using a sliding window of for instance 100 draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<p>An experimental policy, using a sliding window of for instance <span class="math">\(\tau=100\)</span> draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME I should remove this code, it&#8217;s useless now that the generic wrapper <a class="reference internal" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Policies.SlidingWindowRestart.SlidingWindowRestart"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart</span></code></a> works fine.</p>
+</div>
 <dl class="method">
 <dt id="Policies.SlidingWindowRestart.SWR_UCB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -440,12 +479,16 @@
 
 <dl class="class">
 <dt id="Policies.SlidingWindowRestart.SWR_UCBalpha">
-<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_UCBalpha</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>alpha=4</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCBalpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCBalpha" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_UCBalpha</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>alpha=4</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCBalpha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCBalpha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a></p>
-<p>An experimental policy, using a sliding window of for instance 100 draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<p>An experimental policy, using a sliding window of for instance <span class="math">\(\tau=100\)</span> draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME I should remove this code, it&#8217;s useless now that the generic wrapper <a class="reference internal" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Policies.SlidingWindowRestart.SlidingWindowRestart"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart</span></code></a> works fine.</p>
+</div>
 <dl class="method">
 <dt id="Policies.SlidingWindowRestart.SWR_UCBalpha.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>alpha=4</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCBalpha.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCBalpha.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>alpha=4</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_UCBalpha.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_UCBalpha.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -501,12 +544,16 @@
 
 <dl class="class">
 <dt id="Policies.SlidingWindowRestart.SWR_klUCB">
-<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_klUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowRestart.</code><code class="descname">SWR_klUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.klUCB.html#Policies.klUCB.klUCB" title="Policies.klUCB.klUCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.klUCB.klUCB</span></code></a></p>
-<p>An experimental policy, using a sliding window of for instance 100 draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<p>An experimental policy, using a sliding window of for instance <span class="math">\(\tau=100\)</span> draws, and reset the algorithm as soon as the small empirical average is too far away from the full history empirical average (or just restart for one arm, if possible).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME I should remove this code, it&#8217;s useless now that the generic wrapper <a class="reference internal" href="#Policies.SlidingWindowRestart.SlidingWindowRestart" title="Policies.SlidingWindowRestart.SlidingWindowRestart"><code class="xref py py-class docutils literal"><span class="pre">SlidingWindowRestart</span></code></a> works fine.</p>
+</div>
 <dl class="method">
 <dt id="Policies.SlidingWindowRestart.SWR_klUCB.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=300</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=100</em>, <em>threshold=0.005</em>, <em>full_restart_when_refresh=True</em>, <em>tolerance=0.0001</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>c=1.0</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowRestart.html#SWR_klUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowRestart.SWR_klUCB.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -575,7 +622,7 @@
         <a href="Policies.SlidingWindowUCB.html" class="btn btn-neutral float-right" title="Policies.SlidingWindowUCB module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="Policies.ProbabilityPursuit.html" class="btn btn-neutral" title="Policies.ProbabilityPursuit module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="Policies.SWHash_UCB.html" class="btn btn-neutral" title="Policies.SWHash_UCB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -585,7 +632,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 18 Oct 2018, 11h.
+      Last updated on 23 Oct 2018, 08h.
 
     </p>
   </div>

@@ -215,6 +215,8 @@
 <span class="sd">    &gt;&gt;&gt; weightedDistance(choices, weights)  # worst choice!  # doctest: +ELLIPSIS</span>
 <span class="sd">    0.3333...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="n">choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -243,6 +245,8 @@
 <span class="sd">    &gt;&gt;&gt; manhattan(perm)</span>
 <span class="sd">    0.72</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
     <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">comp</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">-</span> <span class="n">element</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">permutation</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
@@ -267,6 +271,8 @@
 <span class="sd">    &gt;&gt;&gt; kendalltau(perm)  # doctest: +ELLIPSIS</span>
 <span class="sd">    0.984...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
     <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">kendalltau</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span><span class="o">.</span><span class="n">pvalue</span>
@@ -294,6 +300,8 @@
 <span class="sd">    &gt;&gt;&gt; spearmanr(perm)  # doctest: +ELLIPSIS</span>
 <span class="sd">    0.986...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
     <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span><span class="o">.</span><span class="n">pvalue</span>
@@ -327,6 +335,8 @@
 <span class="sd">    &gt;&gt;&gt; gestalt(ratings)  # doctest: +ELLIPSIS</span>
 <span class="sd">    8e-05...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">comp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">comp</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">permutation</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">permutation</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span></div>
@@ -397,7 +407,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 18 Oct 2018, 11h.
+      Last updated on 23 Oct 2018, 08h.
 
     </p>
   </div>
