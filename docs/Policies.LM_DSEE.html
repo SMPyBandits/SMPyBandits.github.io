@@ -393,12 +393,12 @@
 
 <dl class="class">
 <dt id="Policies.LM_DSEE.LM_DSEE">
-<em class="property">class </em><code class="descclassname">Policies.LM_DSEE.</code><code class="descname">LM_DSEE</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.05</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=2</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.LM_DSEE.</code><code class="descname">LM_DSEE</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.5</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=2</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
 <p>The LM-DSEE policy for non-stationary bandits, from [[&#8220;On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems&#8221;, by Lai Wei, Vaibhav Srivastava, 2018, arXiv:1802.08380]](https://arxiv.org/pdf/1802.08380)</p>
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.05</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=2</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.5</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=2</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -429,12 +429,6 @@
 <dt id="Policies.LM_DSEE.LM_DSEE.rho">
 <code class="descname">rho</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.rho" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameter <span class="math">\(\rho\)</span> for the LM-DSEE algorithm.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.LM_DSEE.LM_DSEE.t">
-<code class="descname">t</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.t" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal timer</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -486,18 +480,26 @@
 
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.length_exploration_phase">
-<code class="descname">length_exploration_phase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploration_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Permalink to this definition">¶</a></dt>
+<code class="descname">length_exploration_phase</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploration_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the value of the current exploration phase:</p>
 <div class="math">
-\[L(k) = \lceil \gamma \log(k^{\rho} l b)\rceil.\]</div>
+\[L_1(k) = L(k) = \lceil \gamma \log(k^{\rho} l b)\rceil.\]</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">I think there is a typo in the paper, as their formula are weird (like <span class="math">\(al\)</span> is defined from <span class="math">\(a\)</span>).</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.length_exploitation_phase">
-<code class="descname">length_exploitation_phase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploitation_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase" title="Permalink to this definition">¶</a></dt>
+<code class="descname">length_exploitation_phase</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploitation_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the value of the current exploitation phase:</p>
 <div class="math">
-\[\lceil a k^{\rho} l\rceil - K L(k).\]</div>
+\[L_2(k) = \lceil a k^{\rho} l\rceil - K L_1(k).\]</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">I think there is a typo in the paper, as their formula are weird (like <span class="math">\(al\)</span> is defined from <span class="math">\(a\)</span>).</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -544,7 +546,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 23 Oct 2018, 08h.
+      Last updated on 24 Oct 2018, 14h.
 
     </p>
   </div>

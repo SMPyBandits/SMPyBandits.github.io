@@ -219,7 +219,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LM_DSEE.__init__"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
-            <span class="n">nu</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">DeltaMin</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">nu</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">DeltaMin</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LM_DSEE</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -234,7 +234,6 @@
         <span class="n">rho</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">nu</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">nu</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span>  <span class="c1">#: Parameter :math:`\rho` for the LM-DSEE algorithm.</span>
         <span class="c1"># Internal memory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Internal timer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">Exploration</span>  <span class="c1">#: Current phase, exploration or exploitation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Currently explored arm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_exploitation_arm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Currently exploited arm</span>
@@ -249,7 +248,6 @@
 <div class="viewcode-block" id="LM_DSEE.startGame"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Start the game (fill pulls and rewards with 0).&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">LM_DSEE</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">current_exploitation_arm</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span> <span class="o">=</span> <span class="mi">1</span>
@@ -257,22 +255,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">step_of_current_phase</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span></div>
 
-<div class="viewcode-block" id="LM_DSEE.length_exploration_phase"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.length_exploration_phase">[docs]</a>    <span class="k">def</span> <span class="nf">length_exploration_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LM_DSEE.length_exploration_phase"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.length_exploration_phase">[docs]</a>    <span class="k">def</span> <span class="nf">length_exploration_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the value of the current exploration phase:</span>
 
-<span class="sd">        .. math:: L(k) = \lceil \gamma \log(k^{\rho} l b)\rceil.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">value_Lk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">value_Lk</span><span class="p">))</span></div>
+<span class="sd">        .. math:: L_1(k) = L(k) = \lceil \gamma \log(k^{\rho} l b)\rceil.</span>
 
-<div class="viewcode-block" id="LM_DSEE.length_exploitation_phase"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase">[docs]</a>    <span class="k">def</span> <span class="nf">length_exploitation_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">        .. warning:: I think there is a typo in the paper, as their formula are weird (like :math:`al` is defined from :math:`a`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value_Lk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">value_Lk</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Length of exploration phase: computed to be = </span><span class="si">{}</span><span class="s2"> for batch number = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="n">length</span></div>
+
+<div class="viewcode-block" id="LM_DSEE.length_exploitation_phase"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase">[docs]</a>    <span class="k">def</span> <span class="nf">length_exploitation_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the value of the current exploitation phase:</span>
 
-<span class="sd">        .. math:: \lceil a k^{\rho} l\rceil - K L(k).</span>
+<span class="sd">        .. math:: L_2(k) = \lceil a k^{\rho} l\rceil - K L_1(k).</span>
+
+<span class="sd">        .. warning:: I think there is a typo in the paper, as their formula are weird (like :math:`al` is defined from :math:`a`).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">large_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">))</span>
-        <span class="n">Lk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_exploration_phase</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">large_value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">Lk</span></div>
+        <span class="n">large_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">l</span><span class="p">))</span>
+        <span class="n">Lk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_exploration_phase</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">large_value</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">Lk</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Length of exploitation phase: computed to be = </span><span class="si">{}</span><span class="s2"> for batch number = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="n">length</span></div>
 
 <div class="viewcode-block" id="LM_DSEE.getReward"><a class="viewcode-back" href="../../docs/Policies.LM_DSEE.html#Policies.LM_DSEE.LM_DSEE.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Get a reward from an arm.&quot;&quot;&quot;</span>
@@ -285,7 +291,7 @@
         <span class="c1"># print(&quot;For a {} policy: t = {}, current_exploration_arm = {}, current_exploitation_arm = {}, batch_number = {}, length_of_current_phase = {}, step_of_current_phase = {}&quot;.format(self, self.t, self.current_exploration_arm, self.current_exploitation_arm, self.batch_number, self.length_of_current_phase, self.step_of_current_phase))  # DEBUG</span>
         <span class="c1"># 1) exploration</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">Exploration</span><span class="p">:</span>
-            <span class="c1"># beginning of explore phase</span>
+            <span class="c1"># beginning of exploration phase</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="c1"># if length of current exploration phase not computed, do it</span>
@@ -302,18 +308,20 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">Exploitation</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">step_of_current_phase</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="c1"># note that this last update might force to sample the arm 0 instead of arm K-1, once in a while...</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span>
         <span class="c1"># ---</span>
         <span class="c1"># 2) exploitation</span>
         <span class="c1"># ---</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">Exploitation</span><span class="p">:</span>
+            <span class="c1"># beginning of exploitation phase</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_of_current_phase</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># start exploitation</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">length_of_current_phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length_exploitation_phase</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exploitation_arm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># compute exploited arm</span>
                 <span class="n">mean_rewards</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards_of_arm_k</span><span class="p">)</span> <span class="k">for</span> <span class="n">rewards_of_arm_k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">]</span>
                 <span class="n">j_epch_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">mean_rewards</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A </span><span class="si">{}</span><span class="s2"> player at time </span><span class="si">{}</span><span class="s2"> and batch number </span><span class="si">{}</span><span class="s2"> observed the mean rewards = </span><span class="si">{}</span><span class="s2"> and will play </span><span class="si">{}</span><span class="s2"> for this exploitation phase.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span><span class="p">,</span> <span class="n">mean_rewards</span><span class="p">,</span> <span class="n">j_epch_k</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">current_exploitation_arm</span> <span class="o">=</span> <span class="n">j_epch_k</span>
                 <span class="c1"># erase current memory</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>
@@ -324,6 +332,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">Exploration</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">length_of_current_phase</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># flag to start the next one</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">step_of_current_phase</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_exploration_arm</span> <span class="o">=</span> <span class="mi">0</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">batch_number</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_exploitation_arm</span>
         <span class="k">else</span><span class="p">:</span>
@@ -345,7 +355,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 23 Oct 2018, 08h.
+      Last updated on 24 Oct 2018, 14h.
 
     </p>
   </div>
