@@ -546,9 +546,8 @@
 <span class="c1"># --- KL functions, for the KL-UCB policy</span>
 
 <span class="nd">@jit</span>
-<div class="viewcode-block" id="klucb"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.klucb">[docs]</a><span class="k">def</span> <span class="nf">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span>
-        <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span>
-        <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span>
+<div class="viewcode-block" id="klucb"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.klucb">[docs]</a><span class="k">def</span> <span class="nf">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span>
+        <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
     <span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The generic KL-UCB index computation.</span>
 
@@ -557,7 +556,7 @@
 <span class="sd">    - ``kl``: the KL divergence to be used (:func:`klBern`, :func:`klGauss`, etc),</span>
 <span class="sd">    - ``upperbound``, ``lowerbound=float(&#39;-inf&#39;)``: the known bound of the values ``x``,</span>
 <span class="sd">    - ``precision=1e-6``: the threshold from where to stop the research,</span>
-<span class="sd">    - ``max_iterations``: max number of iterations of the loop (safer to bound it to reduce time complexity).</span>
+<span class="sd">    - ``max_iterations=50``: max number of iterations of the loop (safer to bound it to reduce time complexity).</span>
 
 <span class="sd">    .. math::</span>
 
@@ -574,7 +573,7 @@
 <span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-3, max_iterations=10)  # doctest: +ELLIPSIS</span>
 <span class="sd">    0.9941...</span>
 <span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-6, max_iterations=10)  # doctest: +ELLIPSIS</span>
-<span class="sd">    0.994482...  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.9944...</span>
 <span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-3, max_iterations=50)  # doctest: +ELLIPSIS</span>
 <span class="sd">    0.9941...</span>
 <span class="sd">    &gt;&gt;&gt; klucb(x, d, klBern, upperbound, lowerbound=0, precision=1e-6, max_iterations=100)  # more and more precise!  # doctest: +ELLIPSIS</span>
@@ -587,12 +586,12 @@
     <span class="n">_count_iteration</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">_count_iteration</span> <span class="o">&lt;</span> <span class="n">max_iterations</span> <span class="ow">and</span> <span class="n">u</span> <span class="o">-</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">precision</span><span class="p">:</span>
         <span class="n">_count_iteration</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
         <span class="k">if</span> <span class="n">kl</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">:</span>
             <span class="n">u</span> <span class="o">=</span> <span class="n">m</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">m</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span></div>
 
 
 <span class="nd">@jit</span>
@@ -742,7 +741,7 @@
         <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">d</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klGamma</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klGamma</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">)</span></div>
 
 
 <span class="c1"># FIXME this one is wrong!</span>
@@ -787,6 +786,251 @@
         <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">d</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
     <span class="c1"># FIXME specify the value for a !</span>
     <span class="k">return</span> <span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klGamma</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">upperbound</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="o">-</span><span class="mf">1e2</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">),</span> <span class="n">precision</span><span class="p">)</span></div>
+
+
+<span class="c1"># --- KL functions, for the KL Lower Confidence Bound</span>
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="kllcb"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.kllcb">[docs]</a><span class="k">def</span> <span class="nf">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">kl</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span>
+        <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">),</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The generic KL-LCB index computation.</span>
+
+<span class="sd">    - ``x``: value of the cum reward,</span>
+<span class="sd">    - ``d``: lower bound on the divergence,</span>
+<span class="sd">    - ``kl``: the KL divergence to be used (:func:`klBern`, :func:`klGauss`, etc),</span>
+<span class="sd">    - ``lowerbound``, ``upperbound=float(&#39;-inf&#39;)``: the known bound of the values ``x``,</span>
+<span class="sd">    - ``precision=1e-6``: the threshold from where to stop the research,</span>
+<span class="sd">    - ``max_iterations=50``: max number of iterations of the loop (safer to bound it to reduce time complexity).</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \mathrm{kllcb}(x, d) \simeq \inf_{\mathrm{lowerbound} \leq y \leq \mathrm{upperbound}} \{ y : \mathrm{kl}(x, y) &gt; d \}.</span>
+
+<span class="sd">    .. note:: It uses a **bisection search**, and one call to ``kl`` for each step of the bisection search.</span>
+
+<span class="sd">    For example, for :func:`kllcbBern`, the two steps are to first compute an upperbound (as precise as possible) and the compute the kl-UCB index:</span>
+
+<span class="sd">    &gt;&gt;&gt; x, d = 0.9, 0.2   # mean x, exploration term d</span>
+<span class="sd">    &gt;&gt;&gt; lowerbound = max(0., kllcbGauss(x, d, sig2x=0.25))  # variance 1/4 for [0,1] bounded distributions</span>
+<span class="sd">    &gt;&gt;&gt; lowerbound  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.5837...</span>
+<span class="sd">    &gt;&gt;&gt; kllcb(x, d, klBern, lowerbound, upperbound=0, precision=1e-3, max_iterations=10)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.29...</span>
+<span class="sd">    &gt;&gt;&gt; kllcb(x, d, klBern, lowerbound, upperbound=0, precision=1e-6, max_iterations=10)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.29188...</span>
+<span class="sd">    &gt;&gt;&gt; kllcb(x, d, klBern, lowerbound, upperbound=0, precision=1e-3, max_iterations=50)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.291886...</span>
+<span class="sd">    &gt;&gt;&gt; kllcb(x, d, klBern, lowerbound, upperbound=0, precision=1e-6, max_iterations=100)  # more and more precise!  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.29188611...</span>
+
+<span class="sd">    .. note:: See below for more examples for different KL divergence functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">)</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">lowerbound</span>
+    <span class="n">_count_iteration</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">_count_iteration</span> <span class="o">&lt;</span> <span class="n">max_iterations</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">-</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">precision</span><span class="p">:</span>
+        <span class="n">_count_iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+        <span class="k">if</span> <span class="n">kl</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">d</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">m</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span></div>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="kllcbBern"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.kllcbBern">[docs]</a><span class="k">def</span> <span class="nf">kllcbBern</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; KL-LCB index computation for Bernoulli distributions, using :func:`kllcb`.</span>
+
+<span class="sd">    - Influence of x:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.1, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.09999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.5, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.49999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.9, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.89999...</span>
+
+<span class="sd">    - Influence of d:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.1, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.09999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.1, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.09999...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.5, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.4999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.5, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.4999...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.9, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.8999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbBern(0.9, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.8999...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lowerbound</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">kllcbGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">sig2x</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>  <span class="c1"># variance 1/4 for [0,1] bounded distributions</span>
+    <span class="c1"># lowerbound = max(0., kllcbPoisson(x, d))  # also safe, and better ?</span>
+    <span class="k">return</span> <span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span></div>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="kllcbGauss"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.kllcbGauss">[docs]</a><span class="k">def</span> <span class="nf">kllcbGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">sig2x</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; KL-LCB index computation for Gaussian distributions.</span>
+
+<span class="sd">    - Note that it does not require any search.</span>
+
+<span class="sd">    .. warning:: it works only if the good variance constant is given.</span>
+
+<span class="sd">    - Influence of x:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.1, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    -0.21622...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.5, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.18377...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.9, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.58377...</span>
+
+<span class="sd">    - Influence of d:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.1, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    -0.3472...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.1, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    -0.5708...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.5, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.0527...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.5, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    -0.1708...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.9, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.4527...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbGauss(0.9, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.2291...</span>
+
+<span class="sd">    .. warning:: Using :class:`Policies.kllCB` (and variants) with :func:`kllcbGauss` is equivalent to use :class:`Policies.UCB`, so prefer the simpler version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sig2x</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span></div>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="kllcbPoisson"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.kllcbPoisson">[docs]</a><span class="k">def</span> <span class="nf">kllcbPoisson</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; KL-LCB index computation for Poisson distributions, using :func:`kllcb`.</span>
+
+<span class="sd">    - Influence of x:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.1, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.09999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.5, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.49999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.9, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.89999...</span>
+
+<span class="sd">    - Influence of d:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.1, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.09999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.1, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.09999...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.5, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.49999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.5, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.49999...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.9, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.89999...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbPoisson(0.9, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.89999...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">d</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">d</span><span class="p">)</span>  <span class="c1"># looks safe, to check: left (Gaussian) tail of Poisson dev</span>
+    <span class="k">return</span> <span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klPoisson</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span></div>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="kllcbExp"><a class="viewcode-back" href="../../docs/Arms.kullback.html#Arms.kullback.kllcbExp">[docs]</a><span class="k">def</span> <span class="nf">kllcbExp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; KL-LCB index computation for exponential distributions, using :func:`kllcb`.</span>
+
+<span class="sd">    - Influence of x:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.1, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.15267...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.5, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.7633...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.9, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.3740...</span>
+
+<span class="sd">    - Influence of d:</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.1, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.2000...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.1, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.3842...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.5, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.0000...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.5, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.9214...</span>
+
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.9, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="sd">    1.8000...</span>
+<span class="sd">    &gt;&gt;&gt; kllcbExp(0.9, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="sd">    3.4586...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mf">0.77</span><span class="p">:</span>  <span class="c1"># XXX where does this value come from?</span>
+        <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">2.</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">d</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">4.</span> <span class="o">/</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
+        <span class="c1"># safe, klexp(x,y) &gt;= e^2/(2*(1-2e/3)) if x=y(1-e)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mf">1.61</span><span class="p">:</span>  <span class="c1"># XXX where does this value come from?</span>
+        <span class="n">upperbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">upperbound</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">d</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">d</span> <span class="o">*</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klGamma</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">)</span></div>
+
+
+<span class="c1"># # FIXME this one is wrong!</span>
+<span class="c1"># @jit</span>
+<span class="c1"># def kllcbGamma(x, d, precision=1e-6):</span>
+<span class="c1">#     &quot;&quot;&quot; KL-LCB index computation for Gamma distributions, using :func:`kllcb`.</span>
+
+<span class="c1">#     - Influence of x:</span>
+
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.1, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     0.202...</span>
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.5, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     1.013...</span>
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.9, 0.2)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     1.824...</span>
+
+<span class="c1">#     - Influence of d:</span>
+
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.1, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     0.285...</span>
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.1, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     0.559...</span>
+
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.5, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     1.428...</span>
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.5, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     2.795...</span>
+
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.9, 0.4)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     2.572...</span>
+<span class="c1">#     &gt;&gt;&gt; kllcbGamma(0.9, 0.9)  # doctest: +ELLIPSIS</span>
+<span class="c1">#     5.031...</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     if d &lt; 0.77:  # XXX where does this value come from?</span>
+<span class="c1">#         lowerbound = x / (1 + 2. / 3 * d - sqrt(4. / 9 * d * d + 2 * d))</span>
+<span class="c1">#         # safe, klexp(x,y) &gt;= e^2/(2*(1-2e/3)) if x=y(1-e)</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         lowerbound = x * exp(d + 1)</span>
+<span class="c1">#     if d &gt; 1.61:  # XXX where does this value come from?</span>
+<span class="c1">#         upperbound = x * exp(d)</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         upperbound = x / (1 + d - sqrt(d * d + 2 * d))</span>
+<span class="c1">#     # FIXME specify the value for a !</span>
+<span class="c1">#     return kllcb(x, d, klGamma, min(lowerbound, -1e2), precision, max(1e2, upperbound))</span>
 
 
 <span class="c1"># --- max EV functions</span>
@@ -959,7 +1203,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 24 Oct 2018, 14h.
+      Last updated on 01 Nov 2018, 21h.
 
     </p>
   </div>

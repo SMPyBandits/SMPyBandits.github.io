@@ -200,7 +200,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Olivier Cappé, Aurélien Garivier, Emilie Kaufmann, Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
 <span class="k">try</span><span class="p">:</span>
@@ -261,6 +261,8 @@
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">with_proba</span><span class="p">(</span><span class="n">r_t</span><span class="p">))</span></div>
 
 
+<span class="c1"># --- Class</span>
+
 <div class="viewcode-block" id="Beta"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta">[docs]</a><span class="k">class</span> <span class="nc">Beta</span><span class="p">(</span><span class="n">Posterior</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Manipulate posteriors of Bernoulli/Beta experiments.&quot;&quot;&quot;</span>
 
@@ -273,7 +275,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>  <span class="c1">#: List of two parameters [a, b]</span></div>
 
 <div class="viewcode-block" id="Beta.__str__"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Beta(</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Beta(\alpha=</span><span class="si">{:.3g}</span><span class="s2">, \beta=</span><span class="si">{:.3g}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="Beta.reset"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset alpha and beta, both to 1 as when creating a new default Beta.&quot;&quot;&quot;</span>
@@ -309,7 +311,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="n">bernoulliBinarization</span><span class="p">(</span><span class="n">obs</span><span class="p">)]</span> <span class="o">-=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="Beta.update"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add an observation. If obs is 1, update alpha, if it is 0, update beta, otherwise, a trick with :func:`bernoulliBinarization` has to be used.&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add an observation.</span>
+
+<span class="sd">        - If obs is 1, update :math:`\alpha` the count of positive observations,</span>
+<span class="sd">        - If it is 0, update :math:`\beta` the count of negative observations.</span>
+
+<span class="sd">        .. note:: Otherwise, a trick with :func:`bernoulliBinarization` has to be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># print(&quot;Info: calling Beta.update() with obs = {} ...&quot;.format(obs))  # DEBUG</span>
         <span class="c1"># FIXED update this code, to accept obs that are FLOAT in [0, 1] and not just in {0, 1}...</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="n">bernoulliBinarization</span><span class="p">(</span><span class="n">obs</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
@@ -328,7 +336,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 24 Oct 2018, 14h.
+      Last updated on 01 Nov 2018, 21h.
 
     </p>
   </div>

@@ -127,6 +127,8 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedBayesianIndexPolicy.html">Policies.DiscountedBayesianIndexPolicy module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedThompson.html">Policies.DiscountedThompson module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedUCB.html">Policies.DiscountedUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DoublingTrickWrapper.html">Policies.DoublingTrickWrapper module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.EmpiricalMeans.html">Policies.EmpiricalMeans module</a></li>
@@ -685,7 +687,7 @@ a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &g
 <li><code class="docutils literal"><span class="pre">kl</span></code>: the KL divergence to be used (<a class="reference internal" href="#Policies.kullback.klBern" title="Policies.kullback.klBern"><code class="xref py py-func docutils literal"><span class="pre">klBern()</span></code></a>, <a class="reference internal" href="#Policies.kullback.klGauss" title="Policies.kullback.klGauss"><code class="xref py py-func docutils literal"><span class="pre">klGauss()</span></code></a>, etc),</li>
 <li><code class="docutils literal"><span class="pre">upperbound</span></code>, <code class="docutils literal"><span class="pre">lowerbound=float('-inf')</span></code>: the known bound of the values <code class="docutils literal"><span class="pre">x</span></code>,</li>
 <li><code class="docutils literal"><span class="pre">precision=1e-6</span></code>: the threshold from where to stop the research,</li>
-<li><code class="docutils literal"><span class="pre">max_iterations</span></code>: max number of iterations of the loop (safer to bound it to reduce time complexity).</li>
+<li><code class="docutils literal"><span class="pre">max_iterations=50</span></code>: max number of iterations of the loop (safer to bound it to reduce time complexity).</li>
 </ul>
 <div class="math">
 \[\mathrm{klucb}(x, d) \simeq \sup_{\mathrm{lowerbound} \leq y \leq \mathrm{upperbound}} \{ y : \mathrm{kl}(x, y) &lt; d \}.\]</div>
@@ -701,7 +703,7 @@ a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &g
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  
 <span class="go">0.9941...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  
-<span class="go">0.994482...  </span>
+<span class="go">0.9944...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>  
 <span class="go">0.9941...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">klucb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">upperbound</span><span class="p">,</span> <span class="n">lowerbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># more and more precise!  </span>
@@ -916,6 +918,208 @@ a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &g
 </dd></dl>
 
 <dl class="attribute">
+<dt id="Policies.kullback.kllcb">
+<code class="descclassname">Policies.kullback.</code><code class="descname">kllcb</code><a class="headerlink" href="#Policies.kullback.kllcb" title="Permalink to this definition">¶</a></dt>
+<dd><p>The generic KL-LCB index computation.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">x</span></code>: value of the cum reward,</li>
+<li><code class="docutils literal"><span class="pre">d</span></code>: lower bound on the divergence,</li>
+<li><code class="docutils literal"><span class="pre">kl</span></code>: the KL divergence to be used (<a class="reference internal" href="#Policies.kullback.klBern" title="Policies.kullback.klBern"><code class="xref py py-func docutils literal"><span class="pre">klBern()</span></code></a>, <a class="reference internal" href="#Policies.kullback.klGauss" title="Policies.kullback.klGauss"><code class="xref py py-func docutils literal"><span class="pre">klGauss()</span></code></a>, etc),</li>
+<li><code class="docutils literal"><span class="pre">lowerbound</span></code>, <code class="docutils literal"><span class="pre">upperbound=float('-inf')</span></code>: the known bound of the values <code class="docutils literal"><span class="pre">x</span></code>,</li>
+<li><code class="docutils literal"><span class="pre">precision=1e-6</span></code>: the threshold from where to stop the research,</li>
+<li><code class="docutils literal"><span class="pre">max_iterations=50</span></code>: max number of iterations of the loop (safer to bound it to reduce time complexity).</li>
+</ul>
+<div class="math">
+\[\mathrm{kllcb}(x, d) \simeq \inf_{\mathrm{lowerbound} \leq y \leq \mathrm{upperbound}} \{ y : \mathrm{kl}(x, y) &gt; d \}.\]</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It uses a <strong>bisection search</strong>, and one call to <code class="docutils literal"><span class="pre">kl</span></code> for each step of the bisection search.</p>
+</div>
+<p>For example, for <a class="reference internal" href="#Policies.kullback.kllcbBern" title="Policies.kullback.kllcbBern"><code class="xref py py-func docutils literal"><span class="pre">kllcbBern()</span></code></a>, the two steps are to first compute an upperbound (as precise as possible) and the compute the kl-UCB index:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span>   <span class="c1"># mean x, exploration term d</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lowerbound</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="n">kllcbGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">sig2x</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>  <span class="c1"># variance 1/4 for [0,1] bounded distributions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lowerbound</span>  
+<span class="go">0.5837...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  
+<span class="go">0.29...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  
+<span class="go">0.29188...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>  
+<span class="go">0.291886...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcb</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">,</span> <span class="n">upperbound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># more and more precise!  </span>
+<span class="go">0.29188611...</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See below for more examples for different KL divergence functions.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.kullback.kllcbBern">
+<code class="descclassname">Policies.kullback.</code><code class="descname">kllcbBern</code><a class="headerlink" href="#Policies.kullback.kllcbBern" title="Permalink to this definition">¶</a></dt>
+<dd><p>KL-LCB index computation for Bernoulli distributions, using <a class="reference internal" href="#Policies.kullback.kllcb" title="Policies.kullback.kllcb"><code class="xref py py-func docutils literal"><span class="pre">kllcb()</span></code></a>.</p>
+<ul class="simple">
+<li>Influence of x:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.09999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.49999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.89999...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Influence of d:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.09999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.09999...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.4999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.4999...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.8999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbBern</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.8999...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.kullback.kllcbGauss">
+<code class="descclassname">Policies.kullback.</code><code class="descname">kllcbGauss</code><a class="headerlink" href="#Policies.kullback.kllcbGauss" title="Permalink to this definition">¶</a></dt>
+<dd><p>KL-LCB index computation for Gaussian distributions.</p>
+<ul class="simple">
+<li>Note that it does not require any search.</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">it works only if the good variance constant is given.</p>
+</div>
+<ul class="simple">
+<li>Influence of x:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">-0.21622...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.18377...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.58377...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Influence of d:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">-0.3472...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">-0.5708...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.0527...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">-0.1708...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.4527...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbGauss</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.2291...</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Using <code class="xref py py-class docutils literal"><span class="pre">Policies.kllCB</span></code> (and variants) with <a class="reference internal" href="#Policies.kullback.kllcbGauss" title="Policies.kullback.kllcbGauss"><code class="xref py py-func docutils literal"><span class="pre">kllcbGauss()</span></code></a> is equivalent to use <a class="reference internal" href="Policies.UCB.html#module-Policies.UCB" title="Policies.UCB"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCB</span></code></a>, so prefer the simpler version.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.kullback.kllcbPoisson">
+<code class="descclassname">Policies.kullback.</code><code class="descname">kllcbPoisson</code><a class="headerlink" href="#Policies.kullback.kllcbPoisson" title="Permalink to this definition">¶</a></dt>
+<dd><p>KL-LCB index computation for Poisson distributions, using <a class="reference internal" href="#Policies.kullback.kllcb" title="Policies.kullback.kllcb"><code class="xref py py-func docutils literal"><span class="pre">kllcb()</span></code></a>.</p>
+<ul class="simple">
+<li>Influence of x:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.09999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.49999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.89999...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Influence of d:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.09999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.09999...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.49999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.49999...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.89999...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbPoisson</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.89999...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.kullback.kllcbExp">
+<code class="descclassname">Policies.kullback.</code><code class="descname">kllcbExp</code><a class="headerlink" href="#Policies.kullback.kllcbExp" title="Permalink to this definition">¶</a></dt>
+<dd><p>KL-LCB index computation for exponential distributions, using <a class="reference internal" href="#Policies.kullback.kllcb" title="Policies.kullback.kllcb"><code class="xref py py-func docutils literal"><span class="pre">kllcb()</span></code></a>.</p>
+<ul class="simple">
+<li>Influence of x:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.15267...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">0.7633...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>  
+<span class="go">1.3740...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Influence of d:</li>
+</ul>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">0.2000...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">0.3842...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">1.0000...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">1.9214...</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>  
+<span class="go">1.8000...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kllcbExp</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>  
+<span class="go">3.4586...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="Policies.kullback.maxEV">
 <code class="descclassname">Policies.kullback.</code><code class="descname">maxEV</code><a class="headerlink" href="#Policies.kullback.maxEV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maximize expectation of <span class="math">\(V\)</span> with respect to <span class="math">\(q\)</span> st. <span class="math">\(\mathrm{KL}(p, q) &lt; \text{klMax}\)</span>.</p>
@@ -987,7 +1191,7 @@ a \times \left( \frac{x}{y} - 1 - \log(\frac{x}{y}) \right) &amp; \text{if} x &g
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 24 Oct 2018, 14h.
+      Last updated on 01 Nov 2018, 21h.
 
     </p>
   </div>

@@ -187,13 +187,15 @@
             
   <h1>Source code for Policies.Thompson</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot; The Thompson (Bayesian) index policy. By default, it uses a Beta posterior.</span>
-<span class="sd">Reference: [Thompson - Biometrika, 1933].</span>
+<span class="sd">&quot;&quot;&quot; The Thompson (Bayesian) index policy.</span>
+
+<span class="sd">- By default, it uses a Beta posterior (:class:`Policies.Posterior.Beta`), one by arm.</span>
+<span class="sd">- Reference: [Thompson - Biometrika, 1933].</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Olivier Cappé, Aurélien Garivier, Emilie Kaufmann, Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.5&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.BayesianIndexPolicy</span> <span class="k">import</span> <span class="n">BayesianIndexPolicy</span>
@@ -202,14 +204,37 @@
 
 
 <div class="viewcode-block" id="Thompson"><a class="viewcode-back" href="../../docs/Policies.Thompson.html#Policies.Thompson.Thompson">[docs]</a><span class="k">class</span> <span class="nc">Thompson</span><span class="p">(</span><span class="n">BayesianIndexPolicy</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The Thompson (Bayesian) index policy. By default, it uses a Beta posterior.</span>
-<span class="sd">    Reference: [Thompson - Biometrika, 1933].</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;The Thompson (Bayesian) index policy.</span>
+
+<span class="sd">    - By default, it uses a Beta posterior (:class:`Policies.Posterior.Beta`), one by arm.</span>
+<span class="sd">    - Prior is initially flat, i.e., :math:`a=\alpha_0=1` and :math:`b=\beta_0=1`.</span>
+
+<span class="sd">    - A non-flat prior for each arm can be given with parameters ``a`` and ``b``, for instance::</span>
+
+<span class="sd">        nbArms = 2</span>
+<span class="sd">        prior_failures  = a = 100</span>
+<span class="sd">        prior_successes = b = 50</span>
+<span class="sd">        policy = Thompson(nbArms, a=a, b=b)</span>
+<span class="sd">        np.mean([policy.choice() for _ in range(1000)])  # 0.515 ~= 0.5: each arm has same prior!</span>
+
+<span class="sd">    - A different prior for each arm can be given with parameters ``params_for_each_posterior``, for instance::</span>
+
+<span class="sd">        nbArms = 2</span>
+<span class="sd">        params0 = { &#39;a&#39;: 10, &#39;b&#39;: 5}  # mean 1/3</span>
+<span class="sd">        params1 = { &#39;a&#39;: 5, &#39;b&#39;: 10}  # mean 2/3</span>
+<span class="sd">        params = [params0, params1]</span>
+<span class="sd">        policy = Thompson(nbArms, params_for_each_posterior=params)</span>
+<span class="sd">        np.mean([policy.choice() for _ in range(1000)])  # 0.9719 ~= 1: arm 1 is better than arm 0 !</span>
+
+<span class="sd">    - Reference: [Thompson - Biometrika, 1933].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Thompson.computeIndex"><a class="viewcode-back" href="../../docs/Policies.Thompson.html#Policies.Thompson.Thompson.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the current index, at time t and after :math:`N_k(t)` pulls of arm k, giving :math:`S_k(t)` rewards of 1, by sampling from the Beta posterior:</span>
 
-<span class="sd">        .. math:: I_k(t) \sim \mathrm{Beta}(1 + S_k(t), 1 + N_k(t) - S_k(t)).</span>
+<span class="sd">        .. math::</span>
+<span class="sd">            A(t) &amp;\sim U(\arg\max_{1 \leq k \leq K} I_k(t)),\\</span>
+<span class="sd">            I_k(t) &amp;\sim \mathrm{Beta}(1 + \tilde{S_k}(t), 1 + \tilde{N_k}(t) - \tilde{S_k}(t)).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div></div>
 </pre></div>
@@ -227,7 +252,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 24 Oct 2018, 14h.
+      Last updated on 01 Nov 2018, 21h.
 
     </p>
   </div>

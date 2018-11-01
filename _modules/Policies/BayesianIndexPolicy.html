@@ -191,7 +191,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.3&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
@@ -202,14 +202,31 @@
 
 
 <div class="viewcode-block" id="BayesianIndexPolicy"><a class="viewcode-back" href="../../docs/Policies.BayesianIndexPolicy.html#Policies.BayesianIndexPolicy.BayesianIndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">BayesianIndexPolicy</span><span class="p">(</span><span class="n">IndexPolicy</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Basic Bayesian index policy. By default, it uses a Beta posterior. &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; Basic Bayesian index policy.</span>
 
-<div class="viewcode-block" id="BayesianIndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.BayesianIndexPolicy.html#Policies.BayesianIndexPolicy.BayesianIndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">posterior</span><span class="o">=</span><span class="n">Beta</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="sd">    - By default, it uses a Beta posterior (:class:`Policies.Posterior.Beta`), one by arm.</span>
+<span class="sd">    - Use ``*args`` and ``**kwargs`` if you want to give parameters to the underlying posteriors.</span>
+<span class="sd">    - Or use ``params_for_each_posterior`` as a *list* of parameters (as a dictionary) to give a different set of parameters for each posterior.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BayesianIndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.BayesianIndexPolicy.html#Policies.BayesianIndexPolicy.BayesianIndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+            <span class="n">posterior</span><span class="o">=</span><span class="n">Beta</span><span class="p">,</span>
+            <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create a new Bayesian policy, by creating a default posterior on each arm.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BayesianIndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbArms</span>  <span class="c1">#: Posterior for each arm. List instead of dict, quicker access</span>
-        <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;params_for_each_posterior&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params_for_each_posterior&#39;</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&#39;params_for_each_posterior&#39; is in kwargs, so using params =</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">as a list of parameters to give to each posterior.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating posterior for arm </span><span class="si">{}</span><span class="s2">, with params = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">arm</span><span class="p">]))</span>  <span class="c1"># DEBUG</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                <span class="c1"># print(&quot;Creating posterior for arm {}, with args = {} and kwargs = {}.&quot;.format(arm, args, kwargs))  # DEBUG</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_posterior_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BayesianIndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.BayesianIndexPolicy.html#Policies.BayesianIndexPolicy.BayesianIndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -224,6 +241,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+        <span class="c1"># print(&quot;Policy {} reinitialized with posteriors: {}&quot;.format(self, [str(p) for p in self.posterior])) # DEBUG</span>
 
 <div class="viewcode-block" id="BayesianIndexPolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.BayesianIndexPolicy.html#Policies.BayesianIndexPolicy.BayesianIndexPolicy.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Update the posterior on each arm, with the normalized reward.&quot;&quot;&quot;</span>
@@ -247,7 +265,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 24 Oct 2018, 14h.
+      Last updated on 01 Nov 2018, 21h.
 
     </p>
   </div>
