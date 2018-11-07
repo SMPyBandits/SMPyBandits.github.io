@@ -379,7 +379,7 @@
 
 <dl class="data">
 <dt id="Policies.CD_UCB.MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</code><em class="property"> = 10</em><a class="headerlink" href="#Policies.CD_UCB.MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</code><em class="property"> = 100</em><a class="headerlink" href="#Policies.CD_UCB.MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hypothesis on the speed of changes: between two change points, there is at least <span class="math">\(M * K\)</span> time steps, where K is the number of arms, and M is this constant.</p>
 </dd></dl>
 
@@ -465,6 +465,10 @@
 <em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SlidingWindowRestart_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>proba_random_exploration=0.1</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>A more generic implementation is the <a class="reference internal" href="Policies.SlidingWindowRestart.html#module-Policies.SlidingWindowRestart" title="Policies.SlidingWindowRestart"><code class="xref py py-class docutils literal"><span class="pre">Policies.SlidingWindowRestart</span></code></a> class.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">I have no idea if what I wrote is correct or not!</p>
+</div>
 <dl class="method">
 <dt id="Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change">
 <code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
@@ -484,12 +488,12 @@
 
 <dl class="class">
 <dt id="Policies.CD_UCB.CUSUM_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">CUSUM_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=10</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">CUSUM_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The CUSUM-UCB generic policy for non-stationary bandits, from [[&#8220;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&#8221;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
 <dl class="method">
 <dt id="Policies.CD_UCB.CUSUM_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=10</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -519,6 +523,18 @@
 <dt id="Policies.CD_UCB.CUSUM_IndexPolicy.detect_change">
 <code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect a change in the current arm, using the two-sided CUSUM algorithm [Page, 1954].</p>
+<ul class="simple">
+<li>For each <em>data</em> k, compute:</li>
+</ul>
+<div class="math">
+\[\begin{split}s_k^- &amp;= (y_k - \hat{u}_0 - \varepsilon) 1(k &gt; M),\\
+s_k^+ &amp;= (\hat{u}_0 - y_k - \varepsilon) 1(k &gt; M),\\
+g_k^+ &amp;= max(0, g_{k-1}^+ + s_k^+),\\
+g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
+<ul class="simple">
+<li>The change is detected if <span class="math">\(\max(g_k^+, g_k^-) &gt; h\)</span> where <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h" title="Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code></a> is the threshold of the test,</li>
+<li>And <span class="math">\(\hat{u}_0 = \frac{1}{M} \sum_{k=1}^{M} y_k\)</span> is the mean of the first M samples, where M is <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.M" title="Policies.CD_UCB.CUSUM_IndexPolicy.M"><code class="xref py py-attr docutils literal"><span class="pre">M</span></code></a> the min number of observation between change points.</li>
+</ul>
 </dd></dl>
 
 <dl class="attribute">
@@ -530,7 +546,7 @@
 
 <dl class="class">
 <dt id="Policies.CD_UCB.PHT_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">PHT_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=10</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">PHT_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>epsilon=0.5</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy" title="Policies.CD_UCB.CUSUM_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CUSUM_IndexPolicy</span></code></a></p>
 <p>The PHT-UCB generic policy for non-stationary bandits, from [[&#8220;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&#8221;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
 <dl class="method">
@@ -542,6 +558,18 @@
 <dt id="Policies.CD_UCB.PHT_IndexPolicy.detect_change">
 <code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect a change in the current arm, using the two-side PHT algorithm [Hinkley, 1971].</p>
+<ul class="simple">
+<li>For each <em>data</em> k, compute:</li>
+</ul>
+<div class="math">
+\[\begin{split}s_k^- &amp;= y_k - \hat{y}_k - \varepsilon,\\
+s_k^+ &amp;= \hat{y}_k - y_k - \varepsilon,\\
+g_k^+ &amp;= max(0, g_{k-1}^+ + s_k^+),\\
+g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
+<ul class="simple">
+<li>The change is detected if <span class="math">\(\max(g_k^+, g_k^-) &gt; h\)</span> where <code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code> is the threshold of the test,</li>
+<li>And <span class="math">\(\hat{y}_k = \frac{1}{k} \sum_{s=1}^{k} y_s\)</span> is the mean of the first k samples.</li>
+</ul>
 </dd></dl>
 
 <dl class="attribute">
@@ -576,7 +604,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 01 Nov 2018, 21h.
+      Last updated on 07 Nov 2018, 14h.
 
     </p>
   </div>

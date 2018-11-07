@@ -221,7 +221,7 @@
 <span class="c1">#: Default value for the parameter :math:`\delta`, the lower-bound for :math:`\delta_k^{(i)}` the amplitude of change of arm k at break-point 1.</span>
 <span class="c1">#: The default abruptly-changing non-stationary problem draws news means in :math:`[0,1]` so :math:`\delta=0` is the only possible (worst-case) lower-bound on amplitude of changes.</span>
 <span class="c1">#: I force ``0.1`` because I can force the minimum gap when calling :func:`Arms.randomMeans` to be ``0.1``.</span>
-<span class="n">DELTA</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">DELTA</span> <span class="o">=</span> <span class="mf">0.1</span>
 
 <span class="c1">#: Should we fully restart the algorithm or simply reset one arm empirical average ?</span>
 <span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">False</span>
@@ -247,17 +247,17 @@
         <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">w</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
             <span class="c1"># XXX Estimate w from Remark 1</span>
             <span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="n">delta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nbArms</span> <span class="o">*</span> <span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">horizon</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">w</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">w</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">w</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: for Monitored_UCB policy the parameter w should be &gt; 0 but it was given as </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">w</span>  <span class="c1">#: Parameter :math:`w` for the M-UCB algorithm.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">=</span> <span class="n">w</span>  <span class="c1">#: Parameter :math:`w` for the M-UCB algorithm.</span>
 
         <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">b</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
             <span class="c1"># XXX compute b from the formula from Theorem 6.1</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">nbArms</span> <span class="o">*</span> <span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
         <span class="k">assert</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: for Monitored_UCB policy the parameter b should be &gt; 0 but it was given as </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>  <span class="c1">#: Parameter :math:`b` for the M-UCB algorithm.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold_b</span> <span class="o">=</span> <span class="n">b</span>  <span class="c1">#: Parameter :math:`b` for the M-UCB algorithm.</span>
 
         <span class="k">if</span> <span class="n">gamma</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">gamma</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
             <span class="n">M</span> <span class="o">=</span> <span class="n">max_nb_random_events</span>
@@ -268,21 +268,36 @@
             <span class="n">gamma</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">nbArms</span>
         <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">gamma</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: for Monitored_UCB policy the parameter gamma should be 0 &lt;= gamma &lt;= 1, but it was given as </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">gamma</span><span class="p">))</span>  <span class="c1"># clip gamma to (0, 1) it&#39;s a probability!</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span> <span class="o">=</span> <span class="n">gamma</span>  <span class="c1">#: What they call :math:`\gamma` in their paper: the probability of uniform exploration at each time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>  <span class="c1">#: What they call :math:`\gamma` in their paper: the share of uniform exploration.</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span> <span class="o">=</span> <span class="n">full_restart_when_refresh</span>  <span class="c1"># Should we fully restart the algorithm or simply reset one arm empirical average ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_update_time_tau</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Keep in memory the last time a change was detected, ie, the variable :math:`\tau` in the algorithm.</span>
 
         <span class="c1"># Internal memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Keep in memory all the rewards obtained since the last restart on that arm.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Monitored(</span><span class="si">{}</span><span class="s2">, $w=</span><span class="si">{:.3g}</span><span class="s2">$, $b=</span><span class="si">{:.3g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Monitored-</span><span class="si">{}</span><span class="s2">($w=</span><span class="si">{:g}</span><span class="s2">$, $b=</span><span class="si">{:g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.choice"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; With a probability :math:`\alpha`, play uniformly at random, otherwise, pass the call to ``choice`` of the underlying policy.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Essentially play uniformly at random with probability :math:`\gamma`, otherwise, pass the call to ``choice`` of the underlying policy (eg. UCB).</span>
+
+<span class="sd">        .. warning:: Actually, it&#39;s more complicated:</span>
+
+<span class="sd">        - If :math:`t` is the current time and :math:`\tau` is the latest restarting time, then uniform exploration is done if:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            A &amp;:= (t - \tau) \mod \lceil \frac{K}{\gamma} \rceil,\\</span>
+<span class="sd">            A &amp;\leq K \implies A_t = A.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_update_time_tau</span><span class="p">)</span> <span class="o">%</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nArms</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">A</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">A</span>
+        <span class="c1"># FIXED no in this algorithm they do not use a uniform chance of random exploration!</span>
+        <span class="c1"># if with_proba(self.gamma):</span>
+        <span class="c1">#     return np.random.randint(0, self.nbArms - 1)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
@@ -295,11 +310,11 @@
         <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
         <span class="c1"># We seen it one more time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># we update the total number of samples available to the underlying policy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">)</span>
         <span class="c1"># Store it in place for the empirical average of that arm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_change</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For a player </span><span class="si">{}</span><span class="s2"> a change was detected at time </span><span class="si">{}</span><span class="s2"> for arm </span><span class="si">{}</span><span class="s2"> after seeing reward = </span><span class="si">{}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_update_time_tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
             <span class="c1"># Fully restart the algorithm ?!</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">startGame</span><span class="p">(</span><span class="n">createNewPolicy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -307,22 +322,25 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
-            <span class="c1"># reset current memory for THIS arm</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
+            <span class="c1"># XXX reset current memory for ALL arm</span>
+            <span class="k">for</span> <span class="n">eachArm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">eachArm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">eachArm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># we update the total number of samples available to the underlying policy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A change i detected in the current arm if the following test is true:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A change is detected for the current arm if the following test is true:</span>
 
 <span class="sd">        .. math:: |\sum_{i=w/2+1}^{w} Y_i - \sum_{i=1}^{w/2} Y_i | &gt; b ?</span>
 
-<span class="sd">        - where :math:`Y_i` is the i-th data in the latest w data from this arm.</span>
-<span class="sd">        - where b is the threshold of the test, and w is the window-size.</span>
+<span class="sd">        - where :math:`Y_i` is the i-th data in the latest w data from this arm (ie, :math:`X_k(t)` for :math:`t = n_k - w + 1` to :math:`t = n_k` current number of samples from arm k).</span>
+<span class="sd">        - where :attr:`threshold_b` is the threshold b of the test, and :attr:`window_size` is the window-size w.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
-        <span class="n">sum_first_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_y</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">])</span>
-        <span class="n">sum_second_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">:])</span>
-        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sum_first_half</span> <span class="o">-</span> <span class="n">sum_second_half</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span></div></div>
+        <span class="n">sum_first_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_y</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">])</span>
+        <span class="n">sum_second_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sum_first_half</span> <span class="o">-</span> <span class="n">sum_second_half</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_b</span></div></div>
 
 
 </pre></div>
@@ -340,7 +358,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 01 Nov 2018, 21h.
+      Last updated on 07 Nov 2018, 14h.
 
     </p>
   </div>

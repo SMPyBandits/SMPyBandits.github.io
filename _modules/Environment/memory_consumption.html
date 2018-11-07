@@ -196,12 +196,36 @@
 <span class="sd">- Reference: https://docs.python.org/3/library/tracemalloc.html#pretty-top</span>
 <span class="sd">- Example:</span>
 
-<span class="sd">&gt;&gt;&gt; start_tracemalloc()</span>
+<span class="sd">&gt;&gt;&gt; return_code = start_tracemalloc()</span>
 <span class="sd">Starting to trace memory allocations...</span>
 <span class="sd">&gt;&gt;&gt; # ... run your application ...</span>
 <span class="sd">&gt;&gt;&gt; display_top_tracemalloc()</span>
+<span class="sd">&lt;BLANKLINE&gt;</span>
 <span class="sd">Top 10 lines ranked by memory consumption:</span>
-<span class="sd">...</span>
+<span class="sd">#1: python3.6/doctest.py:1330: 636 B</span>
+<span class="sd">    compileflags, 1), test.globs)</span>
+<span class="sd">#2: &lt;doctest __main__[1]&gt;:1: 568 B</span>
+<span class="sd">    display_top_tracemalloc()</span>
+<span class="sd">#3: python3.6/doctest.py:1346: 472 B</span>
+<span class="sd">    if check(example.want, got, self.optionflags):</span>
+<span class="sd">#4: python3.6/doctest.py:1374: 464 B</span>
+<span class="sd">    self.report_success(out, test, example, got)</span>
+<span class="sd">#5: python3.6/doctest.py:1591: 456 B</span>
+<span class="sd">    got = self._toAscii(got)</span>
+<span class="sd">#6: ./memory_consumption.py:168: 448 B</span>
+<span class="sd">    snapshot = tracemalloc.take_snapshot()</span>
+<span class="sd">#7: python3.6/doctest.py:1340: 440 B</span>
+<span class="sd">    self._fakeout.truncate(0)</span>
+<span class="sd">#8: python3.6/doctest.py:1339: 440 B</span>
+<span class="sd">    got = self._fakeout.getvalue()  # the actual output</span>
+<span class="sd">#9: python3.6/doctest.py:1331: 432 B</span>
+<span class="sd">    self.debugger.set_continue() # ==== Example Finished ====</span>
+<span class="sd">#10: python3.6/doctest.py:251: 89 B</span>
+<span class="sd">    result = StringIO.getvalue(self)</span>
+<span class="sd">2 others: 78 B</span>
+<span class="sd">&lt;BLANKLINE&gt;</span>
+<span class="sd">Total allocated size: 4.4 KiB</span>
+<span class="sd">4523</span>
 
 <span class="sd">.. warning:: This is automatically used (for ``main.py`` at least) when ``DEBUGMEMORY=True`` (cli env).</span>
 
@@ -245,7 +269,7 @@
 <span class="sd">    .. warning:: This is still experimental for multi-threaded code.</span>
 <span class="sd">    .. warning:: It can break on some systems, see for instance [the issue #142](https://github.com/SMPyBandits/SMPyBandits/issues/142).</span>
 
-<span class="sd">    .. warning:: FIXME even on my own system, when no multi-threading is used, it works for the *last* few policies I test, but fails for the first??</span>
+<span class="sd">    .. warning:: FIXME even on my own system,, it works for the *last* few policies I test, but fails for the first??</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">thread</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -253,12 +277,6 @@
             <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_THREAD</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: resource.RUSAGE_THREAD is not available.&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-    <span class="k">if</span> <span class="n">both</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># https://docs.python.org/3/library/resource.html#resource.RUSAGE_BOTH</span>
-            <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_BOTH</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: resource.RUSAGE_BOTH is not available.&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
     <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrusage</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RUSAGE_SELF</span><span class="p">)</span><span class="o">.</span><span class="n">ru_maxrss</span></div>
 
 
@@ -314,7 +332,7 @@
 
 
 <span class="c1">#: Max number of lines to show with :func:`display_top_tracemalloc`.</span>
-<span class="n">LIMIT</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">LIMIT</span> <span class="o">=</span> <span class="mi">10</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">tracemalloc</span>
@@ -322,7 +340,7 @@
     <span class="k">def</span> <span class="nf">start_tracemalloc</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;Wrapper function around :func:`tracemalloc.start`, to log the start of tracing memory allocation.&quot;&quot;&quot;</span>
         <span class="n">tracemalloc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting to trace memory allocations...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting to trace memory allocations...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
         <span class="k">return</span> <span class="mi">0</span>
 
     <span class="k">def</span> <span class="nf">display_top_tracemalloc</span><span class="p">(</span><span class="n">snapshot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">key_type</span><span class="o">=</span><span class="s1">&#39;lineno&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">LIMIT</span><span class="p">):</span>
@@ -408,7 +426,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 01 Nov 2018, 21h.
+      Last updated on 07 Nov 2018, 14h.
 
     </p>
   </div>
