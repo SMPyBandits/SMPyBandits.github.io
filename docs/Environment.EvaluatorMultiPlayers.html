@@ -1,0 +1,896 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Environment.EvaluatorMultiPlayers module &mdash; SMPyBandits 0.9.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
+        <link rel="up" title="Environment package" href="Environment.html"/>
+        <link rel="next" title="Environment.EvaluatorSparseMultiPlayers module" href="Environment.EvaluatorSparseMultiPlayers.html"/>
+        <link rel="prev" title="Environment.Evaluator module" href="Environment.Evaluator.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">SMPyBandits modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Arms.html">Arms package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Environment.html">Environment package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Environment.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Environment.CollisionModels.html">Environment.CollisionModels module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.Evaluator.html">Environment.Evaluator module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Environment.EvaluatorMultiPlayers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.EvaluatorSparseMultiPlayers.html">Environment.EvaluatorSparseMultiPlayers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.MAB.html">Environment.MAB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.Result.html">Environment.Result module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.ResultMultiPlayers.html">Environment.ResultMultiPlayers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.fairnessMeasures.html">Environment.fairnessMeasures module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.memory_consumption.html">Environment.memory_consumption module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.notify.html">Environment.notify module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.plot_Cmu_HOI.html">Environment.plot_Cmu_HOI module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.plotsettings.html">Environment.plotsettings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.pykov.html">Environment.pykov module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.sortedDistance.html">Environment.sortedDistance module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.usejoblib.html">Environment.usejoblib module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.usenumba.html">Environment.usenumba module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Environment.usetqdm.html">Environment.usetqdm module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Policies.html">Policies package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complete_tree_exploration_for_MP_bandits.html">complete_tree_exploration_for_MP_bandits module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_aggregation_algorithms.html">configuration_comparing_aggregation_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_comparing_doubling_algorithms.html">configuration_comparing_doubling_algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_markovian.html">configuration_markovian module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_multiplayers.html">configuration_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse.html">configuration_sparse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_sparse_multiplayers.html">configuration_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="env_client.html">env_client module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers.html">main_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_multiplayers_more.html">main_multiplayers_more module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main_sparse_multiplayers.html">main_sparse_multiplayers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="policy_server.html">policy_server module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><code class="docutils literal"><span class="pre">Multi-players</span> <span class="pre">simulation</span> <span class="pre">environment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Environment.html">Environment package</a> &raquo;</li>
+        
+      <li>Environment.EvaluatorMultiPlayers module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Environment.EvaluatorMultiPlayers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="module-Environment.EvaluatorMultiPlayers">
+<span id="environment-evaluatormultiplayers-module"></span><h1>Environment.EvaluatorMultiPlayers module<a class="headerlink" href="#module-Environment.EvaluatorMultiPlayers" title="Permalink to this headline">¶</a></h1>
+<p>EvaluatorMultiPlayers class to wrap and run the simulations, for the multi-players case.
+Lots of plotting methods, to have various visualizations. See documentation.</p>
+<dl class="function">
+<dt id="Environment.EvaluatorMultiPlayers._nbOfArgs">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">_nbOfArgs</code><span class="sig-paren">(</span><em>function</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#_nbOfArgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers._nbOfArgs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.REPETITIONS">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">REPETITIONS</code><em class="property"> = 1</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.REPETITIONS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default nb of repetitions</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.DELTA_T_PLOT">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">DELTA_T_PLOT</code><em class="property"> = 50</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.DELTA_T_PLOT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default sampling rate for plotting</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.COUNT_RANKS_MARKOV_CHAIN">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">COUNT_RANKS_MARKOV_CHAIN</code><em class="property"> = False</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.COUNT_RANKS_MARKOV_CHAIN" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, count and then print a lot of statistics for the Markov Chain of the underlying configurations on ranks</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.MORE_ACCURATE">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">MORE_ACCURATE</code><em class="property"> = True</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.MORE_ACCURATE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the count of selections instead of rewards for a more accurate mean/std reward measure.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.plot_lowerbounds">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">plot_lowerbounds</code><em class="property"> = True</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.plot_lowerbounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default is to plot the lower-bounds</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.FINAL_RANKS_ON_AVERAGE">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">FINAL_RANKS_ON_AVERAGE</code><em class="property"> = True</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.FINAL_RANKS_ON_AVERAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for <code class="docutils literal"><span class="pre">finalRanksOnAverage</span></code></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.USE_JOBLIB_FOR_POLICIES">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">USE_JOBLIB_FOR_POLICIES</code><em class="property"> = False</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.USE_JOBLIB_FOR_POLICIES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for <code class="docutils literal"><span class="pre">useJoblibForPolicies</span></code>. Does not speed up to use it (too much overhead in using too much threads); so it should really be disabled.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.EvaluatorMultiPlayers.PICKLE_IT">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">PICKLE_IT</code><em class="property"> = True</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.PICKLE_IT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for <code class="docutils literal"><span class="pre">pickleit</span></code> for saving the figures. If True, then all <code class="docutils literal"><span class="pre">plt.figure</span></code> object are saved (in pickle format).</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers">
+<em class="property">class </em><code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">EvaluatorMultiPlayers</code><span class="sig-paren">(</span><em>configuration</em>, <em>moreAccurate=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Evaluator class to run the simulations, for the multi-players case.</p>
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>configuration</em>, <em>moreAccurate=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.cfg">
+<code class="descname">cfg</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.cfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration dictionnary</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.nbPlayers">
+<code class="descname">nbPlayers</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.nbPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of players</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.repetitions">
+<code class="descname">repetitions</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.repetitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of repetitions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.horizon">
+<code class="descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horizon (number of time steps)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.collisionModel">
+<code class="descname">collisionModel</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.collisionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Which collision model should be used</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.full_lost_if_collision">
+<code class="descname">full_lost_if_collision</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.full_lost_if_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is there a full loss of rewards if collision ? To compute the correct decomposition of regret</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.moreAccurate">
+<code class="descname">moreAccurate</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.moreAccurate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the count of selections instead of rewards for a more accurate mean/std reward measure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.finalRanksOnAverage">
+<code class="descname">finalRanksOnAverage</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.finalRanksOnAverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Final display of ranks are done on average rewards?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.averageOn">
+<code class="descname">averageOn</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.averageOn" title="Permalink to this definition">¶</a></dt>
+<dd><p>How many last steps for final rank average rewards</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plot_lowerbounds">
+<code class="descname">plot_lowerbounds</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plot_lowerbounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we plot the lower-bounds?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.useJoblib">
+<code class="descname">useJoblib</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.useJoblib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use joblib to parallelize for loop on repetitions (useful)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.showplot">
+<code class="descname">showplot</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.showplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the plot (interactive display or not)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.count_ranks_markov_chain">
+<code class="descname">count_ranks_markov_chain</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.count_ranks_markov_chain" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, count and then print a lot of statistics for the Markov Chain of the underlying configurations on ranks</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.change_labels">
+<code class="descname">change_labels</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.change_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Possibly empty dictionary to map &#8216;playerId&#8217; to new labels (overwrite their name).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.append_labels">
+<code class="descname">append_labels</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.append_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Possibly empty dictionary to map &#8216;playerId&#8217; to new labels (by appending the result from &#8216;append_labels&#8217;).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.envs">
+<code class="descname">envs</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.envs" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of environments</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.players">
+<code class="descname">players</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.players" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of players</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.rewards">
+<code class="descname">rewards</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, history of rewards</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.pulls">
+<code class="descname">pulls</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.pulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of arm pulls (mean)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.lastPulls">
+<code class="descname">lastPulls</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.lastPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the distribution of arm pulls</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.allPulls">
+<code class="descname">allPulls</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.allPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the full history of arm pulls</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.collisions">
+<code class="descname">collisions</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.collisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of collisions on all arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.lastCumCollisions">
+<code class="descname">lastCumCollisions</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.lastCumCollisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, last count of collisions on all arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.nbSwitchs">
+<code class="descname">nbSwitchs</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.nbSwitchs" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of switches (change of configuration of players)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.bestArmPulls">
+<code class="descname">bestArmPulls</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.bestArmPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of best arm pulls</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.freeTransmissions">
+<code class="descname">freeTransmissions</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.freeTransmissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of successful transmission (1 - collisions, basically)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.lastCumRewards">
+<code class="descname">lastCumRewards</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.lastCumRewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, last accumulated rewards, to compute variance and histogram of whole regret R_T</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.runningTimes">
+<code class="descname">runningTimes</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.runningTimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of running times</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.memoryConsumption">
+<code class="descname">memoryConsumption</code><em class="property"> = None</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.memoryConsumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, keep the history of running times</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__initEnvironments__">
+<code class="descname">__initEnvironments__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.__initEnvironments__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__initEnvironments__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create environments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__initPlayers__">
+<code class="descname">__initPlayers__</code><span class="sig-paren">(</span><em>env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.__initPlayers__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__initPlayers__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create or initialize players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.startAllEnv">
+<code class="descname">startAllEnv</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.startAllEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.startAllEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate all envs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.startOneEnv">
+<code class="descname">startOneEnv</code><span class="sig-paren">(</span><em>envId</em>, <em>env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.startOneEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.startOneEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate that env.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.saveondisk">
+<code class="descname">saveondisk</code><span class="sig-paren">(</span><em>filepath='saveondisk_EvaluatorMultiPlayers.hdf5'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.saveondisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.saveondisk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the content of the internal data to into a HDF5 file on the disk.</p>
+<ul class="simple">
+<li>See <a class="reference external" href="http://docs.h5py.org/en/stable/quick.html">http://docs.h5py.org/en/stable/quick.html</a> if needed.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.loadfromdisk">
+<code class="descname">loadfromdisk</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.loadfromdisk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.loadfromdisk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update internal memory of the Evaluator object by loading data the opened HDF5 file.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME this is not YET implemented!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getPulls">
+<code class="descname">getPulls</code><span class="sig-paren">(</span><em>playerId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getPulls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean pulls.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getAllPulls">
+<code class="descname">getAllPulls</code><span class="sig-paren">(</span><em>playerId</em>, <em>armId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getAllPulls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getAllPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean of all pulls.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getNbSwitchs">
+<code class="descname">getNbSwitchs</code><span class="sig-paren">(</span><em>playerId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getNbSwitchs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getNbSwitchs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean nb of switches.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedNbSwitchs">
+<code class="descname">getCentralizedNbSwitchs</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getCentralizedNbSwitchs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedNbSwitchs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract average of mean nb of switches.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getBestArmPulls">
+<code class="descname">getBestArmPulls</code><span class="sig-paren">(</span><em>playerId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getBestArmPulls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getBestArmPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean of best arms pulls.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getfreeTransmissions">
+<code class="descname">getfreeTransmissions</code><span class="sig-paren">(</span><em>playerId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getfreeTransmissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getfreeTransmissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean of successful transmission.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCollisions">
+<code class="descname">getCollisions</code><span class="sig-paren">(</span><em>armId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getCollisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCollisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean of number of collisions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getRewards">
+<code class="descname">getRewards</code><span class="sig-paren">(</span><em>playerId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getRewards"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getRewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean of rewards.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getRegretMean">
+<code class="descname">getRegretMean</code><span class="sig-paren">(</span><em>playerId</em>, <em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getRegretMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getRegretMean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract mean of regret</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This is the centralized regret, for one arm, it does not make much sense in the multi-players setting!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedRegret_LessAccurate">
+<code class="descname">getCentralizedRegret_LessAccurate</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getCentralizedRegret_LessAccurate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedRegret_LessAccurate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the empirical centralized regret: cumsum on time of the mean rewards of the M best arms - cumsum on time of the empirical rewards obtained by the players, based on accumulated rewards.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getFirstRegretTerm">
+<code class="descname">getFirstRegretTerm</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getFirstRegretTerm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getFirstRegretTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract and compute the first term <span class="math">\((a)\)</span> in the centralized regret: losses due to pulling suboptimal arms.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getSecondRegretTerm">
+<code class="descname">getSecondRegretTerm</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getSecondRegretTerm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getSecondRegretTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract and compute the second term <span class="math">\((b)\)</span> in the centralized regret: losses due to not pulling optimal arms.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getThirdRegretTerm">
+<code class="descname">getThirdRegretTerm</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getThirdRegretTerm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getThirdRegretTerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract and compute the third term <span class="math">\((c)\)</span> in the centralized regret: losses due to collisions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedRegret_MoreAccurate">
+<code class="descname">getCentralizedRegret_MoreAccurate</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getCentralizedRegret_MoreAccurate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedRegret_MoreAccurate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the empirical centralized regret, based on counts of selections and not actual rewards.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedRegret">
+<code class="descname">getCentralizedRegret</code><span class="sig-paren">(</span><em>envId=0</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getCentralizedRegret"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getCentralizedRegret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using either the more accurate or the less accurate regret count.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getLastRegrets_LessAccurate">
+<code class="descname">getLastRegrets_LessAccurate</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getLastRegrets_LessAccurate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getLastRegrets_LessAccurate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract last regrets, based on accumulated rewards.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getAllLastWeightedSelections">
+<code class="descname">getAllLastWeightedSelections</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getAllLastWeightedSelections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getAllLastWeightedSelections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract weighted count of selections.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getLastRegrets_MoreAccurate">
+<code class="descname">getLastRegrets_MoreAccurate</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getLastRegrets_MoreAccurate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getLastRegrets_MoreAccurate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract last regrets, based on counts of selections and not actual rewards.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getLastRegrets">
+<code class="descname">getLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getLastRegrets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using either the more accurate or the less accurate regret count.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getRunningTimes">
+<code class="descname">getRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getRunningTimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the means and stds and list of running time of the different players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getMemoryConsumption">
+<code class="descname">getMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.getMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.getMemoryConsumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the means and stds and list of memory consumptions of the different players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotRewards">
+<code class="descname">plotRewards</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>semilogx=False</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotRewards"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotRewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the decentralized (vectorial) rewards, for each player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotFairness">
+<code class="descname">plotFairness</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>semilogx=False</em>, <em>fairness='default'</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotFairness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotFairness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a certain measure of &#8220;fairness&#8221;, from these personal rewards, support more than one environments (use evaluators to give a list of other environments).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotRegretCentralized">
+<code class="descname">plotRegretCentralized</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>semilogx=False</em>, <em>semilogy=False</em>, <em>loglog=False</em>, <em>normalized=False</em>, <em>evaluators=()</em>, <em>subTerms=False</em>, <em>sumofthreeterms=False</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotRegretCentralized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotRegretCentralized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the centralized cumulated regret, support more than one environments (use evaluators to give a list of other environments).</p>
+<ul class="simple">
+<li>The lower bounds are also plotted (Besson &amp; Kaufmann, and Anandkumar et al).</li>
+<li>The three terms of the regret are also plotting if evaluators = () (that&#8217;s the default).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotNbSwitchs">
+<code class="descname">plotNbSwitchs</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>semilogx=False</em>, <em>cumulated=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotNbSwitchs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotNbSwitchs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot cumulated number of switchs (to evaluate the switching costs), comparing each player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotNbSwitchsCentralized">
+<code class="descname">plotNbSwitchsCentralized</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>semilogx=False</em>, <em>cumulated=False</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotNbSwitchsCentralized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotNbSwitchsCentralized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the centralized cumulated number of switchs (to evaluate the switching costs), support more than one environments (use evaluators to give a list of other environments).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotBestArmPulls">
+<code class="descname">plotBestArmPulls</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotBestArmPulls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotBestArmPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the frequency of pulls of the best channel.</p>
+<ul class="simple">
+<li>Warning: does not adapt to dynamic settings!</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotAllPulls">
+<code class="descname">plotAllPulls</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>cumulated=True</em>, <em>normalized=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotAllPulls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotAllPulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the frequency of use of every channels, one figure for each channel. Not so useful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotFreeTransmissions">
+<code class="descname">plotFreeTransmissions</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>cumulated=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotFreeTransmissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotFreeTransmissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the frequency free transmission.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotNbCollisions">
+<code class="descname">plotNbCollisions</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>semilogx=False</em>, <em>semilogy=False</em>, <em>loglog=False</em>, <em>cumulated=False</em>, <em>upperbound=False</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotNbCollisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotNbCollisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the frequency or cum number of collisions, support more than one environments (use evaluators to give a list of other environments).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotFrequencyCollisions">
+<code class="descname">plotFrequencyCollisions</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>piechart=True</em>, <em>semilogy=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotFrequencyCollisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotFrequencyCollisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the frequency of collision, in a pie chart (histogram not supported yet).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printRunningTimes">
+<code class="descname">printRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>precision=3</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.printRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printRunningTimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the average+-std running time of the different players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printMemoryConsumption">
+<code class="descname">printMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.printMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printMemoryConsumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the average+-std memory consumption of the different players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotRunningTimes">
+<code class="descname">plotRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>maxNbOfLabels=30</em>, <em>base=1</em>, <em>unit='seconds'</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotRunningTimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the running times of the different players, as a box plot for each evaluators.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotMemoryConsumption">
+<code class="descname">plotMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>maxNbOfLabels=30</em>, <em>base=1024</em>, <em>unit='KiB'</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotMemoryConsumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the memory consumption of the different players, as a box plot for each.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printFinalRanking">
+<code class="descname">printFinalRanking</code><span class="sig-paren">(</span><em>envId=0</em>, <em>verb=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.printFinalRanking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printFinalRanking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute and print the ranking of the different players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printFinalRankingAll">
+<code class="descname">printFinalRankingAll</code><span class="sig-paren">(</span><em>envId=0</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.printFinalRankingAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printFinalRankingAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute and print the ranking of the different players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printLastRegrets">
+<code class="descname">printLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>evaluators=()</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.printLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.printLastRegrets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the last regrets of the different evaluators.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotLastRegrets">
+<code class="descname">plotLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>normed=False</em>, <em>subplots=True</em>, <em>nbbins=20</em>, <em>log=False</em>, <em>all_on_separate_figures=False</em>, <em>sharex=False</em>, <em>sharey=False</em>, <em>savefig=None</em>, <em>moreAccurate=None</em>, <em>evaluators=()</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.plotLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.plotLastRegrets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot histogram of the regrets R_T for all evaluators.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.strPlayers">
+<code class="descname">strPlayers</code><span class="sig-paren">(</span><em>short=False</em>, <em>latex=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#EvaluatorMultiPlayers.strPlayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.strPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a string of the players for this environment.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'Environment.EvaluatorMultiPlayers', '__doc__': ' Evaluator class to run the simulations, for the multi-players case.\n    ', '__init__': &lt;function EvaluatorMultiPlayers.__init__&gt;, '__initEnvironments__': &lt;function EvaluatorMultiPlayers.__initEnvironments__&gt;, '__initPlayers__': &lt;function EvaluatorMultiPlayers.__initPlayers__&gt;, 'startAllEnv': &lt;function EvaluatorMultiPlayers.startAllEnv&gt;, 'startOneEnv': &lt;function EvaluatorMultiPlayers.startOneEnv&gt;, 'saveondisk': &lt;function EvaluatorMultiPlayers.saveondisk&gt;, 'loadfromdisk': &lt;function EvaluatorMultiPlayers.loadfromdisk&gt;, 'getPulls': &lt;function EvaluatorMultiPlayers.getPulls&gt;, 'getAllPulls': &lt;function EvaluatorMultiPlayers.getAllPulls&gt;, 'getNbSwitchs': &lt;function EvaluatorMultiPlayers.getNbSwitchs&gt;, 'getCentralizedNbSwitchs': &lt;function EvaluatorMultiPlayers.getCentralizedNbSwitchs&gt;, 'getBestArmPulls': &lt;function EvaluatorMultiPlayers.getBestArmPulls&gt;, 'getfreeTransmissions': &lt;function EvaluatorMultiPlayers.getfreeTransmissions&gt;, 'getCollisions': &lt;function EvaluatorMultiPlayers.getCollisions&gt;, 'getRewards': &lt;function EvaluatorMultiPlayers.getRewards&gt;, 'getRegretMean': &lt;function EvaluatorMultiPlayers.getRegretMean&gt;, 'getCentralizedRegret_LessAccurate': &lt;function EvaluatorMultiPlayers.getCentralizedRegret_LessAccurate&gt;, 'getFirstRegretTerm': &lt;function EvaluatorMultiPlayers.getFirstRegretTerm&gt;, 'getSecondRegretTerm': &lt;function EvaluatorMultiPlayers.getSecondRegretTerm&gt;, 'getThirdRegretTerm': &lt;function EvaluatorMultiPlayers.getThirdRegretTerm&gt;, 'getCentralizedRegret_MoreAccurate': &lt;function EvaluatorMultiPlayers.getCentralizedRegret_MoreAccurate&gt;, 'getCentralizedRegret': &lt;function EvaluatorMultiPlayers.getCentralizedRegret&gt;, 'getLastRegrets_LessAccurate': &lt;function EvaluatorMultiPlayers.getLastRegrets_LessAccurate&gt;, 'getAllLastWeightedSelections': &lt;function EvaluatorMultiPlayers.getAllLastWeightedSelections&gt;, 'getLastRegrets_MoreAccurate': &lt;function EvaluatorMultiPlayers.getLastRegrets_MoreAccurate&gt;, 'getLastRegrets': &lt;function EvaluatorMultiPlayers.getLastRegrets&gt;, 'getRunningTimes': &lt;function EvaluatorMultiPlayers.getRunningTimes&gt;, 'getMemoryConsumption': &lt;function EvaluatorMultiPlayers.getMemoryConsumption&gt;, 'plotRewards': &lt;function EvaluatorMultiPlayers.plotRewards&gt;, 'plotFairness': &lt;function EvaluatorMultiPlayers.plotFairness&gt;, 'plotRegretCentralized': &lt;function EvaluatorMultiPlayers.plotRegretCentralized&gt;, 'plotNbSwitchs': &lt;function EvaluatorMultiPlayers.plotNbSwitchs&gt;, 'plotNbSwitchsCentralized': &lt;function EvaluatorMultiPlayers.plotNbSwitchsCentralized&gt;, 'plotBestArmPulls': &lt;function EvaluatorMultiPlayers.plotBestArmPulls&gt;, 'plotAllPulls': &lt;function EvaluatorMultiPlayers.plotAllPulls&gt;, 'plotFreeTransmissions': &lt;function EvaluatorMultiPlayers.plotFreeTransmissions&gt;, 'plotNbCollisions': &lt;function EvaluatorMultiPlayers.plotNbCollisions&gt;, 'plotFrequencyCollisions': &lt;function EvaluatorMultiPlayers.plotFrequencyCollisions&gt;, 'printRunningTimes': &lt;function EvaluatorMultiPlayers.printRunningTimes&gt;, 'printMemoryConsumption': &lt;function EvaluatorMultiPlayers.printMemoryConsumption&gt;, 'plotRunningTimes': &lt;function EvaluatorMultiPlayers.plotRunningTimes&gt;, 'plotMemoryConsumption': &lt;function EvaluatorMultiPlayers.plotMemoryConsumption&gt;, 'printFinalRanking': &lt;function EvaluatorMultiPlayers.printFinalRanking&gt;, 'printFinalRankingAll': &lt;function EvaluatorMultiPlayers.printFinalRankingAll&gt;, 'printLastRegrets': &lt;function EvaluatorMultiPlayers.printLastRegrets&gt;, 'plotLastRegrets': &lt;function EvaluatorMultiPlayers.plotLastRegrets&gt;, 'strPlayers': &lt;function EvaluatorMultiPlayers.strPlayers&gt;, '__dict__': &lt;attribute '__dict__' of 'EvaluatorMultiPlayers' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'EvaluatorMultiPlayers' objects&gt;})</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Environment.EvaluatorMultiPlayers'</em><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Environment.EvaluatorMultiPlayers.delayed_play">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">delayed_play</code><span class="sig-paren">(</span><em>env</em>, <em>players</em>, <em>horizon</em>, <em>collisionModel</em>, <em>seed=None</em>, <em>repeatId=0</em>, <em>count_ranks_markov_chain=False</em>, <em>useJoblib=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#delayed_play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers.delayed_play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function for the parallelization.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Environment.EvaluatorMultiPlayers._extract">
+<code class="descclassname">Environment.EvaluatorMultiPlayers.</code><code class="descname">_extract</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/EvaluatorMultiPlayers.html#_extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.EvaluatorMultiPlayers._extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the str of a player, if it is a child, printed as &#8216;#[0-9]+&lt;...&gt;&#8217; &#8211;&gt; ...</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Environment.EvaluatorSparseMultiPlayers.html" class="btn btn-neutral float-right" title="Environment.EvaluatorSparseMultiPlayers module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Environment.Evaluator.html" class="btn btn-neutral" title="Environment.Evaluator module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 10 Nov 2018, 09h.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

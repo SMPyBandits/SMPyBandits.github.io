@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Some illustrations for this project &mdash; SMPyBandits 0.9.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
+        <link rel="next" title="Jupyter Notebooks 📓 by Naereen @ GitHub" href="../notebooks/README.html"/>
+        <link rel="prev" title="💥 TODO" href="../TODO.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/modules.html">SMPyBandits modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><code class="docutils literal"><span class="pre">Multi-players</span> <span class="pre">simulation</span> <span class="pre">environment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Some illustrations for this project</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#histogram-of-regrets-at-the-end-of-some-simulations">Histogram of regrets at the end of some simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#demonstration-of-different-aggregation-policies">Demonstration of different <code class="docutils literal"><span class="pre">Aggregation</span> <span class="pre">policies</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#demonstration-of-multi-player-algorithms">Demonstration of <code class="docutils literal"><span class="pre">multi-player</span> <span class="pre">algorithms</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-illustrations">Other illustrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#piece-wise-stationary-problems">Piece-wise stationary problems</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparse-problem-and-sparsity-aware-algorithms">Sparse problem and Sparsity-aware algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#demonstration-of-the-doubling-trick-policy">Demonstration of the <code class="docutils literal"><span class="pre">Doubling</span> <span class="pre">Trick</span> <span class="pre">policy</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plots-for-the-jmlr-mloss-paper">Plots for the JMLR MLOSS paper</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#saving-simulation-data-to-hdf5-file">Saving simulation data to HDF5 file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-of-time-and-memory-consumptions">Graph of time and memory consumptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#time-consumption">Time consumption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-consumption">Memory consumption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scroll-license-github-license">📜 License ? </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Some illustrations for this project</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/plots/README.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="some-illustrations-for-this-project">
+<span id="some-illustrations-for-this-project"></span><h1>Some illustrations for <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits">this project</a><a class="headerlink" href="#some-illustrations-for-this-project" title="Permalink to this headline">¶</a></h1>
+<p>Here are some plots illustrating the performances of the different <a class="reference external" href="../SMPyBandits/Policies/">policies</a> implemented in this project, against various problems (with <a class="reference external" href="docs/...SMPyBandits.Arms.Bernoulli.html"><code class="docutils literal"><span class="pre">Bernoulli</span></code></a> arms only):</p>
+<div class="section" id="histogram-of-regrets-at-the-end-of-some-simulations">
+<span id="histogram-of-regrets-at-the-end-of-some-simulations"></span><h2>Histogram of regrets at the end of some simulations<a class="headerlink" href="#histogram-of-regrets-at-the-end-of-some-simulations" title="Permalink to this headline">¶</a></h2>
+<p>On a simple Bernoulli problem, we can compare 16 different algorithms (on a short horizon and a small number of repetitions, just as an example).
+If we plot the distribution of the regret at the end of each experiment, <code class="docutils literal"><span class="pre">R_T</span></code>, we can see this kind of plot:</p>
+<p><img alt="Histogramme_regret_monoplayer_2.png" src="../_images/Histogramme_regret_monoplayer_2.png" /></p>
+<p>It helps a lot to see both the mean value (in solid black) of the regret, and its distribution of a few runs (100 here).
+It can be used to detect algorithms that perform well in average, but sometimes with really bad runs.
+Here, the <a class="reference external" href="docs/...SMPyBandits.Policies.Exp3PlusPlus.html">Exp3++</a> seems to had one bad run.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="demonstration-of-different-aggregation-policies">
+<span id="demonstration-of-different-aggregation-policies"></span><h2>Demonstration of different <a class="reference internal" href="../Aggregation.html"><span class="doc">Aggregation policies</span></a><a class="headerlink" href="#demonstration-of-different-aggregation-policies" title="Permalink to this headline">¶</a></h2>
+<p>On a fixed Gaussian problem, aggregating some algorithms tuned for this exponential family (ie, they know the variance but not the means).
+Our algorithm, <a class="reference external" href="docs/...SMPyBandits.Policies.Aggregator.html">Aggregator</a>, outperforms its ancestor <a class="reference external" href="docs/...SMPyBandits.Policies.Aggregator.html">Exp4</a> as well as the other state-of-the-art experts aggregation algorithms, <a class="reference external" href="docs/...SMPyBandits.Policies.CORRAL.html">CORRAL</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.LearnExp.html">LearnExp</a>.</p>
+<p><img alt="main____env3-4_932221613383548446.png" src="../_images/main____env3-4_932221613383548446.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="demonstration-of-multi-player-algorithms">
+<span id="demonstration-of-multi-player-algorithms"></span><h2>Demonstration of <a class="reference internal" href="../MultiPlayers.html"><span class="doc">multi-player algorithms</span></a><a class="headerlink" href="#demonstration-of-multi-player-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>Regret plot on a random Bernoulli problem, with <code class="docutils literal"><span class="pre">M=6</span></code> players accessing independently and in a decentralized way <code class="docutils literal"><span class="pre">K=9</span></code> arms.
+Our algorithms (<a class="reference external" href="docs/...SMPyBandits.PoliciesMultiPlayers.RandTopM.html">RandTopM</a> and <a class="reference external" href="docs/...SMPyBandits.PoliciesMultiPlayers.RandTopM.html">MCTopM</a>, as well as <a class="reference external" href="docs/...SMPyBandits.Policie.Selfish.html">Selfish</a>) outperform the state-of-the-art <a class="reference external" href="docs/...SMPyBandits.PoliciesMultiPlayers.rhoRand.html">rhoRand</a>:</p>
+<p><img alt="MP__K9_M6_T5000_N500__4_algos__all_RegretCentralized____env1-1_8318947830261751207.png" src="../_images/MP__K9_M6_T5000_N500__4_algos__all_RegretCentralized____env1-1_8318947830261751207.png" /></p>
+<p>Histogram on the same random Bernoulli problems.
+We see that some all algorithms have a non-negligible variance on their regrets.</p>
+<p><img alt="MP__K9_M6_T10000_N1000__4_algos__all_HistogramsRegret____env1-1_8200873569864822246.png" src="../_images/MP__K9_M6_T10000_N1000__4_algos__all_HistogramsRegret____env1-1_8200873569864822246.png" /></p>
+<p>Comparison with two other &#8220;state-of-the-art&#8221; algorithms (<a class="reference external" href="docs/...SMPyBandits.Policies.MusicalChair.html">MusicalChair</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.MEGA.html">MEGA</a>, in semilogy scale to really see the different scale of regret between efficient and sub-optimal algorithms):</p>
+<p><img alt="MP__K9_M3_T123456_N100__8_algos__all_RegretCentralized_semilogy____env1-1_7803645526012310577.png" src="../_images/MP__K9_M3_T123456_N100__8_algos__all_RegretCentralized_semilogy____env1-1_7803645526012310577.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="other-illustrations">
+<span id="other-illustrations"></span><h2>Other illustrations<a class="headerlink" href="#other-illustrations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="piece-wise-stationary-problems">
+<span id="piece-wise-stationary-problems"></span><h3>Piece-wise stationary problems<a class="headerlink" href="#piece-wise-stationary-problems" title="Permalink to this headline">¶</a></h3>
+<p>Comparing <a class="reference external" href="docs/...SMPyBandits.Policies.SlidingWindowUCB.html">Sliding-Window UCB</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.DiscountedUCB.html">Discounted UCB</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.UCB.html">UCB</a>, on a simple Bernoulli problem which regular random shuffling of the arm.</p>
+<p><img alt="Demo_of_DiscountedUCB2.png" src="../_images/Demo_of_DiscountedUCB2.png" /></p>
+</div>
+<div class="section" id="sparse-problem-and-sparsity-aware-algorithms">
+<span id="sparse-problem-and-sparsity-aware-algorithms"></span><h3>Sparse problem and Sparsity-aware algorithms<a class="headerlink" href="#sparse-problem-and-sparsity-aware-algorithms" title="Permalink to this headline">¶</a></h3>
+<p>Comparing regular <a class="reference external" href="docs/...SMPyBandits.Policies.UCB.html">UCB</a>, <a class="reference external" href="docs/...SMPyBandits.Policies.klUCB.html">klUCB</a> and <a class="reference external" href="docs/...SMPyBandits.Policies.Thompson.html">Thompson sampling</a> against <a class="reference external" href="docs/...SMPyBandits.Policies.SparseWrapper.html">&#8220;sparse-aware&#8221; versions</a>, on a simple Gaussian problem with <code class="docutils literal"><span class="pre">K=10</span></code> arms but only <code class="docutils literal"><span class="pre">s=4</span></code> with non-zero mean.</p>
+<p><img alt="Demo_of_SparseWrapper_regret.png" src="../_images/Demo_of_SparseWrapper_regret.png" /></p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="demonstration-of-the-doubling-trick-policy">
+<span id="demonstration-of-the-doubling-trick-policy"></span><h2>Demonstration of the <a class="reference internal" href="../DoublingTrick.html"><span class="doc">Doubling Trick policy</span></a><a class="headerlink" href="#demonstration-of-the-doubling-trick-policy" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>On a fixed problem with full restart:
+<img alt="main____env1-1_3633169128724378553.png" src="../_images/main____env1-1_3633169128724378553.png" /></li>
+<li>On a fixed problem with no restart:
+<img alt="main____env1-1_5972568793654673752.png" src="../_images/main____env1-1_5972568793654673752.png" /></li>
+<li>On random problems with full restart:
+<img alt="main____env1-1_1217677871459230631.png" src="../_images/main____env1-1_1217677871459230631.png" /></li>
+<li>On random problems with no restart:
+<img alt="main____env1-1_5964629015089571121.png" src="../_images/main____env1-1_5964629015089571121.png" /></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="plots-for-the-jmlr-mloss-paper">
+<span id="plots-for-the-jmlr-mloss-paper"></span><h2>Plots for the <a class="reference external" href="http://jmlr.org/mloss/">JMLR MLOSS</a> paper<a class="headerlink" href="#plots-for-the-jmlr-mloss-paper" title="Permalink to this headline">¶</a></h2>
+<p>In <a class="reference external" href="../paper/paper.html">the JMLR MLOSS paper</a> I wrote to present SMPyBandits,
+an example of a simulation is presented, where we compare the standard anytime <a class="reference external" href="https://SMPyBandits.GitHub.io/docs/Policies.klUCB.html"><code class="docutils literal"><span class="pre">klUCB</span></code></a> algorithm against the non-anytime variant <a class="reference external" href="https://SMPyBandits.GitHub.io/docs/Policies.klUCBPlusPlus.html"><code class="docutils literal"><span class="pre">klUCBPlusPlus</span></code></a> algorithm, and also <a class="reference external" href="https://SMPyBandits.GitHub.io/docs/Policies.UCBalpha.html"><code class="docutils literal"><span class="pre">UCB</span></code></a> (with (\alpha=1)) and <a class="reference external" href="https://SMPyBandits.GitHub.io/docs/Policies.Thompson.html"><code class="docutils literal"><span class="pre">Thompson</span></code></a> (with <a class="reference external" href="https://SMPyBandits.GitHub.io/docs/Policies.Posterior.Beta.html">Beta posterior</a>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;policies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucbBern</span> <span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCBPlusPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucbBern</span> <span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span> <span class="p">}</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Running this simulation as shown below will save figures in a sub-folder, as well as save data (pulls, rewards and regret) in <a class="reference external" href="http://docs.h5py.org/en/stable/high/file.html">HDF5 files</a>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># 3. run a single-player simulation</span>
+$ <span class="nv">BAYES</span><span class="o">=</span>False <span class="nv">ARM_TYPE</span><span class="o">=</span>Bernoulli <span class="nv">N</span><span class="o">=</span><span class="m">1000</span> <span class="nv">T</span><span class="o">=</span><span class="m">10000</span> <span class="nv">K</span><span class="o">=</span><span class="m">9</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> <span class="se">\</span>
+  <span class="nv">MEANS</span><span class="o">=[</span><span class="m">0</span>.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9<span class="o">]</span> python3 main.py configuration.py
+</pre></div>
+</div>
+<p>The two plots below shows the average regret for these 4 algorithms.
+The regret is the difference between the cumulated rewards of the best fixed-armed strategy (which is the oracle strategy for stationary bandits), and the cumulated rewards of the considered algorithms.</p>
+<ul class="simple">
+<li>Average regret:
+<img alt="paper/3.png" src="../_images/3.png" /></li>
+<li>Histogram of regrets:
+<img alt="paper/3_hist.png" src="../_images/3_hist.png" /></li>
+</ul>
+<blockquote>
+<div>Example of a single-player simulation showing the average regret and histogram of regrets of 4 algorithms. They all perform very well: each algorithm is known to be order-optimal (<em>i.e.</em>, its regret is proved to match the lower-bound up-to a constant), and each but UCB is known to be optimal (<em>i.e.</em> with the constant matching the lower-bound). For instance, Thomson sampling is very efficient in average (in yellow), and UCB shows a larger variance (in red).</div></blockquote>
+<div class="section" id="saving-simulation-data-to-hdf5-file">
+<span id="saving-simulation-data-to-hdf5-file"></span><h3>Saving simulation data to HDF5 file<a class="headerlink" href="#saving-simulation-data-to-hdf5-file" title="Permalink to this headline">¶</a></h3>
+<p>This simulation produces this example HDF5 file,
+which contains attributes (<em>e.g.</em>, <code class="docutils literal"><span class="pre">horizon=10000</span></code>, <code class="docutils literal"><span class="pre">repetitions=1000</span></code>, <code class="docutils literal"><span class="pre">nbPolicies=4</span></code>),
+and a collection of different datasets for each environment.
+Only one environment was tested, and for <code class="docutils literal"><span class="pre">env_0</span></code> the HDF5 stores some attributes (<em>e.g.</em>, <code class="docutils literal"><span class="pre">nbArms=9</span></code> and <code class="docutils literal"><span class="pre">means=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]</span></code>)
+and datasets (<em>e.g.</em>, <code class="docutils literal"><span class="pre">bestArmPulls</span></code> of shape <code class="docutils literal"><span class="pre">(4,</span> <span class="pre">10000)</span></code>, <code class="docutils literal"><span class="pre">cumulatedRegret</span></code> of shape <code class="docutils literal"><span class="pre">(4,</span> <span class="pre">10000)</span></code>, <code class="docutils literal"><span class="pre">lastRegrets</span></code> of shape <code class="docutils literal"><span class="pre">(4,</span> <span class="pre">1000)</span></code>, <code class="docutils literal"><span class="pre">averageRewards</span></code> of shape <code class="docutils literal"><span class="pre">(4,</span> <span class="pre">10000)</span></code>).
+See the example:
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/plots/paper/example.hdf5">GitHub.com/SMPyBandits/SMPyBandits/blob/master/plots/paper/example.hdf5</a>.</p>
+<blockquote>
+<div>Note: <a class="reference external" href="https://github.com/HDFGroup/hdf-compass">HDFCompass</a> is recommended to explore the file from a nice and easy to use GUI. Or use it from a Python script with <a class="reference external" href="http://docs.h5py.org/en/stable/index.html">h5py</a> or a Julia script with <a class="reference external" href="https://github.com/JuliaIO/HDF5.jl">HDF5.jl</a>.
+<img alt="Example of exploring this 'example.hdf5' file using HDFCompass" src="../_images/example_HDF5_exploration_with_HDFCompass.png" /></div></blockquote>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="graph-of-time-and-memory-consumptions">
+<span id="graph-of-time-and-memory-consumptions"></span><h2>Graph of time and memory consumptions<a class="headerlink" href="#graph-of-time-and-memory-consumptions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="time-consumption">
+<span id="time-consumption"></span><h3>Time consumption<a class="headerlink" href="#time-consumption" title="Permalink to this headline">¶</a></h3>
+<p>Note that <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/94">I had added a very clean support</a> for time consumption measures, every simulation script will output (as the end) some lines looking like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>Giving the mean and std running times ...
+For policy #0 called &#39;UCB($\alpha=1$)&#39; ...
+    84.3 ms ± 7.54 ms per loop (mean ± std. dev. of 10 runs)
+For policy #1 called &#39;Thompson&#39; ...
+    89.6 ms ± 17.7 ms per loop (mean ± std. dev. of 10 runs)
+For policy #3 called &#39;kl-UCB$^{++}$($T=1000$)&#39; ...
+    2.52 s ± 29.3 ms per loop (mean ± std. dev. of 10 runs)
+For policy #2 called &#39;kl-UCB&#39; ...
+    2.59 s ± 284 ms per loop (mean ± std. dev. of 10 runs)
+</pre></div>
+</div>
+<p><img alt="Demo_of_automatic_time_consumption_measure_between_algorithms" src="../_images/Demo_of_automatic_time_consumption_measure_between_algorithms1.png" /></p>
+</div>
+<div class="section" id="memory-consumption">
+<span id="memory-consumption"></span><h3>Memory consumption<a class="headerlink" href="#memory-consumption" title="Permalink to this headline">¶</a></h3>
+<p>Note that <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/129">I had added an experimental support</a> for time consumption measures, every simulation script will output (as the end) some lines looking like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>Giving the mean and std memory consumption ...
+For players called &#39;3 x RhoRand-kl-UCB, rank:1&#39; ...
+    23.6 KiB ± 52 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x RandTopM-kl-UCB&#39; ...
+    1.1 KiB ± 0 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x Selfish-kl-UCB&#39; ...
+    12 B ± 0 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x MCTopM-kl-UCB&#39; ...
+    4.9 KiB ± 86 B (mean ± std. dev. of 10 runs)
+For players called &#39;3 x MCNoSensing($M=3$, $T=1000$)&#39; ...
+    12 B ± 0 B (mean ± std. dev. of 10 runs)
+</pre></div>
+</div>
+<p><img alt="Demo_of_automatic_memory_consumption_measure_between_algorithms" src="../_images/Demo_of_automatic_memory_consumption_measure_between_algorithms1.png" /></p>
+<blockquote>
+<div>It is still experimental!</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="scroll-license-github-license">
+<span id="scroll-license-github-license"></span><h3>📜 License ? <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg" /></a><a class="headerlink" href="#scroll-license-github-license" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://lbesson.mit-license.org/">MIT Licensed</a> (file <a class="reference external" href="LICENSE">LICENSE</a>).</p>
+<p>© 2016-2018 <a class="reference external" href="https://GitHub.com/Naereen">Lilian Besson</a>.</p>
+<p><a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/"><img alt="Open Source? Yes!" src="https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
+<a class="reference external" href="https://GitHub.com/Naereen/ama"><img alt="Ask Me Anything !" src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/"><img alt="Analytics" src="https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel" /></a>
+<img alt="" src="https://pypi.org/project/SMPyBandits" />
+<img alt="" src="https://pypi.org/project/SMPyBandits" />
+<img alt="" src="https://pypi.org/project/SMPyBandits" />
+<a class="reference external" href="https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/smpybandits/badge/?version=latest" /></a>
+<a class="reference external" href="https://travis-ci.org/SMPyBandits/SMPyBandits"><img alt="Build Status" src="https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/stargazers"><img alt="Stars of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/stars/SMPyBandits/SMPyBandits" /></a>
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/releases"><img alt="Releases of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/release/SMPyBandits/SMPyBandits" /></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../notebooks/README.html" class="btn btn-neutral float-right" title="Jupyter Notebooks 📓 by Naereen @ GitHub" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../TODO.html" class="btn btn-neutral" title="💥 TODO" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 10 Nov 2018, 09h.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

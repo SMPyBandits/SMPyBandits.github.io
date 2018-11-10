@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Policies.Experimentals.UnsupervisedLearning &mdash; SMPyBandits 0.9.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../docs/modules.html">SMPyBandits modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MultiPlayers.html"><code class="docutils literal"><span class="pre">Multi-players</span> <span class="pre">simulation</span> <span class="pre">environment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.Experimentals.UnsupervisedLearning</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.Experimentals.UnsupervisedLearning</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; An experimental &quot;on-line&quot; policy, using algorithms from Unsupervised Learning.</span>
+
+<span class="sd">Basically, it works like this:</span>
+
+<span class="sd">- Start with a purely random exploration phase (uniform exploration), to get some data about each arm,</span>
+<span class="sd">- Then, fit some unsupervised learning model on each arm, to build a model of its distribution (e.g., a simple Gaussian, with mean and variance obtained from the data).</span>
+<span class="sd">- And then, at each time step, use the models to generate some prediction for the output of each arm, and play according to the arm with highest prediction.</span>
+
+<span class="sd">    + If needed, refit the models once in a while, to incorporate all the collected data.</span>
+<span class="sd">    + If needed, use a robust estimate (e.g., mean of 100 samples) to choose the arm to play, instead of only *one* sample.</span>
+
+<span class="sd">.. warning:: This is still **experimental**! It is NOT efficient in terms of storage, and NOT efficient either in terms of efficiency against a Bandit problem (i.e., regret, best arm identification etc).</span>
+<span class="sd">.. warning:: It is NOT really an on-line policy, as both the memory consumption and the time complexity of each step *increase* with time!</span>
+
+
+<span class="sd">This module provides also two simple Unsupervised Learning algorithm, :class:`SimpleGaussianA` and :class:`SimpleBernoulliKernel`, see below.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
+
+
+<span class="c1"># Cf. http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html#sklearn.neighbors.KernelDensity</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">sklearn.neighbors.kde</span> <span class="k">import</span> <span class="n">KernelDensity</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: the &#39;scikit-learn&#39; package is mandatory for UnsupervisedLearning policy.</span><span class="se">\n</span><span class="s2">Install it with &#39;pip install sklearn&#39; or &#39;sudo pip install sklearn&#39; (or maybe &#39;pip3&#39;).&quot;</span><span class="p">)</span>  <span class="c1"># WARNING</span>
+    <span class="k">raise</span> <span class="n">e</span>
+
+
+<span class="c1"># --- Unsupervised fitting models</span>
+
+<div class="viewcode-block" id="FittingModel"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel">[docs]</a><span class="k">class</span> <span class="nc">FittingModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base class for any fitting model&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FittingModel.__init__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Nothing to do here.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FittingModel.__repr__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel.__repr__">[docs]</a>    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FittingModel.fit"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Nothing to do here.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="FittingModel.sample"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Always 0., for instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.</span></div>
+
+<div class="viewcode-block" id="FittingModel.score_samples"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel.score_samples">[docs]</a>    <span class="k">def</span> <span class="nf">score_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Always 1., for instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">1.</span></div>
+
+<div class="viewcode-block" id="FittingModel.score"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.FittingModel.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Log likelihood of the point (or the vector of data), under the current Gaussian model.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span></div></div>
+
+
+<div class="viewcode-block" id="SimpleGaussianKernel"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleGaussianKernel">[docs]</a><span class="k">class</span> <span class="nc">SimpleGaussianKernel</span><span class="p">(</span><span class="n">FittingModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Basic Unsupervised Learning algorithm, which simply fits a 1D Gaussian on some 1D data.</span>
+
+<span class="sd">    - It works quite well, for Gaussian as well as Constant, Uniform and Bernoulli arms.</span>
+<span class="sd">    - It fails (more or less) dramatically on Exponential, Binomial and Poisson arms.</span>
+
+<span class="sd">    &gt;&gt;&gt; K = SimpleGaussianKernel(loc=0.5, scale=0.1)</span>
+<span class="sd">    &gt;&gt;&gt; K</span>
+<span class="sd">    N(0.5, 0.1)</span>
+<span class="sd">    &gt;&gt;&gt; data = [0.33, 0.34, 0.40, 0.37]</span>
+<span class="sd">    &gt;&gt;&gt; K.fit(data)</span>
+<span class="sd">    N(0.36, 0.0274)</span>
+<span class="sd">    &gt;&gt;&gt; np.random.seed(0)  # reproducibility</span>
+<span class="sd">    &gt;&gt;&gt; K.sample()  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.4083...</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(K.sample((100, 100)))  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.3594...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleGaussianKernel.__init__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleGaussianKernel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Starts with :math:`\mathcal{N}(0, 1)`, by default.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SimpleGaussianKernel.__str__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleGaussianKernel.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;N(</span><span class="si">{:.3g}</span><span class="s2">, </span><span class="si">{:.3g}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SimpleGaussianKernel.fit"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleGaussianKernel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Use the mean and variance from the 1D vector data (of shape `n_samples` or `(n_samples, 1)`).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="SimpleGaussianKernel.sample"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleGaussianKernel.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return one or more sample, from the current Gaussian model.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">shape</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SimpleGaussianKernel.score_samples"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleGaussianKernel.score_samples">[docs]</a>    <span class="k">def</span> <span class="nf">score_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Likelihood of the point (or the vector of data), under the current Gaussian model, component-wise.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">st</span><span class="o">.</span><span class="n">bernoulli</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="SimpleBernoulliKernel"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleBernoulliKernel">[docs]</a><span class="k">class</span> <span class="nc">SimpleBernoulliKernel</span><span class="p">(</span><span class="n">FittingModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Basic Unsupervised Learning algorithm, which simply fits a 1D Bernoulli distribution on some 1D data.</span>
+
+<span class="sd">    - It works quite well, for Bernoulli as well as Constant arms.</span>
+<span class="sd">    - It fails (more or less) dramatically on Gaussian, Uniform, Exponential, Binomial and Poisson arms.</span>
+
+<span class="sd">    &gt;&gt;&gt; K = SimpleBernoulliKernel(lower=0, amplitude=1)</span>
+<span class="sd">    &gt;&gt;&gt; K.mu</span>
+<span class="sd">    0.5</span>
+<span class="sd">    &gt;&gt;&gt; data = [0.33, 0.34, 0.40, 0.37]</span>
+<span class="sd">    &gt;&gt;&gt; K.fit(data)</span>
+<span class="sd">    B(0.36)</span>
+<span class="sd">    &gt;&gt;&gt; np.random.seed(0)  # reproducibility</span>
+<span class="sd">    &gt;&gt;&gt; K.sample()</span>
+<span class="sd">    0.0</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(K.sample((100, 100)))  # doctest: +ELLIPSIS</span>
+<span class="sd">    0.3619...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleBernoulliKernel.__init__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleBernoulliKernel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Starts with :math:`\mathcal{B}(\mu)`, where :math:`\mu = p` or :math:`\mu = \mathrm{lower} + \mathrm{amplitude} / 2`, by default.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lower</span><span class="p">)</span>  <span class="c1">#: Known lower bounds on the rewards.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1">#: Known amplitude of the rewards.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">p</span> <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>  <span class="c1">#: Mean of the Bernoulli arm.</span></div>
+
+<div class="viewcode-block" id="SimpleBernoulliKernel.__str__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleBernoulliKernel.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;B(</span><span class="si">{:.3g}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SimpleBernoulliKernel.fit"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleBernoulliKernel.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Use the mean and variance from the 1D vector data (of shape `n_samples` or `(n_samples, 1)`).&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="s2">&quot;Error: some point in this data is not &gt;= </span><span class="si">{:.3g}</span><span class="s2"> (known lower bound on the rewards).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="s2">&quot;Error: some point in this data is not &lt;= </span><span class="si">{:.3g}</span><span class="s2"> (known upper bound on the rewards).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="SimpleBernoulliKernel.sample"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleBernoulliKernel.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return one or more sample, from the current Bernoulli model.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">shape</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">obs</span></div>
+
+<div class="viewcode-block" id="SimpleBernoulliKernel.score_samples"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.SimpleBernoulliKernel.score_samples">[docs]</a>    <span class="k">def</span> <span class="nf">score_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Likelihood of the point (or the vector of data), under the current Bernoulli model, component-wise.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="k">return</span> <span class="n">st</span><span class="o">.</span><span class="n">bernoulli</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># --- Decision Making Policy</span>
+
+<span class="n">T0</span> <span class="o">=</span> <span class="mi">100</span>          <span class="c1">#: Default value for the parameter `T_0`.</span>
+<span class="n">FIT_EVERY</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1">#: Default value for the parameter `fit_every`.</span>
+<span class="n">MEAN_OF</span> <span class="o">=</span> <span class="mi">100</span>     <span class="c1">#: Default value for the parameter `meanOf`.</span>
+
+
+<div class="viewcode-block" id="UnsupervisedLearning"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning">[docs]</a><span class="k">class</span> <span class="nc">UnsupervisedLearning</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Generic policy using an Unsupervised Learning algorithm, for instance from scikit-learn.</span>
+
+<span class="sd">    - By default, it uses a [KernelDensity](http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KernelDensity.html#sklearn.neighbors.KernelDensity) estimator.</span>
+
+<span class="sd">    .. warning:: This is still **experimental**!</span>
+
+
+<span class="sd">    .. note:: The algorithm I designed is not obvious, but here are some explanations:</span>
+
+
+<span class="sd">    - Initially : create :math:`K` Unsupervised Learning algorithms :math:`\mathcal{U}_k(0)`, :math:`k\in\{1,\dots,K\}`, for instance `KernelDensity` estimators.</span>
+
+<span class="sd">    - For the first :math:`K \times T_0` time steps, each arm :math:`k \in \{1, \dots, K\}` is sampled exactly :math:`T_0` times, to get a lot of initial observations for each arm.</span>
+
+<span class="sd">    - With these first :math:`T_0` (e.g., :math:`50`) observations, train a first version of the Unsupervised Learning algorithms :math:`\mathcal{U}_k(t)`, :math:`k\in\{1,\dots,K\}`.</span>
+
+<span class="sd">    - Then, for the following time steps, :math:`t \geq T_0 + 1` :</span>
+
+<span class="sd">      + Once in a while (every :math:`T_1 =` `fit_every` steps, e.g., :math:`100`), retrain all the Unsupervised Learning algorithms :</span>
+
+<span class="sd">        - For each arm :math:`k\in\{1,\dots,K\}`,</span>
+<span class="sd">        - Use all the previous observations of that arm to train the model :math:`\mathcal{U}_k(t)`.</span>
+
+<span class="sd">      + Otherwise, use the previously trained model to choose the arm :math:`A(t) \in \{1,\dots,K\}` to play next (see :meth:`choice` below).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="UnsupervisedLearning.__init__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+                 <span class="n">estimator</span><span class="o">=</span><span class="n">SimpleGaussianKernel</span><span class="p">,</span>
+                <span class="c1">#  estimator=KernelDensity,</span>
+                 <span class="n">T_0</span><span class="o">=</span><span class="n">T0</span><span class="p">,</span> <span class="n">fit_every</span><span class="o">=</span><span class="n">FIT_EVERY</span><span class="p">,</span> <span class="n">meanOf</span><span class="o">=</span><span class="n">MEAN_OF</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>  <span class="c1"># not used, but needed for my framework</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create a new UnsupervisedLearning policy.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms of the MAB problem.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1">#: Current time.</span>
+        <span class="n">T_0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T_0</span><span class="p">))</span>  <span class="c1">#: Number of random exploration of each arm at the beginning.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_every</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fit_every</span><span class="p">)</span>  <span class="c1">#: Frequency of refit of the unsupervised models.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meanOf</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">meanOf</span><span class="p">)</span>  <span class="c1">#: Number of samples used to estimate the best arm.</span>
+        <span class="c1"># Unsupervised Learning algorithm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_was_fitted</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">givenEstimator</span> <span class="o">=</span> <span class="n">estimator</span>  <span class="c1">#: The class to use to create the estimator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span> <span class="o">=</span> <span class="n">estimator</span>  <span class="c1"># The class to use to create the estimator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">args</span>  <span class="c1"># Other non-kwargs args given to the estimator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>  <span class="c1"># Other kwargs given to the estimator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ests</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: List of estimators (i.e., an object with a `fit` and `sample` method).</span>
+        <span class="c1"># Store all the observations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observations</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: List of observations for each arm. This is the main weakness of this policy: it uses a **linear** storage space, in the number of observations so far (i.e., the time index t), in other words it has a **linear memory complexity** : that&#39;s really bad!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>  <span class="c1">#: Known lower bounds on the rewards.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">amplitude</span>  <span class="c1">#: Known amplitude of the rewards.</span></div>
+
+    <span class="c1"># --- Easy methods</span>
+
+<div class="viewcode-block" id="UnsupervisedLearning.__str__"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;UnsupervisedLearning({.__name__}, :math:`T_0=</span><span class="si">{}</span><span class="s2">`, :math:`T_1=</span><span class="si">{}</span><span class="s2">`, :math:`M=</span><span class="si">{}</span><span class="s2">`)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_every</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">meanOf</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UnsupervisedLearning.startGame"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Reinitialize the estimators.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ests</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="UnsupervisedLearning.getReward"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">armId</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Store this observation `reward` for that arm `armId`.&quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;   - At time {}, we saw {} from arm {} ...&quot;.format(self.t, reward, armId))  # DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span></div>
+
+    <span class="c1"># --- The main part of the algorithm</span>
+
+<div class="viewcode-block" id="UnsupervisedLearning.choice"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Choose an arm, according to this algorithm:</span>
+
+<span class="sd">        * If :math:`t &lt; T_0 \times K`, choose arm :math:`t \;\mathrm{mod}\; K`, in order to select each arm exactly :math:`K` times initially.</span>
+
+<span class="sd">        * Otherwise, get a random sample, :math:`s_k(t)` from the :math:`K` Unsupervised Learning algorithms :math:`\mathcal{U}_k(t)`, :math:`k\in\{1,\dots,K\}` :</span>
+
+<span class="sd">        .. math:: \forall k\in\{1,\dots,K\}, \;\; s_k(t) \sim \mathcal{U}_k(t).</span>
+
+<span class="sd">        * Choose the arm :math:`A(t)` with *highest* sample :</span>
+
+<span class="sd">        .. math:: A(t) \in \arg\max_{k\in\{1,\dots,K\}} s_k(t).</span>
+
+<span class="sd">        * Play that arm :math:`A(t)`, receive a reward :math:`r_{A(t)}(t)` from its (unknown) distribution, and store it.</span>
+
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">           A more robust (and so more correct) variant could be to use a bunch of samples, and use their mean to give :math:`s_k(t)` :</span>
+
+<span class="sd">           * Get a bunch of :math:`M` random samples (e.g., :math:`50`), :math:`s_k^i(t)` from the :math:`K` Unsupervised Learning algorithms :math:`\mathcal{U}_k(t)`, :math:`k\in\{1,\dots,K\}` :</span>
+
+<span class="sd">           .. math:: \forall k\in\{1,\dots,K\}, \;\; \forall i\in\{1,\dots,M\}, \;\; s_k^i(t) \sim \mathcal{U}_k(t).</span>
+
+<span class="sd">           * Average them to get :math:`\hat{s_k}(t)` :</span>
+
+<span class="sd">           .. math:: \forall k\in\{1,\dots,K\}, \;\; \hat{s_k}(t) := \frac{1}{M} \sum_{i=1}^{M} s_k^i(t).</span>
+
+<span class="sd">           * Choose the arm :math:`A(t)` with *highest* mean sample :</span>
+
+<span class="sd">           .. math:: A(t) \in \arg\max_{k\in\{1,\dots,K\}} \hat{s_k}(t).</span>
+
+<span class="sd">           Note that if :math:`M = 1`, this is equivalent to the naive approach.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Start by sampling each arm a certain number of times</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_0</span><span class="p">:</span>
+            <span class="c1"># print(&quot;- First phase: exploring arm {} at time {} ...&quot;.format(self.t % self.nbArms, self.t))  # DEBUG</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># print(&quot;- Second phase: at time {} ...&quot;.format(self.t))  # DEBUG</span>
+            <span class="c1"># 1. Fit the Unsupervised Learning on *all* the data observed so far</span>
+            <span class="c1">#    but do it once in a while only</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_was_fitted</span><span class="p">:</span>
+                <span class="c1"># print(&quot;   - Need to first fit the model of each arm with the first {} observations, now of shape {} ...&quot;.format(self.fit_every, np.shape(self.observations)))  # DEBUG</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_was_fitted</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># print(&quot;   - Need to refit the model of each arm with {} more observations, now of shape {} ...&quot;.format(self.fit_every, np.shape(self.observations)))  # DEBUG</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observations</span><span class="p">)</span>
+            <span class="c1"># 2. Sample a random prediction for next output of the arms</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_with_mean</span><span class="p">()</span>
+            <span class="c1"># exp_score = np.exp(self.score(prediction))</span>
+            <span class="c1"># Project to the simplex Delta_K, if needed</span>
+            <span class="c1"># score = exp_score / np.sum(exp_score)</span>
+            <span class="c1"># print(&quot;   - Got a prediction = {} and score {} ...&quot;.format(prediction, score))  # DEBUG</span>
+            <span class="c1"># 3. Use this sample to select next arm to play</span>
+            <span class="n">best_arm_predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+            <span class="c1"># print(&quot;   - So the best arm seems to be = {} ...&quot;.format(best_arm_predicted))  # DEBUG</span>
+            <span class="k">return</span> <span class="n">best_arm_predicted</span></div>
+            <span class="c1"># best_arm_predicted2 = np.argmax(prediction * score)</span>
+            <span class="c1"># print(&quot;   - So the best arm seems to be = {} ...&quot;.format(best_arm_predicted2))  # DEBUG</span>
+            <span class="c1"># # return best_arm_predicted2</span>
+            <span class="c1"># sampled_arm = np.random.choice(self.nbArms, p=score)</span>
+            <span class="c1"># print(&quot;   - And a random sample from the score was drawn as = {} ...&quot;.format(sampled_arm))  # DEBUG</span>
+            <span class="c1"># return sampled_arm</span>
+
+    <span class="c1"># --- Shortcut methods</span>
+
+<div class="viewcode-block" id="UnsupervisedLearning.fit"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Fit each of the K models, with the data accumulated up-to now.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">armId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+            <span class="c1"># print(&quot; - Fitting the #{} model, with observations of shape {} ...&quot;.format(armId + 1, np.shape(self.observations[armId])))  # DEBUG</span>
+            <span class="n">est</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ests</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span>
+            <span class="n">est</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">armId</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ests</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span> <span class="o">=</span> <span class="n">est</span></div>
+
+<div class="viewcode-block" id="UnsupervisedLearning.sample"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a vector of random sample from each of the K models.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">est</span><span class="o">.</span><span class="n">sample</span><span class="p">())</span> <span class="k">for</span> <span class="n">est</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ests</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="UnsupervisedLearning.sample_with_mean"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.sample_with_mean">[docs]</a>    <span class="k">def</span> <span class="nf">sample_with_mean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meanOf</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a vector of random sample from each of the K models, by averaging a lot of samples (reduce variance).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">meanOf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">meanOf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meanOf</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">est</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">meanOf</span><span class="p">)))</span> <span class="k">for</span> <span class="n">est</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ests</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="UnsupervisedLearning.score"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.score">[docs]</a>    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a vector of scores, for each of the K models on its observation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">est</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">o</span><span class="p">))</span> <span class="k">for</span> <span class="n">est</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ests</span><span class="p">,</span> <span class="n">obs</span><span class="p">)]</span></div>
+
+    <span class="c1"># --- Other method</span>
+
+<div class="viewcode-block" id="UnsupervisedLearning.estimatedOrder"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.estimatedOrder">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the estimate order of the arms, as a permutation on [0..K-1] that would order the arms by increasing means.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_with_mean</span><span class="p">())</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 10 Nov 2018, 09h.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.9.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
