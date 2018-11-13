@@ -118,7 +118,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
@@ -242,7 +242,7 @@
 <span class="c1"># Parameters for the random events</span>
 <span class="n">random_shuffle</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">random_invert</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">nb_break_points</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1">#: Default nb of random events</span>
+<span class="n">nb_break_points</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Default nb of random events</span>
 
 <span class="c1"># Flag for experimental aspects</span>
 <span class="n">STORE_ALL_REWARDS</span> <span class="o">=</span> <span class="kc">True</span>       <span class="c1">#: Store all rewards?</span>
@@ -679,13 +679,17 @@
 
 <div class="viewcode-block" id="Evaluator._xlabel"><a class="viewcode-back" href="../../docs/Environment.Evaluator.html#Environment.Evaluator.Evaluator._xlabel">[docs]</a>    <span class="k">def</span> <span class="nf">_xlabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envId</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add xlabel to the plot, and if the environment has change-point, draw vertical lines to clearly identify the locations of the change points.&quot;&quot;&quot;</span>
-        <span class="c1"># FIXME add markers for the breakpoints</span>
         <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">envId</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s1">&#39;changePoints&#39;</span><span class="p">):</span>
             <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">envId</span><span class="p">]</span><span class="o">.</span><span class="n">changePoints</span><span class="p">:</span>
+            <span class="n">taus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">envId</span><span class="p">]</span><span class="o">.</span><span class="n">changePoints</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">taus</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">25</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: Adding vlines for the change points with more than 25 change points will be ugly on the plots...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">taus</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>  <span class="c1"># Force to NOT add the vlines</span>
+                <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">taus</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">tau</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">tau</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">:</span>
-                    <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+                    <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Evaluator.plotRegrets"><a class="viewcode-back" href="../../docs/Environment.Evaluator.html#Environment.Evaluator.Evaluator.plotRegrets">[docs]</a>    <span class="k">def</span> <span class="nf">plotRegrets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envId</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1153,7 +1157,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 10 Nov 2018, 09h.
+      Last updated on 13 Nov 2018, 20h.
 
     </p>
   </div>

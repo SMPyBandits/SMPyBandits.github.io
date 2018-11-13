@@ -47,7 +47,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="List of notebooks for SMPyBandits documentation" href="list.html"/>
+        <link rel="up" title="List of notebooks for SMPyBandits" href="list.html"/>
         <link rel="next" title="Table of Contents" href="Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.html"/>
         <link rel="prev" title="Table of Contents" href="Do_we_even_need_UCB.html"/> 
 
@@ -120,7 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html#Easily-creating-MAB-problems">Easily creating MAB problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html">Table of Contents</a></li>
@@ -153,6 +153,8 @@
 <li class="toctree-l2"><a class="reference internal" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html#Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem">Trying to use Black-Box Bayesian optimization algorithms for a Gaussian bandit problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html#Lai-&amp;-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points">Lai &amp; Robbins lower-bound for stochastic bandit with full restart points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html#Exploring-different-doubling-tricks-for-different-kinds-of-regret-bounds">Exploring different doubling tricks for different kinds of regret bounds</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
@@ -202,7 +204,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="list.html">List of notebooks for SMPyBandits documentation</a> &raquo;</li>
+          <li><a href="list.html">List of notebooks for SMPyBandits</a> &raquo;</li>
         
       <li>Table of Contents</li>
     
@@ -423,18 +425,75 @@ div.nboutput div.output_area.stderr {
 <hr class="docutils" />
 <div class="section" id="An-example-of-a-small-Single-Player-simulation">
 <h1>An example of a small Single-Player simulation<a class="headerlink" href="#An-example-of-a-small-Single-Player-simulation" title="Permalink to this headline">¶</a></h1>
-<p>First, be sure to be in the main folder, and import <code class="docutils literal"><span class="pre">Evaluator</span></code> from
-<code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
-<div class="nbinput nblast docutils container">
+<p>First, be sure to be in the main folder, or to have
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits">SMPyBandits</a> installed,
+and import <code class="docutils literal"><span class="pre">Evaluator</span></code> from <code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [1]:
+<span></span>In [2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">path</span>
-<span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span></span><span class="o">!</span>pip install SMPyBandits watermark
+<span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -v -m -p SMPyBandits -a &quot;Lilian Besson&quot;
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: SMPyBandits in ./venv3/lib/python3.6/site-packages (0.9.4)
+Collecting watermark
+  Using cached https://files.pythonhosted.org/packages/81/c8/9d3dd05a91bdbda03e24e52870b653c9345a0461294a7290f321bba18fad/watermark-1.7.0-py3-none-any.whl
+Requirement already satisfied: numpy in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (1.15.4)
+Requirement already satisfied: matplotlib&gt;=2 in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (3.0.2)
+Requirement already satisfied: scikit-learn in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.20.0)
+Requirement already satisfied: scikit-optimize in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.5.2)
+Requirement already satisfied: seaborn in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.9.0)
+Requirement already satisfied: joblib in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.13.0)
+Requirement already satisfied: scipy&gt;0.9 in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (1.1.0)
+Requirement already satisfied: ipython in ./venv3/lib/python3.6/site-packages (from watermark) (7.1.1)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (1.0.1)
+Requirement already satisfied: cycler&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (0.10.0)
+Requirement already satisfied: python-dateutil&gt;=2.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (2.7.5)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (2.3.0)
+Requirement already satisfied: pandas&gt;=0.15.2 in ./venv3/lib/python3.6/site-packages (from seaborn-&gt;SMPyBandits) (0.23.4)
+Requirement already satisfied: pygments in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.2.0)
+Requirement already satisfied: pickleshare in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.7.5)
+Requirement already satisfied: pexpect; sys_platform != &#34;win32&#34; in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.6.0)
+Requirement already satisfied: jedi&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.13.1)
+Requirement already satisfied: traitlets&gt;=4.2 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.2)
+Requirement already satisfied: backcall in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.1.0)
+Requirement already satisfied: prompt-toolkit&lt;2.1.0,&gt;=2.0.0 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.0.7)
+Requirement already satisfied: setuptools&gt;=18.5 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (40.6.2)
+Requirement already satisfied: decorator in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.0)
+Requirement already satisfied: six in ./venv3/lib/python3.6/site-packages (from cycler&gt;=0.10-&gt;matplotlib&gt;=2-&gt;SMPyBandits) (1.11.0)
+Requirement already satisfied: pytz&gt;=2011k in ./venv3/lib/python3.6/site-packages (from pandas&gt;=0.15.2-&gt;seaborn-&gt;SMPyBandits) (2018.7)
+Requirement already satisfied: ptyprocess&gt;=0.5 in ./venv3/lib/python3.6/site-packages (from pexpect; sys_platform != &#34;win32&#34;-&gt;ipython-&gt;watermark) (0.6.0)
+Requirement already satisfied: parso&gt;=0.3.0 in ./venv3/lib/python3.6/site-packages (from jedi&gt;=0.10-&gt;ipython-&gt;watermark) (0.3.1)
+Requirement already satisfied: ipython-genutils in ./venv3/lib/python3.6/site-packages (from traitlets&gt;=4.2-&gt;ipython-&gt;watermark) (0.2.0)
+Requirement already satisfied: wcwidth in ./venv3/lib/python3.6/site-packages (from prompt-toolkit&lt;2.1.0,&gt;=2.0.0-&gt;ipython-&gt;watermark) (0.1.7)
+Installing collected packages: watermark
+Successfully installed watermark-1.7.0
+Info: Using the Jupyter notebook version of the tqdm() decorator, tqdm_notebook() ...
+Lilian Besson
+
+CPython 3.6.6
+IPython 7.1.1
+
+SMPyBandits 0.9.4
+
+compiler   : GCC 8.0.1 20180414 (experimental) [trunk revision 259383
+system     : Linux
+release    : 4.15.0-38-generic
+machine    : x86_64
+processor  : x86_64
+CPU cores  : 4
+interpreter: 64bit
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
@@ -443,19 +502,19 @@ div.nboutput div.output_area.stderr {
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Environment</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">tqdm</span>
 </pre></div>
 </div>
 </div>
 <p>We also need arms, for instance <code class="docutils literal"><span class="pre">Bernoulli</span></code>-distributed arm:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Import arms</span>
-<span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
 </pre></div>
 </div>
 </div>
@@ -463,12 +522,12 @@ div.nboutput div.output_area.stderr {
 algorithms:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Import algorithms</span>
-<span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 </div>
@@ -477,7 +536,7 @@ algorithm &lt;<a class="reference external" href="https://en.wikipedia.org/wiki/
 is the <code class="docutils literal"><span class="pre">UCBalpha</span></code> class:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -495,7 +554,7 @@ is the <code class="docutils literal"><span class="pre">UCBalpha</span></code> c
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -508,7 +567,7 @@ is the <code class="docutils literal"><span class="pre">UCBalpha</span></code> c
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">Init signature:</span> UCBalpha<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Init signature:</span> UCBalpha<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">4</span><span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.0</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-red-fg">Docstring:</span>
 The UCB1 (UCB-alpha) index policy, modified to take a random permutation order for the initial exploration of each arm (reduce collisions in the multi-players setting).
 Reference: [Auer et al. 02].
@@ -517,7 +576,7 @@ New generic index policy.
 
 - nbArms: the number of arms,
 - lower, amplitude: lower value and known amplitude of the rewards.
-<span class="ansi-red-fg">File:</span>           ~/ownCloud/cloud.openmailbox.org/Thèse_2016-17/src/SMPyBandits.git/Policies/UCBalpha.py
+<span class="ansi-red-fg">File:</span>           /tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/SMPyBandits/Policies/UCBalpha.py
 <span class="ansi-red-fg">Type:</span>           type
 
 </pre></div></div>
@@ -525,7 +584,7 @@ New generic index policy.
 <p>With more details, here the code:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -538,7 +597,7 @@ New generic index policy.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">Init signature:</span> UCBalpha<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-red-fg">Init signature:</span> UCBalpha<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">4</span><span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.0</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.0</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-red-fg">Source:</span>
 <span class="ansi-green-fg">class</span> UCBalpha<span class="ansi-blue-fg">(</span>UCB<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
     <span class="ansi-blue-fg">&#34;&#34;&#34; The UCB1 (UCB-alpha) index policy, modified to take a random permutation order for the initial exploration of each arm (reduce collisions in the multi-players setting).</span>
@@ -547,7 +606,7 @@ New generic index policy.
 
     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> nbArms<span class="ansi-blue-fg">,</span> alpha<span class="ansi-blue-fg">=</span>ALPHA<span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.</span><span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">1.</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
         super<span class="ansi-blue-fg">(</span>UCBalpha<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>__init__<span class="ansi-blue-fg">(</span>nbArms<span class="ansi-blue-fg">,</span> lower<span class="ansi-blue-fg">=</span>lower<span class="ansi-blue-fg">,</span> amplitude<span class="ansi-blue-fg">=</span>amplitude<span class="ansi-blue-fg">)</span>
-        <span class="ansi-green-fg">assert</span> alpha <span class="ansi-blue-fg">&gt;=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;Error: the alpha parameter for UCBalpha class has to be &gt;= 0.&#34;</span>
+        <span class="ansi-green-fg">assert</span> alpha <span class="ansi-blue-fg">&gt;=</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;Error: the alpha parameter for UCBalpha class has to be &gt;= 0.&#34;</span>  <span class="ansi-red-fg"># DEBUG</span>
         self<span class="ansi-blue-fg">.</span>alpha <span class="ansi-blue-fg">=</span> alpha  <span class="ansi-red-fg">#: Parameter alpha</span>
 
     <span class="ansi-green-fg">def</span> __str__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
@@ -567,8 +626,8 @@ New generic index policy.
         <span class="ansi-blue-fg">&#34;&#34;&#34; Compute the current indexes for all arms, in a vectorized manner.&#34;&#34;&#34;</span>
         indexes <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>rewards <span class="ansi-blue-fg">/</span> self<span class="ansi-blue-fg">.</span>pulls<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">+</span> np<span class="ansi-blue-fg">.</span>sqrt<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>alpha <span class="ansi-blue-fg">*</span> np<span class="ansi-blue-fg">.</span>log<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>t<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">/</span> <span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">2</span> <span class="ansi-blue-fg">*</span> self<span class="ansi-blue-fg">.</span>pulls<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
         indexes<span class="ansi-blue-fg">[</span>self<span class="ansi-blue-fg">.</span>pulls <span class="ansi-blue-fg">&lt;</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> float<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;+inf&#39;</span><span class="ansi-blue-fg">)</span>
-        self<span class="ansi-blue-fg">.</span>index <span class="ansi-blue-fg">=</span> indexes
-<span class="ansi-red-fg">File:</span>           ~/ownCloud/cloud.openmailbox.org/Thèse_2016-17/src/SMPyBandits.git/Policies/UCBalpha.py
+        self<span class="ansi-blue-fg">.</span>index<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> indexes
+<span class="ansi-red-fg">File:</span>           /tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/SMPyBandits/Policies/UCBalpha.py
 <span class="ansi-red-fg">Type:</span>           type
 
 </pre></div></div>
@@ -585,13 +644,13 @@ New generic index policy.
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
 </div>
@@ -602,7 +661,7 @@ New generic index policy.
 of different means.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -630,7 +689,7 @@ of different means.</p>
 <span class="math">\(\mathrm{kl}-\mathrm{UCB}\)</span>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -670,7 +729,7 @@ of different means.</p>
 <p>Complete configuration for the problem:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -693,25 +752,27 @@ of different means.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[9]:
+<span></span>Out[12]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>{&#39;environment&#39;: [{&#39;arm_type&#39;: Arms.Bernoulli.Bernoulli,
-   &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]},
-  {&#39;arm_type&#39;: Arms.Bernoulli.Bernoulli,
-   &#39;params&#39;: [0.01, 0.02, 0.3, 0.4, 0.5, 0.6, 0.795, 0.8, 0.805]},
-  {&#39;arm_type&#39;: Arms.Bernoulli.Bernoulli,
-   &#39;params&#39;: [0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.05, 0.05, 0.1]}],
- &#39;horizon&#39;: 10000,
- &#39;n_jobs&#39;: 4,
- &#39;policies&#39;: [{&#39;archtype&#39;: Policies.UCBalpha.UCBalpha, &#39;params&#39;: {&#39;alpha&#39;: 1}},
-  {&#39;archtype&#39;: Policies.UCBalpha.UCBalpha, &#39;params&#39;: {&#39;alpha&#39;: 0.5}},
-  {&#39;archtype&#39;: Policies.Thompson.Thompson, &#39;params&#39;: {}},
-  {&#39;archtype&#39;: Policies.klUCB.klUCB, &#39;params&#39;: {}},
-  {&#39;archtype&#39;: Policies.BayesUCB.BayesUCB, &#39;params&#39;: {}}],
+<span></span>{&#39;horizon&#39;: 10000,
  &#39;repetitions&#39;: 10,
- &#39;verbosity&#39;: 6}
+ &#39;n_jobs&#39;: 1,
+ &#39;verbosity&#39;: 6,
+ &#39;environment&#39;: [{&#39;arm_type&#39;: SMPyBandits.Arms.Bernoulli.Bernoulli,
+   &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]},
+  {&#39;arm_type&#39;: SMPyBandits.Arms.Bernoulli.Bernoulli,
+   &#39;params&#39;: [0.01, 0.02, 0.3, 0.4, 0.5, 0.6, 0.795, 0.8, 0.805]},
+  {&#39;arm_type&#39;: SMPyBandits.Arms.Bernoulli.Bernoulli,
+   &#39;params&#39;: [0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.05, 0.05, 0.1]}],
+ &#39;policies&#39;: [{&#39;archtype&#39;: SMPyBandits.Policies.UCBalpha.UCBalpha,
+   &#39;params&#39;: {&#39;alpha&#39;: 1}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.UCBalpha.UCBalpha,
+   &#39;params&#39;: {&#39;alpha&#39;: 0.5}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.Thompson.Thompson, &#39;params&#39;: {}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.klUCB.klUCB, &#39;params&#39;: {}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.BayesUCB.BayesUCB, &#39;params&#39;: {}}]}
 </pre></div>
 </div>
 </div>
@@ -722,7 +783,7 @@ of different means.</p>
 <h2>Creating the <code class="docutils literal"><span class="pre">Evaluator</span></code> object<a class="headerlink" href="#Creating-the-Evaluator-object" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -738,12 +799,18 @@ of different means.</p>
 Number of policies in this comparison: 5
 Time horizon: 10000
 Number of repetitions: 10
-Sampling rate DELTA_T_SAVE: 1
+Sampling rate for plotting, delta_t_plot: 1
+Number of jobs for parallelization: 1
+Using this dictionary to create a new environment:
+ {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}
+
+
 Creating a new MAB problem ...
-  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
- - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;
  - with &#39;params&#39; = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
  - with &#39;arms&#39; = [B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)]
+ - with &#39;means&#39; = [0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9]
  - with &#39;nbArms&#39; = 9
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -751,11 +818,17 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 ...
  - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
+ - with &#39;arms&#39; represented as: $[B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)^*]$
+Using this dictionary to create a new environment:
+ {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.01, 0.02, 0.3, 0.4, 0.5, 0.6, 0.795, 0.8, 0.805]}
+
+
 Creating a new MAB problem ...
-  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.01, 0.02, 0.3, 0.4, 0.5, 0.6, 0.795, 0.8, 0.805], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
- - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.01, 0.02, 0.3, 0.4, 0.5, 0.6, 0.795, 0.8, 0.805]} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;
  - with &#39;params&#39; = [0.01, 0.02, 0.3, 0.4, 0.5, 0.6, 0.795, 0.8, 0.805]
  - with &#39;arms&#39; = [B(0.01), B(0.02), B(0.3), B(0.4), B(0.5), B(0.6), B(0.795), B(0.8), B(0.805)]
+ - with &#39;means&#39; = [0.01  0.02  0.3   0.4   0.5   0.6   0.795 0.8   0.805]
  - with &#39;nbArms&#39; = 9
  - with &#39;maxArm&#39; = 0.805
  - with &#39;minArm&#39; = 0.01
@@ -763,11 +836,17 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 101 ...
  - a Optimal Arm Identification factor H_OI(mu) = 55.39% ...
+ - with &#39;arms&#39; represented as: $[B(0.01), B(0.02), B(0.3), B(0.4), B(0.5), B(0.6), B(0.795), B(0.8), B(0.805)^*]$
+Using this dictionary to create a new environment:
+ {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.05, 0.05, 0.1]}
+
+
 Creating a new MAB problem ...
-  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;params&#39;: [0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.05, 0.05, 0.1], &#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;} ...
- - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.05, 0.05, 0.1]} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;
  - with &#39;params&#39; = [0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.05, 0.05, 0.1]
  - with &#39;arms&#39; = [B(0.01), B(0.01), B(0.01), B(0.02), B(0.02), B(0.02), B(0.05), B(0.05), B(0.1)]
+ - with &#39;means&#39; = [0.01 0.01 0.01 0.02 0.02 0.02 0.05 0.05 0.1 ]
  - with &#39;nbArms&#39; = 9
  - with &#39;maxArm&#39; = 0.1
  - with &#39;minArm&#39; = 0.01
@@ -775,6 +854,7 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 14.5 ...
  - a Optimal Arm Identification factor H_OI(mu) = 82.11% ...
+ - with &#39;arms&#39; represented as: $[B(0.01), B(0.01), B(0.01), B(0.02), B(0.02), B(0.02), B(0.05), B(0.05), B(0.1)^*]$
 Number of environments to try: 3
 </pre></div></div>
 </div>
@@ -785,7 +865,7 @@ Number of environments to try: 3
 some time.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<span></span>In [14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -799,94 +879,97 @@ some time.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c3519c02978c4993b6736e0998bb379a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Evaluating environment: &lt;MAB{&#39;nbArms&#39;: 9, &#39;minArm&#39;: 0.10000000000000001, &#39;maxArm&#39;: 0.90000000000000002, &#39;arms&#39;: [B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)]}&gt;
-- Adding policy #1 = {&#39;params&#39;: {&#39;alpha&#39;: 1}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;params&#39;: {&#39;alpha&#39;: 1}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-- Adding policy #2 = {&#39;params&#39;: {&#39;alpha&#39;: 0.5}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;params&#39;: {&#39;alpha&#39;: 0.5}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-- Adding policy #3 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;} ...
-- Adding policy #4 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;} ...
-- Adding policy #5 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.BayesUCB.BayesUCB&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.BayesUCB.BayesUCB&#39;&gt;} ...
+
+Evaluating environment: MAB(nbArms: 9, arms: [B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)], minArm: 0.1, maxArm: 0.9)
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 1}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 1}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 0.5}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 0.5}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #5 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.BayesUCB.BayesUCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.BayesUCB.BayesUCB&#39;&gt;, &#39;params&#39;: {}} ...
+
+
 
 - Evaluating policy #1/5: UCB($\alpha=1$) ...
-
-Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 2 3 4 6 5 7 8] ...  ==&gt; Manhattan   distance from optimal ordering: 95.06% (relative success)...
-
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.96% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 88.89% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 95.98% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    1.9s remaining:    1.9s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.1s remaining:    0.9s
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.6s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "bbfe90f17b73465ca374a9545ab96dcb", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "1a645472e10343c7a926932c90715e76", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
 <div class="highlight"><pre>
+
+Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 4 2 5 3 6 7 1 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 66.05% (relative success)...
+
+
 
 - Evaluating policy #2/5: UCB($\alpha=0.5$) ...
-
-Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [0 1 3 2 5 4 6 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 90.12% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.92% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 91.95% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    1.9s remaining:    1.9s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.0s remaining:    0.9s
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.7s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "aa522325d0824b0188dd86c1923e9cf9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "96174b7cc12c4ccdaa7ccc24839ebc56", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
 <div class="highlight"><pre>
+
+Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [0 4 2 5 7 1 3 6 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 58.02% (relative success)...
+
+
 
 - Evaluating policy #3/5: Thompson ...
-
-Estimated order by the policy Thompson after 10000 steps: [1 3 0 4 2 6 5 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 75.31% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.33% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 99.75% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 85.26% (relative success)...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    1.2s remaining:    1.2s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    1.3s remaining:    0.6s
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    1.7s finished
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a760eb59441c4fe986e9f0922929d7c3", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4a556546109a4c52946cb9a138ab0094", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -894,31 +977,38 @@ Estimated order by the policy Thompson after 10000 steps: [1 3 0 4 2 6 5 7 8] ..
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-- Evaluating policy #4/5: KL-UCB(Bern) ...
-
-Estimated order by the policy KL-UCB(Bern) after 10000 steps: [2 3 6 0 1 5 4 7 8] ...
+Estimated order by the policy Thompson after 10000 steps: [2 1 0 6 4 3 5 7 8] ...
   ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 60.49% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 93.94% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 92.31% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 55.56% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 75.57% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.1s remaining:    2.1s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.3s remaining:    1.0s
+  ==&gt; Mean distance from optimal ordering: 59.88% (relative success)...
+
+
+
+- Evaluating policy #4/5: kl-UCB ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4735f83353b84ad6a263fb0fd1b0c246", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "717c903e60564d03b1a9d8bb02ffd975", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
 <div class="highlight"><pre>
+
+Estimated order by the policy kl-UCB after 10000 steps: [4 3 0 1 2 5 6 8 7] ...
+  ==&gt; Optimal arm identification: 88.89% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 66.05% (relative success)...
+
+
 
 - Evaluating policy #5/5: BayesUCB ...
 </pre></div></div>
@@ -926,10 +1016,14 @@ Estimated order by the policy KL-UCB(Bern) after 10000 steps: [2 3 6 0 1 5 4 7 8
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    3.1s finished
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4ab0e337cfce4b9dad520aed331accf7", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5466f3b7b7d7405bb7ad365277433476", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -937,62 +1031,39 @@ Estimated order by the policy KL-UCB(Bern) after 10000 steps: [2 3 6 0 1 5 4 7 8
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Estimated order by the policy BayesUCB after 10000 steps: [7 5 6 0 3 2 1 4 8] ...
+Estimated order by the policy BayesUCB after 10000 steps: [1 4 2 0 3 6 5 7 8] ...
   ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 25.93% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 32.33% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 23.50% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 33.33% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 28.77% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.5s remaining:    2.5s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.6s remaining:    1.1s
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    3.4s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
+  ==&gt; Mean distance from optimal ordering: 65.43% (relative success)...
 
-Evaluating environment: &lt;MAB{&#39;nbArms&#39;: 9, &#39;minArm&#39;: 0.01, &#39;maxArm&#39;: 0.80500000000000005, &#39;arms&#39;: [B(0.01), B(0.02), B(0.3), B(0.4), B(0.5), B(0.6), B(0.795), B(0.8), B(0.805)]}&gt;
-- Adding policy #1 = {&#39;params&#39;: {&#39;alpha&#39;: 1}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;params&#39;: {&#39;alpha&#39;: 1}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-- Adding policy #2 = {&#39;params&#39;: {&#39;alpha&#39;: 0.5}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;params&#39;: {&#39;alpha&#39;: 0.5}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-- Adding policy #3 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;} ...
-- Adding policy #4 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;} ...
-- Adding policy #5 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.BayesUCB.BayesUCB&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.BayesUCB.BayesUCB&#39;&gt;} ...
+
+Evaluating environment: MAB(nbArms: 9, arms: [B(0.01), B(0.02), B(0.3), B(0.4), B(0.5), B(0.6), B(0.795), B(0.8), B(0.805)], minArm: 0.01, maxArm: 0.805)
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 1}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 1}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 0.5}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 0.5}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #5 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.BayesUCB.BayesUCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.BayesUCB.BayesUCB&#39;&gt;, &#39;params&#39;: {}} ...
+
+
 
 - Evaluating policy #1/5: UCB($\alpha=1$) ...
-
-Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 4 2 5 3 7 8 6] ...
-  ==&gt; Optimal arm identification: 98.76% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 75.31% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.33% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 99.75% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 85.26% (relative success)...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.1s remaining:    2.1s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.2s remaining:    0.9s
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5963ed4e803145b99df9ab089d8af982", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e106c46b3b604434bc2c644c0012495c", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1000,208 +1071,11 @@ Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 4 2 5 3 7 
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-- Evaluating policy #2/5: UCB($\alpha=0.5$) ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.8s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [0 1 2 3 4 5 8 6 7] ...
+Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 2 3 4 5 6 8 7] ...
   ==&gt; Optimal arm identification: 99.38% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 90.12% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.92% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 99.99% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 88.89% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 94.73% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    1.9s remaining:    1.9s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.0s remaining:    0.9s
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
+  ==&gt; Mean distance from optimal ordering: 91.98% (relative success)...
 
-- Evaluating policy #3/5: Thompson ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.6s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
 
-Estimated order by the policy Thompson after 10000 steps: [0 5 1 2 3 4 7 8 6] ...
-  ==&gt; Optimal arm identification: 98.76% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 98.77% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 98.75% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 86.42% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    1.2s remaining:    1.2s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    1.3s remaining:    0.5s
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    1.6s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-- Evaluating policy #4/5: KL-UCB(Bern) ...
-
-Estimated order by the policy KL-UCB(Bern) after 10000 steps: [0 1 3 4 2 5 8 6 7] ...
-  ==&gt; Optimal arm identification: 99.38% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 80.25% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.65% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 99.91% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 89.39% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.2s remaining:    2.2s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.3s remaining:    1.0s
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-- Evaluating policy #5/5: BayesUCB ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.9s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy BayesUCB after 10000 steps: [0 1 2 3 5 4 7 6 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 90.12% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.92% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 100.00% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 91.95% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.6s remaining:    2.6s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.7s remaining:    1.1s
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Evaluating environment: &lt;MAB{&#39;nbArms&#39;: 9, &#39;minArm&#39;: 0.01, &#39;maxArm&#39;: 0.10000000000000001, &#39;arms&#39;: [B(0.01), B(0.01), B(0.01), B(0.02), B(0.02), B(0.02), B(0.05), B(0.05), B(0.1)]}&gt;
-- Adding policy #1 = {&#39;params&#39;: {&#39;alpha&#39;: 1}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;params&#39;: {&#39;alpha&#39;: 1}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-- Adding policy #2 = {&#39;params&#39;: {&#39;alpha&#39;: 0.5}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;params&#39;: {&#39;alpha&#39;: 0.5}, &#39;archtype&#39;: &lt;class &#39;Policies.UCBalpha.UCBalpha&#39;&gt;} ...
-- Adding policy #3 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.Thompson.Thompson&#39;&gt;} ...
-- Adding policy #4 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.klUCB.klUCB&#39;&gt;} ...
-- Adding policy #5 = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.BayesUCB.BayesUCB&#39;&gt;} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;params&#39;: {}, &#39;archtype&#39;: &lt;class &#39;Policies.BayesUCB.BayesUCB&#39;&gt;} ...
-
-- Evaluating policy #1/5: UCB($\alpha=1$) ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    3.5s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 4 5 3 7 6 2 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 96.29% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 95.76% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 82.27% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.0s remaining:    2.0s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.1s remaining:    0.9s
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
 
 - Evaluating policy #2/5: UCB($\alpha=0.5$) ...
 </pre></div></div>
@@ -1209,10 +1083,14 @@ Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 4 5 3 7 6 
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.8s finished
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9759f590c39a4fcca82aec6481b0cf39", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "52c4b987518a466aa39c41acb32cc7c5", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1220,29 +1098,11 @@ Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [0 1 4 5 3 7 6 
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [3 0 1 2 4 5 7 6 8] ...
+Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [0 1 2 3 4 5 6 7 8] ...
   ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 80.25% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 99.65% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 99.84% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 89.38% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.0s remaining:    2.0s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.0s remaining:    0.9s
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
+  ==&gt; Mean distance from optimal ordering: 100.00% (relative success)...
+
+
 
 - Evaluating policy #3/5: Thompson ...
 </pre></div></div>
@@ -1250,10 +1110,14 @@ Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [3 0 1 2 4 5 
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    2.6s finished
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "0bab6630e2284e409de571167e066d55", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "6329a4367c814251892e1113758833b4", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1261,24 +1125,26 @@ Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [3 0 1 2 4 5 
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Estimated order by the policy Thompson after 10000 steps: [3 5 2 6 4 1 0 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 50.62% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 46.84% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 54.00% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 55.56% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 51.75% (relative success)...
+Estimated order by the policy Thompson after 10000 steps: [0 1 5 2 4 3 7 8 6] ...
+  ==&gt; Optimal arm identification: 98.76% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 65.43% (relative success)...
+
+
+
+- Evaluating policy #4/5: kl-UCB ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    1.1s remaining:    1.1s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    1.3s remaining:    0.6s
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    1.6s finished
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "20eff6d862774bbda4f75a73b68bb7a1", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5c7733c416af4ca48650cb6daae1da50", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1286,31 +1152,11 @@ Estimated order by the policy Thompson after 10000 steps: [3 5 2 6 4 1 0 7 8] ..
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-- Evaluating policy #4/5: KL-UCB(Bern) ...
+Estimated order by the policy kl-UCB after 10000 steps: [0 1 3 2 5 4 8 6 7] ...
+  ==&gt; Optimal arm identification: 99.38% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 73.46% (relative success)...
 
-Estimated order by the policy KL-UCB(Bern) after 10000 steps: [0 6 2 3 1 7 4 5 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 65.43% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 93.94% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 92.31% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 79.59% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    2.2s remaining:    2.2s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    2.4s remaining:    1.0s
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
+
 
 - Evaluating policy #5/5: BayesUCB ...
 </pre></div></div>
@@ -1318,10 +1164,14 @@ Estimated order by the policy KL-UCB(Bern) after 10000 steps: [0 6 2 3 1 7 4 5 8
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    3.5s finished
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "de1b09a73c264157afa5ae9692aa7843", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "211c06e0d6d441f4802486ced79db1af", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1329,23 +1179,66 @@ Estimated order by the policy KL-UCB(Bern) after 10000 steps: [0 6 2 3 1 7 4 5 8
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Estimated order by the policy BayesUCB after 10000 steps: [0 1 5 6 4 7 2 3 8] ...
+Estimated order by the policy BayesUCB after 10000 steps: [0 1 2 3 4 5 7 8 6] ...
+  ==&gt; Optimal arm identification: 98.76% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 89.51% (relative success)...
+
+
+Evaluating environment: MAB(nbArms: 9, arms: [B(0.01), B(0.01), B(0.01), B(0.02), B(0.02), B(0.02), B(0.05), B(0.05), B(0.1)], minArm: 0.01, maxArm: 0.1)
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 1}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 1}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 0.5}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.UCBalpha.UCBalpha&#39;&gt;, &#39;params&#39;: {&#39;alpha&#39;: 0.5}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.Thompson.Thompson&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.klUCB.klUCB&#39;&gt;, &#39;params&#39;: {}} ...
+- Adding policy #5 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.BayesUCB.BayesUCB&#39;&gt;, &#39;params&#39;: {}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.BayesUCB.BayesUCB&#39;&gt;, &#39;params&#39;: {}} ...
+
+
+
+- Evaluating policy #1/5: UCB($\alpha=1$) ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "2b1e00bf2c5f45b69ea3703c26cca067", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ca8bf49decc2442aa6c6084382000822", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy UCB($\alpha=1$) after 10000 steps: [6 7 3 0 2 4 1 5 8] ...
   ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 60.49% (relative success)...
-  ==&gt; Kendell Tau distance from optimal ordering: 90.47% (relative success)...
-  ==&gt; Spearman    distance from optimal ordering: 87.50% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 76.28% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 34.57% (relative success)...
+
+
+
+- Evaluating policy #2/5: UCB($\alpha=0.5$) ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 out of  10 | elapsed:    4.3s remaining:    4.3s
-[Parallel(n_jobs=4)]: Done   7 out of  10 | elapsed:    5.0s remaining:    2.1s
-</pre></div></div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c9b44962b1194fc8afef7f14eb4f9c5e", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "80157d5a3c9545c284f3d62dc865fcd0", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -1353,14 +1246,91 @@ Estimated order by the policy BayesUCB after 10000 steps: [0 1 5 6 4 7 2 3 8] ..
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
+Estimated order by the policy UCB($\alpha=0.5$) after 10000 steps: [2 3 5 6 0 7 4 1 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 53.70% (relative success)...
+
+
+
+- Evaluating policy #3/5: Thompson ...
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "d276bf67a0584cf6be1b62c2fd4e26d7", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "346f493c0618452ab3a8bc7e0b78cf9d", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy Thompson after 10000 steps: [2 1 3 4 5 0 7 6 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 68.52% (relative success)...
+
+
+
+- Evaluating policy #4/5: kl-UCB ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dca05d7aef30498db10a421bb8b47e45", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "99e6f73e796e4d4385f20a23493a3610", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Estimated order by the policy kl-UCB after 10000 steps: [0 4 7 2 1 5 6 3 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 58.02% (relative success)...
+
+
+
+- Evaluating policy #5/5: BayesUCB ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "781536b192b94b3ea2ea04ed4002eab5", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dcae5ec8c9234d8ba1f922fa745dd00c", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="stderr output_area docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    6.4s finished
+
+Estimated order by the policy BayesUCB after 10000 steps: [5 6 4 3 7 0 1 2 8] ...
+  ==&gt; Optimal arm identification: 100.00% (relative success)...
+  ==&gt; Mean distance from optimal ordering: 35.19% (relative success)...
+
 </pre></div></div>
 </div>
 </div>
@@ -1370,7 +1340,7 @@ Estimated order by the policy BayesUCB after 10000 steps: [0 1 5 6 4 7 2 3 8] ..
 object:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1378,8 +1348,39 @@ object:</p>
     <span class="n">evaluation</span><span class="o">.</span><span class="n">printFinalRanking</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
     <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
     <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">semilogx</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">meanRegret</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">evaluation</span><span class="o">.</span><span class="n">plotRegrets</span><span class="p">(</span><span class="n">envId</span><span class="p">,</span> <span class="n">meanReward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">evaluation</span><span class="o">.</span><span class="n">plotBestArmPulls</span><span class="p">(</span><span class="n">envId</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">evaluation</span><span class="o">.</span><span class="n">nb_break_points</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[16]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>0
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">12.4</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1388,11 +1389,11 @@ object:</p>
 <p><span class="math">\([B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)]\)</span></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1403,97 +1404,16 @@ object:</p>
 <div class="highlight"><pre>
 
 Final ranking for this environment #0 :
-- Policy &#39;BayesUCB&#39;     was ranked      1 / 5 for this simulation (last regret = 41.8).
-- Policy &#39;UCB($\alpha=0.5$)&#39;    was ranked      2 / 5 for this simulation (last regret = 41.9).
-- Policy &#39;Thompson&#39;     was ranked      3 / 5 for this simulation (last regret = 47.8).
-- Policy &#39;KL-UCB(Bern)&#39; was ranked      4 / 5 for this simulation (last regret = 48.7).
-- Policy &#39;UCB($\alpha=1$)&#39;      was ranked      5 / 5 for this simulation (last regret = 105.7).
+- Policy &#39;Thompson&#39;     was ranked      1 / 5 for this simulation (last regret = 33.2).
+- Policy &#39;UCB($\alpha=0.5$)&#39;    was ranked      2 / 5 for this simulation (last regret = 49.52).
+- Policy &#39;kl-UCB&#39;       was ranked      3 / 5 for this simulation (last regret = 51.36).
+- Policy &#39;BayesUCB&#39;     was ranked      4 / 5 for this simulation (last regret = 58.74).
+- Policy &#39;UCB($\alpha=1$)&#39;      was ranked      5 / 5 for this simulation (last regret = 98.04).
 
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 for 1-player problem...
  - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_1.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_3.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_3.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_5.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_5.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_6.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_29_6.png" />
-</div>
-</div>
-</div>
-<div class="section" id="Second-problem">
-<h3>Second problem<a class="headerlink" href="#Second-problem" title="Permalink to this headline">¶</a></h3>
-<p><span class="math">\([B(0.01), B(0.02), B(0.3), B(0.4), B(0.5), B(0.6), B(0.795), B(0.8), B(0.805)]\)</span></p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Final ranking for this environment #1 :
-- Policy &#39;UCB($\alpha=0.5$)&#39;    was ranked      1 / 5 for this simulation (last regret = 65.155).
-- Policy &#39;BayesUCB&#39;     was ranked      2 / 5 for this simulation (last regret = 81.655).
-- Policy &#39;Thompson&#39;     was ranked      3 / 5 for this simulation (last regret = 84.555).
-- Policy &#39;UCB($\alpha=1$)&#39;      was ranked      4 / 5 for this simulation (last regret = 87.455).
-- Policy &#39;KL-UCB(Bern)&#39; was ranked      5 / 5 for this simulation (last regret = 88.655).
-
-This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 101 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 55.39% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1508,10 +1428,7 @@ This MAB problem has:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-
-This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 101 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 55.39% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1528,8 +1445,9 @@ This MAB problem has:
 <div class="highlight"><pre>
 
 This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 101 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 55.39% ...
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1539,24 +1457,32 @@ This MAB problem has:
 <img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_31_5.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_31_5.png" />
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 5 items in the legend.
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_31_6.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_31_6.png" />
+<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_31_7.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_31_7.png" />
 </div>
 </div>
 </div>
-<div class="section" id="Third-problem">
-<h3>Third problem<a class="headerlink" href="#Third-problem" title="Permalink to this headline">¶</a></h3>
-<p><span class="math">\([B(0.01), B(0.01), B(0.01), B(0.02), B(0.02), B(0.02), B(0.05), B(0.05), B(0.1)]\)</span></p>
+<div class="section" id="Second-problem">
+<h3>Second problem<a class="headerlink" href="#Second-problem" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\([B(0.01), B(0.02), B(0.3), B(0.4), B(0.5), B(0.6), B(0.795), B(0.8), B(0.805)]\)</span></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<span></span>In [22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1566,16 +1492,17 @@ This MAB problem has:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Final ranking for this environment #2 :
-- Policy &#39;Thompson&#39;     was ranked      1 / 5 for this simulation (last regret = 60.4).
-- Policy &#39;BayesUCB&#39;     was ranked      2 / 5 for this simulation (last regret = 82.9).
-- Policy &#39;KL-UCB(Bern)&#39; was ranked      3 / 5 for this simulation (last regret = 92.1).
-- Policy &#39;UCB($\alpha=0.5$)&#39;    was ranked      4 / 5 for this simulation (last regret = 144.1).
-- Policy &#39;UCB($\alpha=1$)&#39;      was ranked      5 / 5 for this simulation (last regret = 253.7).
+Final ranking for this environment #1 :
+- Policy &#39;UCB($\alpha=0.5$)&#39;    was ranked      1 / 5 for this simulation (last regret = 65.017).
+- Policy &#39;BayesUCB&#39;     was ranked      2 / 5 for this simulation (last regret = 70.413).
+- Policy &#39;Thompson&#39;     was ranked      3 / 5 for this simulation (last regret = 83.188).
+- Policy &#39;kl-UCB&#39;       was ranked      4 / 5 for this simulation (last regret = 84.505).
+- Policy &#39;UCB($\alpha=1$)&#39;      was ranked      5 / 5 for this simulation (last regret = 96.174).
 
 This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 14.5 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 82.11% ...
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 101 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 55.39% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1590,10 +1517,7 @@ This MAB problem has:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-
-This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 14.5 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 82.11% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1610,8 +1534,9 @@ This MAB problem has:
 <div class="highlight"><pre>
 
 This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 14.5 for 1-player problem...
- - a Optimal Arm Identification factor H_OI(mu) = 82.11% ...
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 101 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 55.39% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1621,11 +1546,108 @@ This MAB problem has:
 <img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_33_5.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_33_5.png" />
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 5 items in the legend.
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_33_6.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_33_6.png" />
+<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_33_7.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_33_7.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Third-problem">
+<h3>Third problem<a class="headerlink" href="#Third-problem" title="Permalink to this headline">¶</a></h3>
+<p><span class="math">\([B(0.01), B(0.01), B(0.01), B(0.02), B(0.02), B(0.02), B(0.05), B(0.05), B(0.1)]\)</span></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plotAll</span><span class="p">(</span><span class="n">evaluation</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Final ranking for this environment #2 :
+- Policy &#39;Thompson&#39;     was ranked      1 / 5 for this simulation (last regret = 69.227).
+- Policy &#39;BayesUCB&#39;     was ranked      2 / 5 for this simulation (last regret = 84.888).
+- Policy &#39;kl-UCB&#39;       was ranked      3 / 5 for this simulation (last regret = 94.7).
+- Policy &#39;UCB($\alpha=0.5$)&#39;    was ranked      4 / 5 for this simulation (last regret = 162.35).
+- Policy &#39;UCB($\alpha=1$)&#39;      was ranked      5 / 5 for this simulation (last regret = 282.57).
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 14.5 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 82.11% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_1.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 6 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_3.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 14.5 for 1-player problem...
+ - a Optimal Arm Identification factor H_OI(mu) = 82.11% ...
+Warning: forcing to use putatright = False because there is 6 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_5.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 5 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_7.png" src="../_images/notebooks_Example_of_a_small_Single-Player_Simulation_35_7.png" />
 </div>
 </div>
 <hr class="docutils" />
@@ -1658,7 +1680,7 @@ This MAB problem has:
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 10 Nov 2018, 09h.
+      Last updated on 13 Nov 2018, 20h.
 
     </p>
   </div>

@@ -47,8 +47,8 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="List of notebooks for SMPyBandits documentation" href="list.html"/>
-        <link rel="next" title="A note on execution times, speed and profiling" href="../Profiling.html"/>
+        <link rel="up" title="List of notebooks for SMPyBandits" href="list.html"/>
+        <link rel="next" title="Table of Contents" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html"/>
         <link rel="prev" title="Table of Contents" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html"/> 
 
   
@@ -120,7 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html#Easily-creating-MAB-problems">Easily creating MAB problems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html">Table of Contents</a></li>
@@ -151,6 +151,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#Conclusion">Conclusion</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html#Exploring-different-doubling-tricks-for-different-kinds-of-regret-bounds">Exploring different doubling tricks for different kinds of regret bounds</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
@@ -200,7 +202,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="list.html">List of notebooks for SMPyBandits documentation</a> &raquo;</li>
+          <li><a href="list.html">List of notebooks for SMPyBandits</a> &raquo;</li>
         
       <li>Table of Contents</li>
     
@@ -423,95 +425,131 @@ breaking points</p>
 <hr class="docutils" />
 <div class="section" id="Lai-&amp;-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points">
 <h1>Lai &amp; Robbins lower-bound for stochastic bandit with full restart points<a class="headerlink" href="#Lai-&-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points" title="Permalink to this headline">¶</a></h1>
-<p>First, be sure to be in the main folder, and import <code class="docutils literal"><span class="pre">Evaluator</span></code> from
-<code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
+<p>First, be sure to be in the main folder, or to have installed
+<code class="docutils literal"><span class="pre">`SMPyBandits</span></code> &lt;<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits">https://github.com/SMPyBandits/SMPyBandits</a>&gt;`__, and
+import <code class="docutils literal"><span class="pre">Evaluator</span></code> from <code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">path</span>
-<span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span></span><span class="o">!</span>pip install SMPyBandits watermark
+<span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -v -m -p SMPyBandits -a &quot;Lilian Besson&quot;
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: SMPyBandits in ./venv3/lib/python3.6/site-packages (0.9.4)
+Requirement already satisfied: watermark in ./venv3/lib/python3.6/site-packages (1.7.0)
+Requirement already satisfied: seaborn in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.9.0)
+Requirement already satisfied: scikit-learn in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.20.0)
+Requirement already satisfied: numpy in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (1.15.4)
+Requirement already satisfied: scipy&gt;0.9 in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (1.1.0)
+Requirement already satisfied: joblib in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.13.0)
+Requirement already satisfied: scikit-optimize in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.5.2)
+Requirement already satisfied: matplotlib&gt;=2 in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (3.0.2)
+Requirement already satisfied: ipython in ./venv3/lib/python3.6/site-packages (from watermark) (7.1.1)
+Requirement already satisfied: pandas&gt;=0.15.2 in ./venv3/lib/python3.6/site-packages (from seaborn-&gt;SMPyBandits) (0.23.4)
+Requirement already satisfied: python-dateutil&gt;=2.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (2.7.5)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (2.3.0)
+Requirement already satisfied: cycler&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (0.10.0)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (1.0.1)
+Requirement already satisfied: decorator in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.0)
+Requirement already satisfied: setuptools&gt;=18.5 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (40.6.2)
+Requirement already satisfied: backcall in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.1.0)
+Requirement already satisfied: traitlets&gt;=4.2 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.2)
+Requirement already satisfied: jedi&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.13.1)
+Requirement already satisfied: pexpect; sys_platform != &#34;win32&#34; in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.6.0)
+Requirement already satisfied: pygments in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.2.0)
+Requirement already satisfied: prompt-toolkit&lt;2.1.0,&gt;=2.0.0 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.0.7)
+Requirement already satisfied: pickleshare in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.7.5)
+Requirement already satisfied: pytz&gt;=2011k in ./venv3/lib/python3.6/site-packages (from pandas&gt;=0.15.2-&gt;seaborn-&gt;SMPyBandits) (2018.7)
+Requirement already satisfied: six&gt;=1.5 in ./venv3/lib/python3.6/site-packages (from python-dateutil&gt;=2.1-&gt;matplotlib&gt;=2-&gt;SMPyBandits) (1.11.0)
+Requirement already satisfied: ipython-genutils in ./venv3/lib/python3.6/site-packages (from traitlets&gt;=4.2-&gt;ipython-&gt;watermark) (0.2.0)
+Requirement already satisfied: parso&gt;=0.3.0 in ./venv3/lib/python3.6/site-packages (from jedi&gt;=0.10-&gt;ipython-&gt;watermark) (0.3.1)
+Requirement already satisfied: ptyprocess&gt;=0.5 in ./venv3/lib/python3.6/site-packages (from pexpect; sys_platform != &#34;win32&#34;-&gt;ipython-&gt;watermark) (0.6.0)
+Requirement already satisfied: wcwidth in ./venv3/lib/python3.6/site-packages (from prompt-toolkit&lt;2.1.0,&gt;=2.0.0-&gt;ipython-&gt;watermark) (0.1.7)
+Info: Using the Jupyter notebook version of the tqdm() decorator, tqdm_notebook() ...
+Lilian Besson
+
+CPython 3.6.6
+IPython 7.1.1
+
+SMPyBandits 0.9.4
+
+compiler   : GCC 8.0.1 20180414 (experimental) [trunk revision 259383
+system     : Linux
+release    : 4.15.0-38-generic
+machine    : x86_64
+processor  : x86_64
+CPU cores  : 4
+interpreter: 64bit
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">tqdm</span>
-<span class="kn">from</span> <span class="nn">Environment.plotsettings</span> <span class="k">import</span> <span class="n">legend</span><span class="p">,</span> <span class="n">makemarkers</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Environment</span> <span class="k">import</span> <span class="n">Evaluator</span><span class="p">,</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Environment.plotsettings</span> <span class="k">import</span> <span class="n">legend</span><span class="p">,</span> <span class="n">makemarkers</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
- - Setting dpi of all figures to 110 ...
- - Setting &#39;figsize&#39; of all figures to (19.8, 10.8) ...
-Info: Using the Jupyter notebook version of the tqdm() decorator, tqdm_notebook() ...
-</pre></div></div>
-</div>
 <p>We also need arms, for instance <code class="docutils literal"><span class="pre">Bernoulli</span></code>-distributed arm:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Import arms</span>
-<span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Info: numba.jit seems to be available.
-</pre></div></div>
-</div>
 <p>And finally we need some single-player Reinforcement Learning
 algorithms:</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [5]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="c1"># Import algorithms</span>
-<span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
 </div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Info: numba.jit seems to be available.
-</pre></div></div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">12.4</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="Creating-the-problem">
@@ -525,7 +563,7 @@ Info: numba.jit seems to be available.
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -542,7 +580,7 @@ Info: numba.jit seems to be available.
 of different means.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -563,7 +601,7 @@ of different means.</p>
 policy, with a common growing scheme.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [8]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -579,7 +617,7 @@ policy, with a common growing scheme.</p>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -611,7 +649,7 @@ policy, with a common growing scheme.</p>
 <p>Complete configuration for the problem:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -634,48 +672,48 @@ policy, with a common growing scheme.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[10]:
+<span></span>Out[13]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>{&#39;environment&#39;: [{&#39;arm_type&#39;: Arms.Bernoulli.Bernoulli,
-   &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}],
- &#39;horizon&#39;: 20000,
- &#39;n_jobs&#39;: 4,
- &#39;policies&#39;: [{&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__geometric&gt;,
-    &#39;policy&#39;: Policies.UCBH.UCBH}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__exponential_generic&gt;,
-    &#39;policy&#39;: Policies.UCBH.UCBH}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__geometric&gt;,
-    &#39;policy&#39;: Policies.MOSSH.MOSSH}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__exponential_generic&gt;,
-    &#39;policy&#39;: Policies.MOSSH.MOSSH}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__geometric&gt;,
-    &#39;policy&#39;: Policies.klUCBPlusPlus.klUCBPlusPlus}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__exponential_generic&gt;,
-    &#39;policy&#39;: Policies.klUCBPlusPlus.klUCBPlusPlus}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__geometric&gt;,
-    &#39;policy&#39;: Policies.ApproximatedFHGittins.ApproximatedFHGittins}},
-  {&#39;archtype&#39;: Policies.DoublingTrickWrapper.DoublingTrickWrapper,
-   &#39;params&#39;: {&#39;full_restart&#39;: True,
-    &#39;next_horizon&#39;: &lt;function Policies.DoublingTrickWrapper.next_horizon__exponential_generic&gt;,
-    &#39;policy&#39;: Policies.ApproximatedFHGittins.ApproximatedFHGittins}}],
+<span></span>{&#39;horizon&#39;: 20000,
  &#39;repetitions&#39;: 40,
- &#39;verbosity&#39;: 6}
+ &#39;n_jobs&#39;: 4,
+ &#39;verbosity&#39;: 6,
+ &#39;environment&#39;: [{&#39;arm_type&#39;: SMPyBandits.Arms.Bernoulli.Bernoulli,
+   &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}],
+ &#39;policies&#39;: [{&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;),
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.UCBH.UCBH}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function SMPyBandits.Policies.DoublingTrickWrapper.next_horizon__exponential_generic(i, horizon)&gt;,
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.UCBH.UCBH}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;),
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.MOSSH.MOSSH}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function SMPyBandits.Policies.DoublingTrickWrapper.next_horizon__exponential_generic(i, horizon)&gt;,
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.MOSSH.MOSSH}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;),
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.klUCBPlusPlus.klUCBPlusPlus}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function SMPyBandits.Policies.DoublingTrickWrapper.next_horizon__exponential_generic(i, horizon)&gt;,
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.klUCBPlusPlus.klUCBPlusPlus}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;),
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.ApproximatedFHGittins.ApproximatedFHGittins}},
+  {&#39;archtype&#39;: SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper,
+   &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function SMPyBandits.Policies.DoublingTrickWrapper.next_horizon__exponential_generic(i, horizon)&gt;,
+    &#39;full_restart&#39;: True,
+    &#39;policy&#39;: SMPyBandits.Policies.ApproximatedFHGittins.ApproximatedFHGittins}}]}
 </pre></div>
 </div>
 </div>
@@ -686,7 +724,7 @@ policy, with a common growing scheme.</p>
 <h2>Creating the <code class="docutils literal"><span class="pre">Evaluator</span></code> object<a class="headerlink" href="#Creating-the-Evaluator-object" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -704,11 +742,13 @@ Time horizon: 20000
 Number of repetitions: 40
 Sampling rate for plotting, delta_t_plot: 50
 Number of jobs for parallelization: 4
+Using this dictionary to create a new environment:
+ {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]}
 
 
 Creating a new MAB problem ...
-  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]} ...
- - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;
  - with &#39;params&#39; = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
  - with &#39;arms&#39; = [B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)]
  - with &#39;means&#39; = [0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9]
@@ -730,7 +770,7 @@ Number of environments to try: 1
 some time.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -744,7 +784,7 @@ some time.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cba99c933e80425082058595276c7b79", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "32df67ff35f54fd082122747b8f25e93", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
@@ -754,55 +794,43 @@ some time.</p>
 
 
 Evaluating environment: MAB(nbArms: 9, arms: [B(0.1), B(0.2), B(0.3), B(0.4), B(0.5), B(0.6), B(0.7), B(0.8), B(0.9)], minArm: 0.1, maxArm: 0.9)
-- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.UCBH.UCBH&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.UCBH.UCBH&#39;&gt;}} ...
-- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.UCBH.UCBH&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.UCBH.UCBH&#39;&gt;}} ...
-- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.MOSSH.MOSSH&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.MOSSH.MOSSH&#39;&gt;}} ...
-- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.MOSSH.MOSSH&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.MOSSH.MOSSH&#39;&gt;}} ...
-- Adding policy #5 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
-- Adding policy #6 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][5]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
-- Adding policy #7 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][6]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__geometric at 0x7f8c7ea81d90&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
-- Adding policy #8 = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
-  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][7]&#39; = {&#39;archtype&#39;: &lt;class &#39;Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f8c7ea8f048&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
+- Adding policy #1 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.UCBH.UCBH&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][0]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.UCBH.UCBH&#39;&gt;}} ...
+- Adding policy #2 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.UCBH.UCBH&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][1]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.UCBH.UCBH&#39;&gt;}} ...
+- Adding policy #3 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.MOSSH.MOSSH&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][2]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.MOSSH.MOSSH&#39;&gt;}} ...
+- Adding policy #4 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.MOSSH.MOSSH&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][3]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.MOSSH.MOSSH&#39;&gt;}} ...
+- Adding policy #5 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][4]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
+- Adding policy #6 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][5]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.klUCBPlusPlus.klUCBPlusPlus&#39;&gt;}} ...
+- Adding policy #7 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][6]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: CPUDispatcher(&lt;function next_horizon__geometric at 0x7f18c1a70620&gt;), &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
+- Adding policy #8 = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
+  Creating this policy from a dictionnary &#39;self.cfg[&#39;policies&#39;][7]&#39; = {&#39;archtype&#39;: &lt;class &#39;SMPyBandits.Policies.DoublingTrickWrapper.DoublingTrickWrapper&#39;&gt;, &#39;params&#39;: {&#39;next_horizon&#39;: &lt;function next_horizon__exponential_generic at 0x7f18c1a70ea0&gt;, &#39;full_restart&#39;: True, &#39;policy&#39;: &lt;class &#39;SMPyBandits.Policies.ApproximatedFHGittins.ApproximatedFHGittins&#39;&gt;}} ...
 
 
 
-- Evaluating policy #1/8: DT($T_0=100$, geom seq, restart)[UCB-H($\alpha=1$)] ...
+- Evaluating policy #1/8: DT($T_i = 200 \times 2^i$)[UCB-H($\alpha=4$)] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e42b94b821a24b43a6c39b09417c50f9", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, geom seq, restart)[UCB-H($T=25600$, $\alpha=1$)] after 20000 steps: [3 5 1 2 4 0 6 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 65.43% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 66.05% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "144dfd9913fa4333b9e5a0c1412fad74", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.1s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.4s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.4s finished
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    5.5s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   23.1s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   23.1s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -813,36 +841,24 @@ Estimated order by the policy DT($T_0=100$, geom seq, restart)[UCB-H($T=25600$, 
 
 
 
-- Evaluating policy #2/8: DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[UCB-H($\alpha=1$)] ...
+- Evaluating policy #2/8: DT($T_i = (200/2) 2^{2^i}$)[UCB-H($\alpha=4$)] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "8d79449f28a54c9bb6daf4250909a856", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[UCB-H($T=3276800$, $\alpha=1$)] after 20000 steps: [1 4 0 2 5 3 7 6 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 55.56% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 62.96% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c858744785de47bcba92da84af234563", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    2.8s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.5s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.5s finished
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    5.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   21.6s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   21.6s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -853,36 +869,24 @@ Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, resta
 
 
 
-- Evaluating policy #3/8: DT($T_0=100$, geom seq, restart)[MOSS-H] ...
+- Evaluating policy #3/8: DT($T_i = 200 \times 2^i$)[MOSS-H] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3d07d3a3e0f24fe296cbca81adb6dc75", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, geom seq, restart)[MOSS-H($T=25600$)] after 20000 steps: [0 1 4 3 6 5 2 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 80.25% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 73.46% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dd55d3f5b34347d69dd1eaec3dec96fa", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    2.8s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.6s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.6s finished
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    2.7s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.3s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.3s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -893,36 +897,24 @@ Estimated order by the policy DT($T_0=100$, geom seq, restart)[MOSS-H($T=25600$)
 
 
 
-- Evaluating policy #4/8: DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[MOSS-H] ...
+- Evaluating policy #4/8: DT($T_i = (200/2) 2^{2^i}$)[MOSS-H] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ba2437ac08de4398a487e99fff0a95b3", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[MOSS-H($T=3276800$)] after 20000 steps: [2 3 0 1 6 4 7 5 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 65.43% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 55.56% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 60.49% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "48a9565d2b374f33bc94603318bb290e", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.4s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   15.2s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   15.2s finished
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    2.6s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.0s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   14.0s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -933,34 +925,50 @@ Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, resta
 
 
 
-- Evaluating policy #5/8: DT($T_0=100$, geom seq, restart)[KLUCB$^{++}$] ...
+- Evaluating policy #5/8: DT($T_i = 200 \times 2^i$)[kl-UCB$^{++}$] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e0ffa13b82404bb1a97d147e1695006b", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, geom seq, restart)[KLUCB$^{++}$($T=25600$)] after 20000 steps: [0 4 1 2 5 7 3 6 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 66.67% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 68.52% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "feefc415ced94218a9eda311d0696714", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    6.4s
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    6.1s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   35.7s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   35.7s finished
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+
+- Evaluating policy #6/8: DT($T_i = (200/2) 2^{2^i}$)[kl-UCB$^{++}$] ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e11526ab664e4065b3d4d692d3d8373b", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    6.9s
 [Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   33.1s remaining:    0.0s
 [Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   33.1s finished
 </pre></div></div>
@@ -973,76 +981,24 @@ Estimated order by the policy DT($T_0=100$, geom seq, restart)[KLUCB$^{++}$($T=2
 
 
 
-- Evaluating policy #6/8: DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[KLUCB$^{++}$] ...
+- Evaluating policy #7/8: DT($T_i = 200 \times 2^i$)[ApprFHG] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "444504644d754622806885dbc8dd1d8d", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[KLUCB$^{++}$($T=3276800$)] after 20000 steps: [0 1 6 5 2 3 4 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 70.37% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 74.07% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "ba4133bb9c594a0e894cf2b356c90340", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    6.9s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   37.4s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   37.4s finished
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-
-
-- Evaluating policy #7/8: DT($T_0=100$, geom seq, restart)[ApprFHG($\alpha=0.5$)] ...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "08f05b3ef54e4454a68d319e753cb18f", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, geom seq, restart)[ApprFHG($T=25600$, $\alpha=0.5$)] after 20000 steps: [0 1 5 2 3 4 7 6 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 80.25% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 77.78% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 79.01% (relative success)...
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="stderr output_area docutils container">
-<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   16.2s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   16.2s finished
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   25.4s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   25.4s finished
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1053,36 +1009,24 @@ Estimated order by the policy DT($T_0=100$, geom seq, restart)[ApprFHG($T=25600$
 
 
 
-- Evaluating policy #8/8: DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[ApprFHG($\alpha=0.5$)] ...
+- Evaluating policy #8/8: DT($T_i = (200/2) 2^{2^i}$)[ApprFHG] ...
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a118e320c9bb454a83f993e718d9e2d7", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-
-Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[ApprFHG($T=3276800$, $\alpha=0.5$)] after 20000 steps: [1 3 0 6 5 4 2 7 8] ...
-  ==&gt; Optimal arm identification: 100.00% (relative success)...
-  ==&gt; Manhattan   distance from optimal ordering: 65.43% (relative success)...
-  ==&gt; Gestalt     distance from optimal ordering: 55.56% (relative success)...
-  ==&gt; Mean distance from optimal ordering: 60.49% (relative success)...
-</pre></div></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "78ecad21beb84f2da2e60286682c25aa", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="stderr output_area docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.1s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   16.5s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   16.5s finished
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 tasks      | elapsed:    3.4s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   18.1s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:   18.1s finished
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1100,7 +1044,7 @@ Estimated order by the policy DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, resta
 object:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1116,7 +1060,7 @@ object:</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1131,25 +1075,26 @@ object:</p>
 <div class="highlight"><pre>
 
 Final ranking for this environment #0 :
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[ApprFHG($\alpha=0.5$)]&#39; was ranked      1 / 8 for this simulation (last regret = 148.29).
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[KLUCB$^{++}$]&#39;  was ranked      2 / 8 for this simulation (last regret = 209.7).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[ApprFHG($\alpha=0.5$)]&#39;      was ranked      3 / 8 for this simulation (last regret = 224.32).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[KLUCB$^{++}$]&#39;       was ranked      4 / 8 for this simulation (last regret = 332.43).
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[UCB-H($\alpha=1$)]&#39;     was ranked      5 / 8 for this simulation (last regret = 335.25).
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[MOSS-H]&#39;        was ranked      6 / 8 for this simulation (last regret = 350.03).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[MOSS-H]&#39;     was ranked      7 / 8 for this simulation (last regret = 512.74).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[UCB-H($\alpha=1$)]&#39;  was ranked      8 / 8 for this simulation (last regret = 515.23).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[kl-UCB$^{++}$]&#39;   was ranked      1 / 8 for this simulation (last regret = 144.11).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[MOSS-H]&#39;  was ranked      2 / 8 for this simulation (last regret = 213.66).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[ApprFHG]&#39; was ranked      3 / 8 for this simulation (last regret = 239.97).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[kl-UCB$^{++}$]&#39;    was ranked      4 / 8 for this simulation (last regret = 323.72).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[MOSS-H]&#39;   was ranked      5 / 8 for this simulation (last regret = 500.27).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[ApprFHG]&#39;  was ranked      6 / 8 for this simulation (last regret = 539.85).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[UCB-H($\alpha=4$)]&#39;       was ranked      7 / 8 for this simulation (last regret = 636.46).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[UCB-H($\alpha=4$)]&#39;        was ranked      8 / 8 for this simulation (last regret = 1363.4).
 
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 for 1-player problem...
  - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
+Warning: forcing to use putatright = True because there is 9 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_25_1.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_25_1.png" />
+<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_26_1.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_26_1.png" />
 </div>
 </div>
 </div>
@@ -1157,7 +1102,7 @@ This MAB problem has:
 <h2>Visualisation the lower-bound for algorithms that restart at breaking points<a class="headerlink" href="#Visualisation-the-lower-bound-for-algorithms-that-restart-at-breaking-points" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<span></span>In [18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1200,7 +1145,7 @@ This MAB problem has:
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<span></span>In [19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1214,17 +1159,28 @@ This MAB problem has:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 At time 100, lowerbound was 4.59511985013459
-At time 100, lowerbound was 4.59511985013459
 At time 200, lowerbound was 9.20029003612268
-At time 800, lowerbound was 15.597219691338827
-At time 12800, lowerbound was 24.989881620108964
+At time 400, lowerbound was 14.498607402670718
+At time 1600, lowerbound was 21.58868423844681
+Warning: forcing to use putatright = False because there is 1 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/legend.py:508: UserWarning: Automatic legend placement (loc=&#34;best&#34;) not implemented for figure legend. Falling back on &#34;upper right&#34;.
+  warnings.warn(&#39;Automatic legend placement (loc=&#34;best&#34;) not &#39;
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/figure.py:445: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  % get_backend())
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_28_1.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_28_1.png" />
+<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_29_2.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_29_2.png" />
 </div>
 </div>
 </div>
@@ -1232,7 +1188,7 @@ At time 12800, lowerbound was 24.989881620108964
 <h2>Seeing the lower-bound on the regret plot<a class="headerlink" href="#Seeing-the-lower-bound-on-the-regret-plot" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<span></span>In [20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1247,30 +1203,31 @@ At time 12800, lowerbound was 24.989881620108964
 <div class="highlight"><pre>
 
 Final ranking for this environment #0 :
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[ApprFHG($\alpha=0.5$)]&#39; was ranked      1 / 8 for this simulation (last regret = 148.29).
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[KLUCB$^{++}$]&#39;  was ranked      2 / 8 for this simulation (last regret = 209.7).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[ApprFHG($\alpha=0.5$)]&#39;      was ranked      3 / 8 for this simulation (last regret = 224.32).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[KLUCB$^{++}$]&#39;       was ranked      4 / 8 for this simulation (last regret = 332.43).
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[UCB-H($\alpha=1$)]&#39;     was ranked      5 / 8 for this simulation (last regret = 335.25).
-- Policy &#39;DT($T_0=100$, exp $\alpha=2$, $\beta=2$ seq, restart)[MOSS-H]&#39;        was ranked      6 / 8 for this simulation (last regret = 350.03).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[MOSS-H]&#39;     was ranked      7 / 8 for this simulation (last regret = 512.74).
-- Policy &#39;DT($T_0=100$, geom seq, restart)[UCB-H($\alpha=1$)]&#39;  was ranked      8 / 8 for this simulation (last regret = 515.23).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[kl-UCB$^{++}$]&#39;   was ranked      1 / 8 for this simulation (last regret = 144.11).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[MOSS-H]&#39;  was ranked      2 / 8 for this simulation (last regret = 213.66).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[ApprFHG]&#39; was ranked      3 / 8 for this simulation (last regret = 239.97).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[kl-UCB$^{++}$]&#39;    was ranked      4 / 8 for this simulation (last regret = 323.72).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[MOSS-H]&#39;   was ranked      5 / 8 for this simulation (last regret = 500.27).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[ApprFHG]&#39;  was ranked      6 / 8 for this simulation (last regret = 539.85).
+- Policy &#39;DT($T_i = (200/2) 2^{2^i}$)[UCB-H($\alpha=4$)]&#39;       was ranked      7 / 8 for this simulation (last regret = 636.46).
+- Policy &#39;DT($T_i = 200 \times 2^i$)[UCB-H($\alpha=4$)]&#39;        was ranked      8 / 8 for this simulation (last regret = 1363.4).
 
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 7.52 for 1-player problem...
  - a Optimal Arm Identification factor H_OI(mu) = 48.89% ...
+Warning: forcing to use putatright = True because there is 9 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_30_1.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_30_1.png" />
+<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_31_1.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_31_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<span></span>In [21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1280,7 +1237,7 @@ This MAB problem has:
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<span></span>In [22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1289,7 +1246,7 @@ This MAB problem has:
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -1302,16 +1259,35 @@ At time 1600, lowerbound was 27.174683677446627
 At time 3200, lowerbound was 34.5524425856745
 At time 6400, lowerbound was 42.62334867446232
 At time 12800, lowerbound was 51.38740194381008
-At time 100, lowerbound was 4.59511985013459
+Warning: forcing to use putatright = False because there is 0 items in the legend.
 At time 100, lowerbound was 4.59511985013459
 At time 200, lowerbound was 9.20029003612268
-At time 800, lowerbound was 15.597219691338827
-At time 12800, lowerbound was 24.989881620108964
+At time 400, lowerbound was 14.498607402670718
+At time 1600, lowerbound was 21.58868423844681
+Warning: forcing to use putatright = False because there is 0 items in the legend.
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/legend.py:508: UserWarning: Automatic legend placement (loc=&#34;best&#34;) not implemented for figure legend. Falling back on &#34;upper right&#34;.
+  warnings.warn(&#39;Automatic legend placement (loc=&#34;best&#34;) not &#39;
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/figure.py:445: UserWarning: Matplotlib is currently using module://ipykernel.pylab.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  % get_backend())
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_33_2.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_33_2.png" />
+</div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<span></span>In [23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1321,11 +1297,11 @@ At time 12800, lowerbound was 24.989881620108964
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[20]:
+<span></span>Out[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_33_0.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_33_0.png" />
+<img alt="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_34_0.png" src="../_images/notebooks_Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms_34_0.png" />
 </div>
 </div>
 </div>
@@ -1345,7 +1321,7 @@ At time 12800, lowerbound was 24.989881620108964
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Profiling.html" class="btn btn-neutral float-right" title="A note on execution times, speed and profiling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html" class="btn btn-neutral float-right" title="Table of Contents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html" class="btn btn-neutral" title="Table of Contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -1358,7 +1334,7 @@ At time 12800, lowerbound was 24.989881620108964
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 10 Nov 2018, 09h.
+      Last updated on 13 Nov 2018, 20h.
 
     </p>
   </div>

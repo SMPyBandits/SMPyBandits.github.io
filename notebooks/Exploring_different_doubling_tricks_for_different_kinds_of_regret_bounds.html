@@ -1,0 +1,1855 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Table of Contents &mdash; SMPyBandits 0.9.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
+        <link rel="up" title="List of notebooks for SMPyBandits" href="list.html"/>
+        <link rel="next" title="A note on execution times, speed and profiling" href="../Profiling.html"/>
+        <link rel="prev" title="Table of Contents" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/modules.html">SMPyBandits modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><code class="docutils literal"><span class="pre">Multi-players</span> <span class="pre">simulation</span> <span class="pre">environment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Easily_creating_MAB_problems.html#Easily-creating-MAB-problems">Easily creating MAB problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Do_we_even_need_UCB.html#Do-we-even-need-a-smart-learning-algorithm?-Is-UCB-useless?"><em>Do we even need a smart learning algorithm? Is UCB useless?</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Single-Player_Simulation.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Single-Player_Simulation.html#An-example-of-a-small-Single-Player-simulation">An example of a small Single-Player simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.html#An-example-of-a-small-Multi-Player-simulation,-with-Centralized-Algorithms">An example of a small Multi-Player simulation, with Centralized Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Example_of_a_small_Multi-Player_Simulation__with_rhoRand_and_Selfish_Algorithms.html#An-example-of-a-small-Multi-Player-simulation,-with-rhoRand-and-Selfish,-for-different-algorithms">An example of a small Multi-Player simulation, with rhoRand and Selfish, for different algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Unsupervised_Learning_for_Bandit_problem.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Unsupervised_Learning_for_Bandit_problem.html#Trying-to-use-Unsupervised-Learning-algorithms-for-a-Gaussian-bandit-problem">Trying to use Unsupervised Learning algorithms for a Gaussian bandit problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html#Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem">Trying to use Black-Box Bayesian optimization algorithms for a Gaussian bandit problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html#Lai-&amp;-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points">Lai &amp; Robbins lower-bound for stochastic bandit with full restart points</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exploring-different-doubling-tricks-for-different-kinds-of-regret-bounds">Exploring different doubling tricks for different kinds of regret bounds</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#What-do-we-want?">What do we want?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Defining-the-functions-">Defining the functions <span class="math">\(f\)</span></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Cheating-with-a-“safe”-log">Cheating with a “safe” log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Geometric-sequences">Geometric sequences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Exponential-sequences">Exponential sequences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Generic-function-">Generic function <span class="math">\(f\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Some-specific-case-of-intermediate-sequences">Some specific case of intermediate sequences</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Defining-the-sequences-and-last-term">Defining the sequences and last term</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sequence-">Sequence <span class="math">\(f \mapsto (T_i)_i\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Last-term-operator-">Last term operator <span class="math">\(T \mapsto L_T\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Helper-for-the-plot">Helper for the plot</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Plotting-what-we-want">Plotting what we want</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Plotting-the-values-of-the-sequences">Plotting the values of the sequences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Plotting-the-ratio-for-our-upper-bound">Plotting the ratio for our upper-bound</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Results">Results</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Values-of-the-doubling-sequences">Values of the doubling sequences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Bound-in-">Bound in <span class="math">\(R_T \leq \mathcal{O}(\log(T))\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Bound-in-">Bound in <span class="math">\(R_T \leq \mathcal{O}(\sqrt{T})\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Bound-in-">Bound in <span class="math">\(R_T \leq \mathcal{O}(\sqrt{T \log(T)})\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#A-last-weird-bound-in--(just-to-try)">A last weird bound in <span class="math">\(R_T \leq \mathcal{O}(T^{2/3} \log(T))\)</span> (just to try)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Conclusions">Conclusions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#About-geometric-sequences">About geometric sequences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#About-exponential-sequences">About exponential sequences</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#About-intermediate-sequences">About intermediate sequences</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="list.html">List of notebooks for SMPyBandits</a> &raquo;</li>
+        
+      <li>Table of Contents</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/notebooks/Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Table-of-Contents">
+<h1>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Permalink to this headline">¶</a></h1>
+<p><div class="lev1 toc-item"><p>1&nbsp;&nbsp;Exploring different doubling tricks for different kinds of regret
+bounds</p>
+</div><div class="lev2 toc-item"><p>1.1&nbsp;&nbsp;What do we want?</p>
+</div><div class="lev2 toc-item"><p>1.2&nbsp;&nbsp;Dependencies</p>
+</div><div class="lev2 toc-item"><p>1.3&nbsp;&nbsp;Defining the functions <span class="math">\(f\)</span></p>
+</div><div class="lev3 toc-item"><p>1.3.1&nbsp;&nbsp;Cheating with a “safe” log</p>
+</div><div class="lev3 toc-item"><p>1.3.2&nbsp;&nbsp;Geometric sequences</p>
+</div><div class="lev3 toc-item"><p>1.3.3&nbsp;&nbsp;Exponential sequences</p>
+</div><div class="lev3 toc-item"><p>1.3.4&nbsp;&nbsp;Generic function <span class="math">\(f\)</span></p>
+</div><div class="lev3 toc-item"><p>1.3.5&nbsp;&nbsp;Some specific case of intermediate sequences</p>
+</div><div class="lev2 toc-item"><p>1.4&nbsp;&nbsp;Defining the sequences and last term</p>
+</div><div class="lev3 toc-item"><p>1.4.1&nbsp;&nbsp;Sequence <span class="math">\(f \mapsto (T_i)_i\)</span></p>
+</div><div class="lev3 toc-item"><p>1.4.2&nbsp;&nbsp;Last term operator <span class="math">\(T \mapsto L_T\)</span></p>
+</div><div class="lev3 toc-item"><p>1.4.3&nbsp;&nbsp;Helper for the plot</p>
+</div><div class="lev2 toc-item"><p>1.5&nbsp;&nbsp;Plotting what we want</p>
+</div><div class="lev3 toc-item"><p>1.5.1&nbsp;&nbsp;Plotting the values of the sequences</p>
+</div><div class="lev3 toc-item"><p>1.5.2&nbsp;&nbsp;Plotting the ratio for our upper-bound</p>
+</div><div class="lev2 toc-item"><p>1.6&nbsp;&nbsp;Results</p>
+</div><div class="lev3 toc-item"><p>1.6.1&nbsp;&nbsp;Values of the doubling sequences</p>
+</div><div class="lev3 toc-item"><p>1.6.2&nbsp;&nbsp;Bound in <span class="math">\(R_T \leq \mathcal{O}(\log(T))\)</span></p>
+</div><div class="lev3 toc-item"><p>1.6.3&nbsp;&nbsp;Bound in <span class="math">\(R_T \leq \mathcal{O}(\sqrt{T})\)</span></p>
+</div><div class="lev3 toc-item"><p>1.6.4&nbsp;&nbsp;Bound in <span class="math">\(R_T \leq \mathcal{O}(\sqrt{T \log(T)})\)</span></p>
+</div><div class="lev3 toc-item"><p>1.6.5&nbsp;&nbsp;A last weird bound in
+<span class="math">\(R_T \leq \mathcal{O}(T^{2/3} \log(T))\)</span> (just to try)</p>
+</div><div class="lev2 toc-item"><p>1.7&nbsp;&nbsp;Conclusions</p>
+</div><div class="lev3 toc-item"><p>1.7.1&nbsp;&nbsp;About geometric sequences</p>
+</div><div class="lev3 toc-item"><p>1.7.2&nbsp;&nbsp;About exponential sequences</p>
+</div><div class="lev3 toc-item"><p>1.7.3&nbsp;&nbsp;About intermediate sequences</p>
+</div></div>
+<div class="section" id="Exploring-different-doubling-tricks-for-different-kinds-of-regret-bounds">
+<h1>Exploring different doubling tricks for different kinds of regret bounds<a class="headerlink" href="#Exploring-different-doubling-tricks-for-different-kinds-of-regret-bounds" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Author: <a class="reference external" href="https://perso.crans.org/besson/">Lilian Besson</a> and
+<a class="reference external" href="http://chercheurs.lille.inria.fr/ekaufman/">Emilie Kaufmann</a>,</li>
+<li>License: <a class="reference external" href="https://lbesson.mit-license.org/">MIT License</a>.</li>
+<li>Date: 19 September 2018.</li>
+</ul>
+<div class="section" id="What-do-we-want?">
+<h2>What do we want?<a class="headerlink" href="#What-do-we-want?" title="Permalink to this headline">¶</a></h2>
+<p>This notebooks studies and plot the ratio between a sum like the
+following</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}\sum_{i=0}^{L_T} (T_i - T_{i-1})^\gamma \ln(T_i - T_{i-1})^\delta\\and the quantity :math:`T^\gamma (\ln(T))^\delta`, where\end{aligned}\end{align} \]</div>
+<p><span class="math">\(T \in\mathbb{N}\)</span> is a time horizon of some multi-armed bandit
+problem, and <span class="math">\(\gamma,\delta \geq 0\)</span> but not simultaneously zero.</p>
+<p>The successive horizon (in a <a class="reference external" href="https://hal.inria.fr/hal-01736357/">doubling trick
+scheme</a>) are defined by
+<span class="math">\(\forall i\in\mathbb{N},\; T_i := \lfloor \exp(\alpha \times \exp(f(i))) \rfloor\)</span>,
+for some function <span class="math">\(f: i \mapsto f(i)\)</span>.</p>
+<p>We study a generic form of functions <span class="math">\(f\)</span>, with parameters
+<span class="math">\(c,d,e \geq 0\)</span>: <span class="math">\(f(i) = c (i^d) (\log(i))^e\)</span>.</p>
+<ul class="simple">
+<li><span class="math">\(d, e = 0, 1\)</span> corresponds to the geometric doubling trick, with
+<span class="math">\(T_i = \mathcal{O}(2^i)\)</span>,</li>
+<li><span class="math">\(d, e = 1, 0\)</span> corresponds to the exponential doubling trick,
+with <span class="math">\(T_i = \mathcal{O}(2^{2^i})\)</span>,</li>
+<li>we are curious about intermediate sequences, that grow faster than
+any geometric scheme but slower than any exponential scheme.
+Mathematically, it corresponds to the generic case of
+<span class="math">\(0 &lt; d &lt; 1\)</span> and <span class="math">\(e \geq 0\)</span>.</li>
+</ul>
+<p>Moreover, we are especially interested in these two cases: -
+<span class="math">\(\gamma, \delta = 0, 1\)</span> for bounds in regret like
+<span class="math">\(R_T(\mathcal{A}) = \mathcal{O}(\log T)\)</span> (stochastic problem and
+problem dependent bounds), - <span class="math">\(\gamma, \delta = 1/2, 0\)</span> for bounds
+in regret like <span class="math">\(R_T(\mathcal{A}) = \mathcal{O}(\sqrt{T})\)</span>
+(stochastic problem and worst-case bounds, ie “minimax bounds”, or
+adversarial regret).</p>
+<p>To conclude these quick explanation, the notation <span class="math">\(L_T\)</span> is the
+“last term operator”, for a fixed increasing sequence
+<span class="math">\((T_i)_{i\in\mathbb{N})\)</span>:</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}L_T = \min\{ i \in\mathbb{N}, T_{i-1} &lt; T \leq T_{i} \}.\\For more details, please check `this page on SMPyBandits
+documentation &lt;https://smpybandits.github.io/DoublingTrick.html&gt;`__
+or this article: `[What the Doubling Trick Can or Can’t Do for
+Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann,
+2018] &lt;https://hal.inria.fr/hal-01736357&gt;`__.\end{aligned}\end{align} \]</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Dependencies">
+<h2>Dependencies<a class="headerlink" href="#Dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Here we import some code.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="o">!</span>pip install watermark
+<span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -v -m -p numpy,matplotlib,seaborn -a &quot;Lilian Besson and Emilie Kaufmann&quot;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: watermark in ./venv3/lib/python3.6/site-packages (1.7.0)
+Requirement already satisfied: ipython in ./venv3/lib/python3.6/site-packages (from watermark) (7.1.1)
+Requirement already satisfied: pexpect; sys_platform != &#34;win32&#34; in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.6.0)
+Requirement already satisfied: prompt-toolkit&lt;2.1.0,&gt;=2.0.0 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.0.7)
+Requirement already satisfied: setuptools&gt;=18.5 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (40.6.2)
+Requirement already satisfied: pygments in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.2.0)
+Requirement already satisfied: pickleshare in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.7.5)
+Requirement already satisfied: decorator in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.0)
+Requirement already satisfied: jedi&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.13.1)
+Requirement already satisfied: traitlets&gt;=4.2 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.2)
+Requirement already satisfied: backcall in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.1.0)
+Requirement already satisfied: ptyprocess&gt;=0.5 in ./venv3/lib/python3.6/site-packages (from pexpect; sys_platform != &#34;win32&#34;-&gt;ipython-&gt;watermark) (0.6.0)
+Requirement already satisfied: six&gt;=1.9.0 in ./venv3/lib/python3.6/site-packages (from prompt-toolkit&lt;2.1.0,&gt;=2.0.0-&gt;ipython-&gt;watermark) (1.11.0)
+Requirement already satisfied: wcwidth in ./venv3/lib/python3.6/site-packages (from prompt-toolkit&lt;2.1.0,&gt;=2.0.0-&gt;ipython-&gt;watermark) (0.1.7)
+Requirement already satisfied: parso&gt;=0.3.0 in ./venv3/lib/python3.6/site-packages (from jedi&gt;=0.10-&gt;ipython-&gt;watermark) (0.3.1)
+Requirement already satisfied: ipython-genutils in ./venv3/lib/python3.6/site-packages (from traitlets&gt;=4.2-&gt;ipython-&gt;watermark) (0.2.0)
+Lilian Besson and Emilie Kaufmann
+
+CPython 3.6.6
+IPython 7.1.1
+
+numpy 1.15.4
+matplotlib 3.0.2
+seaborn 0.9.0
+
+compiler   : GCC 8.0.1 20180414 (experimental) [trunk revision 259383
+system     : Linux
+release    : 4.15.0-38-generic
+machine    : x86_64
+processor  : x86_64
+CPU cores  : 4
+interpreter: 64bit
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson and Emilie Kaufmann&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Change here if needed, use 128 bits floats instead of 64 bits.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span>
+<span class="n">_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float128</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Defining-the-functions-">
+<h2>Defining the functions <span class="math">\(f\)</span><a class="headerlink" href="#Defining-the-functions-" title="Permalink to this headline">¶</a></h2>
+<p>Let’s start by defining the functions.</p>
+<p>This is some experimental code to plot some doubling sequences and check
+numerically some inequalities : like controlling a sum
+<span class="math">\(\Sigma_i=0^n u_i\)</span> by a constant times to last term <span class="math">\(u_n\)</span>
+and controlling the last term <span class="math">\(u_{L_T}\)</span> as a function of
+<span class="math">\(T\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1">#: The constant c in front of the function f.</span>
+<span class="n">constant_c_for_the_functions_f</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">constant_c_for_the_functions_f</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">constant_c_for_the_functions_f</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We recall that we are interested by sequences <span class="math">\((T_i)_i\)</span> that grows
+about</p>
+<div class="math">
+\[T_i = \mathcal{O}(\exp(\alpha \exp(f(i)),\]</div>
+<p>and</p>
+<div class="math">
+\[ \begin{align}\begin{aligned}f(i) = c \, i^d \, (\log i)^e, \forall i\in\mathbb{N}\\for :math:`c &gt; 0, d \geq 0, e \geq 0` and :math:`d, e` not zero\end{aligned}\end{align} \]</div>
+<p>simultaneously.</p>
+<div class="section" id="Cheating-with-a-“safe”-log">
+<h3>Cheating with a “safe” log<a class="headerlink" href="#Cheating-with-a-“safe”-log" title="Permalink to this headline">¶</a></h3>
+<p>I don’t want to have <span class="math">\(\log(T_i - T_{i-1}) = -\infty\)</span> if
+<span class="math">\(T_i = T_{i-1}\)</span> but I want <span class="math">\(\log(0) = 0\)</span>. Let’s hack it!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">mylog</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">res</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">res</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Geometric-sequences">
+<h3>Geometric sequences<a class="headerlink" href="#Geometric-sequences" title="Permalink to this headline">¶</a></h3>
+<div class="math">
+\[f(i) = \log(i) \Leftrightarrow T_i = \mathcal{O}(2^i).\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">function_f__for_geometric_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For the *geometric* doubling sequences, :math:`f(i) = c \times \log(i)`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">mylog</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Exponential-sequences">
+<h3>Exponential sequences<a class="headerlink" href="#Exponential-sequences" title="Permalink to this headline">¶</a></h3>
+<div class="math">
+\[f(i) = i \Leftrightarrow T_i = \mathcal{O}(2^{2^i}).\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">function_f__for_exponential_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For the *exponential* doubling sequences, :math:`f(i) = c \times i`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">i</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Generic-function-">
+<h3>Generic function <span class="math">\(f\)</span><a class="headerlink" href="#Generic-function-" title="Permalink to this headline">¶</a></h3>
+<p>As soon as <span class="math">\(0 &lt; d &lt; 1\)</span>, no matter the value of <span class="math">\(e\)</span>,
+<span class="math">\(T_i\)</span> will essentially <strong>faster than any geometric sequence</strong> and
+<strong>slower than any exponential sequence</strong>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For a certain *generic* family of doubling sequences, :math:`f(i) = c \times i^{d} \times (\log(i))^{e}`.</span>
+
+<span class="sd">    - ``d, e = 0, 1`` gives :func:`function_f__for_geometric_sequences`,</span>
+<span class="sd">    - ``d, e = 1, 0`` gives :func:`function_f__for_geometric_sequences`,</span>
+<span class="sd">    - ``d, e = 0.5, 0`` gives an intermediate sequence, growing faster than any geometric sequence and slower than any exponential sequence,</span>
+<span class="sd">    - any other combination has not been studied yet.</span>
+
+<span class="sd">    .. warning:: ``d`` should most probably be smaller than 1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">e</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: invalid value of d = </span><span class="si">{}</span><span class="s2"> for function_f__for_generic_sequences, cannot be &lt;= 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">**</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: invalid value of e = </span><span class="si">{}</span><span class="s2"> for function_f__for_generic_sequences, cannot be &lt;= 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="p">((</span><span class="n">mylog</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">**</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">**</span> <span class="n">d</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">mylog</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">**</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Some-specific-case-of-intermediate-sequences">
+<h3>Some specific case of intermediate sequences<a class="headerlink" href="#Some-specific-case-of-intermediate-sequences" title="Permalink to this headline">¶</a></h3>
+<p>Analytically (mathematically) we started to study
+<span class="math">\(f(i) = \sqrt{i}\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">function_f__for_intermediate_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>And empirically, I’m curious about other sequences, including
+<span class="math">\(f(i) = i^{1/3}\)</span>, <span class="math">\(f(i) = i^{2/3}\)</span> and
+<span class="math">\(f(i) = \sqrt{i} \sqrt{\log(i)}\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">function_f__for_intermediate2_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.3333</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">function_f__for_intermediate3_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.6667</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">function_f__for_intermediate4_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">function_f__for_generic_sequences</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">constant_c_for_the_functions_f</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">e</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Defining-the-sequences-and-last-term">
+<h2>Defining the sequences and last term<a class="headerlink" href="#Defining-the-sequences-and-last-term" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="c1">#: Value of the parameter :math:`\alpha` for the :func:`Ti_from_f` function.</span>
+<span class="n">alpha_for_Ti</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">alpha_for_Ti</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">alpha_for_Ti</span> <span class="o">=</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Sequence-">
+<h3>Sequence <span class="math">\(f \mapsto (T_i)_i\)</span><a class="headerlink" href="#Sequence-" title="Permalink to this headline">¶</a></h3>
+<p>We need to define a function that take <span class="math">\(f\)</span> and give the
+corresponding sequence <span class="math">\((T_i)\)</span>, given as a function
+<span class="math">\(Ti: i \mapsto T_i\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">Ti_from_f</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha_for_Ti</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For any non-negative and increasing function :math:`f: i \mapsto f(i)`, the corresponding sequence is defined by:</span>
+
+<span class="sd">    .. math:: \forall i\in\mathbb{N},\; T_i := \lfloor \exp(\alpha \times \exp(f(i))) \rfloor.</span>
+
+<span class="sd">    .. warning:: :math:`f(i)` can need other parameters, see the examples above. They can be given as ``*args`` or ``**kwargs`` to :func:`Ti_from_f`.</span>
+
+<span class="sd">    .. warning:: it should be computed otherwise, I should give :math:`i \mapsto \exp(f(i))` instead of :math:`f: i \mapsto f(i)`. I need to try as much as possible to reduce the risk of overflow errors!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># WARNING don&#39;t forget the floor!</span>
+    <span class="k">def</span> <span class="nf">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+        <span class="n">this_Ti</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">this_Ti</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">this_Ti</span><span class="p">)):</span>
+            <span class="n">this_Ti</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">this_Ti</span><span class="p">)</span>
+        <span class="c1"># print(&quot;    For f = {}, i = {} gives Ti = {}&quot;.format(f, i, this_Ti))  # DEBUG</span>
+        <span class="k">return</span> <span class="n">this_Ti</span>
+    <span class="k">return</span> <span class="n">Ti</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Last-term-operator-">
+<h3>Last term operator <span class="math">\(T \mapsto L_T\)</span><a class="headerlink" href="#Last-term-operator-" title="Permalink to this headline">¶</a></h3>
+<p>Then we can define the “last term operator”, by a naive search (and not
+an analytic derivation). I don’t care if this is not efficient, it works
+and at least we are sure that <span class="math">\(L_T\)</span> satisfies its definition.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">last_term_operator_LT</span><span class="p">(</span><span class="n">Ti</span><span class="p">,</span> <span class="n">max_i</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For a certain function representing a doubling sequence, :math:`T: i \mapsto T_i`, this :func:`last_term_operator_LT` function returns the function :math:`L: T \mapsto L_T`, defined as:</span>
+
+<span class="sd">    .. math:: \forall T\in\mathbb{N},\; L_T := \min\{ i \in\mathbb{N},\; T \leq T_i \}.</span>
+
+<span class="sd">    :math:`L_T` is the only integer which satisfies :math:`T_{L_T - 1} &lt; T \leq T_{L_T}`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">LT</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">max_i</span><span class="o">=</span><span class="n">max_i</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">:</span>  <span class="c1"># very naive loop!</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">max_i</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;LT(T=</span><span class="si">{T}</span><span class="s2">) was unable to find a i &lt;= </span><span class="si">{max_i}</span><span class="s2"> such that T_i &gt;= T.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">max_i</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">assert</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">T</span> <span class="o">&lt;=</span> <span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="s2">&quot;Error: i = </span><span class="si">{}</span><span class="s2"> was computed as LT for T = </span><span class="si">{}</span><span class="s2"> and Ti = </span><span class="si">{}</span><span class="s2"> but does not satisfy T_(i-1) &lt; T &lt;= T(i)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Ti</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="c1"># print(&quot;  For LT: i = {} was computed as LT for T = {} and Ti = {} and satisfies T(i-1) = {} &lt; T &lt;= T(i) = {}&quot;.format(i, T, Ti, Ti(i-1), Ti(i)))  # DEBUG</span>
+        <span class="k">return</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">LT</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Helper-for-the-plot">
+<h3>Helper for the plot<a class="headerlink" href="#Helper-for-the-plot" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">markers_colors</span><span class="p">(</span><span class="n">nb</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make unique markers and colors for nb plots.&quot;&quot;&quot;</span>
+    <span class="n">allmarkers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">]</span>
+    <span class="n">longlist</span> <span class="o">=</span> <span class="n">allmarkers</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allmarkers</span><span class="p">))))</span>  <span class="c1"># Cycle the good number of time</span>
+    <span class="n">markers</span> <span class="o">=</span> <span class="n">longlist</span><span class="p">[:</span><span class="n">nb</span><span class="p">]</span>  <span class="c1"># Truncate</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">hls_palette</span><span class="p">(</span><span class="n">nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="n">nb</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">markers</span><span class="p">,</span> <span class="n">colors</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Plotting-what-we-want">
+<h2>Plotting what we want<a class="headerlink" href="#Plotting-what-we-want" title="Permalink to this headline">¶</a></h2>
+<p>By default, we will study the following doubling sequences:</p>
+<ul class="simple">
+<li><strong>Geometric</strong> doubling with <span class="math">\(d=0, e=1\)</span>,</li>
+<li>Intermediate doubling with <span class="math">\(d=1/2, e=0\)</span> (the one I’m excited
+about),</li>
+<li>Intermediate doubling with <span class="math">\(d=1/3, e=0\)</span>,</li>
+<li>Intermediate doubling with <span class="math">\(d=2/3, e=0\)</span>,</li>
+<li>Intermediate doubling with <span class="math">\(d=1/2, e=1/2\)</span>,</li>
+<li><strong>Exponential</strong> doubling with <span class="math">\(d=1, e=0\)</span>.</li>
+</ul>
+<div class="section" id="Plotting-the-values-of-the-sequences">
+<h3>Plotting the values of the sequences<a class="headerlink" href="#Plotting-the-values-of-the-sequences" title="Permalink to this headline">¶</a></h3>
+<p>First, we want to check how much do these sequences increase.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plot_doubling_sequences</span><span class="p">(</span>
+        <span class="n">i_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">i_max</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">list_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">function_f__for_geometric_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate2_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate3_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate4_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_exponential_sequences</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="n">label_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Geometric    doubling (d=0, e=1)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=2/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=1/2)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Exponential  doubling (d=1, e=0)&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Display a plot to illustrate the values of the :math:`T_i` as a function of :math:`i` for some i.</span>
+
+<span class="sd">    - Can accept many functions f (and labels).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">markers</span><span class="p">,</span> <span class="n">colors</span> <span class="o">=</span> <span class="n">markers_colors</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+    <span class="n">i_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i_min</span><span class="p">,</span> <span class="n">i_max</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">)</span>
+    <span class="c1"># now for each function f</span>
+    <span class="k">for</span> <span class="n">num_f</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">la</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">,</span> <span class="n">label_of_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The </span><span class="si">{}</span><span class="s2">th function is referred to as </span><span class="si">{}</span><span class="s2"> and is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_f</span><span class="p">,</span> <span class="n">la</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="n">Ti</span> <span class="o">=</span> <span class="n">Ti_from_f</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">values_of_Ti</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">i_s</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">i_s</span><span class="p">,</span> <span class="n">values_of_Ti</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">la</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">num_f</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">num_f</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Value of the time horizon $i = </span><span class="si">{}</span><span class="s2">,...,</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i_min</span><span class="p">,</span> <span class="n">i_max</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Comparison of the values of $T_i$&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1"># return fig</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Plotting-the-ratio-for-our-upper-bound">
+<h3>Plotting the ratio for our upper-bound<a class="headerlink" href="#Plotting-the-ratio-for-our-upper-bound" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">plot_quality_first_upper_bound</span><span class="p">(</span>
+        <span class="n">Tmin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e8</span><span class="p">),</span> <span class="n">nbTs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">gamma</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">delta</span><span class="o">=</span><span class="n">_f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">),</span>  <span class="c1"># XXX bound in RT &lt;= log(T)</span>
+        <span class="c1"># gamma=_f(0.5), delta=_f(0.0),  # XXX bound in RT &lt;= sqrt(T)</span>
+        <span class="c1"># gamma=_f(0.5), delta=_f(0.5),  # XXX bound in RT &lt;= sqrt(T * log(T))</span>
+        <span class="c1"># gamma=_f(0.66667), delta=_f(1.0),  # XXX another weird bound in RT &lt;= T^2/3 * log(T)</span>
+        <span class="n">list_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="n">function_f__for_geometric_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate2_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate3_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_intermediate4_sequences</span><span class="p">,</span>
+            <span class="n">function_f__for_exponential_sequences</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="n">label_of_f</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Geometric    doubling (d=0, e=1)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=2/3, e=0)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Intermediate doubling (d=1/2, e=1/2)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Exponential  doubling (d=1, e=0)&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Display a plot to compare numerically between the following sum :math:`S` and the upper-bound we hope to have, :math:`T^{\gamma} (\log T)^{\delta}`, as a function of :math:`T` for some values between :math:`T_{\min}` and :math:`T_{\max}`:</span>
+
+<span class="sd">    .. math:: S := \sum_{i=0}^{L_T} (T_i - T_{i-1})^{\gamma} (\log (T_i - T_{i-1}))^{\delta}.</span>
+
+<span class="sd">    - Can accept many functions f (and labels).</span>
+<span class="sd">    - Can use :math:`T_i` instead of :math:`T_i - T_{i-1}` if ``show_Ti_m_Tim1=False`` (default is to use the smaller possible bound, with difference of sequence lengths, :math:`T_i - T_{i-1}`).</span>
+
+<span class="sd">    .. warning:: This is still ON GOING WORK.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">markers</span><span class="p">,</span> <span class="n">colors</span> <span class="o">=</span> <span class="n">markers_colors</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+    <span class="n">Ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">_f</span><span class="p">(</span><span class="n">Tmin</span><span class="p">),</span> <span class="n">_f</span><span class="p">(</span><span class="n">Tmax</span><span class="p">),</span> <span class="n">num</span><span class="o">=</span><span class="n">nbTs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">))</span>
+    <span class="n">the_bound_we_want</span> <span class="o">=</span> <span class="p">(</span><span class="n">Ts</span> <span class="o">**</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">mylog</span><span class="p">(</span><span class="n">Ts</span><span class="p">)</span> <span class="o">**</span> <span class="n">delta</span><span class="p">)</span>
+
+    <span class="c1"># now for each function f</span>
+    <span class="k">for</span> <span class="n">num_f</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">la</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">list_of_f</span><span class="p">,</span> <span class="n">label_of_f</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The </span><span class="si">{}</span><span class="s2">th function is referred to as </span><span class="si">{}</span><span class="s2"> and is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_f</span><span class="p">,</span> <span class="n">la</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="n">Ti</span> <span class="o">=</span> <span class="n">Ti_from_f</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">LT</span> <span class="o">=</span> <span class="n">last_term_operator_LT</span><span class="p">(</span><span class="n">Ti</span><span class="p">)</span>
+        <span class="n">the_sum_we_have</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float128</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">Tj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ts</span><span class="p">):</span>
+            <span class="n">LTj</span> <span class="o">=</span> <span class="n">LT</span><span class="p">(</span><span class="n">Tj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">show_Ti_m_Tim1</span><span class="p">:</span>
+                <span class="n">the_sum_we_have</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">((</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">**</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">mylog</span><span class="p">((</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span> <span class="o">**</span> <span class="n">delta</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">LTj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">the_sum_we_have</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">**</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">mylog</span><span class="p">(</span><span class="n">Ti</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">**</span> <span class="n">delta</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">LTj</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="c1"># print(&quot;For j = {}, Tj = {}, gives LTj = {}, and the value of the sum from i=0 to LTj is = \n{}.&quot;.format(j, Tj, LTj, the_sum_we_have[j]))  # DEBUG</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">the_sum_we_have</span> <span class="o">/</span> <span class="n">the_bound_we_want</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">la</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">num_f</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">num_f</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Value of the time horizon $T = </span><span class="si">{}</span><span class="s2">,...,</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Tmin</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">))</span>
+    <span class="n">str_of_Tj_or_dTj</span> <span class="o">=</span> <span class="s2">&quot;T_i - T_{i-1}&quot;</span> <span class="k">if</span> <span class="n">show_Ti_m_Tim1</span> <span class="k">else</span> <span class="s2">&quot;T_i&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Ratio of the sum $\sum_{i=0}^</span><span class="si">{L_T}</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)^{\gamma} (\log(</span><span class="si">%s</span><span class="s2">))^{\delta}$ and the upper-bound $T^{\gamma} \log(T)^{\delta}$, for $\gamma=</span><span class="si">%.3g</span><span class="s2">$, $\delta=</span><span class="si">%.3g</span><span class="s2">$.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">str_of_Tj_or_dTj</span><span class="p">,</span> <span class="n">str_of_Tj_or_dTj</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="c1"># return fig</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Results">
+<h2>Results<a class="headerlink" href="#Results" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="Values-of-the-doubling-sequences">
+<h3>Values of the doubling sequences<a class="headerlink" href="#Values-of-the-doubling-sequences" title="Permalink to this headline">¶</a></h3>
+<p>We check that the exponential sequence is growing WAY faster than all
+the others.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_doubling_sequences</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/ipykernel_launcher.py:12: RuntimeWarning: overflow encountered in exp
+  if sys.path[0] == &#39;&#39;:
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">OverflowError</span>                             Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-19-d34d7af5c931&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>plot_doubling_sequences<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-17-fb497b0fdf32&gt;</span> in <span class="ansi-cyan-fg">plot_doubling_sequences</span><span class="ansi-blue-fg">(i_min, i_max, list_of_f, label_of_f, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     32</span>         Ti <span class="ansi-blue-fg">=</span> Ti_from_f<span class="ansi-blue-fg">(</span>f<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     33</span>         values_of_Ti <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>Ti<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> i_s<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-fg">---&gt; 34</span><span class="ansi-red-fg">         </span>plt<span class="ansi-blue-fg">.</span>plot<span class="ansi-blue-fg">(</span>i_s<span class="ansi-blue-fg">,</span> values_of_Ti<span class="ansi-blue-fg">,</span> label<span class="ansi-blue-fg">=</span>la<span class="ansi-blue-fg">,</span> lw<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">4</span><span class="ansi-blue-fg">,</span> ms<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">7</span><span class="ansi-blue-fg">,</span> color<span class="ansi-blue-fg">=</span>colors<span class="ansi-blue-fg">[</span>num_f<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> marker<span class="ansi-blue-fg">=</span>markers<span class="ansi-blue-fg">[</span>num_f<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     35</span>
+<span class="ansi-green-intense-fg ansi-bold">     36</span>     plt<span class="ansi-blue-fg">.</span>legend<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/pyplot.py</span> in <span class="ansi-cyan-fg">plot</span><span class="ansi-blue-fg">(scalex, scaley, data, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2811</span>     return gca().plot(
+<span class="ansi-green-intense-fg ansi-bold">   2812</span>         *args, scalex=scalex, scaley=scaley, **({&#34;data&#34;: data} if data
+<span class="ansi-green-fg">-&gt; 2813</span><span class="ansi-red-fg">         is not None else {}), **kwargs)
+</span><span class="ansi-green-intense-fg ansi-bold">   2814</span>
+<span class="ansi-green-intense-fg ansi-bold">   2815</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/__init__.py</span> in <span class="ansi-cyan-fg">inner</span><span class="ansi-blue-fg">(ax, data, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1808</span>                         <span class="ansi-blue-fg">&#34;the Matplotlib list!)&#34;</span> <span class="ansi-blue-fg">%</span> <span class="ansi-blue-fg">(</span>label_namer<span class="ansi-blue-fg">,</span> func<span class="ansi-blue-fg">.</span>__name__<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">   1809</span>                         RuntimeWarning, stacklevel=2)
+<span class="ansi-green-fg">-&gt; 1810</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> func<span class="ansi-blue-fg">(</span>ax<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1811</span>
+<span class="ansi-green-intense-fg ansi-bold">   1812</span>         inner.__doc__ = _add_data_doc(inner.__doc__,
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/axes/_axes.py</span> in <span class="ansi-cyan-fg">plot</span><span class="ansi-blue-fg">(self, scalex, scaley, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1610</span>
+<span class="ansi-green-intense-fg ansi-bold">   1611</span>         <span class="ansi-green-fg">for</span> line <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>_get_lines<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1612</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>add_line<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1613</span>             lines<span class="ansi-blue-fg">.</span>append<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1614</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/axes/_base.py</span> in <span class="ansi-cyan-fg">add_line</span><span class="ansi-blue-fg">(self, line)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1893</span>             line<span class="ansi-blue-fg">.</span>set_clip_path<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>patch<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1894</span>
+<span class="ansi-green-fg">-&gt; 1895</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>_update_line_limits<span class="ansi-blue-fg">(</span>line<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1896</span>         <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> line<span class="ansi-blue-fg">.</span>get_label<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1897</span>             line<span class="ansi-blue-fg">.</span>set_label<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;_line%d&#39;</span> <span class="ansi-blue-fg">%</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>lines<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/axes/_base.py</span> in <span class="ansi-cyan-fg">_update_line_limits</span><span class="ansi-blue-fg">(self, line)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1915</span>         Figures out the data limit of the given line<span class="ansi-blue-fg">,</span> updating self<span class="ansi-blue-fg">.</span>dataLim<span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">   1916</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">-&gt; 1917</span><span class="ansi-red-fg">         </span>path <span class="ansi-blue-fg">=</span> line<span class="ansi-blue-fg">.</span>get_path<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1918</span>         <span class="ansi-green-fg">if</span> path<span class="ansi-blue-fg">.</span>vertices<span class="ansi-blue-fg">.</span>size <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1919</span>             <span class="ansi-green-fg">return</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/lines.py</span> in <span class="ansi-cyan-fg">get_path</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    943</span>         &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    944</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>_invalidy <span class="ansi-green-fg">or</span> self<span class="ansi-blue-fg">.</span>_invalidx<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 945</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>recache<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    946</span>         <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_path
+<span class="ansi-green-intense-fg ansi-bold">    947</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/lines.py</span> in <span class="ansi-cyan-fg">recache</span><span class="ansi-blue-fg">(self, always)</span>
+<span class="ansi-green-intense-fg ansi-bold">    643</span>         <span class="ansi-green-fg">if</span> always <span class="ansi-green-fg">or</span> self<span class="ansi-blue-fg">.</span>_invalidy<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    644</span>             yconv <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>convert_yunits<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_yorig<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 645</span><span class="ansi-red-fg">             </span>y <span class="ansi-blue-fg">=</span> _to_unmasked_float_array<span class="ansi-blue-fg">(</span>yconv<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>ravel<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    646</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    647</span>             y <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_y
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/matplotlib/cbook/__init__.py</span> in <span class="ansi-cyan-fg">_to_unmasked_float_array</span><span class="ansi-blue-fg">(x)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1363</span>         <span class="ansi-green-fg">return</span> np<span class="ansi-blue-fg">.</span>ma<span class="ansi-blue-fg">.</span>asarray<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">,</span> float<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>filled<span class="ansi-blue-fg">(</span>np<span class="ansi-blue-fg">.</span>nan<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1364</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1365</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> np<span class="ansi-blue-fg">.</span>asarray<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">,</span> float<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1366</span>
+<span class="ansi-green-intense-fg ansi-bold">   1367</span>
+
+<span class="ansi-green-fg">/tmp/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/numpy/core/numeric.py</span> in <span class="ansi-cyan-fg">asarray</span><span class="ansi-blue-fg">(a, dtype, order)</span>
+<span class="ansi-green-intense-fg ansi-bold">    499</span>
+<span class="ansi-green-intense-fg ansi-bold">    500</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 501</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">return</span> array<span class="ansi-blue-fg">(</span>a<span class="ansi-blue-fg">,</span> dtype<span class="ansi-blue-fg">,</span> copy<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> order<span class="ansi-blue-fg">=</span>order<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    502</span>
+<span class="ansi-green-intense-fg ansi-bold">    503</span>
+
+<span class="ansi-red-fg">OverflowError</span>: int too large to convert to float
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_40_3.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_40_3.png" />
+</div>
+</div>
+<p>And without this faster sequence, just for the first <span class="math">\(10\)</span> first
+sequences:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_doubling_sequences</span><span class="p">(</span>
+    <span class="n">i_max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">list_of_f</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">function_f__for_geometric_sequences</span><span class="p">,</span>
+        <span class="n">function_f__for_intermediate_sequences</span><span class="p">,</span>
+        <span class="n">function_f__for_intermediate2_sequences</span><span class="p">,</span>
+        <span class="n">function_f__for_intermediate3_sequences</span><span class="p">,</span>
+        <span class="n">function_f__for_intermediate4_sequences</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="n">label_of_f</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;Geometric    doubling (d=0, e=1)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intermediate doubling (d=1/2, e=0)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intermediate doubling (d=1/3, e=0)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intermediate doubling (d=2/3, e=0)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intermediate doubling (d=1/2, e=1/2)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_42_1.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_42_1.png" />
+</div>
+</div>
+<p>And for the three slower sequences, an interesting observation is that
+the “intermediate” sequence with <span class="math">\(f(i) = i^{1/3}\)</span> is comparable to
+<span class="math">\(f(i) = \log(i)\)</span> (geometric one) for small values!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_doubling_sequences</span><span class="p">(</span>
+    <span class="n">i_max</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+    <span class="n">list_of_f</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">function_f__for_geometric_sequences</span><span class="p">,</span>
+        <span class="n">function_f__for_intermediate_sequences</span><span class="p">,</span>
+        <span class="n">function_f__for_intermediate2_sequences</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="n">label_of_f</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;Geometric    doubling (d=0, e=1)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intermediate doubling (d=1/2, e=0)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Intermediate doubling (d=1/3, e=0)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_44_1.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_44_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Bound-in-">
+<h3>Bound in <span class="math">\(R_T \leq \mathcal{O}(\log(T))\)</span><a class="headerlink" href="#Bound-in-" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">_f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">Tmax</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">),</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/ipykernel_launcher.py:2: RuntimeWarning: divide by zero encountered in log
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_47_3.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_47_3.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_48_1.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_48_1.png" />
+</div>
+</div>
+<p>Conclusion: - geometric sequences <strong>cannot</strong> be used to conserve a
+logarithmic regret bound (as we proved), - exponential sequences <strong>can</strong>
+be used to conserve such bounds (as we proved, also), - and we
+conjecture that all other sequences (ie as soon as <span class="math">\(d &gt; 0\)</span> ie
+<span class="math">\(f(i) &gt;&gt; \log(i)\)</span>) can be used too.</p>
+</div>
+<div class="section" id="Bound-in-">
+<h3>Bound in <span class="math">\(R_T \leq \mathcal{O}(\sqrt{T})\)</span><a class="headerlink" href="#Bound-in-" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/ipykernel_launcher.py:2: RuntimeWarning: divide by zero encountered in log
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_52_3.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_52_3.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_53_1.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_53_1.png" />
+</div>
+</div>
+<p>Conclusion: - geometric sequences <strong>can</strong> be used to conserve a minimax
+(worst case) regret bound in <span class="math">\(R_T = \mathcal{O}(\sqrt{T})\)</span> (as we
+proved). &gt; But the proof has to be careful and use a smart bound on
+<span class="math">\(T_i - T_{i-1} \leq \text{cste} \times b^{i-1}\)</span> and not with a
+<span class="math">\(b^i\)</span> (see difference between first and second plot) - exponential
+sequences <strong>can</strong> be used to conserve such bounds (as we conjectured but
+did not proved, also), - and we conjecture that all other sequences (ie
+as soon as <span class="math">\(d &gt; 0\)</span> ie <span class="math">\(f(i) &gt;&gt; \log(i)\)</span>) can be used.</p>
+</div>
+<div class="section" id="Bound-in-">
+<h3>Bound in <span class="math">\(R_T \leq \mathcal{O}(\sqrt{T \log(T)})\)</span><a class="headerlink" href="#Bound-in-" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">_f</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/ipykernel_launcher.py:2: RuntimeWarning: divide by zero encountered in log
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_57_3.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_57_3.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_58_1.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_58_1.png" />
+</div>
+</div>
+<p>Conclusion: - geometric sequences <strong>can</strong> be used to conserve a minimax
+(worst case) regret bound in <span class="math">\(R_T = \mathcal{O}(\sqrt{T \log(T)})\)</span>
+(as we proved). &gt; But the proof has to be careful and use a smart bound
+on <span class="math">\(T_i - T_{i-1} \leq \text{cste} \times b^{i-1}\)</span> and not with a
+<span class="math">\(b^i\)</span> (see difference between first and second plot) - exponential
+sequences <strong>can</strong> be used to conserve such bounds (as we conjectured but
+did not proved, also), - and we conjecture that all other sequences (ie
+as soon as <span class="math">\(d &gt; 0\)</span> ie <span class="math">\(f(i) &gt;&gt; \log(i)\)</span>) can be used.</p>
+</div>
+<div class="section" id="A-last-weird-bound-in--(just-to-try)">
+<h3>A last weird bound in <span class="math">\(R_T \leq \mathcal{O}(T^{2/3} \log(T))\)</span> (just to try)<a class="headerlink" href="#A-last-weird-bound-in--(just-to-try)" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">_f</span><span class="p">(</span><span class="mf">0.66667</span><span class="p">),</span> <span class="n">_f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+/home/lilian/ownCloud/owncloud.crans.org/Crans/These_2016-17/src/SMPyBandits/notebooks/venv3/lib/python3.6/site-packages/ipykernel_launcher.py:2: RuntimeWarning: divide by zero encountered in log
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_62_3.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_62_3.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">plot_quality_first_upper_bound</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">show_Ti_m_Tim1</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+The 0th function is referred to as Geometric    doubling (d=0, e=1) and is &lt;function function_f__for_geometric_sequences at 0x7f0e2cbc3ea0&gt;
+
+
+The 1th function is referred to as Intermediate doubling (d=1/2, e=0) and is &lt;function function_f__for_intermediate_sequences at 0x7f0e2cbd3ae8&gt;
+
+
+The 2th function is referred to as Intermediate doubling (d=1/3, e=0) and is &lt;function function_f__for_intermediate2_sequences at 0x7f0e2cbd3f28&gt;
+
+
+The 3th function is referred to as Intermediate doubling (d=2/3, e=0) and is &lt;function function_f__for_intermediate3_sequences at 0x7f0e2cbe0048&gt;
+
+
+The 4th function is referred to as Intermediate doubling (d=1/2, e=1/2) and is &lt;function function_f__for_intermediate4_sequences at 0x7f0e2cbe00d0&gt;
+
+
+The 5th function is referred to as Exponential  doubling (d=1, e=0) and is &lt;function function_f__for_exponential_sequences at 0x7f0e2cbd3268&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_63_1.png" src="../_images/notebooks_Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds_63_1.png" />
+</div>
+</div>
+<p>Conclusion: - geometric sequences <strong>can</strong> be used to conserve a minimax
+(worst case) regret bound in
+<span class="math">\(R_T = \mathcal{O}(T^{\gamma} (\log(T))^{\delta})\)</span> (as we proved
+in the generic case) &gt; But the proof has to be careful and use a smart
+bound on <span class="math">\(T_i - T_{i-1} \leq \text{cste} \times b^{i-1}\)</span> and not
+with a <span class="math">\(b^i\)</span> (see difference between first and second plot) -
+exponential sequences <strong>can</strong> be used to conserve such bounds (as we
+conjectured but did not proved, also), - and we conjecture that all
+other sequences (ie as soon as <span class="math">\(d &gt; 0\)</span> ie <span class="math">\(f(i) &gt;&gt; \log(i)\)</span>)
+can be used.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="Conclusions">
+<h2>Conclusions<a class="headerlink" href="#Conclusions" title="Permalink to this headline">¶</a></h2>
+<p>The take home messages are the following:</p>
+<div class="section" id="About-geometric-sequences">
+<h3>About geometric sequences<a class="headerlink" href="#About-geometric-sequences" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>We can see that bounding <span class="math">\(T_i - T_{i-1}\)</span> by <span class="math">\(T_i\)</span> usually
+is strongly sub-optimal for the geometric sequences, as we saw it in
+our paper, but works fine for the other sequences.</li>
+<li>We could check that (numerically) a geometric sequence grows too
+slowly to preserve a logarithmic bound
+<span class="math">\(R_T \leq \mathcal{O}(\log(T))\)</span> (first plot), as we proved.</li>
+</ul>
+</div>
+<div class="section" id="About-exponential-sequences">
+<h3>About exponential sequences<a class="headerlink" href="#About-exponential-sequences" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>They work perfectly fine to preserve logarithmic regret bound, as we
+proved.</li>
+<li>And as we conjectured, they (seem to) work perfectly fine too to
+preserve minimax (worst case) regret bound, even if we failed to
+prove it completely so far.</li>
+</ul>
+</div>
+<div class="section" id="About-intermediate-sequences">
+<h3>About intermediate sequences<a class="headerlink" href="#About-intermediate-sequences" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>They (seem to) work perfectly fine to preserve logarithmic regret
+bound, as we started to prove it (work in progress).</li>
+<li>And as we conjectured, they (seem to) work perfectly fine too to
+preserve minimax (worst case) regret bound, as we started to prove it
+(work in progress).</li>
+</ul>
+<p>That’s it for today!</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Profiling.html" class="btn btn-neutral float-right" title="A note on execution times, speed and profiling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html" class="btn btn-neutral" title="Table of Contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 13 Nov 2018, 20h.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -47,9 +47,9 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="List of notebooks for SMPyBandits documentation" href="list.html"/>
+        <link rel="up" title="List of notebooks for SMPyBandits" href="list.html"/>
         <link rel="next" title="Table of Contents" href="Do_we_even_need_UCB.html"/>
-        <link rel="prev" title="List of notebooks for SMPyBandits documentation" href="list.html"/> 
+        <link rel="prev" title="List of notebooks for SMPyBandits" href="list.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -120,7 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits documentation</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="list.html">List of notebooks for SMPyBandits</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Easily-creating-MAB-problems">Easily creating MAB problems</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Constant-arms">Constant arms</a></li>
@@ -153,6 +153,8 @@
 <li class="toctree-l2"><a class="reference internal" href="BlackBox_Bayesian_Optimization_for_Bandit_problems.html#Trying-to-use-Black-Box-Bayesian-optimization-algorithms-for-a-Gaussian-bandit-problem">Trying to use Black-Box Bayesian optimization algorithms for a Gaussian bandit problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Lai_Robbins_Lower_Bound_for_Doubling_Trick_with_Restarting_Algorithms.html#Lai-&amp;-Robbins-lower-bound-for-stochastic-bandit-with-full-restart-points">Lai &amp; Robbins lower-bound for stochastic bandit with full restart points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exploring_different_doubling_tricks_for_different_kinds_of_regret_bounds.html#Exploring-different-doubling-tricks-for-different-kinds-of-regret-bounds">Exploring different doubling tricks for different kinds of regret bounds</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
@@ -202,7 +204,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="list.html">List of notebooks for SMPyBandits documentation</a> &raquo;</li>
+          <li><a href="list.html">List of notebooks for SMPyBandits</a> &raquo;</li>
         
       <li>Table of Contents</li>
     
@@ -425,57 +427,122 @@ div.nboutput div.output_area.stderr {
 <hr class="docutils" />
 <div class="section" id="Easily-creating-MAB-problems">
 <h1>Easily creating MAB problems<a class="headerlink" href="#Easily-creating-MAB-problems" title="Permalink to this headline">¶</a></h1>
-<p>First, be sure to be in the main folder, and import <code class="docutils literal"><span class="pre">MAB</span></code> from
-<code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
-<div class="nbinput nblast docutils container">
+<p>First, be sure to be in the main folder, or to have installed
+<code class="docutils literal"><span class="pre">`SMPyBandits</span></code> &lt;<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits">https://github.com/SMPyBandits/SMPyBandits</a>&gt;`__, and
+import <code class="docutils literal"><span class="pre">MAB</span></code> from <code class="docutils literal"><span class="pre">Environment</span></code> package:</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
 <span></span>In [1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">path</span>
-<span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span></span><span class="o">!</span>pip install SMPyBandits watermark
+<span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span> -v -m -p SMPyBandits -a &quot;Lilian Besson&quot;
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: SMPyBandits in ./venv3/lib/python3.6/site-packages (0.9.4)
+Requirement already satisfied: watermark in ./venv3/lib/python3.6/site-packages (1.7.0)
+Requirement already satisfied: scikit-learn in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.20.0)
+Requirement already satisfied: scikit-optimize in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.5.2)
+Requirement already satisfied: scipy&gt;0.9 in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (1.1.0)
+Requirement already satisfied: numpy in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (1.15.4)
+Requirement already satisfied: matplotlib&gt;=2 in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (3.0.2)
+Requirement already satisfied: seaborn in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.9.0)
+Requirement already satisfied: joblib in ./venv3/lib/python3.6/site-packages (from SMPyBandits) (0.13.0)
+Requirement already satisfied: ipython in ./venv3/lib/python3.6/site-packages (from watermark) (7.1.1)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (2.3.0)
+Requirement already satisfied: kiwisolver&gt;=1.0.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (1.0.1)
+Requirement already satisfied: python-dateutil&gt;=2.1 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (2.7.5)
+Requirement already satisfied: cycler&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from matplotlib&gt;=2-&gt;SMPyBandits) (0.10.0)
+Requirement already satisfied: pandas&gt;=0.15.2 in ./venv3/lib/python3.6/site-packages (from seaborn-&gt;SMPyBandits) (0.23.4)
+Requirement already satisfied: setuptools&gt;=18.5 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (40.6.2)
+Requirement already satisfied: pexpect; sys_platform != &#34;win32&#34; in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.6.0)
+Requirement already satisfied: jedi&gt;=0.10 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.13.1)
+Requirement already satisfied: backcall in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.1.0)
+Requirement already satisfied: traitlets&gt;=4.2 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.2)
+Requirement already satisfied: pickleshare in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (0.7.5)
+Requirement already satisfied: pygments in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.2.0)
+Requirement already satisfied: prompt-toolkit&lt;2.1.0,&gt;=2.0.0 in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (2.0.7)
+Requirement already satisfied: decorator in ./venv3/lib/python3.6/site-packages (from ipython-&gt;watermark) (4.3.0)
+Requirement already satisfied: six&gt;=1.5 in ./venv3/lib/python3.6/site-packages (from python-dateutil&gt;=2.1-&gt;matplotlib&gt;=2-&gt;SMPyBandits) (1.11.0)
+Requirement already satisfied: pytz&gt;=2011k in ./venv3/lib/python3.6/site-packages (from pandas&gt;=0.15.2-&gt;seaborn-&gt;SMPyBandits) (2018.7)
+Requirement already satisfied: ptyprocess&gt;=0.5 in ./venv3/lib/python3.6/site-packages (from pexpect; sys_platform != &#34;win32&#34;-&gt;ipython-&gt;watermark) (0.6.0)
+Requirement already satisfied: parso&gt;=0.3.0 in ./venv3/lib/python3.6/site-packages (from jedi&gt;=0.10-&gt;ipython-&gt;watermark) (0.3.1)
+Requirement already satisfied: ipython-genutils in ./venv3/lib/python3.6/site-packages (from traitlets&gt;=4.2-&gt;ipython-&gt;watermark) (0.2.0)
+Requirement already satisfied: wcwidth in ./venv3/lib/python3.6/site-packages (from prompt-toolkit&lt;2.1.0,&gt;=2.0.0-&gt;ipython-&gt;watermark) (0.1.7)
+Info: Using the Jupyter notebook version of the tqdm() decorator, tqdm_notebook() ...
+Lilian Besson
+
+CPython 3.6.6
+IPython 7.1.1
+
+SMPyBandits 0.9.4
+
+compiler   : GCC 8.0.1 20180414 (experimental) [trunk revision 259383
+system     : Linux
+release    : 4.15.0-38-generic
+machine    : x86_64
+processor  : x86_64
+CPU cores  : 4
+interpreter: 64bit
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [3]:
+<span></span>In [2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">MAB</span>
+<span></span><span class="kn">from</span> <span class="nn">SMPyBandits.Environment</span> <span class="k">import</span> <span class="n">MAB</span>
 </pre></div>
 </div>
 </div>
 <p>And also, import all the types of arms.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [6]:
+<span></span>In [3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="o">*</span>
+<span></span><span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="o">*</span>
 <span class="c1"># Check it exists:</span>
-<span class="n">Constant</span><span class="p">,</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="n">Exponential</span><span class="p">,</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="n">Poisson</span><span class="p">,</span> <span class="n">Uniform</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">GammaFromMean</span>
+<span class="n">Constant</span><span class="p">,</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="n">Exponential</span><span class="p">,</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="n">Poisson</span><span class="p">,</span> <span class="n">UniformArm</span><span class="p">,</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">GammaFromMean</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[6]:
+<span></span>Out[3]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>(Arms.Constant.Constant,
- Arms.Bernoulli.Bernoulli,
- Arms.Gaussian.Gaussian,
- Arms.Exponential.Exponential,
- Arms.Exponential.ExponentialFromMean,
- Arms.Poisson.Poisson,
- Arms.Uniform.Uniform,
- Arms.Gamma.Gamma,
- Arms.Gamma.GammaFromMean)
+<span></span>(SMPyBandits.Arms.Constant.Constant,
+ SMPyBandits.Arms.Bernoulli.Bernoulli,
+ SMPyBandits.Arms.Gaussian.Gaussian,
+ SMPyBandits.Arms.Exponential.Exponential,
+ SMPyBandits.Arms.Exponential.ExponentialFromMean,
+ SMPyBandits.Arms.Poisson.Poisson,
+ SMPyBandits.Arms.UniformArm.UniformArm,
+ SMPyBandits.Arms.Gamma.Gamma,
+ SMPyBandits.Arms.Gamma.GammaFromMean)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">12.4</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -486,7 +553,7 @@ randomly drawn from a distribution. Let consider an example with
 <span class="math">\(K = 3\)</span> arms.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [7]:
+<span></span>In [5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -499,10 +566,12 @@ randomly drawn from a distribution. Let consider an example with
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
   Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [Constant(0.1), Constant(0.5), Constant(0.9)] ...
  - with &#39;arms&#39; = [Constant(0.1), Constant(0.5), Constant(0.9)]
- - with &#39;means&#39; = [ 0.1  0.5  0.9]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -518,19 +587,27 @@ histogram of their repartition. For constant arms, no need to take a lot
 of samples as they are constant.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [9]:
+<span></span>In [6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_C</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_C</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_9_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_9_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_10_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_10_1.png" />
 </div>
 </div>
 </div>
@@ -540,7 +617,7 @@ of samples as they are constant.</p>
 <code class="docutils literal"><span class="pre">MAB</span></code> class, either from a list of <code class="docutils literal"><span class="pre">Arm</span></code> objects:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [10]:
+<span></span>In [7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -553,10 +630,12 @@ of samples as they are constant.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
   Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [B(0.1), B(0.5), B(0.9)] ...
  - with &#39;arms&#39; = [B(0.1), B(0.5), B(0.9)]
- - with &#39;means&#39; = [ 0.1  0.5  0.9]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -570,7 +649,7 @@ This MAB problem has:
 <p>Or from a dictionary, with keys <code class="docutils literal"><span class="pre">&quot;arm_type&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;params&quot;</span></code>:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -586,12 +665,14 @@ This MAB problem has:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.5, 0.9]} ...
- - with &#39;arm_type&#39; = &lt;class &#39;Arms.Bernoulli.Bernoulli&#39;&gt;
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;, &#39;params&#39;: [0.1, 0.5, 0.9]} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;SMPyBandits.Arms.Bernoulli.Bernoulli&#39;&gt;
  - with &#39;params&#39; = [0.1, 0.5, 0.9]
  - with &#39;arms&#39; = [B(0.1), B(0.5), B(0.9)]
- - with &#39;means&#39; = [ 0.1  0.5  0.9]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -606,19 +687,27 @@ This MAB problem has:
 plot a histogram of their repartition:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_B</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_B</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_15_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_15_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_16_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_16_1.png" />
 </div>
 </div>
 </div>
@@ -628,7 +717,7 @@ plot a histogram of their repartition:</p>
 <span class="math">\(\sigma^2 = 0.05\)</span>, for rewards truncated into <span class="math">\([0, 1]\)</span>:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -641,10 +730,12 @@ plot a histogram of their repartition:</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(0.1, 0.05), G(0.5, 0.05), G(0.9, 0.05)] ...
- - with &#39;arms&#39; = [G(0.1, 0.05), G(0.5, 0.05), G(0.9, 0.05)]
- - with &#39;means&#39; = [ 0.1  0.5  0.9]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [N(0.1, 0.05), N(0.5, 0.05), N(0.9, 0.05)] ...
+ - with &#39;arms&#39; = [N(0.1, 0.05), N(0.5, 0.05), N(0.9, 0.05)]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -652,26 +743,34 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 0.375 ...
  - a Optimal Arm Identification factor H_OI(mu) = 26.67% ...
- - with &#39;arms&#39; represented as: $[G(0.1, 0.05), G(0.5, 0.05), G(0.9, 0.05)^*]$
+ - with &#39;arms&#39; represented as: $[N(0.1), N(0.5), N(0.9)^*], \sigma^2=0.05$
 </pre></div></div>
 </div>
 <p>The histogram clearly shows that low-variance Gaussian arms are easy to
 separate:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_19_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_19_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_20_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_20_1.png" />
 </div>
 </div>
 <div class="section" id="Wrong-means-for-Gaussian-arms-?">
@@ -684,7 +783,7 @@ value <span class="math">\(0\)</span>, so it probably reduces its mean.</div></b
 solution.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [31]:
+<span></span>In [12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -694,7 +793,7 @@ solution.</p>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [32]:
+<span></span>In [13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -705,7 +804,7 @@ solution.</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [33]:
+<span></span>In [14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -715,17 +814,17 @@ solution.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[33]:
+<span></span>Out[14]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>(0.1, 0.10043270258959709)
+<span></span>(0.1, 0.10042691516597835)
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [34]:
+<span></span>In [15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -738,11 +837,11 @@ solution.</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[34]:
+<span></span>Out[15]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>0.0043270258959708652
+<span></span>0.004269151659783421
 </pre></div>
 </div>
 </div>
@@ -751,7 +850,7 @@ negligible!</p>
 <p>And for other values for <span class="math">\((\mu, \sigma)\)</span>:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<span></span>In [16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -761,7 +860,7 @@ negligible!</p>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<span></span>In [17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -772,7 +871,7 @@ negligible!</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<span></span>In [18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -782,17 +881,17 @@ negligible!</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[21]:
+<span></span>Out[18]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>(0.7, 0.52655266492913366)
+<span></span>(0.7, 0.5266068636711595)
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [23]:
+<span></span>In [19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -802,11 +901,11 @@ negligible!</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[23]:
+<span></span>Out[19]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>0.24778190724409471
+<span></span>0.2477044804697721
 </pre></div>
 </div>
 </div>
@@ -823,7 +922,7 @@ negligible!</p>
 <p>Let’s compute that.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [24]:
+<span></span>In [20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -837,7 +936,7 @@ negligible!</p>
 \[\phi(x) := \frac{1}{\sqrt{2 \pi}} \exp\left(- \frac{1}{2} x^2 \right).\]</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [27]:
+<span></span>In [21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -857,7 +956,7 @@ negligible!</p>
 \[\Phi(x) := \frac{1}{2} \left(1 + \mathrm{erf}\left( \frac{x}{\sqrt{2}} \right) \right).\]</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [26]:
+<span></span>In [22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -874,7 +973,7 @@ negligible!</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [28]:
+<span></span>In [23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -885,7 +984,7 @@ negligible!</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[28]:
+<span></span>Out[23]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
@@ -895,7 +994,7 @@ negligible!</p>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [29]:
+<span></span>In [24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -905,7 +1004,7 @@ negligible!</p>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [30]:
+<span></span>In [25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -915,11 +1014,11 @@ negligible!</p>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[30]:
+<span></span>Out[25]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
-<span></span>(0.7, 0.52655266492913366, 2.0795866878592797)
+<span></span>(0.7, 0.5266068636711595, 2.0795866878592797)
 </pre></div>
 </div>
 </div>
@@ -937,12 +1036,12 @@ between arms, and so MAB learning will be harder. With a big variance of
 <span class="math">\(\sigma^2 = 0.5\)</span>, for rewards truncated into <span class="math">\([0, 1]\)</span>:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [11]:
+<span></span>In [26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">M_G</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.10</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]])</span>
-<span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -951,9 +1050,12 @@ between arms, and so MAB learning will be harder. With a big variance of
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(0.1, 0.1), G(0.5, 0.1), G(0.9, 0.1)] ...
- - with &#39;arms&#39; = [G(0.1, 0.1), G(0.5, 0.1), G(0.9, 0.1)]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [N(0.1, 0.1), N(0.5, 0.1), N(0.9, 0.1)] ...
+ - with &#39;arms&#39; = [N(0.1, 0.1), N(0.5, 0.1), N(0.9, 0.1)]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -961,13 +1063,15 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 0.75 ...
  - a Optimal Arm Identification factor H_OI(mu) = 26.67% ...
+ - with &#39;arms&#39; represented as: $[N(0.1), N(0.5), N(0.9)^*], \sigma^2=0.1$
+Warning: forcing to use putatright = False because there is 3 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_43_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_43_1.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_44_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_44_1.png" />
 </div>
 </div>
 <p>We see that due to the truncation, if mean of the Gaussian is too close
@@ -977,12 +1081,12 @@ to <span class="math">\(0\)</span> or <span class="math">\(1\)</span>, then actu
 <p>And for larger variances, it is even stronger:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [12]:
+<span></span>In [27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
 <span></span><span class="n">M_G</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="k">for</span> <span class="n">mu</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]])</span>
-<span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -991,9 +1095,12 @@ to <span class="math">\(0\)</span> or <span class="math">\(1\)</span>, then actu
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(0.1, 0.25), G(0.5, 0.25), G(0.9, 0.25)] ...
- - with &#39;arms&#39; = [G(0.1, 0.25), G(0.5, 0.25), G(0.9, 0.25)]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [N(0.1, 0.25), N(0.5, 0.25), N(0.9, 0.25)] ...
+ - with &#39;arms&#39; = [N(0.1, 0.25), N(0.5, 0.25), N(0.9, 0.25)]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 0.9
  - with &#39;minArm&#39; = 0.1
@@ -1001,13 +1108,15 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 1.87 ...
  - a Optimal Arm Identification factor H_OI(mu) = 26.67% ...
+ - with &#39;arms&#39; represented as: $[N(0.1), N(0.5), N(0.9)^*], \sigma^2=0.25$
+Warning: forcing to use putatright = False because there is 3 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_45_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_45_1.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_46_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_46_1.png" />
 </div>
 </div>
 </div>
@@ -1019,7 +1128,7 @@ convenience I prefer to work with <code class="docutils literal"><span class="pr
 mean and not the <span class="math">\(\lambda\)</span> parameter to create the arm.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [13]:
+<span></span>In [28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1032,35 +1141,47 @@ mean and not the <span class="math">\(\lambda\)</span> parameter to create the a
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;Arms.Exponential.ExponentialFromMean&#39;&gt;, &#39;params&#39;: [0.1, 0.5, 0.9]} ...
- - with &#39;arm_type&#39; = &lt;class &#39;Arms.Exponential.ExponentialFromMean&#39;&gt;
+  Reading arms of this MAB problem from a dictionnary &#39;configuration&#39; = {&#39;arm_type&#39;: &lt;class &#39;SMPyBandits.Arms.Exponential.ExponentialFromMean&#39;&gt;, &#39;params&#39;: [0.1, 0.5, 0.9]} ...
+ - with &#39;arm_type&#39; = &lt;class &#39;SMPyBandits.Arms.Exponential.ExponentialFromMean&#39;&gt;
  - with &#39;params&#39; = [0.1, 0.5, 0.9]
- - with &#39;arms&#39; = [Exp(10, 1), Exp(1.59, 1), Exp(0.215, 1)]
+ - with &#39;arms&#39; = [\mathrm{Exp}(10, 1), \mathrm{Exp}(1.59, 1), \mathrm{Exp}(0.215, 1)]
+ - with &#39;means&#39; = [0.1 0.5 0.9]
  - with &#39;nbArms&#39; = 3
- - with &#39;maxArm&#39; = 0.900000003233
- - with &#39;minArm&#39; = 0.100000000055
+ - with &#39;maxArm&#39; = 0.9000000032329611
+ - with &#39;minArm&#39; = 0.10000000005466392
 
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 3.4 ...
  - a Optimal Arm Identification factor H_OI(mu) = 26.67% ...
+ - with &#39;arms&#39; represented as: $[\mathrm{Exp}(10, 1), \mathrm{Exp}(1.59, 1), \mathrm{Exp}(0.215, 1)^*]$
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [14]:
+<span></span>In [29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_E</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_E</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_48_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_48_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_49_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_49_1.png" />
 </div>
 </div>
 </div>
@@ -1070,20 +1191,20 @@ This MAB problem has:
 Bernoulli<span class="math">\((0.5)\)</span>. They can also be uniform in other intervals.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [15]:
+<span></span>In [30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
-<span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
-<span class="n">Uniform</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
-<span class="n">Uniform</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
+<span></span><span class="n">UniformArm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
+<span class="n">UniformArm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
+<span class="n">UniformArm</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
+<span class="n">UniformArm</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span><span class="o">.</span><span class="n">lower_amplitude</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[15]:
+<span></span>Out[30]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
@@ -1093,7 +1214,7 @@ Bernoulli<span class="math">\((0.5)\)</span>. They can also be uniform in other 
 </div>
 <div class="nboutput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[15]:
+<span></span>Out[30]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
@@ -1103,7 +1224,7 @@ Bernoulli<span class="math">\((0.5)\)</span>. They can also be uniform in other 
 </div>
 <div class="nboutput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[15]:
+<span></span>Out[30]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
@@ -1113,7 +1234,7 @@ Bernoulli<span class="math">\((0.5)\)</span>. They can also be uniform in other 
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>Out[15]:
+<span></span>Out[30]:
 </pre></div>
 </div>
 <div class="output_area highlight-none"><div class="highlight"><pre>
@@ -1123,11 +1244,11 @@ Bernoulli<span class="math">\((0.5)\)</span>. They can also be uniform in other 
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [16]:
+<span></span>In [31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_U</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">Uniform</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">Uniform</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)])</span>
+<span></span><span class="n">M_U</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">UniformArm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">UniformArm</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">UniformArm</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">UniformArm</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)])</span>
 </pre></div>
 </div>
 </div>
@@ -1136,33 +1257,45 @@ Bernoulli<span class="math">\((0.5)\)</span>. They can also be uniform in other 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [U(0, 1), U(0, 0.1), U(0.4, 0.1), U(0.8, 0.1)] ...
- - with &#39;arms&#39; = [U(0, 1), U(0, 0.1), U(0.4, 0.1), U(0.8, 0.1)]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [U(0, 1), U(0, 0.1), U(0.4, 0.5), U(0.8, 0.9)] ...
+ - with &#39;arms&#39; = [U(0, 1), U(0, 0.1), U(0.4, 0.5), U(0.8, 0.9)]
+ - with &#39;means&#39; = [0.5  0.05 0.45 0.85]
  - with &#39;nbArms&#39; = 4
- - with &#39;maxArm&#39; = 0.85
+ - with &#39;maxArm&#39; = 0.8500000000000001
  - with &#39;minArm&#39; = 0.05
 
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 2.47 ...
  - a Optimal Arm Identification factor H_OI(mu) = 36.25% ...
+ - with &#39;arms&#39; represented as: $[U(0, 1), U(0, 0.1), U(0.4, 0.5), U(0.8, 0.9)^*]$
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [17]:
+<span></span>In [32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_U</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_U</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 4 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_52_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_52_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_53_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_53_1.png" />
 </div>
 </div>
 </div>
@@ -1180,7 +1313,7 @@ instead of <span class="math">\([0, 1]\)</span>. Let define some Gaussian arms, 
 <span class="math">\(-5, 0, 5\)</span> and a variance of <span class="math">\(\sigma^2 = 2\)</span>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [18]:
+<span></span>In [33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1193,9 +1326,12 @@ instead of <span class="math">\([0, 1]\)</span>. Let define some Gaussian arms, 
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(-5, 2), G(0, 2), G(5, 2)] ...
- - with &#39;arms&#39; = [G(-5, 2), G(0, 2), G(5, 2)]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [N(-5, 2), N(0, 2), N(5, 2)] ...
+ - with &#39;arms&#39; = [N(-5, 2), N(0, 2), N(5, 2)]
+ - with &#39;means&#39; = [-5  0  5]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 5
  - with &#39;minArm&#39; = -5
@@ -1203,28 +1339,37 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 1.2 ...
  - a Optimal Arm Identification factor H_OI(mu) = 16.67% ...
+ - with &#39;arms&#39; represented as: $[N(-5), N(0), N(5)^*], \sigma^2=2$
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [19]:
+<span></span>In [34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_55_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_55_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_56_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_56_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [20]:
+<span></span>In [35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1237,9 +1382,12 @@ This MAB problem has:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(-5, 0.1), G(0, 0.1), G(5, 0.1)] ...
- - with &#39;arms&#39; = [G(-5, 0.1), G(0, 0.1), G(5, 0.1)]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [N(-5, 0.1), N(0, 0.1), N(5, 0.1)] ...
+ - with &#39;arms&#39; = [N(-5, 0.1), N(0, 0.1), N(5, 0.1)]
+ - with &#39;means&#39; = [-5  0  5]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 5
  - with &#39;minArm&#39; = -5
@@ -1247,23 +1395,32 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 0.06 ...
  - a Optimal Arm Identification factor H_OI(mu) = 16.67% ...
+ - with &#39;arms&#39; represented as: $[N(-5), N(0), N(5)^*], \sigma^2=0.1$
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [21]:
+<span></span>In [36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_57_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_57_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_58_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_58_1.png" />
 </div>
 </div>
 </div>
@@ -1276,7 +1433,7 @@ fixed to <span class="math">\(1\)</span> by default, and here the rewards will b
 <span class="math">\([0, 10]\)</span>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [31]:
+<span></span>In [37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1289,9 +1446,12 @@ fixed to <span class="math">\(1\)</span> by default, and here the rewards will b
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
   Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [\Gamma(1, 1), \Gamma(2, 1), \Gamma(3, 1), \Gamma(4, 1), \Gamma(5, 1)] ...
  - with &#39;arms&#39; = [\Gamma(1, 1), \Gamma(2, 1), \Gamma(3, 1), \Gamma(4, 1), \Gamma(5, 1)]
+ - with &#39;means&#39; = [1. 2. 3. 4. 5.]
  - with &#39;nbArms&#39; = 5
  - with &#39;maxArm&#39; = 5.0
  - with &#39;minArm&#39; = 1.0
@@ -1299,23 +1459,32 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 75.7 ...
  - a Optimal Arm Identification factor H_OI(mu) = 60.00% ...
+ - with &#39;arms&#39; represented as: $[\Gamma(1, 1), \Gamma(2, 1), \Gamma(3, 1), \Gamma(4, 1), \Gamma(5, 1)^*]$
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [32]:
+<span></span>In [38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_Gamma</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_Gamma</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 5 items in the legend.
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_60_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_60_0.png" />
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_61_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_61_1.png" />
 </div>
 </div>
 <p>As for Gaussian arms, the truncation is strongly changing the means of
@@ -1327,7 +1496,7 @@ empirical mean close to <span class="math">\(10\)</span> due to truncation.</p>
 <p>Let try with non-truncated rewards.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [28]:
+<span></span>In [39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
@@ -1340,9 +1509,12 @@ empirical mean close to <span class="math">\(10\)</span> due to truncation.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [G(-10, 3), G(0, 3), G(10, 3)] ...
- - with &#39;arms&#39; = [G(-10, 3), G(0, 3), G(10, 3)]
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [N(-10, 3), N(0, 3), N(10, 3)] ...
+ - with &#39;arms&#39; = [N(-10, 3), N(0, 3), N(10, 3)]
+ - with &#39;means&#39; = [-10   0  10]
  - with &#39;nbArms&#39; = 3
  - with &#39;maxArm&#39; = 10
  - with &#39;minArm&#39; = -10
@@ -1350,34 +1522,16 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 0.9 ...
  - a Optimal Arm Identification factor H_OI(mu) = 66.67% ...
+ - with &#39;arms&#39; represented as: $[N(-10), N(0), N(10)^*], \sigma^2=3$
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [29]:
+<span></span>In [40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_64_0.png" src="../_images/notebooks_Easily_creating_MAB_problems_64_0.png" />
-</div>
-</div>
-<p>And with non-truncated Gamma arms ?</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [36]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_Gamma</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">GammaFromMean</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mini</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">maxi</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
-<span class="n">M_Gamma</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span></span><span class="n">_</span> <span class="o">=</span> <span class="n">M_G</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1386,9 +1540,39 @@ This MAB problem has:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
+Warning: forcing to use putatright = False because there is 3 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_65_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_65_1.png" />
+</div>
+</div>
+<p>And with non-truncated Gamma arms ?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">M_Gamma</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">GammaFromMean</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mini</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">maxi</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">M_Gamma</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
 Creating a new MAB problem ...
   Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [\Gamma(1, 1), \Gamma(2, 1), \Gamma(3, 1), \Gamma(4, 1), \Gamma(5, 1)] ...
  - with &#39;arms&#39; = [\Gamma(1, 1), \Gamma(2, 1), \Gamma(3, 1), \Gamma(4, 1), \Gamma(5, 1)]
+ - with &#39;means&#39; = [1. 2. 3. 4. 5.]
  - with &#39;nbArms&#39; = 5
  - with &#39;maxArm&#39; = 5.0
  - with &#39;minArm&#39; = 1.0
@@ -1396,41 +1580,8 @@ Creating a new MAB problem ...
 This MAB problem has:
  - a [Lai &amp; Robbins] complexity constant C(mu) = 75.7 ...
  - a Optimal Arm Identification factor H_OI(mu) = 80.00% ...
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/notebooks_Easily_creating_MAB_problems_66_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_66_1.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none"><div class="highlight"><pre>
-<span></span>In [38]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3"><div class="highlight"><pre>
-<span></span><span class="n">M_Gamma</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">GammaFromMean</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mini</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">maxi</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]])</span>
-<span class="n">M_Gamma</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Creating a new MAB problem ...
-  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [\Gamma(10, 1), \Gamma(20, 1), \Gamma(30, 1), \Gamma(40, 1), \Gamma(50, 1)] ...
- - with &#39;arms&#39; = [\Gamma(10, 1), \Gamma(20, 1), \Gamma(30, 1), \Gamma(40, 1), \Gamma(50, 1)]
- - with &#39;nbArms&#39; = 5
- - with &#39;maxArm&#39; = 50.0
- - with &#39;minArm&#39; = 10.0
-
-This MAB problem has:
- - a [Lai &amp; Robbins] complexity constant C(mu) = 757 ...
- - a Optimal Arm Identification factor H_OI(mu) = 80.00% ...
+ - with &#39;arms&#39; represented as: $[\Gamma(1, 1), \Gamma(2, 1), \Gamma(3, 1), \Gamma(4, 1), \Gamma(5, 1)^*]$
+Warning: forcing to use putatright = False because there is 5 items in the legend.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1440,12 +1591,53 @@ This MAB problem has:
 <img alt="../_images/notebooks_Easily_creating_MAB_problems_67_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_67_1.png" />
 </div>
 </div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3"><div class="highlight"><pre>
+<span></span><span class="n">M_Gamma</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">([</span><span class="n">GammaFromMean</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mini</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">),</span> <span class="n">maxi</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]])</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">M_Gamma</span><span class="o">.</span><span class="n">plotHistogram</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+
+Creating a new MAB problem ...
+  Taking arms of this MAB problem from a list of arms &#39;configuration&#39; = [\Gamma(10, 1), \Gamma(20, 1), \Gamma(30, 1), \Gamma(40, 1), \Gamma(50, 1)] ...
+ - with &#39;arms&#39; = [\Gamma(10, 1), \Gamma(20, 1), \Gamma(30, 1), \Gamma(40, 1), \Gamma(50, 1)]
+ - with &#39;means&#39; = [10. 20. 30. 40. 50.]
+ - with &#39;nbArms&#39; = 5
+ - with &#39;maxArm&#39; = 50.0
+ - with &#39;minArm&#39; = 10.0
+
+This MAB problem has:
+ - a [Lai &amp; Robbins] complexity constant C(mu) = 757 ...
+ - a Optimal Arm Identification factor H_OI(mu) = 80.00% ...
+ - with &#39;arms&#39; represented as: $[\Gamma(10, 1), \Gamma(20, 1), \Gamma(30, 1), \Gamma(40, 1), \Gamma(50, 1)^*]$
+Warning: forcing to use putatright = False because there is 5 items in the legend.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Easily_creating_MAB_problems_68_1.png" src="../_images/notebooks_Easily_creating_MAB_problems_68_1.png" />
+</div>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="Conclusion">
 <h2>Conclusion<a class="headerlink" href="#Conclusion" title="Permalink to this headline">¶</a></h2>
 <p>This small notebook demonstrated how to define arms and Multi-Armed
-Bandit problems in my framework.</p>
+Bandit problems in my framework,
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits">SMPyBandits</a>.</p>
 </div>
 </div>
 
@@ -1462,7 +1654,7 @@ Bandit problems in my framework.</p>
         <a href="Do_we_even_need_UCB.html" class="btn btn-neutral float-right" title="Table of Contents" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="list.html" class="btn btn-neutral" title="List of notebooks for SMPyBandits documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="list.html" class="btn btn-neutral" title="List of notebooks for SMPyBandits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -1472,7 +1664,7 @@ Bandit problems in my framework.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 10 Nov 2018, 09h.
+      Last updated on 13 Nov 2018, 20h.
 
     </p>
   </div>
