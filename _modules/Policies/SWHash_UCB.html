@@ -282,6 +282,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="c1"># Get reward, normalize it</span>
         <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
         <span class="c1"># We seen it one more time at this time step?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_pulls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
@@ -296,8 +298,8 @@
         <span class="k">for</span> <span class="n">otherArm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
             <span class="c1"># Store it in place for the empirical average of that arm</span>
             <span class="n">these_rewards</span> <span class="o">=</span> <span class="p">[</span><span class="n">partial_all_rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">partial_all_pulls</span><span class="p">)</span> <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">otherArm</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">otherArm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">these_rewards</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">otherArm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">these_rewards</span><span class="p">)</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">otherArm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">these_rewards</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">otherArm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">these_rewards</span><span class="p">)</span></div></div>
         <span class="c1"># # print(&quot; and self.pulls = {} and self.rewards = {}&quot;.format(self.pulls, self.rewards))  # DEBUG</span>
 </pre></div>
 
@@ -314,7 +316,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 15 Nov 2018, 13h.
+      Last updated on 19 Nov 2018, 16h.
 
     </p>
   </div>

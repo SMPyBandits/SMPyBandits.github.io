@@ -212,7 +212,7 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">locale</span>  <span class="c1"># See this bug, http://numba.pydata.org/numba-doc/dev/user/faq.html#llvm-locale-bug</span>
 <span class="n">locale</span><span class="o">.</span><span class="n">setlocale</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">LC_TIME</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)</span>
-<span class="n">monthyear</span> <span class="o">=</span> <span class="s1">&#39;{:%b.%Y}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>  <span class="c1">#: Month.Year date</span>
+<span class="n">monthyear</span> <span class="o">=</span> <span class="s2">&quot;{:%b.%Y}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>  <span class="c1">#: Month.Year date</span>
 
 <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">getenv</span>
 
@@ -234,7 +234,7 @@
 <span class="n">VIRIDIS</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Use the Viridis colormap</span>
 
 <span class="c1"># Bbox in inches. Only the given portion of the figure is saved. If &#39;tight&#39;, try to figure out the tight bbox of the figure.</span>
-<span class="n">BBOX_INCHES</span> <span class="o">=</span> <span class="s1">&#39;tight&#39;</span>  <span class="c1">#: Use this parameter for bbox</span>
+<span class="n">BBOX_INCHES</span> <span class="o">=</span> <span class="s2">&quot;tight&quot;</span>  <span class="c1">#: Use this parameter for bbox</span>
 <span class="n">BBOX_INCHES</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -248,6 +248,12 @@
     <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cm&quot;</span>
     <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.rm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;serif&quot;</span>
 
+    <span class="c1"># Configure size for axes and x and y labels</span>
+    <span class="c1"># Cf. https://stackoverflow.com/a/12444777/</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="s2">&quot;medium&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+
     <span class="c1"># Configure the DPI of all images, once and for all!</span>
     <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DPI</span>
     <span class="c1"># print(&quot; - Setting dpi of all figures to&quot;, DPI, &quot;...&quot;)  # DEBUG</span>
@@ -257,7 +263,7 @@
     <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FIGSIZE</span>
     <span class="c1"># print(&quot; - Setting &#39;figsize&#39; of all figures to&quot;, FIGSIZE, &quot;...&quot;)  # DEBUG</span>
 
-    <span class="c1"># Set up a discrete version of the Viridis map for axes.prop_cycle</span>
+    <span class="c1"># XXX Set up a discrete version of the Viridis map for axes.prop_cycle</span>
 
 
 <div class="viewcode-block" id="palette"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.palette">[docs]</a><span class="k">def</span> <span class="nf">palette</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">hls</span><span class="o">=</span><span class="n">HLS</span><span class="p">,</span> <span class="n">viridis</span><span class="o">=</span><span class="n">VIRIDIS</span><span class="p">):</span>
@@ -317,7 +323,10 @@
 <span class="n">MAXNBOFLABELINFIGURE</span> <span class="o">=</span> <span class="mi">7</span>
 
 
-<div class="viewcode-block" id="legend"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.legend">[docs]</a><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">putatright</span><span class="o">=</span><span class="n">PUTATRIGHT</span><span class="p">,</span> <span class="n">shrinkfactor</span><span class="o">=</span><span class="n">SHRINKFACTOR</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxnboflabelinfigure</span><span class="o">=</span><span class="n">MAXNBOFLABELINFIGURE</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-small&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="legend"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.legend">[docs]</a><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">putatright</span><span class="o">=</span><span class="n">PUTATRIGHT</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-small&quot;</span><span class="p">,</span>
+        <span class="n">shrinkfactor</span><span class="o">=</span><span class="n">SHRINKFACTOR</span><span class="p">,</span> <span class="n">maxnboflabelinfigure</span><span class="o">=</span><span class="n">MAXNBOFLABELINFIGURE</span><span class="p">,</span>
+        <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;plt.legend() with good options, cf. http://matplotlib.org/users/recipes.html#transparent-fancy-legends.</span>
 
 <span class="sd">    - It can place the legend to the right also, see https://stackoverflow.com/a/4701285/.</span>
@@ -325,7 +334,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">len_leg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">putatright</span> <span class="o">=</span> <span class="n">len_leg</span> <span class="o">&gt;</span> <span class="n">maxnboflabelinfigure</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: forcing to use putatright = </span><span class="si">{}</span><span class="s2"> because there is </span><span class="si">{}</span><span class="s2"> items in the legend.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">putatright</span><span class="p">,</span> <span class="n">len_leg</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">if</span> <span class="n">len_leg</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: forcing to use putatright = </span><span class="si">{}</span><span class="s2"> because there is </span><span class="si">{}</span><span class="s2"> items in the legend.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">putatright</span><span class="p">,</span> <span class="n">len_leg</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="c1"># print(&quot;    e =&quot;, e)  # DEBUG</span>
         <span class="k">pass</span>
@@ -405,7 +414,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to show the figure for some unknown reason...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span></div>
 
 
-<div class="viewcode-block" id="add_percent_formatter"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.add_percent_formatter">[docs]</a><span class="k">def</span> <span class="nf">add_percent_formatter</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;xaxis&quot;</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">oldformatter</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.2g%%</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{x:.1%}</span><span class="s1">&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="add_percent_formatter"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.add_percent_formatter">[docs]</a><span class="k">def</span> <span class="nf">add_percent_formatter</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;xaxis&quot;</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">oldformatter</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.2g%%</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{x:.1%}</span><span class="s2">&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Small function to use a Percentage formatter for xaxis or yaxis, of a certain amplitude.</span>
 
 <span class="sd">    - which can be &quot;xaxis&quot; or &quot;yaxis&quot;,</span>
@@ -439,12 +448,12 @@
 
 <div class="viewcode-block" id="wraptext"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.wraptext">[docs]</a><span class="k">def</span> <span class="nf">wraptext</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">WIDTH</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Wrap the text, using ``textwrap`` module, and ``width``.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="wraplatex"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.wraplatex">[docs]</a><span class="k">def</span> <span class="nf">wraplatex</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">WIDTH</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Wrap the text, for LaTeX, using ``textwrap`` module, and ``width``.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s1">&#39;$</span><span class="se">\n</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="s2">&quot;$</span><span class="se">\n</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="nrows_ncols"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.nrows_ncols">[docs]</a><span class="k">def</span> <span class="nf">nrows_ncols</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -532,7 +541,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 15 Nov 2018, 13h.
+      Last updated on 19 Nov 2018, 16h.
 
     </p>
   </div>

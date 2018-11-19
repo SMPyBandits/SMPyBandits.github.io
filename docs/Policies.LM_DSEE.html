@@ -378,14 +378,26 @@
 
 </dd></dl>
 
+<dl class="function">
+<dt id="Policies.LM_DSEE.parameter_ell">
+<code class="descclassname">Policies.LM_DSEE.</code><code class="descname">parameter_ell</code><span class="sig-paren">(</span><em>a</em>, <em>N</em>, <em>b</em>, <em>gamma</em>, <em>verbose=True</em>, <em>max_value_on_l=1000000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#parameter_ell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.parameter_ell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for the smallest value of the parameter <span class="math">\(\ell\)</span> that satisfies the following equations:</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.LM_DSEE.VERBOSE">
+<code class="descclassname">Policies.LM_DSEE.</code><code class="descname">VERBOSE</code><em class="property"> = False</em><a class="headerlink" href="#Policies.LM_DSEE.VERBOSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to be verbose when doing the search for valid parameter <span class="math">\(\ell\)</span>.</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="Policies.LM_DSEE.LM_DSEE">
-<em class="property">class </em><code class="descclassname">Policies.LM_DSEE.</code><code class="descname">LM_DSEE</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.5</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=2</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.LM_DSEE.</code><code class="descname">LM_DSEE</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.5</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=0.25</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
 <p>The LM-DSEE policy for non-stationary bandits, from [[&#8220;On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems&#8221;, by Lai Wei, Vaibhav Srivastava, 2018, arXiv:1802.08380]](https://arxiv.org/pdf/1802.08380)</p>
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.5</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=2</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>nu=0.5</em>, <em>DeltaMin=0.5</em>, <em>a=1</em>, <em>b=0.25</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -403,7 +415,7 @@
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.l">
 <code class="descname">l</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.l" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(\ell\)</span> for the LM-DSEE algorithm.</p>
+<dd><p>Parameter <span class="math">\(\ell\)</span> for the LM-DSEE algorithm, as computed by the function <a class="reference internal" href="#Policies.LM_DSEE.parameter_ell" title="Policies.LM_DSEE.parameter_ell"><code class="xref py py-func docutils literal"><span class="pre">parameter_ell()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -415,25 +427,25 @@
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.rho">
 <code class="descname">rho</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.rho" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(\rho\)</span> for the LM-DSEE algorithm.</p>
+<dd><p>Parameter <span class="math">\(\rho = \frac{1-\nu}{1+\nu}\)</span> for the LM-DSEE algorithm.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.phase">
 <code class="descname">phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Current phase, exploration or exploitation</p>
+<dd><p>Current phase, exploration or exploitation.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.current_exploration_arm">
 <code class="descname">current_exploration_arm</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.current_exploration_arm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently explored arm</p>
+<dd><p>Currently explored arm.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.current_exploitation_arm">
 <code class="descname">current_exploitation_arm</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.current_exploitation_arm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently exploited arm</p>
+<dd><p>Currently exploited arm.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -445,18 +457,29 @@
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.length_of_current_phase">
 <code class="descname">length_of_current_phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_of_current_phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Length of the current phase, either computed from <a class="reference internal" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Policies.LM_DSEE.LM_DSEE.length_exploration_phase"><code class="xref py py-func docutils literal"><span class="pre">length_exploration_phase()</span></code></a> or func:length_exploitation_phase``</p>
+<dd><p>Length of the current phase, either computed from <a class="reference internal" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Policies.LM_DSEE.LM_DSEE.length_exploration_phase"><code class="xref py py-func docutils literal"><span class="pre">length_exploration_phase()</span></code></a> or func:<cite>length_exploitation_phase</cite>.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.LM_DSEE.LM_DSEE.step_of_current_phase">
 <code class="descname">step_of_current_phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.step_of_current_phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Timer inside the current phase</p>
+<dd><p>Timer inside the current phase.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.all_rewards">
+<code class="descname">all_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.all_rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Memory of all the rewards. A list per arm. Growing list until restart of that arm?</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.LM_DSEE'</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -467,7 +490,7 @@
 
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.length_exploration_phase">
-<code class="descname">length_exploration_phase</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploration_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Permalink to this definition">¶</a></dt>
+<code class="descname">length_exploration_phase</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploration_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the value of the current exploration phase:</p>
 <div class="math">
 \[L_1(k) = L(k) = \lceil \gamma \log(k^{\rho} l b)\rceil.\]</div>
@@ -479,20 +502,15 @@
 
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.length_exploitation_phase">
-<code class="descname">length_exploitation_phase</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploitation_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase" title="Permalink to this definition">¶</a></dt>
+<code class="descname">length_exploitation_phase</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploitation_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the value of the current exploitation phase:</p>
 <div class="math">
-\[L_2(k) = \lceil a k^{\rho} l\rceil - K L_1(k).\]</div>
+\[L_2(k) = \lceil a k^{\rho} l \rceil - K L_1(k).\]</div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">I think there is a typo in the paper, as their formula are weird (like <span class="math">\(al\)</span> is defined from <span class="math">\(a\)</span>).</p>
 </div>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.LM_DSEE.LM_DSEE.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.LM_DSEE'</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="Policies.LM_DSEE.LM_DSEE.getReward">
@@ -533,7 +551,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 15 Nov 2018, 13h.
+      Last updated on 19 Nov 2018, 16h.
 
     </p>
   </div>
