@@ -571,6 +571,29 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
 </dd></dl>
 
 <dl class="data">
+<dt id="Policies.CD_UCB.eps">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">eps</code><em class="property"> = 1e-15</em><a class="headerlink" href="#Policies.CD_UCB.eps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Threshold value: everything in [0, 1] is truncated to [eps, 1 - eps]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CD_UCB.klBern">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klBern</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klBern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klBern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kullback-Leibler divergence for Bernoulli distributions. <a class="reference external" href="https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence">https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</a></p>
+<div class="math">
+\[\mathrm{KL}(\mathcal{B}(x), \mathcal{B}(y)) = x \log(\frac{x}{y}) + (1-x) \log(\frac{1-x}{1-y}).\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CD_UCB.klGauss">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klGauss</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>sig2x=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klGauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klGauss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kullback-Leibler divergence for Gaussian distributions of means <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> and variances <code class="docutils literal"><span class="pre">sig2x</span></code> and <code class="docutils literal"><span class="pre">sig2y</span></code>, <span class="math">\(\nu_1 = \mathcal{N}(x, \sigma_x^2)\)</span> and <span class="math">\(\nu_2 = \mathcal{N}(y, \sigma_x^2)\)</span>:</p>
+<div class="math">
+\[\mathrm{KL}(\nu_1, \nu_2) = \frac{(x - y)^2}{2 \sigma_y^2} + \frac{1}{2}\left( \frac{\sigma_x^2}{\sigma_y^2} - 1 \log\left(\frac{\sigma_x^2}{\sigma_y^2}\right) \right).\]</div>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#Other_properties">https://en.wikipedia.org/wiki/Normal_distribution#Other_properties</a></p>
+</dd></dl>
+
+<dl class="data">
 <dt id="Policies.CD_UCB.VERBOSE">
 <code class="descclassname">Policies.CD_UCB.</code><code class="descname">VERBOSE</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CD_UCB.VERBOSE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether to be verbose when doing the search for valid parameter <span class="math">\(\ell\)</span>.</p>
@@ -596,7 +619,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
 
 <dl class="class">
 <dt id="Policies.CD_UCB.GLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=&lt;function klBern&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The GLR-UCB generic policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR),  for 1-dimensional exponential families.</p>
 <ul class="simple">
@@ -606,7 +629,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
 </ul>
 <dl class="method">
 <dt id="Policies.CD_UCB.GLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=&lt;function klBern&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -737,7 +760,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Nov 2018, 16h.
+      Last updated on 20 Nov 2018, 17h.
 
     </p>
   </div>

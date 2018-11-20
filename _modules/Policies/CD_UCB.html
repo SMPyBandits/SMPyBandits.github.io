@@ -460,10 +460,27 @@
 
 <span class="c1"># --- Generic GLR for 1-dimensional exponential families</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">klGauss</span>
-<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">SystemError</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klBern</span><span class="p">,</span> <span class="n">klGauss</span>
+<span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-15</span>  <span class="c1">#: Threshold value: everything in [0, 1] is truncated to [eps, 1 - eps]</span>
+
+<span class="c1"># --- Simple Kullback-Leibler divergence for known distributions</span>
+
+<div class="viewcode-block" id="klBern"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.klBern">[docs]</a><span class="k">def</span> <span class="nf">klBern</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Bernoulli distributions. https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</span>
+
+<span class="sd">    .. math:: \mathrm{KL}(\mathcal{B}(x), \mathcal{B}(y)) = x \log(\frac{x}{y}) + (1-x) \log(\frac{1-x}{1-y}).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">eps</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">eps</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="klGauss"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.klGauss">[docs]</a><span class="k">def</span> <span class="nf">klGauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sig2x</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Kullback-Leibler divergence for Gaussian distributions of means ``x`` and ``y`` and variances ``sig2x`` and ``sig2y``, :math:`\nu_1 = \mathcal{N}(x, \sigma_x^2)` and :math:`\nu_2 = \mathcal{N}(y, \sigma_x^2)`:</span>
+
+<span class="sd">    .. math:: \mathrm{KL}(\nu_1, \nu_2) = \frac{(x - y)^2}{2 \sigma_y^2} + \frac{1}{2}\left( \frac{\sigma_x^2}{\sigma_y^2} - 1 \log\left(\frac{\sigma_x^2}{\sigma_y^2}\right) \right).</span>
+
+<span class="sd">    See https://en.wikipedia.org/wiki/Normal_distribution#Other_properties</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">sig2x</span><span class="p">)</span></div>
 
 <span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="c1">#: Whether to be verbose when doing the search for valid parameter :math:`\ell`.</span>
@@ -603,7 +620,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Nov 2018, 16h.
+      Last updated on 20 Nov 2018, 17h.
 
     </p>
   </div>
