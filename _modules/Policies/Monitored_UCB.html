@@ -190,7 +190,7 @@
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The Monitored-UCB generic policy for non-stationary bandits.</span>
 
 <span class="sd">- Reference: [[&quot;Nearly Optimal Adaptive Procedure for Piecewise-Stationary Bandit: a Change-Point Detection Approach&quot;. Yang Cao, Zheng Wen, Branislav Kveton, Yao Xie. arXiv preprint arXiv:1802.03692, 2018]](https://arxiv.org/pdf/1802.03692)</span>
-<span class="sd">- It runs on top of a simple policy, e.g., :class:`Policy.UCB.UCB`, and :func:`Monitored_IndexPolicy` is a wrapper:</span>
+<span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :func:`Monitored_IndexPolicy` is a wrapper:</span>
 
 <span class="sd">    &gt;&gt;&gt; policy = Monitored_IndexPolicy(nbArms, UCB)</span>
 <span class="sd">    &gt;&gt;&gt; # use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
@@ -198,7 +198,7 @@
 <span class="sd">- It uses an additional :math:`\mathcal{O}(\tau_\max)` memory for a game of maximum stationary length :math:`\tau_\max`.</span>
 
 <span class="sd">.. warning:: This implementation is still experimental!</span>
-<span class="sd">.. warning:: It can only work on basic index policy based on empirical averages (and an exploration bias), like :class:`Policy.UCB.UCB`, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</span>
+<span class="sd">.. warning:: It can only work on basic index policy based on empirical averages (and an exploration bias), like :class:`UCB`, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -289,7 +289,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Monitored-</span><span class="si">{}</span><span class="s2">($w=</span><span class="si">{:g}</span><span class="s2">$, $b=</span><span class="si">{:g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.3g}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span> <span class="s2">&quot;, Per-Arm&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;M-</span><span class="si">{}</span><span class="s2">($w=</span><span class="si">{:g}</span><span class="s2">$, $b=</span><span class="si">{:g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.3g}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span> <span class="s2">&quot;, Per-Arm&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.choice"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Essentially play uniformly at random with probability :math:`\gamma`, otherwise, pass the call to ``choice`` of the underlying policy (eg. UCB).</span>
@@ -382,7 +382,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Nov 2018, 17h.
+      Last updated on 22 Nov 2018, 18h.
 
     </p>
   </div>

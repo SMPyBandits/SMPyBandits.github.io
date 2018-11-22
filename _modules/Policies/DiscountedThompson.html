@@ -217,19 +217,21 @@
 
 <span class="sd">        .. math::</span>
 <span class="sd">            A(t) &amp;\sim U(\arg\max_{1 \leq k \leq K} I_k(t)),\\</span>
-<span class="sd">            I_k(t) &amp;\sim \mathrm{Beta}(1 + \tilde{S_k}(t), 1 + \tilde{F_k}(t)).</span>
+<span class="sd">            I_k(t) &amp;\sim \mathrm{Beta}(1 + \widetilde{S_k}(t), 1 + \widetilde{F_k}(t)).</span>
 
-<span class="sd">        - It keeps :math:`\tilde{S_k}(t)` and :math:`\tilde{F_k}(t)` the discounted counts of successes and failures (S and F), for each arm k.</span>
+<span class="sd">        - It keeps :math:`\widetilde{S_k}(t)` and :math:`\widetilde{F_k}(t)` the discounted counts of successes and failures (S and F), for each arm k.</span>
 
-<span class="sd">        - But instead of using :math:`\tilde{S_k}(t) = S_k(t)` and :math:`\tilde{N_k}(t) = N_k(t)`, they are updated at each time step using the discount factor :math:`\gamma`:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \tilde{S_{A(t)}}(t+1) &amp;= \gamma \tilde{S_{A(t)}}(t) + r(t),</span>
-<span class="sd">            \tilde{S_{k&#39;}}(t+1) &amp;= \gamma \tilde{S_{k&#39;}}(t), \forall k&#39; \neq A(t).</span>
+<span class="sd">        - But instead of using :math:`\widetilde{S_k}(t) = S_k(t)` and :math:`\widetilde{N_k}(t) = N_k(t)`, they are updated at each time step using the discount factor :math:`\gamma`:</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            \tilde{F_{A(t)}}(t+1) &amp;= \gamma \tilde{F_{A(t)}}(t) + (1 - r(t)),</span>
-<span class="sd">            \tilde{F_{k&#39;}}(t+1) &amp;= \gamma \tilde{F_{k&#39;}}(t), \forall k&#39; \neq A(t).</span>
+
+<span class="sd">            \widetilde{S_{A(t)}}(t+1) &amp;= \gamma \widetilde{S_{A(t)}}(t) + r(t),\\</span>
+<span class="sd">            \widetilde{S_{k&#39;}}(t+1) &amp;= \gamma \widetilde{S_{k&#39;}}(t), \forall k&#39; \neq A(t).</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \widetilde{F_{A(t)}}(t+1) &amp;= \gamma \widetilde{F_{A(t)}}(t) + (1 - r(t)),\\</span>
+<span class="sd">            \widetilde{F_{k&#39;}}(t+1) &amp;= \gamma \widetilde{F_{k&#39;}}(t), \forall k&#39; \neq A(t).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span></div></div>
 </pre></div>
@@ -247,7 +249,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Nov 2018, 17h.
+      Last updated on 22 Nov 2018, 18h.
 
     </p>
   </div>

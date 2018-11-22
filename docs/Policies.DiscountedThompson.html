@@ -153,6 +153,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCBH.html">Policies.OCUCBH module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OracleSequentiallyRestartPolicy.html">Policies.OracleSequentiallyRestartPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SIC_MMAB.html">Policies.SIC_MMAB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SWHash_UCB.html">Policies.SWHash_UCB module</a></li>
@@ -341,17 +342,17 @@
 <dd><p>Compute the current index, at time t and after <span class="math">\(N_k(t)\)</span> pulls of arm k, by sampling from the DiscountedBeta posterior.</p>
 <div class="math">
 \[\begin{split}A(t) &amp;\sim U(\arg\max_{1 \leq k \leq K} I_k(t)),\\
-I_k(t) &amp;\sim \mathrm{Beta}(1 + \tilde{S_k}(t), 1 + \tilde{F_k}(t)).\end{split}\]</div>
+I_k(t) &amp;\sim \mathrm{Beta}(1 + \widetilde{S_k}(t), 1 + \widetilde{F_k}(t)).\end{split}\]</div>
 <ul class="simple">
-<li>It keeps <span class="math">\(\tilde{S_k}(t)\)</span> and <span class="math">\(\tilde{F_k}(t)\)</span> the discounted counts of successes and failures (S and F), for each arm k.</li>
-<li>But instead of using <span class="math">\(\tilde{S_k}(t) = S_k(t)\)</span> and <span class="math">\(\tilde{N_k}(t) = N_k(t)\)</span>, they are updated at each time step using the discount factor <span class="math">\(\gamma\)</span>:</li>
+<li>It keeps <span class="math">\(\widetilde{S_k}(t)\)</span> and <span class="math">\(\widetilde{F_k}(t)\)</span> the discounted counts of successes and failures (S and F), for each arm k.</li>
+<li>But instead of using <span class="math">\(\widetilde{S_k}(t) = S_k(t)\)</span> and <span class="math">\(\widetilde{N_k}(t) = N_k(t)\)</span>, they are updated at each time step using the discount factor <span class="math">\(\gamma\)</span>:</li>
 </ul>
 <div class="math">
-\[\tilde{S_{A(t)}}(t+1) &amp;= \gamma \tilde{S_{A(t)}}(t) + r(t),
-\tilde{S_{k'}}(t+1) &amp;= \gamma \tilde{S_{k'}}(t), \forall k' \neq A(t).\]</div>
+\[\begin{split}\widetilde{S_{A(t)}}(t+1) &amp;= \gamma \widetilde{S_{A(t)}}(t) + r(t),\\
+\widetilde{S_{k'}}(t+1) &amp;= \gamma \widetilde{S_{k'}}(t), \forall k' \neq A(t).\end{split}\]</div>
 <div class="math">
-\[\tilde{F_{A(t)}}(t+1) &amp;= \gamma \tilde{F_{A(t)}}(t) + (1 - r(t)),
-\tilde{F_{k'}}(t+1) &amp;= \gamma \tilde{F_{k'}}(t), \forall k' \neq A(t).\]</div>
+\[\begin{split}\widetilde{F_{A(t)}}(t+1) &amp;= \gamma \widetilde{F_{A(t)}}(t) + (1 - r(t)),\\
+\widetilde{F_{k'}}(t+1) &amp;= \gamma \widetilde{F_{k'}}(t), \forall k' \neq A(t).\end{split}\]</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -386,7 +387,7 @@ I_k(t) &amp;\sim \mathrm{Beta}(1 + \tilde{S_k}(t), 1 + \tilde{F_k}(t)).\end{spli
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Nov 2018, 17h.
+      Last updated on 22 Nov 2018, 18h.
 
     </p>
   </div>

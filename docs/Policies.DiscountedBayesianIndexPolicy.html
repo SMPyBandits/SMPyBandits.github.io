@@ -153,6 +153,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCB.html">Policies.OCUCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OCUCBH.html">Policies.OCUCBH module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.OSSB.html">Policies.OSSB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.OracleSequentiallyRestartPolicy.html">Policies.OracleSequentiallyRestartPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ProbabilityPursuit.html">Policies.ProbabilityPursuit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SIC_MMAB.html">Policies.SIC_MMAB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.SWHash_UCB.html">Policies.SWHash_UCB module</a></li>
@@ -341,15 +342,15 @@
 <ul class="simple">
 <li>By default, it uses a DiscountedBeta posterior (<a class="reference internal" href="Policies.Posterior.DiscountedBeta.html#module-Policies.Posterior.DiscountedBeta" title="Policies.Posterior.DiscountedBeta"><code class="xref py py-class docutils literal"><span class="pre">Policies.Posterior.DiscountedBeta</span></code></a>), one by arm.</li>
 <li>Use discount factor <span class="math">\(\gamma\in(0,1)\)</span>.</li>
-<li>It keeps <span class="math">\(\tilde{S_k}(t)\)</span> and <span class="math">\(\tilde{F_k}(t)\)</span> the discounted counts of successes and failures (S and F), for each arm k.</li>
-<li>But instead of using <span class="math">\(\tilde{S_k}(t) = S_k(t)\)</span> and <span class="math">\(\tilde{N_k}(t) = N_k(t)\)</span>, they are updated at each time step using the discount factor <span class="math">\(\gamma\)</span>:</li>
+<li>It keeps <span class="math">\(\widetilde{S_k}(t)\)</span> and <span class="math">\(\widetilde{F_k}(t)\)</span> the discounted counts of successes and failures (S and F), for each arm k.</li>
+<li>But instead of using <span class="math">\(\widetilde{S_k}(t) = S_k(t)\)</span> and <span class="math">\(\widetilde{N_k}(t) = N_k(t)\)</span>, they are updated at each time step using the discount factor <span class="math">\(\gamma\)</span>:</li>
 </ul>
 <div class="math">
-\[\tilde{S_{A(t)}}(t+1) &amp;= \gamma \tilde{S_{A(t)}}(t) + r(t),
-\tilde{S_{k'}}(t+1) &amp;= \gamma \tilde{S_{k'}}(t), \forall k' \neq A(t).\]</div>
+\[\begin{split}\widetilde{S_{A(t)}}(t+1) &amp;= \gamma \widetilde{S_{A(t)}}(t) + r(t),\\
+\widetilde{S_{k'}}(t+1) &amp;= \gamma \widetilde{S_{k'}}(t), \forall k' \neq A(t).\end{split}\]</div>
 <div class="math">
-\[\tilde{F_{A(t)}}(t+1) &amp;= \gamma \tilde{F_{A(t)}}(t) + (1 - r(t)),
-\tilde{F_{k'}}(t+1) &amp;= \gamma \tilde{F_{k'}}(t), \forall k' \neq A(t).\]</div>
+\[\begin{split}\widetilde{F_{A(t)}}(t+1) &amp;= \gamma \widetilde{F_{A(t)}}(t) + (1 - r(t)),\\
+\widetilde{F_{k'}}(t+1) &amp;= \gamma \widetilde{F_{k'}}(t), \forall k' \neq A(t).\end{split}\]</div>
 <dl class="method">
 <dt id="Policies.DiscountedBayesianIndexPolicy.DiscountedBayesianIndexPolicy.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>gamma=0.95</em>, <em>posterior=&lt;class 'Policies.Posterior.DiscountedBeta.DiscountedBeta'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedBayesianIndexPolicy.html#DiscountedBayesianIndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedBayesianIndexPolicy.DiscountedBayesianIndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
@@ -406,7 +407,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Nov 2018, 17h.
+      Last updated on 22 Nov 2018, 18h.
 
     </p>
   </div>

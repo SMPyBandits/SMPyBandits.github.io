@@ -190,7 +190,7 @@
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot; An experimental policy, using a sliding window (of for instance :math:`\tau=100` *draws* of each arm), and reset the algorithm as soon as the small empirical average is too far away from the long history empirical average (or just restart for one arm, if possible).</span>
 
 <span class="sd">- Reference: none yet, idea from Rémi Bonnefoi and Lilian Besson.</span>
-<span class="sd">- It runs on top of a simple policy, e.g., :class:`Policy.UCB.UCB`, and :func:`SlidingWindowRestart` is a generic policy using any simple policy with this &quot;sliding window&quot; trick:</span>
+<span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :func:`SlidingWindowRestart` is a generic policy using any simple policy with this &quot;sliding window&quot; trick:</span>
 
 <span class="sd">    &gt;&gt;&gt; policy = SlidingWindowRestart(nbArms, UCB, tau=100, threshold=0.1)</span>
 <span class="sd">    &gt;&gt;&gt; # use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
@@ -198,7 +198,7 @@
 <span class="sd">- It uses an additional :math:`\mathcal{O}(\tau)` memory but do not cost anything else in terms of time complexity (the average is done with a sliding window, and costs :math:`\mathcal{O}(1)` at every time step).</span>
 
 <span class="sd">.. warning:: This is very experimental!</span>
-<span class="sd">.. warning:: It can only work on basic index policy based on empirical averages (and an exploration bias), like :class:`Policy.UCB.UCB`, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)! Note that it works on :class:`Policies.Thompson.Thompson`.</span>
+<span class="sd">.. warning:: It can only work on basic index policy based on empirical averages (and an exploration bias), like :class:`UCB`, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)! Note that it works on :class:`Policies.Thompson.Thompson`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -441,7 +441,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Nov 2018, 17h.
+      Last updated on 22 Nov 2018, 18h.
 
     </p>
   </div>
