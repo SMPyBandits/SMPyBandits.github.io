@@ -190,7 +190,7 @@
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The Monitored-UCB generic policy for non-stationary bandits.</span>
 
 <span class="sd">- Reference: [[&quot;Nearly Optimal Adaptive Procedure for Piecewise-Stationary Bandit: a Change-Point Detection Approach&quot;. Yang Cao, Zheng Wen, Branislav Kveton, Yao Xie. arXiv preprint arXiv:1802.03692, 2018]](https://arxiv.org/pdf/1802.03692)</span>
-<span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :func:`Monitored_IndexPolicy` is a wrapper:</span>
+<span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :class:`Monitored_IndexPolicy` is a wrapper:</span>
 
 <span class="sd">    &gt;&gt;&gt; policy = Monitored_IndexPolicy(nbArms, UCB)</span>
 <span class="sd">    &gt;&gt;&gt; # use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
@@ -348,7 +348,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span></div>
 
         <span class="c1"># we update the total number of samples available to the underlying policy</span>
-        <span class="c1"># self.policy.t = np.sum(self.last_pulls)</span>
+        <span class="c1"># self.policy.t = np.sum(self.last_pulls)  # XXX SO NOT SURE HERE</span>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A change is detected for the current arm if the following test is true:</span>
@@ -362,8 +362,9 @@
         <span class="c1"># don&#39;t try to detect change if there is not enough data!</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
-        <span class="n">sum_first_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_y</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">sum_second_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data_y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="o">//</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="n">last_w_data_y</span> <span class="o">=</span> <span class="n">data_y</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">:]</span>
+        <span class="n">sum_first_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">last_w_data_y</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">sum_second_half</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">last_w_data_y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="o">//</span><span class="mi">2</span><span class="p">:])</span>
         <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">sum_first_half</span> <span class="o">-</span> <span class="n">sum_second_half</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_b</span></div></div>
 
 
@@ -382,7 +383,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 Nov 2018, 17h.
+      Last updated on 28 Nov 2018, 19h.
 
     </p>
   </div>

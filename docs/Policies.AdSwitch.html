@@ -325,7 +325,7 @@
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">FIXME This implementation is still experimental!</p>
+<p class="last">This implementation is still experimental!</p>
 </div>
 <dl class="class">
 <dt id="Policies.AdSwitch.Phase">
@@ -385,6 +385,16 @@
 
 </dd></dl>
 
+<dl class="function">
+<dt id="Policies.AdSwitch.mymean">
+<code class="descclassname">Policies.AdSwitch.</code><code class="descname">mymean</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitch.html#mymean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitch.mymean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simply <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.mean.html#numpy.mean" title="(in NumPy v1.15)"><code class="xref py py-func docutils literal"><span class="pre">numpy.mean()</span></code></a> on x if x is non empty, otherwise <code class="docutils literal"><span class="pre">0.0</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([])</span>
+<span class="go">/usr/local/lib/python3.6/dist-packages/numpy/core/fromnumeric.py:2957: RuntimeWarning: Mean of empty slice.</span>
+</pre></div>
+</div>
+</dd></dl>
+
 <dl class="data">
 <dt id="Policies.AdSwitch.Constant_C1">
 <code class="descclassname">Policies.AdSwitch.</code><code class="descname">Constant_C1</code><em class="property"> = 1.0</em><a class="headerlink" href="#Policies.AdSwitch.Constant_C1" title="Permalink to this definition">¶</a></dt>
@@ -408,6 +418,12 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="Policies.AdSwitch.AdSwitch.horizon">
+<code class="descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math">\(T\)</span> for the AdSwitch algorithm, the horizon of the experiment. TODO try to use <code class="xref py py-class docutils literal"><span class="pre">DoublingTrickWrapper</span></code> to remove the dependency in <span class="math">\(T\)</span> ?</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="Policies.AdSwitch.AdSwitch.C1">
 <code class="descname">C1</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.C1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameter <span class="math">\(C_1\)</span> for the AdSwitch algorithm.</p>
@@ -428,13 +444,13 @@
 <dl class="attribute">
 <dt id="Policies.AdSwitch.AdSwitch.current_exploration_arm">
 <code class="descname">current_exploration_arm</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.current_exploration_arm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently explored arm.</p>
+<dd><p>Currently explored arm. It cycles uniformly, in step 2.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.AdSwitch.AdSwitch.current_exploitation_arm">
 <code class="descname">current_exploitation_arm</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.current_exploitation_arm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Currently exploited arm.</p>
+<dd><p>Currently exploited arm. It is <span class="math">\(\overline{a_k}\)</span> in the algorithm.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -452,7 +468,7 @@
 <dl class="attribute">
 <dt id="Policies.AdSwitch.AdSwitch.length_of_current_phase">
 <code class="descname">length_of_current_phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.length_of_current_phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Length of the current phase, either computed from <code class="xref py py-func docutils literal"><span class="pre">length_exploration_phase()</span></code> or func:<cite>length_exploitation_phase</cite>.</p>
+<dd><p>Length of the current tests phase, computed as <span class="math">\(s_i\)</span>, with <a class="reference internal" href="#Policies.AdSwitch.AdSwitch.compute_di_pi_si" title="Policies.AdSwitch.AdSwitch.compute_di_pi_si"><code class="xref py py-func docutils literal"><span class="pre">compute_di_pi_si()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -488,7 +504,7 @@
 <dl class="attribute">
 <dt id="Policies.AdSwitch.AdSwitch.all_rewards">
 <code class="descname">all_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.all_rewards" title="Permalink to this definition">¶</a></dt>
-<dd><p>Memory of all the rewards. A <em>dictionary</em> per arm, mapping time to rewards or <code class="docutils literal"><span class="pre">nan</span></code> when the arm was <em>not</em> sampled at this time?. Growing list until restart of that arm?</p>
+<dd><p>Memory of all the rewards. A <em>dictionary</em> per arm, mapping time to rewards. Growing size until restart of that arm!</p>
 </dd></dl>
 
 <dl class="method">
@@ -540,8 +556,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Policies.AdSwitch.AdSwitch.find_probabilities_and_di">
-<code class="descname">find_probabilities_and_di</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitch.html#AdSwitch.find_probabilities_and_di"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.find_probabilities_and_di" title="Permalink to this definition">¶</a></dt>
+<dt id="Policies.AdSwitch.AdSwitch.compute_di_pi_si">
+<code class="descname">compute_di_pi_si</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitch.html#AdSwitch.compute_di_pi_si"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitch.AdSwitch.compute_di_pi_si" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the values of <span class="math">\(d_i\)</span>, <span class="math">\(p_{k,i}\)</span>, <span class="math">\(s_i\)</span> according to the AdSwitch algorithm.</p>
 </dd></dl>
 
@@ -578,7 +594,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 27 Nov 2018, 17h.
+      Last updated on 28 Nov 2018, 19h.
 
     </p>
   </div>
