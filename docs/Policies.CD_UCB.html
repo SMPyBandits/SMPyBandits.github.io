@@ -219,7 +219,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><code class="docutils literal"><span class="pre">Multi-players</span> <span class="pre">simulation</span> <span class="pre">environment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -523,7 +523,7 @@
 \[\begin{split}s_k^- &amp;= (y_k - \hat{u}_0 - \varepsilon) 1(k &gt; M),\\
 s_k^+ &amp;= (\hat{u}_0 - y_k - \varepsilon) 1(k &gt; M),\\
 g_k^+ &amp;= max(0, g_{k-1}^+ + s_k^+),\\
-g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
+g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <ul class="simple">
 <li>The change is detected if <span class="math">\(\max(g_k^+, g_k^-) &gt; h\)</span>, where <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h" title="Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code></a> is the threshold of the test,</li>
 <li>And <span class="math">\(\hat{u}_0 = \frac{1}{M} \sum_{k=1}^{M} y_k\)</span> is the mean of the first M samples, where M is <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.M" title="Policies.CD_UCB.CUSUM_IndexPolicy.M"><code class="xref py py-attr docutils literal"><span class="pre">M</span></code></a> the min number of observation between change points.</li>
@@ -558,7 +558,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
 \[\begin{split}s_k^- &amp;= y_k - \hat{y}_k - \varepsilon,\\
 s_k^+ &amp;= \hat{y}_k - y_k - \varepsilon,\\
 g_k^+ &amp;= max(0, g_{k-1}^+ + s_k^+),\\
-g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
+g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <ul class="simple">
 <li>The change is detected if <span class="math">\(\max(g_k^+, g_k^-) &gt; h\)</span>, where <code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code> is the threshold of the test,</li>
 <li>And <span class="math">\(\hat{y}_k = \frac{1}{k} \sum_{s=1}^{k} y_s\)</span> is the mean of the first k samples.</li>
@@ -605,6 +605,11 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-),\\\end{split}\]</div>
 <dt id="Policies.CD_UCB.compute_c_alpha__GLR">
 <code class="descclassname">Policies.CD_UCB.</code><code class="descname">compute_c_alpha__GLR</code><span class="sig-paren">(</span><em>t0</em>, <em>t</em>, <em>horizon</em>, <em>verbose=False</em>, <em>exponentBeta=1.05</em>, <em>alpha_t1=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#compute_c_alpha__GLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.compute_c_alpha__GLR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the values <span class="math">\(c, \alpha\)</span> from the corollary of of Theorem 2 from [&#8220;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&#8221;, O.-A. Maillard, 2018].</p>
+<ul class="simple">
+<li>The threshold is computed as:</li>
+</ul>
+<div class="math">
+\[h := \left(1 + \frac{1}{t - t_0 + 1}\right) 2 \log\left(\frac{2 (t - t_0) \sqrt{(t - t_0) + 2}}{\delta}\right).\]</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>I am currently exploring the following variant (November 2018):</p>
@@ -887,7 +892,7 @@ It seems painful to code correctly, I will do it later.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 28 Nov 2018, 19h.
+      Last updated on 03 Dec 2018, 20h.
 
     </p>
   </div>
