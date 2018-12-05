@@ -620,6 +620,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 \[\forall t&gt;0, \alpha = \alpha_t := \alpha_{t=1} \frac{1}{\max(1, t^{\beta})}.\]</div>
 <ul class="last simple">
 <li>with <span class="math">\(\beta &gt; 1, \beta\)</span> = <code class="docutils literal"><span class="pre">exponentBeta</span></code> (=1.05) and <span class="math">\(\alpha_{t=1} &lt; 1, \alpha_{t=1}\)</span> = <code class="docutils literal"><span class="pre">alpha_t1</span></code> (=0.01).</li>
+<li>the only requirement on <span class="math">\(\alpha_t\)</span> seems to be that <cite>sum_{t=1}^T alpha_t &lt; +infty</cite> (ie. be finite), which is the case for <span class="math">\(\alpha_t = \alpha = \frac{1}{T}\)</span>, but also any <span class="math">\(\alpha_t = \frac{\alpha_1}{t^{\beta}}\)</span> for any <span class="math">\(\beta&gt;1\)</span> (cf. Riemann series).</li>
 </ul>
 </div>
 </dd></dl>
@@ -633,6 +634,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <li>It works for any 1-dimensional exponential family, you just have to give a <code class="docutils literal"><span class="pre">kl</span></code> function.</li>
 <li>For instance <code class="xref py py-func docutils literal"><span class="pre">kullback.klBern()</span></code>, for Bernoulli distributions, gives <a class="reference internal" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy" title="Policies.CD_UCB.GaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">GaussianGLR_IndexPolicy</span></code></a>,</li>
 <li>And <code class="xref py py-func docutils literal"><span class="pre">kullback.klGauss()</span></code> for univariate Gaussian distributions, gives <a class="reference internal" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy" title="Policies.CD_UCB.BernoulliGLR_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">BernoulliGLR_IndexPolicy</span></code></a>.</li>
+<li>From [&#8220;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&#8221;, O.-A. Maillard, 2018].</li>
 </ul>
 <dl class="method">
 <dt id="Policies.CD_UCB.GLR_IndexPolicy.__init__">
@@ -737,7 +739,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dl class="data">
 <dt id="Policies.CD_UCB.CONSTANT_C">
 <code class="descclassname">Policies.CD_UCB.</code><code class="descname">CONSTANT_C</code><em class="property"> = 1</em><a class="headerlink" href="#Policies.CD_UCB.CONSTANT_C" title="Permalink to this definition">¶</a></dt>
-<dd><p>The constant <span class="math">\(C\)</span> used in Corollary 1 of paper XXX.</p>
+<dd><p>The constant <span class="math">\(C\)</span> used in Corollary 1 of paper [[&#8220;EXP3 with Drift Detection for the Switching Bandit Problem&#8221;, Robin Allesiardo &amp; Raphael Feraud]](<a class="reference external" href="https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf">https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf</a>).</p>
 </dd></dl>
 
 <dl class="class">
@@ -745,6 +747,9 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">DriftDetection_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>H=None</em>, <em>delta=None</em>, <em>C=1</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.Exp3.Exp3'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#DriftDetection_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.DriftDetection_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The Drift-Detection generic policy for non-stationary bandits, using a custom Drift-Detection test, for 1-dimensional exponential families.</p>
+<ul class="simple">
+<li>From [[&#8220;EXP3 with Drift Detection for the Switching Bandit Problem&#8221;, Robin Allesiardo &amp; Raphael Feraud]](<a class="reference external" href="https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf">https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf</a>).</li>
+</ul>
 <dl class="method">
 <dt id="Policies.CD_UCB.DriftDetection_IndexPolicy.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>H=None</em>, <em>delta=None</em>, <em>C=1</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.Exp3.Exp3'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#DriftDetection_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.DriftDetection_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
@@ -753,7 +758,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dl class="attribute">
 <dt id="Policies.CD_UCB.DriftDetection_IndexPolicy.H">
 <code class="descname">H</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.DriftDetection_IndexPolicy.H" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(H\)</span> for the Drift-Detection algorithm. Default value is <span class="math">\(\lceil C \sqrt{T \log(T)} \rceil\)</span>, for some constant <span class="math">\(C`=``C``\)</span> (= <a class="reference internal" href="#Policies.CD_UCB.CONSTANT_C" title="Policies.CD_UCB.CONSTANT_C"><code class="xref py py-data docutils literal"><span class="pre">CONSTANT_C</span></code></a> by default).</p>
+<dd><p>Parameter <span class="math">\(H\)</span> for the Drift-Detection algorithm. Default value is <span class="math">\(\lceil C \sqrt{T \log(T)} \rceil\)</span>, for some constant <span class="math">\(C=\)</span> <code class="docutils literal"><span class="pre">C</span></code> (= <a class="reference internal" href="#Policies.CD_UCB.CONSTANT_C" title="Policies.CD_UCB.CONSTANT_C"><code class="xref py py-data docutils literal"><span class="pre">CONSTANT_C</span></code></a> by default).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -765,7 +770,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dl class="attribute">
 <dt id="Policies.CD_UCB.DriftDetection_IndexPolicy.proba_random_exploration">
 <code class="descname">proba_random_exploration</code><a class="headerlink" href="#Policies.CD_UCB.DriftDetection_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math">\(\proba_random_exploration\)</span> for the Exp3 algorithm.</p>
+<dd><p>Parameter <span class="math">\(\gamma\)</span> for the Exp3 algorithm.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -892,7 +897,7 @@ It seems painful to code correctly, I will do it later.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 03 Dec 2018, 20h.
+      Last updated on 05 Dec 2018, 16h.
 
     </p>
   </div>

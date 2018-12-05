@@ -501,6 +501,7 @@
 <span class="sd">        .. math:: \forall t&gt;0, \alpha = \alpha_t := \alpha_{t=1} \frac{1}{\max(1, t^{\beta})}.</span>
 
 <span class="sd">        - with :math:`\beta &gt; 1, \beta` = ``exponentBeta`` (=1.05) and :math:`\alpha_{t=1} &lt; 1, \alpha_{t=1}` = ``alpha_t1`` (=0.01).</span>
+<span class="sd">        - the only requirement on :math:`\alpha_t` seems to be that `\sum_{t=1}^T \alpha_t &lt; +\infty` (ie. be finite), which is the case for :math:`\alpha_t = \alpha = \frac{1}{T}`, but also any :math:`\alpha_t = \frac{\alpha_1}{t^{\beta}}` for any :math:`\beta&gt;1` (cf. Riemann series).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span><span class="p">))</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">T</span>
@@ -520,6 +521,8 @@
 <span class="sd">    - It works for any 1-dimensional exponential family, you just have to give a ``kl`` function.</span>
 <span class="sd">    - For instance :func:`kullback.klBern`, for Bernoulli distributions, gives :class:`GaussianGLR_IndexPolicy`,</span>
 <span class="sd">    - And :func:`kullback.klGauss` for univariate Gaussian distributions, gives :class:`BernoulliGLR_IndexPolicy`.</span>
+
+<span class="sd">    - From [&quot;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&quot;, O.-A. Maillard, 2018].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="GLR_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.GLR_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
             <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -609,15 +612,17 @@
         <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;BernoulliGLR-</span><span class="si">{}</span><span class="s2">($T=</span><span class="si">{}</span><span class="s2">$, $c=</span><span class="si">{:.3g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.3g}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">,</span> <span class="s2">&quot;, Per-Arm&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">)</span></div></div>
 
 
-<span class="c1"># --- Drift-Detection algorithm from XXX</span>
+<span class="c1"># --- Drift-Detection algorithm from [[&quot;EXP3 with Drift Detection for the Switching Bandit Problem&quot;, Robin Allesiardo &amp; Raphael Feraud]](https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf)</span>
 
 <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="n">Exp3</span><span class="p">,</span> <span class="n">Exp3PlusPlus</span>
 
-<span class="n">CONSTANT_C</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: The constant :math:`C` used in Corollary 1 of paper XXX.</span>
+<span class="n">CONSTANT_C</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: The constant :math:`C` used in Corollary 1 of paper [[&quot;EXP3 with Drift Detection for the Switching Bandit Problem&quot;, Robin Allesiardo &amp; Raphael Feraud]](https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf).</span>
 
 
 <div class="viewcode-block" id="DriftDetection_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.DriftDetection_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">DriftDetection_IndexPolicy</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The Drift-Detection generic policy for non-stationary bandits, using a custom Drift-Detection test, for 1-dimensional exponential families.</span>
+
+<span class="sd">    - From [[&quot;EXP3 with Drift Detection for the Switching Bandit Problem&quot;, Robin Allesiardo &amp; Raphael Feraud]](https://www.researchgate.net/profile/Allesiardo_Robin/publication/281028960_EXP3_with_Drift_Detection_for_the_Switching_Bandit_Problem/links/55d1927808aee19936fdac8e.pdf).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="DriftDetection_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.DriftDetection_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
             <span class="n">H</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">CONSTANT_C</span><span class="p">,</span>
@@ -634,7 +639,7 @@
         <span class="k">if</span> <span class="n">H</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">H</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">horizon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">))))</span>
         <span class="k">assert</span> <span class="n">H</span> <span class="o">&gt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: for the Drift-Detection algorithm, the parameter H should be &gt;= K = </span><span class="si">{}</span><span class="s2">, but H = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>  <span class="c1">#: Parameter :math:`H` for the Drift-Detection algorithm. Default value is :math:`\lceil C \sqrt{T \log(T)} \rceil`, for some constant :math:`C`=``C``` (= :data:`CONSTANT_C` by default).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>  <span class="c1">#: Parameter :math:`H` for the Drift-Detection algorithm. Default value is :math:`\lceil C \sqrt{T \log(T)} \rceil`, for some constant :math:`C=` ``C`` (= :data:`CONSTANT_C` by default).</span>
 
         <span class="k">if</span> <span class="n">delta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">horizon</span><span class="p">))</span>
@@ -650,7 +655,7 @@
     <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">proba_random_exploration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Parameter :math:`\proba_random_exploration` for the Exp3 algorithm.&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Parameter :math:`\gamma` for the Exp3 algorithm.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">gamma</span>
 
     <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
@@ -754,7 +759,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 03 Dec 2018, 20h.
+      Last updated on 05 Dec 2018, 16h.
 
     </p>
   </div>
