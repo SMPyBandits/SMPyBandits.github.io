@@ -672,9 +672,9 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <li>For each <em>time step</em> <span class="math">\(s\)</span> between <span class="math">\(t_0=0\)</span> and <span class="math">\(t\)</span>, compute:</li>
 </ul>
 <div class="math">
-\[G^{\mathcal{N}_1}_{t_0:s:t} = (s-t_0+1)(t-s) \mathrm{kl}(\mu_{s+1,t}, \mu_{t_0,s}) / (t-t_0+1).\]</div>
+\[G^{\mathrm{kl}}_{t_0:s:t} = (s-t_0+1) \mathrm{kl}(\mu_{t_0,s}, \mu_{t_0,t}) + (t-s) \mathrm{kl}(\mu_{s+1,t}, \mu_{t_0,t}).\]</div>
 <ul class="simple">
-<li>The change is detected if there is a time <span class="math">\(s\)</span> such that <span class="math">\(G^{\mathcal{N}_1}_{t_0:s:t} &gt; h\)</span>, where <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy.threshold_h" title="Policies.CD_UCB.GLR_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code></a> is the threshold of the test,</li>
+<li>The change is detected if there is a time <span class="math">\(s\)</span> such that <span class="math">\(G^{\mathrm{kl}}_{t_0:s:t} &gt; h\)</span>, where <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy.threshold_h" title="Policies.CD_UCB.GLR_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code></a> is the threshold of the test,</li>
 <li>And <span class="math">\(\mu_{a,b} = \frac{1}{b-a+1} \sum_{s=a}^{b} y_s\)</span> is the mean of the samples between <span class="math">\(a\)</span> and <span class="math">\(b\)</span>.</li>
 </ul>
 </dd></dl>
@@ -732,6 +732,98 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dl class="attribute">
 <dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy.__module__">
 <code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.DELTA">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">DELTA</code><em class="property"> = 0.01</em><a class="headerlink" href="#Policies.CD_UCB.DELTA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default confidence level for <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.SIGMA">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">SIGMA</code><em class="property"> = 0.25</em><a class="headerlink" href="#Policies.CD_UCB.SIGMA" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a> assumes distributions are 0.25-sub Gaussian, like Bernoulli or any distributions with support on <span class="math">\([0,1]\)</span>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.JOINT">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">JOINT</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CD_UCB.JOINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to use the joint or disjoint threshold function (<a class="reference internal" href="#Policies.CD_UCB.threshold_SubGaussianGLR_joint" title="Policies.CD_UCB.threshold_SubGaussianGLR_joint"><code class="xref py py-func docutils literal"><span class="pre">threshold_SubGaussianGLR_joint()</span></code></a> or <a class="reference internal" href="#Policies.CD_UCB.threshold_SubGaussianGLR_disjoint" title="Policies.CD_UCB.threshold_SubGaussianGLR_disjoint"><code class="xref py py-func docutils literal"><span class="pre">threshold_SubGaussianGLR_disjoint()</span></code></a>) for <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CD_UCB.threshold_SubGaussianGLR_joint">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_joint</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_joint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the threshold :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>b^{text{joint}}_{t_0}(s,t,delta) according to this formula:</p>
+<div class="math">
+\[b^{\text{joint}}_{t_0}(s,t,\delta) := \sigma \sqrt{ \left(\frac{1}{s-t_0+1} + \frac{1}{t-s}\right) \left(1 + \frac{1}{t-t_0+1}\right) 2 \log\left( \frac{2(t-t_0)\sqrt{t-t_0+2}}{\delta} \right)}.\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CD_UCB.threshold_SubGaussianGLR_disjoint">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_disjoint</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_disjoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_disjoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the threshold <span class="math">\(b^{\text{disjoint}}_{t_0}(s,t,\delta)\)</span> according to this formula:</p>
+<div class="math">
+\[b^{\text{disjoint}}_{t_0}(s,t,\delta) := \sqrt{2} \sigma \sqrt{\frac{1 + \frac{1}{s - t_0 + 1}}{s - t_0 + 1} \log\left( \frac{4 \sqrt{s - t_0 + 2}}{\delta}\right)} + \sqrt{\frac{1 + \frac{1}{t - s + 1}}{t - s + 1} \log\left( \frac{4 (t - t_0) \sqrt{t - s + 1}}{\delta}\right)}.\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CD_UCB.threshold_SubGaussianGLR">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the threshold <span class="math">\(b^{\text{joint}}_{t_0}(s,t,\delta)\)</span> or <span class="math">\(b^{\text{disjoint}}_{t_0}(s,t,\delta)\)</span>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy">
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
+<p>The SubGaussianGLR-UCB policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for sub-Gaussian distributions.</p>
+<ul class="simple">
+<li>It works for any sub-Gaussian family of distributions, being <span class="math">\(\sigma^2\)</span>-sub Gaussian <em>with known</em> <span class="math">\(\sigma\)</span>.</li>
+<li>From [&#8220;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&#8221;, O.-A. Maillard, 2018].</li>
+</ul>
+<dl class="method">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.compute_threshold_h">
+<code class="descname">compute_threshold_h</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.compute_threshold_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.compute_threshold_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the threshold <span class="math">\(h\)</span> with <a class="reference internal" href="#Policies.CD_UCB.threshold_SubGaussianGLR" title="Policies.CD_UCB.threshold_SubGaussianGLR"><code class="xref py py-func docutils literal"><span class="pre">threshold_SubGaussianGLR()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.detect_change">
+<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect a change in the current arm, using the non-parametric sub-Gaussian Generalized Likelihood Ratio test (GLR) works like this:</p>
+<ul class="simple">
+<li>For each <em>time step</em> <span class="math">\(s\)</span> between <span class="math">\(t_0=0\)</span> and <span class="math">\(t\)</span>, compute:</li>
+</ul>
+<div class="math">
+\[G^{\text{sub-}\sigma}_{t_0:s:t} = |\mu_{t_0,s} - \mu_{s+1,t}|.\]</div>
+<ul class="simple">
+<li>The change is detected if there is a time <span class="math">\(s\)</span> such that <span class="math">\(G^{\text{sub-}\sigma}_{t_0:s:t} &gt; b_{t_0}(s,t,\delta)\)</span>, where <span class="math">\(b_{t_0}(s,t,\delta)\)</span> is the threshold of the test,</li>
+<li>The threshold is computed as:</li>
+</ul>
+<div class="math">
+\[b_{t_0}(s,t,\delta) := \sigma \sqrt{ \left(\frac{1}{s-t_0+1} + \frac{1}{t-s}\right) \left(1 + \frac{1}{t-t_0+1}\right) 2 \log\left( \frac{2(t-t_0)\sqrt{t-t_0+2}}{\delta} \right)}.\]</div>
+<ul class="simple">
+<li>And <span class="math">\(\mu_{a,b} = \frac{1}{b-a+1} \sum_{s=a}^{b} y_s\)</span> is the mean of the samples between <span class="math">\(a\)</span> and <span class="math">\(b\)</span>.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -897,7 +989,7 @@ It seems painful to code correctly, I will do it later.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Dec 2018, 16h.
+      Last updated on 06 Dec 2018, 19h.
 
     </p>
   </div>

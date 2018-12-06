@@ -200,23 +200,25 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
 <span class="c1"># compatibility functions and utilities</span>
 <span class="kn">from</span> <span class="nn">._utils</span> <span class="k">import</span> <span class="n">_supports_unicode</span><span class="p">,</span> <span class="n">_environ_cols_wrapper</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">_unich</span><span class="p">,</span> \
-    <span class="n">_term_move_up</span><span class="p">,</span> <span class="n">_unicode</span><span class="p">,</span> <span class="n">WeakSet</span><span class="p">,</span> <span class="n">_basestring</span><span class="p">,</span> <span class="n">_OrderedDict</span>
+    <span class="n">_term_move_up</span><span class="p">,</span> <span class="n">_unicode</span><span class="p">,</span> <span class="n">WeakSet</span><span class="p">,</span> <span class="n">_basestring</span><span class="p">,</span> <span class="n">_OrderedDict</span><span class="p">,</span> \
+    <span class="n">Comparable</span><span class="p">,</span> <span class="n">RE_ANSI</span>
+<span class="kn">from</span> <span class="nn">._monitor</span> <span class="k">import</span> <span class="n">TMonitor</span>
 <span class="c1"># native libraries</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">numbers</span> <span class="k">import</span> <span class="n">Number</span>
-<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">time</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">sleep</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 <span class="c1"># For parallelism safety</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 <span class="kn">import</span> <span class="nn">threading</span> <span class="k">as</span> <span class="nn">th</span>
-
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;github.com/&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;noamraph&quot;</span><span class="p">,</span> <span class="s2">&quot;obiwanus&quot;</span><span class="p">,</span> <span class="s2">&quot;kmike&quot;</span><span class="p">,</span> <span class="s2">&quot;hadim&quot;</span><span class="p">,</span>
                               <span class="s2">&quot;casperdcl&quot;</span><span class="p">,</span> <span class="s2">&quot;lrq3000&quot;</span><span class="p">]}</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tqdm&#39;</span><span class="p">,</span> <span class="s1">&#39;trange&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;TqdmTypeError&#39;</span><span class="p">,</span> <span class="s1">&#39;TqdmKeyError&#39;</span><span class="p">,</span> <span class="s1">&#39;TqdmDeprecationWarning&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;TqdmTypeError&#39;</span><span class="p">,</span> <span class="s1">&#39;TqdmKeyError&#39;</span><span class="p">,</span> <span class="s1">&#39;TqdmWarning&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TqdmExperimentalWarning&#39;</span><span class="p">,</span> <span class="s1">&#39;TqdmDeprecationWarning&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;TqdmMonitorWarning&#39;</span><span class="p">]</span>
 
 
 <span class="k">class</span> <span class="nc">TqdmTypeError</span><span class="p">(</span><span class="ne">TypeError</span><span class="p">):</span>
@@ -227,13 +229,32 @@
     <span class="k">pass</span>
 
 
-<span class="k">class</span> <span class="nc">TqdmDeprecationWarning</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="c1"># not suppressed if raised</span>
+<span class="k">class</span> <span class="nc">TqdmWarning</span><span class="p">(</span><span class="ne">Warning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;base class for all tqdm warnings.</span>
+
+<span class="sd">    Used for non-external-code-breaking errors, such as garbled printing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">fp_write</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">fp_write</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fp_write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TqdmDeprecationWarning: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">fp_write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span>
+                     <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">TqdmDeprecationWarning</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">TqdmWarning</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">k</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">TqdmExperimentalWarning</span><span class="p">(</span><span class="n">TqdmWarning</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;beta feature, unstable API and behaviour&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">TqdmDeprecationWarning</span><span class="p">(</span><span class="n">TqdmWarning</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">):</span>
+    <span class="c1"># not suppressed if raised</span>
+    <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">TqdmMonitorWarning</span><span class="p">(</span><span class="n">TqdmWarning</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;tqdm monitor errors which do not affect external functionality&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
 
 
 <span class="c1"># Create global parallelism locks to avoid racing issues with parallel bars</span>
@@ -276,81 +297,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
 
-<span class="k">class</span> <span class="nc">TMonitor</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Monitoring thread for tqdm bars.</span>
-<span class="sd">    Monitors if tqdm bars are taking too much time to display</span>
-<span class="sd">    and readjusts miniters automatically if necessary.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    tqdm_cls  : class</span>
-<span class="sd">        tqdm class to use (can be core tqdm or a submodule).</span>
-<span class="sd">    sleep_interval  : fload</span>
-<span class="sd">        Time to sleep between monitoring checks.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># internal vars for unit testing</span>
-    <span class="n">_time</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_sleep</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tqdm_cls</span><span class="p">,</span> <span class="n">sleep_interval</span><span class="p">):</span>
-        <span class="n">Thread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># kill thread when main killed (KeyboardInterrupt)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">was_killed</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">woken</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># last time woken up, to sync with monitor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tqdm_cls</span> <span class="o">=</span> <span class="n">tqdm_cls</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sleep_interval</span> <span class="o">=</span> <span class="n">sleep_interval</span>
-        <span class="k">if</span> <span class="n">TMonitor</span><span class="o">.</span><span class="n">_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">TMonitor</span><span class="o">.</span><span class="n">_time</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
-        <span class="k">if</span> <span class="n">TMonitor</span><span class="o">.</span><span class="n">_sleep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span> <span class="o">=</span> <span class="n">TMonitor</span><span class="o">.</span><span class="n">_sleep</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span> <span class="o">=</span> <span class="n">sleep</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">was_killed</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="c1"># self.join()  # DO NOT, blocking event, slows down tqdm at closing</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">cur_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">()</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="c1"># After processing and before sleeping, notify that we woke</span>
-            <span class="c1"># Need to be done just before sleeping</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">woken</span> <span class="o">=</span> <span class="n">cur_t</span>
-            <span class="c1"># Sleep some time...</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sleep_interval</span><span class="p">)</span>
-            <span class="c1"># Quit if killed</span>
-            <span class="c1"># if self.exit_event.is_set():  # TODO: should work but does not...</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">was_killed</span><span class="p">:</span>
-                <span class="k">return</span>
-            <span class="c1"># Then monitor!</span>
-            <span class="c1"># Acquire lock (to access _instances)</span>
-            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">tqdm_cls</span><span class="o">.</span><span class="n">get_lock</span><span class="p">():</span>
-                <span class="n">cur_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">()</span>
-                <span class="c1"># Check tqdm instances are waiting too long to print</span>
-                <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tqdm_cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
-                    <span class="c1"># Only if mininterval &gt; 1 (else iterations are just slow)</span>
-                    <span class="c1"># and last refresh exceeded maxinterval</span>
-                    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">miniters</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> \
-                            <span class="p">(</span><span class="n">cur_t</span> <span class="o">-</span> <span class="n">instance</span><span class="o">.</span><span class="n">last_print_t</span><span class="p">)</span> <span class="o">&gt;=</span> \
-                            <span class="n">instance</span><span class="o">.</span><span class="n">maxinterval</span><span class="p">:</span>
-                        <span class="c1"># force bypassing miniters on next iteration</span>
-                        <span class="c1"># (dynamic_miniters adjusts mininterval automatically)</span>
-                        <span class="n">instance</span><span class="o">.</span><span class="n">miniters</span> <span class="o">=</span> <span class="mi">1</span>
-                        <span class="c1"># Refresh now! (works only for manual tqdm)</span>
-                        <span class="n">instance</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">nolock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># return self.is_alive()  # TODO: does not work...</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">was_killed</span>
-
-
-<div class="viewcode-block" id="tqdm"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm">[docs]</a><span class="k">class</span> <span class="nc">tqdm</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm">[docs]</a><span class="k">class</span> <span class="nc">tqdm</span><span class="p">(</span><span class="n">Comparable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorate an iterable object, returning an iterator which acts exactly</span>
 <span class="sd">    like the original iterable, but prints a dynamically updating</span>
@@ -382,7 +329,7 @@
 <span class="sd">            Number with Order of Magnitude SI unit postfix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">999.95</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">999.5</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">99.95</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">9.995</span><span class="p">:</span>
                         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:1.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">+</span> <span class="n">unit</span> <span class="o">+</span> <span class="n">suffix</span>
@@ -400,6 +347,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        t  : int</span>
 <span class="sd">            Number of seconds.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        out  : str</span>
@@ -411,6 +359,44 @@
             <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:d}</span><span class="s1">:</span><span class="si">{1:02d}</span><span class="s1">:</span><span class="si">{2:02d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:02d}</span><span class="s1">:</span><span class="si">{1:02d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="tqdm.format_num"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_num">[docs]</a>    <span class="k">def</span> <span class="nf">format_num</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Intelligent scientific notation (.3g).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n  : int or float or Numeric</span>
+<span class="sd">            A Number.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        out  : str</span>
+<span class="sd">            Formatted number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:.3g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+0&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-0&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="tqdm.ema"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.ema">[docs]</a>    <span class="k">def</span> <span class="nf">ema</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Exponential moving average: smoothing to give progressively lower</span>
+<span class="sd">		weights to older values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x  : float</span>
+<span class="sd">            New value to include in EMA.</span>
+<span class="sd">        mu  : float, optional</span>
+<span class="sd">            Previous EMA value.</span>
+<span class="sd">        alpha  : float, optional</span>
+<span class="sd">            Smoothing factor in range [0, 1], [default: 0.3].</span>
+<span class="sd">            Increase to give more weight to recent values.</span>
+<span class="sd">			Ranges from 0 (yields mu) to 1 (yields x).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="k">if</span> <span class="n">mu</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span></div>
 
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="tqdm.status_printer"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.status_printer">[docs]</a>    <span class="k">def</span> <span class="nf">status_printer</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
@@ -485,10 +471,12 @@
 <span class="sd">              rate_inv, rate_inv_fmt, elapsed, remaining, desc, postfix.</span>
 <span class="sd">            Note that a trailing &quot;: &quot; is automatically removed after {desc}</span>
 <span class="sd">            if the latter is empty.</span>
-<span class="sd">        postfix  : str, optional</span>
+<span class="sd">        postfix  : *, optional</span>
 <span class="sd">            Similar to `prefix`, but placed at the end</span>
 <span class="sd">            (e.g. for additional stats).</span>
-<span class="sd">            Note: postfix is a string for this method. Not a dict.</span>
+<span class="sd">            Note: postfix is usually a string (not a dict) for this method,</span>
+<span class="sd">            and will if possible be set to postfix = &#39;, &#39; + postfix.</span>
+<span class="sd">            However other types are supported (#382).</span>
 <span class="sd">        unit_divisor  : float, optional</span>
 <span class="sd">            [default: 1000], ignored unless `unit_scale` is True.</span>
 
@@ -505,6 +493,8 @@
         <span class="k">if</span> <span class="n">unit_scale</span> <span class="ow">and</span> <span class="n">unit_scale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">total</span> <span class="o">*=</span> <span class="n">unit_scale</span>
             <span class="n">n</span> <span class="o">*=</span> <span class="n">unit_scale</span>
+            <span class="k">if</span> <span class="n">rate</span><span class="p">:</span>
+                <span class="n">rate</span> <span class="o">*=</span> <span class="n">unit_scale</span>  <span class="c1"># by default rate = 1 / self.avg_time</span>
             <span class="n">unit_scale</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="n">format_interval</span> <span class="o">=</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">format_interval</span>
@@ -532,6 +522,11 @@
             <span class="n">n_fmt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
             <span class="n">total_fmt</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
 
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">postfix</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">postfix</span> <span class="k">if</span> <span class="n">postfix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
         <span class="c1"># total is known: we can predict some stats</span>
         <span class="k">if</span> <span class="n">total</span><span class="p">:</span>
             <span class="c1"># fractional and percentage progress</span>
@@ -550,8 +545,7 @@
                 <span class="n">l_bar</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
             <span class="n">l_bar</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{0:3.0f}</span><span class="s1">%|&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">percentage</span><span class="p">)</span>
             <span class="n">r_bar</span> <span class="o">=</span> <span class="s1">&#39;| </span><span class="si">{0}</span><span class="s1">/</span><span class="si">{1}</span><span class="s1"> [</span><span class="si">{2}</span><span class="s1">&lt;</span><span class="si">{3}</span><span class="s1">, </span><span class="si">{4}{5}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">n_fmt</span><span class="p">,</span> <span class="n">total_fmt</span><span class="p">,</span> <span class="n">elapsed_str</span><span class="p">,</span> <span class="n">remaining_str</span><span class="p">,</span> <span class="n">rate_fmt</span><span class="p">,</span>
-                <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">postfix</span> <span class="k">if</span> <span class="n">postfix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">n_fmt</span><span class="p">,</span> <span class="n">total_fmt</span><span class="p">,</span> <span class="n">elapsed_str</span><span class="p">,</span> <span class="n">remaining_str</span><span class="p">,</span> <span class="n">rate_fmt</span><span class="p">,</span> <span class="n">postfix</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">ncols</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">l_bar</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">r_bar</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -576,7 +570,7 @@
                             <span class="s1">&#39;l_bar&#39;</span><span class="p">:</span> <span class="n">l_bar</span><span class="p">,</span>
                             <span class="s1">&#39;r_bar&#39;</span><span class="p">:</span> <span class="n">r_bar</span><span class="p">,</span>
                             <span class="s1">&#39;desc&#39;</span><span class="p">:</span> <span class="n">prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;postfix&#39;</span><span class="p">:</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">postfix</span> <span class="k">if</span> <span class="n">postfix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;postfix&#39;</span><span class="p">:</span> <span class="n">postfix</span><span class="p">,</span>
                             <span class="c1"># &#39;bar&#39;: full_bar  # replaced by procedure below</span>
                             <span class="p">}</span>
 
@@ -595,10 +589,11 @@
                     <span class="c1"># Else no progress bar, we can just format and return</span>
                     <span class="k">return</span> <span class="n">bar_format</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">bar_args</span><span class="p">)</span>
 
-            <span class="c1"># Formatting progress bar</span>
-            <span class="c1"># space available for bar&#39;s display</span>
-            <span class="n">N_BARS</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">l_bar</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_bar</span><span class="p">))</span> <span class="k">if</span> <span class="n">ncols</span> \
-                <span class="k">else</span> <span class="mi">10</span>
+            <span class="c1"># Formatting progress bar space available for bar&#39;s display</span>
+            <span class="k">if</span> <span class="n">ncols</span><span class="p">:</span>
+                <span class="n">N_BARS</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">RE_ANSI</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">l_bar</span> <span class="o">+</span> <span class="n">r_bar</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">N_BARS</span> <span class="o">=</span> <span class="mi">10</span>
 
             <span class="c1"># format bar depending on availability of unicode/ascii chars</span>
             <span class="k">if</span> <span class="n">ascii</span><span class="p">:</span>
@@ -631,8 +626,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">((</span><span class="n">prefix</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">prefix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> \
                 <span class="s1">&#39;</span><span class="si">{0}{1}</span><span class="s1"> [</span><span class="si">{2}</span><span class="s1">, </span><span class="si">{3}{4}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">n_fmt</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">elapsed_str</span><span class="p">,</span> <span class="n">rate_fmt</span><span class="p">,</span>
-                    <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">postfix</span> <span class="k">if</span> <span class="n">postfix</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+                    <span class="n">n_fmt</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">elapsed_str</span><span class="p">,</span> <span class="n">rate_fmt</span><span class="p">,</span> <span class="n">postfix</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="tqdm.__new__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__new__">[docs]</a>    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Create a new instance</span>
@@ -647,20 +641,22 @@
         <span class="c1"># Create the monitoring thread</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor_interval</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span>
                                      <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">report</span><span class="p">()):</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span> <span class="o">=</span> <span class="n">TMonitor</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor_interval</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span> <span class="o">=</span> <span class="n">TMonitor</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor_interval</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: nocover</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;tqdm:disabling monitor support&quot;</span>
+                     <span class="s2">&quot; (monitor_interval = 0) due to:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span>
+                     <span class="n">TqdmMonitorWarning</span><span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">monitor_interval</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># Return the instance</span>
         <span class="k">return</span> <span class="n">instance</span></div>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="tqdm._get_free_pos"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm._get_free_pos">[docs]</a>    <span class="k">def</span> <span class="nf">_get_free_pos</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Skips specified instance &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span>
-                       <span class="k">if</span> <span class="n">inst</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">instance</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;arg is an empty sequence&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
-                <span class="k">return</span> <span class="mi">0</span>
-            <span class="k">raise</span>  <span class="c1"># pragma: no cover</span></div>
+        <span class="sd">&quot;&quot;&quot;Skips specified instance&quot;&quot;&quot;</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span>
+                        <span class="k">if</span> <span class="n">inst</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">instance</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">positions</span><span class="p">))</span></div>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="tqdm._decr_instances"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm._decr_instances">[docs]</a>    <span class="k">def</span> <span class="nf">_decr_instances</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
@@ -668,23 +664,29 @@
 <span class="sd">        Remove from list and reposition other bars</span>
 <span class="sd">        so that newer bars won&#39;t overlap previous bars</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>  <span class="c1"># in case instance was explicitly positioned, it won&#39;t be in set</span>
-            <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+        <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
                 <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># if not instance.gui:  # pragma: no cover</span>
+                <span class="c1">#     raise</span>
+                <span class="k">pass</span>  <span class="c1"># py2: maybe magically removed already</span>
+            <span class="c1"># else:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">gui</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="n">instance</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                    <span class="c1"># negative `pos` means fixed</span>
+                    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">pos</span><span class="p">):</span>
                         <span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="o">-=</span> <span class="mi">1</span>
-            <span class="c1"># Kill monitor if no instances are left</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
-                    <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span>
-                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># pragma: nocover</span>
-                    <span class="k">pass</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">pass</span></div>
+                        <span class="c1"># TODO: check this doesn&#39;t overwrite another fixed bar</span>
+        <span class="c1"># Kill monitor if no instances are left</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+                <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># pragma: nocover</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="tqdm.write"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nolock</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -714,19 +716,16 @@
             <span class="c1"># Clear instance if in the target output file</span>
             <span class="c1"># or if write output + tqdm output are both either</span>
             <span class="c1"># sys.stdout or sys.stderr (because both are mixed in terminal)</span>
-            <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">fp</span> <span class="o">==</span> <span class="n">fp</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">(</span>
-                    <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">inst</span><span class="o">.</span><span class="n">fp</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s2">&quot;start_t&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">fp</span> <span class="o">==</span> <span class="n">fp</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">inst</span><span class="o">.</span><span class="n">fp</span><span class="p">))):</span>
                 <span class="n">inst</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">nolock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">inst_cleared</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
         <span class="k">yield</span>
         <span class="c1"># Force refresh display of bars we cleared</span>
         <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">inst_cleared</span><span class="p">:</span>
-            <span class="c1"># Avoid race conditions by checking that the instance started</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s1">&#39;start_t&#39;</span><span class="p">):</span>  <span class="c1"># pragma: nocover</span>
-                <span class="n">inst</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">nolock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">nolock</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nolock</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
-        <span class="c1"># TODO: make list of all instances incl. absolutely positioned ones?</span>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="tqdm.set_lock"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.set_lock">[docs]</a>    <span class="k">def</span> <span class="nf">set_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
@@ -772,11 +771,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">pandas.core.frame</span> <span class="k">import</span> <span class="n">DataFrame</span>
         <span class="kn">from</span> <span class="nn">pandas.core.series</span> <span class="k">import</span> <span class="n">Series</span>
-        <span class="kn">from</span> <span class="nn">pandas.core.groupby</span> <span class="k">import</span> <span class="n">DataFrameGroupBy</span>
-        <span class="kn">from</span> <span class="nn">pandas.core.groupby</span> <span class="k">import</span> <span class="n">SeriesGroupBy</span>
-        <span class="kn">from</span> <span class="nn">pandas.core.groupby</span> <span class="k">import</span> <span class="n">GroupBy</span>
-        <span class="kn">from</span> <span class="nn">pandas.core.groupby</span> <span class="k">import</span> <span class="n">PanelGroupBy</span>
         <span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">Panel</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># pandas&gt;=0.18.0</span>
+            <span class="kn">from</span> <span class="nn">pandas.core.window</span> <span class="k">import</span> <span class="n">_Rolling_and_Expanding</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="n">_Rolling_and_Expanding</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># pandas&gt;=0.23.0</span>
+            <span class="kn">from</span> <span class="nn">pandas.core.groupby.groupby</span> <span class="k">import</span> <span class="n">DataFrameGroupBy</span><span class="p">,</span> \
+                <span class="n">SeriesGroupBy</span><span class="p">,</span> <span class="n">GroupBy</span><span class="p">,</span> <span class="n">PanelGroupBy</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">pandas.core.groupby</span> <span class="k">import</span> <span class="n">DataFrameGroupBy</span><span class="p">,</span> \
+                <span class="n">SeriesGroupBy</span><span class="p">,</span> <span class="n">GroupBy</span><span class="p">,</span> <span class="n">PanelGroupBy</span>
 
         <span class="n">deprecated_t</span> <span class="o">=</span> <span class="p">[</span><span class="n">tkwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;deprecated_t&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span>
 
@@ -789,21 +796,27 @@
 <span class="sd">                    Data (may be grouped).</span>
 <span class="sd">                func  : function</span>
 <span class="sd">                    To be applied on the (grouped) data.</span>
-<span class="sd">                *args, *kwargs  : optional</span>
+<span class="sd">                **kwargs  : optional</span>
 <span class="sd">                    Transmitted to `df.apply()`.</span>
 <span class="sd">                &quot;&quot;&quot;</span>
+
                 <span class="c1"># Precompute total iterations</span>
-                <span class="n">total</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;ngroups&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="n">tkwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;ngroups&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">total</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># not grouped</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Series</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">df_function</span> <span class="o">==</span> <span class="s1">&#39;applymap&#39;</span><span class="p">:</span>
+                        <span class="n">total</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">size</span>
+                    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Series</span><span class="p">):</span>
                         <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;axis&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">total</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># pandas calls update once too many</span>
+                    <span class="k">elif</span> <span class="n">_Rolling_and_Expanding</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> \
+                            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">_Rolling_and_Expanding</span><span class="p">):</span>
+                        <span class="c1"># DataFrame or Panel</span>
+                        <span class="n">axis</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;axis&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;index&#39;</span><span class="p">:</span>
+                            <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">elif</span> <span class="n">axis</span> <span class="o">==</span> <span class="s1">&#39;columns&#39;</span><span class="p">:</span>
+                            <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="c1"># when axis=0, total is shape[axis1]</span>
+                        <span class="n">total</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
 
                 <span class="c1"># Init bar</span>
                 <span class="k">if</span> <span class="n">deprecated_t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -812,14 +825,27 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">t</span> <span class="o">=</span> <span class="n">tclass</span><span class="p">(</span><span class="o">*</span><span class="n">targs</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="o">**</span><span class="n">tkwargs</span><span class="p">)</span>
 
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># *args intentionally not supported (see #244, #299)</span>
+                    <span class="n">TqdmDeprecationWarning</span><span class="p">(</span>
+                        <span class="s2">&quot;Except func, normal arguments are intentionally&quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot; not supported by&quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot; `(DataFrame|Series|GroupBy).progress_apply`.&quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot; Use keyword arguments instead.&quot;</span><span class="p">,</span>
+                        <span class="n">fp_write</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">fp</span><span class="p">,</span> <span class="s1">&#39;write&#39;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">))</span>
+
                 <span class="c1"># Define bar updating wrapper</span>
                 <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-                    <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                    <span class="c1"># update tbar correctly</span>
+                    <span class="c1"># it seems `pandas apply` calls `func` twice</span>
+                    <span class="c1"># on the first column/row to decide whether it can</span>
+                    <span class="c1"># take a fast or slow code path; so stop when t.total==t.n</span>
+                    <span class="n">t</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">t</span><span class="o">.</span><span class="n">total</span> <span class="ow">or</span> <span class="n">t</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">t</span><span class="o">.</span><span class="n">total</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-                <span class="c1"># Apply the provided function (in *args and **kwargs)</span>
+                <span class="c1"># Apply the provided function (in **kwargs)</span>
                 <span class="c1"># on the df using our wrapper (which provides bar updating)</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">df_function</span><span class="p">)(</span><span class="n">wrapper</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">df_function</span><span class="p">)(</span><span class="n">wrapper</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
                 <span class="c1"># Close bar and return pandas calculation result</span>
                 <span class="n">t</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -843,7 +869,10 @@
 
         <span class="n">GroupBy</span><span class="o">.</span><span class="n">progress_apply</span> <span class="o">=</span> <span class="n">inner_generator</span><span class="p">()</span>
         <span class="n">GroupBy</span><span class="o">.</span><span class="n">progress_aggregate</span> <span class="o">=</span> <span class="n">inner_generator</span><span class="p">(</span><span class="s1">&#39;aggregate&#39;</span><span class="p">)</span>
-        <span class="n">GroupBy</span><span class="o">.</span><span class="n">progress_transform</span> <span class="o">=</span> <span class="n">inner_generator</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span></div>
+        <span class="n">GroupBy</span><span class="o">.</span><span class="n">progress_transform</span> <span class="o">=</span> <span class="n">inner_generator</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">_Rolling_and_Expanding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="n">_Rolling_and_Expanding</span><span class="o">.</span><span class="n">progress_apply</span> <span class="o">=</span> <span class="n">inner_generator</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="tqdm.__init__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mininterval</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">maxinterval</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
@@ -880,9 +909,9 @@
 <span class="sd">            fallback is a meter width of 10 and no limit for the counter and</span>
 <span class="sd">            statistics. If 0, will not print any meter (only stats).</span>
 <span class="sd">        mininterval  : float, optional</span>
-<span class="sd">            Minimum progress display update interval, in seconds [default: 0.1].</span>
+<span class="sd">            Minimum progress display update interval [default: 0.1] seconds.</span>
 <span class="sd">        maxinterval  : float, optional</span>
-<span class="sd">            Maximum progress display update interval, in seconds [default: 10].</span>
+<span class="sd">            Maximum progress display update interval [default: 10] seconds.</span>
 <span class="sd">            Automatically adjusts `miniters` to correspond to `mininterval`</span>
 <span class="sd">            after long display update lag. Only works if `dynamic_miniters`</span>
 <span class="sd">            or monitor thread is enabled.</span>
@@ -918,11 +947,13 @@
 <span class="sd">            (current/instantaneous speed) [default: 0.3].</span>
 <span class="sd">        bar_format  : str, optional</span>
 <span class="sd">            Specify a custom bar string formatting. May impact performance.</span>
-<span class="sd">            If unspecified, will use &#39;{l_bar}{bar}{r_bar}&#39;, where l_bar is</span>
-<span class="sd">            &#39;{desc}: {percentage:3.0f}%|&#39; and r_bar is</span>
-<span class="sd">            &#39;| {n_fmt}/{total_fmt} [{elapsed}&lt;{remaining}, {rate_fmt}]&#39;</span>
-<span class="sd">            Possible vars: bar, n, n_fmt, total, total_fmt, percentage,</span>
-<span class="sd">            rate, rate_fmt, elapsed, remaining, l_bar, r_bar, desc.</span>
+<span class="sd">            [default: &#39;{l_bar}{bar}{r_bar}&#39;], where</span>
+<span class="sd">            l_bar=&#39;{desc}: {percentage:3.0f}%|&#39; and</span>
+<span class="sd">            r_bar=&#39;| {n_fmt}/{total_fmt} [{elapsed}&lt;{remaining}, &#39;</span>
+<span class="sd">              &#39;{rate_fmt}{postfix}]&#39;</span>
+<span class="sd">            Possible vars: l_bar, bar, r_bar, n, n_fmt, total, total_fmt,</span>
+<span class="sd">              percentage, rate, rate_fmt, rate_noinv, rate_noinv_fmt,</span>
+<span class="sd">              rate_inv, rate_inv_fmt, elapsed, remaining, desc, postfix.</span>
 <span class="sd">            Note that a trailing &quot;: &quot; is automatically removed after {desc}</span>
 <span class="sd">            if the latter is empty.</span>
 <span class="sd">        initial  : int, optional</span>
@@ -932,10 +963,9 @@
 <span class="sd">            Specify the line offset to print this bar (starting from 0)</span>
 <span class="sd">            Automatic if unspecified.</span>
 <span class="sd">            Useful to manage multiple bars at once (eg, from threads).</span>
-<span class="sd">        postfix  : dict, optional</span>
+<span class="sd">        postfix  : dict or *, optional</span>
 <span class="sd">            Specify additional stats to display at the end of the bar.</span>
-<span class="sd">            Note: postfix is a dict ({&#39;key&#39;: value} pairs) for this method,</span>
-<span class="sd">            not a string.</span>
+<span class="sd">            Calls `set_postfix(**postfix)` if possible (dict).</span>
 <span class="sd">        unit_divisor  : float, optional</span>
 <span class="sd">            [default: 1000], ignored unless `unit_scale` is True.</span>
 <span class="sd">        gui  : bool, optional</span>
@@ -954,12 +984,19 @@
         <span class="k">if</span> <span class="n">disable</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;isatty&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
             <span class="n">disable</span> <span class="o">=</span> <span class="kc">True</span>
 
+        <span class="k">if</span> <span class="n">total</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">iterable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="n">disable</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iterable</span> <span class="o">=</span> <span class="n">iterable</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">disable</span> <span class="o">=</span> <span class="n">disable</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_free_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">initial</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">total</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -972,12 +1009,6 @@
                 <span class="k">else</span> <span class="n">TqdmKeyError</span><span class="p">(</span><span class="s2">&quot;Unknown argument(s): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)))</span>
 
         <span class="c1"># Preprocess the arguments</span>
-        <span class="k">if</span> <span class="n">total</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">iterable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-                <span class="n">total</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="k">if</span> <span class="p">((</span><span class="n">ncols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">file</span> <span class="ow">in</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)))</span> <span class="ow">or</span> \
                 <span class="n">dynamic_ncols</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
             <span class="k">if</span> <span class="n">dynamic_ncols</span><span class="p">:</span>
@@ -1039,7 +1070,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bar_format</span> <span class="o">=</span> <span class="n">bar_format</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">postfix</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">postfix</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">postfix</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">postfix</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">postfix</span> <span class="o">=</span> <span class="n">postfix</span>
 
         <span class="c1"># Init the iterations counters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_print_n</span> <span class="o">=</span> <span class="n">initial</span>
@@ -1047,21 +1081,21 @@
 
         <span class="c1"># if nested, at initial sp() call we replace &#39;\r&#39; by &#39;\n&#39; to</span>
         <span class="c1"># not overwrite the outer progress bar</span>
-        <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_free_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">position</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_free_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># mark fixed positions as negative</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="o">-</span><span class="n">position</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">gui</span><span class="p">:</span>
             <span class="c1"># Initialize the screen printer</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_printer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fp</span><span class="p">)</span>
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(</span><span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
 
         <span class="c1"># Init the time counter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_print_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">()</span>
@@ -1072,7 +1106,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterable</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> \
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterable</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterable</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span>
              <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterable</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterable</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">)</span>
-             <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">)</span></div>
+             <span class="k">else</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="tqdm.__enter__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__enter__">[docs]</a>    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span></div>
@@ -1093,23 +1127,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">unit_scale</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bar_format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">postfix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_divisor</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="tqdm.__lt__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__lt__">[docs]</a>    <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">pos</span></div>
-
-<div class="viewcode-block" id="tqdm.__le__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__le__">[docs]</a>    <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">other</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="tqdm.__eq__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__eq__">[docs]</a>    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">pos</span></div>
-
-<div class="viewcode-block" id="tqdm.__ne__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__ne__">[docs]</a>    <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">other</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="tqdm.__gt__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__gt__">[docs]</a>    <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="tqdm.__ge__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__ge__">[docs]</a>    <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">)</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_comparable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">31</span><span class="p">))</span>
 
 <div class="viewcode-block" id="tqdm.__hash__"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.__hash__">[docs]</a>    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
@@ -1158,19 +1178,18 @@
                         <span class="n">delta_it</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">last_print_n</span>
                         <span class="c1"># EMA (not just overall average)</span>
                         <span class="k">if</span> <span class="n">smoothing</span> <span class="ow">and</span> <span class="n">delta_t</span> <span class="ow">and</span> <span class="n">delta_it</span><span class="p">:</span>
-                            <span class="n">avg_time</span> <span class="o">=</span> <span class="n">delta_t</span> <span class="o">/</span> <span class="n">delta_it</span> \
-                                <span class="k">if</span> <span class="n">avg_time</span> <span class="ow">is</span> <span class="kc">None</span> \
-                                <span class="k">else</span> <span class="n">smoothing</span> <span class="o">*</span> <span class="n">delta_t</span> <span class="o">/</span> <span class="n">delta_it</span> <span class="o">+</span> \
-                                <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">smoothing</span><span class="p">)</span> <span class="o">*</span> <span class="n">avg_time</span>
+                            <span class="n">rate</span> <span class="o">=</span> <span class="n">delta_t</span> <span class="o">/</span> <span class="n">delta_it</span>
+                            <span class="n">avg_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ema</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="n">avg_time</span><span class="p">,</span> <span class="n">smoothing</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span> <span class="o">=</span> <span class="n">avg_time</span>
 
                         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
                         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
                             <span class="c1"># Print bar update</span>
                             <span class="n">sp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
 
                         <span class="c1"># If no `miniters` was specified, adjust automatically</span>
                         <span class="c1"># to the max iteration rate seen so far between 2 prints</span>
@@ -1186,10 +1205,10 @@
                             <span class="k">elif</span> <span class="n">smoothing</span><span class="p">:</span>
                                 <span class="c1"># EMA-weight miniters to converge</span>
                                 <span class="c1"># towards the timeframe of mininterval</span>
-                                <span class="n">miniters</span> <span class="o">=</span> <span class="n">smoothing</span> <span class="o">*</span> <span class="n">delta_it</span> <span class="o">*</span> \
-                                    <span class="p">(</span><span class="n">mininterval</span> <span class="o">/</span> <span class="n">delta_t</span>
-                                     <span class="k">if</span> <span class="n">mininterval</span> <span class="ow">and</span> <span class="n">delta_t</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> \
-                                    <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">smoothing</span><span class="p">)</span> <span class="o">*</span> <span class="n">miniters</span>
+                                <span class="n">rate</span> <span class="o">=</span> <span class="n">delta_it</span>
+                                <span class="k">if</span> <span class="n">mininterval</span> <span class="ow">and</span> <span class="n">delta_t</span><span class="p">:</span>
+                                    <span class="n">rate</span> <span class="o">*=</span> <span class="n">mininterval</span> <span class="o">/</span> <span class="n">delta_t</span>
+                                <span class="n">miniters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ema</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="n">miniters</span><span class="p">,</span> <span class="n">smoothing</span><span class="p">)</span>
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="c1"># Maximum nb of iterations between 2 prints</span>
                                 <span class="n">miniters</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">miniters</span><span class="p">,</span> <span class="n">delta_it</span><span class="p">)</span>
@@ -1243,10 +1262,8 @@
                 <span class="c1"># elapsed = cur_t - self.start_t</span>
                 <span class="c1"># EMA (not just overall average)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span> <span class="ow">and</span> <span class="n">delta_t</span> <span class="ow">and</span> <span class="n">delta_it</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span> <span class="o">=</span> <span class="n">delta_t</span> <span class="o">/</span> <span class="n">delta_it</span> \
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span> <span class="ow">is</span> <span class="kc">None</span> \
-                        <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span> <span class="o">*</span> <span class="n">delta_t</span> <span class="o">/</span> <span class="n">delta_it</span> <span class="o">+</span> \
-                        <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span>
+                    <span class="n">rate</span> <span class="o">=</span> <span class="n">delta_t</span> <span class="o">/</span> <span class="n">delta_it</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ema</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;sp&quot;</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="n">TqdmDeprecationWarning</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
@@ -1255,13 +1272,13 @@
 
                 <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
 
                     <span class="c1"># Print bar update</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
 
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
 
                 <span class="c1"># If no `miniters` was specified, adjust automatically to the</span>
                 <span class="c1"># maximum iteration rate seen so far between two prints.</span>
@@ -1300,7 +1317,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">disable</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># decrement instance pos and remove from internal set</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_decr_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># GUI mode</span>
@@ -1329,7 +1346,9 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
                 <span class="k">if</span> <span class="n">pos</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="n">pos</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="nb">max</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="c1"># only if not nested (#477)</span>
                     <span class="n">fp_write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># clear up last bar</span>
@@ -1388,7 +1407,7 @@
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">postfix</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="c1"># Number: limit the length of the string</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">Number</span><span class="p">):</span>
-                <span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:2.3g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_num</span><span class="p">(</span><span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
             <span class="c1"># Else for any other type, try to get the string conversion</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">_basestring</span><span class="p">):</span>
                 <span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">postfix</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
@@ -1420,10 +1439,10 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nolock</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># place cursor back at the beginning of line</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nolock</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
 
@@ -1436,9 +1455,9 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nolock</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moveto</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nolock</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div></div>
 
@@ -1464,7 +1483,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 05 Dec 2018, 16h.
+      Last updated on 06 Dec 2018, 19h.
 
     </p>
   </div>
