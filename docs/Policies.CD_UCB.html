@@ -341,6 +341,12 @@
 <p class="last">It can only work on basic index policy based on empirical averages (and an exploration bias), like <code class="xref py py-class docutils literal"><span class="pre">UCB</span></code>, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</p>
 </div>
 <dl class="data">
+<dt id="Policies.CD_UCB.VERBOSE">
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">VERBOSE</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CD_UCB.VERBOSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to be verbose when doing the search for valid parameter <span class="math">\(\ell\)</span>.</p>
+</dd></dl>
+
+<dl class="data">
 <dt id="Policies.CD_UCB.PROBA_RANDOM_EXPLORATION">
 <code class="descclassname">Policies.CD_UCB.</code><code class="descname">PROBA_RANDOM_EXPLORATION</code><em class="property"> = 0.1</em><a class="headerlink" href="#Policies.CD_UCB.PROBA_RANDOM_EXPLORATION" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default probability of random exploration <span class="math">\(\alpha\)</span>.</p>
@@ -438,7 +444,7 @@
 
 <dl class="method">
 <dt id="Policies.CD_UCB.CD_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Try to detect a change in the current arm.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -464,7 +470,7 @@
 </div>
 <dl class="method">
 <dt id="Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Try to detect a change in the current arm.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -514,7 +520,7 @@
 
 <dl class="method">
 <dt id="Policies.CD_UCB.CUSUM_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect a change in the current arm, using the two-sided CUSUM algorithm [Page, 1954].</p>
 <ul class="simple">
 <li>For each <em>data</em> k, compute:</li>
@@ -522,8 +528,8 @@
 <div class="math">
 \[\begin{split}s_k^- &amp;= (y_k - \hat{u}_0 - \varepsilon) 1(k &gt; M),\\
 s_k^+ &amp;= (\hat{u}_0 - y_k - \varepsilon) 1(k &gt; M),\\
-g_k^+ &amp;= max(0, g_{k-1}^+ + s_k^+),\\
-g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
+g_k^+ &amp;= \max(0, g_{k-1}^+ + s_k^+),\\
+g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <ul class="simple">
 <li>The change is detected if <span class="math">\(\max(g_k^+, g_k^-) &gt; h\)</span>, where <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h" title="Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code></a> is the threshold of the test,</li>
 <li>And <span class="math">\(\hat{u}_0 = \frac{1}{M} \sum_{k=1}^{M} y_k\)</span> is the mean of the first M samples, where M is <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.M" title="Policies.CD_UCB.CUSUM_IndexPolicy.M"><code class="xref py py-attr docutils literal"><span class="pre">M</span></code></a> the min number of observation between change points.</li>
@@ -549,7 +555,7 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="method">
 <dt id="Policies.CD_UCB.PHT_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
 <dd><p>Detect a change in the current arm, using the two-sided PHT algorithm [Hinkley, 1971].</p>
 <ul class="simple">
 <li>For each <em>data</em> k, compute:</li>
@@ -557,8 +563,8 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <div class="math">
 \[\begin{split}s_k^- &amp;= y_k - \hat{y}_k - \varepsilon,\\
 s_k^+ &amp;= \hat{y}_k - y_k - \varepsilon,\\
-g_k^+ &amp;= max(0, g_{k-1}^+ + s_k^+),\\
-g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
+g_k^+ &amp;= \max(0, g_{k-1}^+ + s_k^+),\\
+g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <ul class="simple">
 <li>The change is detected if <span class="math">\(\max(g_k^+, g_k^-) &gt; h\)</span>, where <code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code> is the threshold of the test,</li>
 <li>And <span class="math">\(\hat{y}_k = \frac{1}{k} \sum_{s=1}^{k} y_s\)</span> is the mean of the first k samples.</li>
@@ -593,12 +599,6 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <div class="math">
 \[\mathrm{KL}(\nu_1, \nu_2) = \frac{(x - y)^2}{2 \sigma_y^2} + \frac{1}{2}\left( \frac{\sigma_x^2}{\sigma_y^2} - 1 \log\left(\frac{\sigma_x^2}{\sigma_y^2}\right) \right).\]</div>
 <p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#Other_properties">https://en.wikipedia.org/wiki/Normal_distribution#Other_properties</a></p>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.VERBOSE">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">VERBOSE</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CD_UCB.VERBOSE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether to be verbose when doing the search for valid parameter <span class="math">\(\ell\)</span>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -790,6 +790,24 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.delta">
+<code class="descname">delta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math">\(\delta\)</span> for the Sub-Gaussian-GLR test.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.sigma">
+<code class="descname">sigma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math">\(\sigma\)</span> for the Sub-Gaussian-GLR test.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.joint">
+<code class="descname">joint</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.joint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <code class="docutils literal"><span class="pre">joint</span></code> for the Sub-Gaussian-GLR test.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.compute_threshold_h">
 <code class="descname">compute_threshold_h</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.compute_threshold_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.compute_threshold_h" title="Permalink to this definition">¶</a></dt>
@@ -887,10 +905,10 @@ g_k^- &amp;= max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dl class="method">
 <dt id="Policies.CD_UCB.DriftDetection_IndexPolicy.detect_change">
 <code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#DriftDetection_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.DriftDetection_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detect a change in the current arm, using a Drift-Detection test (GLR).</p>
+<dd><p>Detect a change in the current arm, using a Drift-Detection test (DD).</p>
 <div class="math">
 \[\begin{split}k_{\max} &amp;:= \arg\max_k \tilde{\rho}_k(t),\\
-DD_t(k) = \hat{\mu}_k(I) - \hat{\mu}_{k_{\max}}(I)\end{split}\]</div>
+DD_t(k) &amp;= \hat{\mu}_k(I) - \hat{\mu}_{k_{\max}}(I)\end{split}\]</div>
 <ul class="simple">
 <li>The change is detected if there is an arm <span class="math">\(k\)</span> such that <span class="math">\(DD_t(k) \geq 2 * \varepsilon = h\)</span>, where <a class="reference internal" href="#Policies.CD_UCB.DriftDetection_IndexPolicy.threshold_h" title="Policies.CD_UCB.DriftDetection_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal"><span class="pre">threshold_h</span></code></a> is the threshold of the test, and <span class="math">\(I\)</span> is the (number of the) current interval since the last (global) restart,</li>
 <li>where <span class="math">\(\tilde{\rho}_k(t)\)</span> is the trust probability of arm <span class="math">\(k\)</span> from the Exp3 algorithm,</li>
@@ -989,7 +1007,7 @@ It seems painful to code correctly, I will do it later.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 06 Dec 2018, 19h.
+      Last updated on 07 Dec 2018, 17h.
 
     </p>
   </div>
