@@ -355,13 +355,13 @@
 <dl class="data">
 <dt id="Policies.CD_UCB.PER_ARM_RESTART">
 <code class="descclassname">Policies.CD_UCB.</code><code class="descname">PER_ARM_RESTART</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CD_UCB.PER_ARM_RESTART" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should we reset one arm empirical average or all?</p>
+<dd><p>Should we reset one arm empirical average or all? Default is <code class="docutils literal"><span class="pre">True</span></code>, it&#8217;s usually more efficient!</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="Policies.CD_UCB.FULL_RESTART_WHEN_REFRESH">
 <code class="descclassname">Policies.CD_UCB.</code><code class="descname">FULL_RESTART_WHEN_REFRESH</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CD_UCB.FULL_RESTART_WHEN_REFRESH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should we fully restart the algorithm or simply reset one arm empirical average ?</p>
+<dd><p>Should we fully restart the algorithm or simply reset one arm empirical average? Default is <code class="docutils literal"><span class="pre">False</span></code>, it&#8217;s usually more efficient!</p>
 </dd></dl>
 
 <dl class="data">
@@ -584,17 +584,17 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dd><p>Threshold value: everything in [0, 1] is truncated to [eps, 1 - eps]</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="attribute">
 <dt id="Policies.CD_UCB.klBern">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klBern</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klBern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klBern" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klBern</code><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klBern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klBern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kullback-Leibler divergence for Bernoulli distributions. <a class="reference external" href="https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence">https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</a></p>
 <div class="math">
 \[\mathrm{KL}(\mathcal{B}(x), \mathcal{B}(y)) = x \log(\frac{x}{y}) + (1-x) \log(\frac{1-x}{1-y}).\]</div>
 </dd></dl>
 
-<dl class="function">
+<dl class="attribute">
 <dt id="Policies.CD_UCB.klGauss">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klGauss</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>sig2x=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klGauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klGauss" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klGauss</code><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klGauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klGauss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Kullback-Leibler divergence for Gaussian distributions of means <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> and variances <code class="docutils literal"><span class="pre">sig2x</span></code> and <code class="docutils literal"><span class="pre">sig2y</span></code>, <span class="math">\(\nu_1 = \mathcal{N}(x, \sigma_x^2)\)</span> and <span class="math">\(\nu_2 = \mathcal{N}(y, \sigma_x^2)\)</span>:</p>
 <div class="math">
 \[\mathrm{KL}(\nu_1, \nu_2) = \frac{(x - y)^2}{2 \sigma_y^2} + \frac{1}{2}\left( \frac{\sigma_x^2}{\sigma_y^2} - 1 \log\left(\frac{\sigma_x^2}{\sigma_y^2}\right) \right).\]</div>
@@ -603,7 +603,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="function">
 <dt id="Policies.CD_UCB.compute_c_alpha__GLR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">compute_c_alpha__GLR</code><span class="sig-paren">(</span><em>t0</em>, <em>t</em>, <em>horizon</em>, <em>verbose=False</em>, <em>exponentBeta=1.05</em>, <em>alpha_t1=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#compute_c_alpha__GLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.compute_c_alpha__GLR" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">compute_c_alpha__GLR</code><span class="sig-paren">(</span><em>t0</em>, <em>t</em>, <em>horizon</em>, <em>verbose=False</em>, <em>exponentBeta=1.05</em>, <em>alpha_t1=0.1</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#compute_c_alpha__GLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.compute_c_alpha__GLR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the values <span class="math">\(c, \alpha\)</span> from the corollary of of Theorem 2 from [&#8220;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&#8221;, O.-A. Maillard, 2018].</p>
 <ul class="simple">
 <li>The threshold is computed as:</li>
@@ -627,7 +627,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="class">
 <dt id="Policies.CD_UCB.GLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=&lt;function klBern&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The GLR-UCB generic policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for 1-dimensional exponential families.</p>
 <ul class="simple">
@@ -638,7 +638,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 </ul>
 <dl class="method">
 <dt id="Policies.CD_UCB.GLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=&lt;function klBern&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -699,7 +699,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 <dl class="attribute">
 <dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy.sig2">
 <code class="descname">sig2</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy.sig2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fixed variance <span class="math">\(\sigma^2\)</span> of the Gaussian distributions. Extra parameter given to <code class="xref py py-func docutils literal"><span class="pre">kullback.klGauss()</span></code>.</p>
+<dd><p>Fixed variance <span class="math">\(\sigma^2\)</span> of the Gaussian distributions. Extra parameter given to <code class="xref py py-func docutils literal"><span class="pre">kullback.klGauss()</span></code>. Default to <span class="math">\(\sigma^2 = \frac{1}{4}\)</span>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -738,7 +738,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="data">
 <dt id="Policies.CD_UCB.DELTA">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">DELTA</code><em class="property"> = 0.01</em><a class="headerlink" href="#Policies.CD_UCB.DELTA" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">DELTA</code><em class="property"> = 0.001</em><a class="headerlink" href="#Policies.CD_UCB.DELTA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default confidence level for <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a>.</p>
 </dd></dl>
 
@@ -756,7 +756,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="function">
 <dt id="Policies.CD_UCB.threshold_SubGaussianGLR_joint">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_joint</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_joint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_joint</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.001</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_joint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the threshold :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>b^{text{joint}}_{t_0}(s,t,delta) according to this formula:</p>
 <div class="math">
 \[b^{\text{joint}}_{t_0}(s,t,\delta) := \sigma \sqrt{ \left(\frac{1}{s-t_0+1} + \frac{1}{t-s}\right) \left(1 + \frac{1}{t-t_0+1}\right) 2 \log\left( \frac{2(t-t_0)\sqrt{t-t_0+2}}{\delta} \right)}.\]</div>
@@ -764,7 +764,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="function">
 <dt id="Policies.CD_UCB.threshold_SubGaussianGLR_disjoint">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_disjoint</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_disjoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_disjoint" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_disjoint</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.001</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_disjoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_disjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the threshold <span class="math">\(b^{\text{disjoint}}_{t_0}(s,t,\delta)\)</span> according to this formula:</p>
 <div class="math">
 \[b^{\text{disjoint}}_{t_0}(s,t,\delta) := \sqrt{2} \sigma \sqrt{\frac{1 + \frac{1}{s - t_0 + 1}}{s - t_0 + 1} \log\left( \frac{4 \sqrt{s - t_0 + 2}}{\delta}\right)} + \sqrt{\frac{1 + \frac{1}{t - s + 1}}{t - s + 1} \log\left( \frac{4 (t - t_0) \sqrt{t - s + 1}}{\delta}\right)}.\]</div>
@@ -772,13 +772,13 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="function">
 <dt id="Policies.CD_UCB.threshold_SubGaussianGLR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR</code><span class="sig-paren">(</span><em>t0</em>, <em>s</em>, <em>t</em>, <em>delta=0.001</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>experimental=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the threshold <span class="math">\(b^{\text{joint}}_{t_0}(s,t,\delta)\)</span> or <span class="math">\(b^{\text{disjoint}}_{t_0}(s,t,\delta)\)</span>.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.001</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The SubGaussianGLR-UCB policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for sub-Gaussian distributions.</p>
 <ul class="simple">
@@ -787,7 +787,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 </ul>
 <dl class="method">
 <dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>alpha=None</em>, <em>delta=0.001</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -944,14 +944,14 @@ It seems painful to code correctly, I will do it later.</p>
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.Exp3.Exp3'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#Exp3R.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.Exp3R.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="Policies.CD_UCB.Exp3R.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#Exp3R.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.Exp3R.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="Policies.CD_UCB.Exp3R.__module__">
 <code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.Exp3R.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.Exp3R.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#Exp3R.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.Exp3R.__str__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1007,7 +1007,7 @@ It seems painful to code correctly, I will do it later.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 13 Dec 2018, 09h.
+      Last updated on 13 Dec 2018, 20h.
 
     </p>
   </div>

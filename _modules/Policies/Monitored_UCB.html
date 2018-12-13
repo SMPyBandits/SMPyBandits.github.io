@@ -223,10 +223,12 @@
 <span class="c1">#: I force ``0.1`` because I can force the minimum gap when calling :func:`Arms.randomMeans` to be ``0.1``.</span>
 <span class="n">DELTA</span> <span class="o">=</span> <span class="mf">0.1</span>
 
-<span class="c1">#: Should we reset one arm empirical average or all?</span>
+<span class="c1">#: Should we reset one arm empirical average or all? Default is ``True``, it&#39;s usually more efficient!</span>
+<span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="c1">#: Should we fully restart the algorithm or simply reset one arm empirical average ?</span>
+<span class="c1">#: Should we fully restart the algorithm or simply reset one arm empirical average? Default is ``False``, it&#39;s usually more efficient!</span>
+<span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">False</span>
 
 
@@ -327,25 +329,28 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For a player </span><span class="si">{}</span><span class="s2"> a change was detected at time </span><span class="si">{}</span><span class="s2"> for arm </span><span class="si">{}</span><span class="s2"> after seeing reward = </span><span class="si">{}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_update_time_tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
 
-            <span class="c1"># Fully restart the algorithm ?!</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">startGame</span><span class="p">(</span><span class="n">createNewPolicy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="c1"># Or simply reset one of the empirical averages?</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
-
-            <span class="c1"># reset current memory for THIS arm</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span>
-            <span class="c1"># or reset current memory for ALL THE arms</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
+                <span class="c1"># or reset current memory for ALL THE arms</span>
                 <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span></div>
+            <span class="c1"># reset current memory for THIS arm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span>
+
+            <span class="c1"># Fully restart the algorithm ?!</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">startGame</span><span class="p">(</span><span class="n">createNewPolicy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Or simply reset one of the empirical averages?</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
+                <span class="c1"># or reset current memory for ALL THE arms</span>
+                    <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># reset current memory for THIS arm</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div>
 
         <span class="c1"># we update the total number of samples available to the underlying policy</span>
         <span class="c1"># self.policy.t = np.sum(self.last_pulls)  # XXX SO NOT SURE HERE</span>
@@ -383,7 +388,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 13 Dec 2018, 09h.
+      Last updated on 13 Dec 2018, 20h.
 
     </p>
   </div>
