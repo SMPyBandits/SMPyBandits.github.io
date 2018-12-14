@@ -112,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a><ul>
@@ -304,9 +305,9 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 <div class="section" id="example-of-simulation-configuration">
 <span id="example-of-simulation-configuration"></span><h2>Example of simulation configuration<a class="headerlink" href="#example-of-simulation-configuration" title="Permalink to this headline">¶</a></h2>
 <p>A simple python file, <a class="reference external" href="https://smpybandits.github.io/docs/configuration_nonstationary.html"><code class="docutils literal"><span class="pre">configuration_nonstationary.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.</p>
-<p>For example, we can compare the standard <a class="reference external" href="https://smpybandits.github.io/docs/Policies.UCB.html"><code class="docutils literal"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="https://smpybandits.github.io/docs/Policies.Thompson.html"><code class="docutils literal"><span class="pre">Thompson</span></code></a> algorithms, non aware of the non-stationarity, against the non-stationarity aware <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedUCB.html"><code class="docutils literal"><span class="pre">DiscountedUCB</span></code></a> and <a class="reference external" href="https://smpybandits.github.io/docs/Policies.SlidingWindowUCB.html"><code class="docutils literal"><span class="pre">SWUCB</span></code></a> algorithms.</p>
+<p>For example, we can compare the standard <a class="reference external" href="https://smpybandits.github.io/docs/Policies.UCB.html"><code class="docutils literal"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="https://smpybandits.github.io/docs/Policies.Thompson.html"><code class="docutils literal"><span class="pre">Thompson</span></code></a> algorithms, non aware of the non-stationarity, against the non-stationarity aware <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedUCB.html"><code class="docutils literal"><span class="pre">DiscountedUCB</span></code></a> and <a class="reference external" href="https://smpybandits.github.io/docs/Policies.SlidingWindowUCB.html"><code class="docutils literal"><span class="pre">SWUCB</span></code></a> algorithms.
+We also included our algorithms <a class="reference external" href="https://smpybandits.github.io/docs/Policies.BernoulliGLR_IndexPolicy.html"><code class="docutils literal"><span class="pre">Bernoulli-GLR-UCB</span></code></a> using <a class="reference external" href="https://smpybandits.github.io/docs/Policies.klUCB.html"><code class="docutils literal"><span class="pre">kl-UCB</span></code></a>, and the efficient <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedThompson.html"><code class="docutils literal"><span class="pre">DiscountedThompson</span></code></a> algorithm.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="n">nb_random_events</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span>    <span class="c1"># Finite horizon of the simulation</span>
     <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># number of repetitions</span>
@@ -317,14 +318,21 @@ TODO what are the lower-bounds given in the more recent articles?</p>
         <span class="p">{</span>   <span class="c1"># A non stationary problem: every step of the same repetition use a different mean vector!</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;newMeans&quot;</span><span class="p">:</span> <span class="n">randomContinuouslyVaryingMeans</span><span class="p">,</span>
-                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">geometricChangePoints</span><span class="p">(</span>
-                    <span class="n">horizon</span><span class="o">=</span><span class="n">horizon</span><span class="p">,</span> <span class="n">proba</span><span class="o">=</span><span class="n">nb_random_events</span><span class="o">/</span><span class="n">horizon</span><span class="p">),</span>
-                <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nbArms&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
-                    <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;amplitude&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-                    <span class="s2">&quot;mingap&quot;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;isSorted&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                <span class="p">}</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 0    to 399</span>
+                    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>  <span class="c1"># 400  to 799</span>
+                    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>  <span class="c1"># 800  to 1199</span>
+                    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 1200 to 1599</span>
+                    <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 1600 to end</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">0</span>    <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">400</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">800</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1600</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="c1"># 20000,  # XXX larger than horizon, just to see if it is a problem?</span>
+                <span class="p">],</span>
             <span class="p">}</span>
         <span class="p">},</span>
     <span class="p">]</span>
@@ -332,16 +340,20 @@ TODO what are the lower-bounds given in the more recent articles?</p>
     <span class="c1"># Policies that should be simulated, and their parameters.</span>
     <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="mi">100</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="mi">500</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="mi">1000</span> <span class="p">}</span> <span class="p">},</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span>  <span class="c1"># formula from [GarivierMoulines2011]</span>
             <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">horizon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">nb_random_events</span><span class="p">))</span>
         <span class="p">}</span> <span class="p">},</span>
         <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.99</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.85</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.5</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.9</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.7</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BernoulliGLR_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">}</span> <span class="p">}</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.99</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.9</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.7</span> <span class="p">}</span> <span class="p">},</span>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
@@ -351,7 +363,10 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 <div class="section" id="how-to-run-the-experiments">
 <span id="how-to-run-the-experiments"></span><h2><a class="reference internal" href="How_to_run_the_code.html"><span class="doc">How to run the experiments ?</span></a><a class="headerlink" href="#how-to-run-the-experiments" title="Permalink to this headline">¶</a></h2>
 <p>You should use the provided <a class="reference external" href="Makefile"><code class="docutils literal"><span class="pre">Makefile</span></code></a> file to do this simply:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>make install         <span class="c1"># install the requirements ONLY ONCE</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="c1"># if not already installed, otherwise update with &#39;git pull&#39;</span>
+git clone https://github.com/SMPyBandits/SMPyBandits/
+<span class="nb">cd</span> SMPyBandits
+make install         <span class="c1"># install the requirements ONLY ONCE</span>
 make nonstationary   <span class="c1"># run and log the main.py script</span>
 </pre></div>
 </div>
@@ -412,7 +427,7 @@ make nonstationary   <span class="c1"># run and log the main.py script</span>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 13 Dec 2018, 09h.
+      Last updated on 14 Dec 2018, 14h.
 
     </p>
   </div>

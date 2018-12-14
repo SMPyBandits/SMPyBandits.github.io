@@ -1,0 +1,900 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>configuration_nonstationary &mdash; SMPyBandits 0.9.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/modules.html">SMPyBandits modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>configuration_nonstationary</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for configuration_nonstationary</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Configuration for the simulations, for the single-player case.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="c1"># Tries to know number of CPU</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">cpu_count</span>
+    <span class="n">CPU_COUNT</span> <span class="o">=</span> <span class="n">cpu_count</span><span class="p">()</span>  <span class="c1">#: Number of CPU on the local machine</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">CPU_COUNT</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">getenv</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: this script &#39;configuration.py&#39; is NOT executable. Use &#39;main.py&#39; or &#39;make single&#39; ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Import arms</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="c1"># Import algorithms</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="c1">#: HORIZON : number of time steps of the experiments.</span>
+<span class="c1">#: Warning Should be &gt;= 10000 to be interesting &quot;asymptotically&quot;.</span>
+<span class="n">HORIZON</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">HORIZON</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">HORIZON</span><span class="p">))</span>
+
+<span class="c1">#: REPETITIONS : number of repetitions of the experiments.</span>
+<span class="c1">#: Warning: Should be &gt;= 10 to be statistically trustworthy.</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">REPETITIONS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="n">REPETITIONS</span><span class="p">))</span>
+
+<span class="c1">#: To profile the code, turn down parallel computing</span>
+<span class="n">DO_PARALLEL</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">DO_PARALLEL</span> <span class="o">=</span> <span class="p">(</span><span class="n">REPETITIONS</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">REPETITIONS</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">DO_PARALLEL</span>
+
+<span class="c1">#: Number of jobs to use for the parallel computations. -1 means all the CPU cores, 1 means no parallelization.</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">DO_PARALLEL</span> <span class="k">else</span> <span class="mi">1</span>
+<span class="k">if</span> <span class="n">CPU_COUNT</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>  <span class="c1"># We are on a server, let&#39;s be nice and not use all cores</span>
+    <span class="n">N_JOBS</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">CPU_COUNT</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">CPU_COUNT</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="n">CPU_COUNT</span> <span class="o">-</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">N_JOBS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;N_JOBS&#39;</span><span class="p">,</span> <span class="n">N_JOBS</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">REPETITIONS</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">REPETITIONS</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">N_JOBS</span><span class="p">,</span> <span class="n">CPU_COUNT</span><span class="p">)</span>
+
+<span class="c1"># Random events</span>
+<span class="n">RANDOM_SHUFFLE</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The arms won&#39;t be shuffled (``shuffle(arms)``).</span>
+<span class="n">RANDOM_SHUFFLE</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;RANDOM_SHUFFLE&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RANDOM_SHUFFLE</span><span class="p">))</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
+<span class="n">RANDOM_INVERT</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: The arms won&#39;t be inverted (``arms = arms[::-1]``).</span>
+<span class="n">RANDOM_INVERT</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;RANDOM_INVERT&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">RANDOM_INVERT</span><span class="p">))</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
+
+<span class="n">NB_BREAK_POINTS</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1">#: Number of true breakpoints. They are uniformly spaced in time steps (and the first one at t=0 does not count).</span>
+<span class="n">NB_BREAK_POINTS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;NB_BREAK_POINTS&#39;</span><span class="p">,</span> <span class="n">NB_BREAK_POINTS</span><span class="p">))</span>
+
+<span class="c1">#: Should we cache rewards? The random rewards will be the same for all the REPETITIONS simulations for each algorithms.</span>
+<span class="n">CACHE_REWARDS</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># XXX to manually disable this feature?</span>
+<span class="n">CACHE_REWARDS</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># XXX to manually enable this feature?</span>
+
+<span class="c1">#: Number of arms for non-hard-coded problems (Bayesian problems)</span>
+<span class="n">NB_ARMS</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">NB_ARMS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="n">NB_ARMS</span><span class="p">))</span>
+<span class="n">NB_ARMS</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;NB_ARMS&#39;</span><span class="p">,</span> <span class="n">NB_ARMS</span><span class="p">))</span>
+
+<span class="c1">#: Default value for the lower value of means</span>
+<span class="n">LOWER</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="c1">#: Default value for the amplitude value of means</span>
+<span class="n">AMPLITUDE</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="c1">#: Variance of Gaussian arms, if needed</span>
+<span class="n">VARIANCE</span> <span class="o">=</span> <span class="mf">0.25</span>
+
+<span class="c1">#: Type of arms for non-hard-coded problems (Bayesian problems)</span>
+<span class="n">ARM_TYPE</span> <span class="o">=</span> <span class="s2">&quot;Bernoulli&quot;</span>
+<span class="n">ARM_TYPE</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ARM_TYPE&#39;</span><span class="p">,</span> <span class="n">ARM_TYPE</span><span class="p">))</span>
+<span class="n">ARM_TYPE_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">ARM_TYPE</span><span class="p">)</span>
+<span class="n">ARM_TYPE</span> <span class="o">=</span> <span class="n">mapping_ARM_TYPE</span><span class="p">[</span><span class="n">ARM_TYPE</span><span class="p">]</span>
+
+<span class="c1">#: Means of arms for non-hard-coded problems (non Bayesian)</span>
+<span class="n">MEANS</span> <span class="o">=</span> <span class="n">uniformMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">NB_ARMS</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">LOWER</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">AMPLITUDE</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+
+<span class="c1">#: This dictionary configures the experiments</span>
+<span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># --- Duration of the experiment</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+    <span class="c1"># --- Number of repetition of the experiment (to have an average)</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="n">REPETITIONS</span><span class="p">,</span>
+    <span class="c1"># --- Parameters for the use of joblib.Parallel</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="n">N_JOBS</span><span class="p">,</span>    <span class="c1"># = nb of CPU cores</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>      <span class="c1"># Max joblib verbosity</span>
+    <span class="c1"># --- Random events</span>
+    <span class="s2">&quot;nb_break_points&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
+    <span class="c1"># --- Should we plot the lower-bounds or not?</span>
+    <span class="s2">&quot;plot_lowerbound&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># XXX Default</span>
+    <span class="c1"># --- Cache rewards: use the same random rewards for the Aggregator[..] and the algorithms</span>
+    <span class="s2">&quot;cache_rewards&quot;</span><span class="p">:</span> <span class="n">CACHE_REWARDS</span><span class="p">,</span>
+    <span class="c1"># --- Arms</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">}</span>
+
+<span class="c1"># XXX Pb 0 changes are only on one arm at a time, only 2 arms</span>
+<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># 0    to 399</span>
+                    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 400  to 799</span>
+                    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 800  to 1199</span>
+                    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 1200 to 1599</span>
+                    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 1600 to end</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">0</span>    <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">400</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">800</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1600</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="c1"># 20000,  # XXX larger than horizon, just to see if it is a problem?</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+<span class="c1"># XXX Pb 1 changes are only on one arm at a time</span>
+<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 0    to 399</span>
+                    <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 400  to 799</span>
+                    <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 800  to 1199</span>
+                    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 1200 to 1599</span>
+                    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 1600 to end</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">0</span>    <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">400</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">800</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1600</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="c1"># 20000,  # XXX larger than horizon, just to see if it is a problem?</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+<span class="c1"># XXX Pb 2 changes are on all or almost arms at a time</span>
+<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 0    to 399</span>
+                    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>  <span class="c1"># 400  to 799</span>
+                    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>  <span class="c1"># 800  to 1199</span>
+                    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 1200 to 1599</span>
+                    <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 1600 to end</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">0</span>    <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">400</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">800</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1600</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="c1"># 20000,  # XXX larger than horizon, just to see if it is a problem?</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+<span class="c1"># XXX Pb 3 changes are on all or almost arms at a time, but sequences don&#39;t have same length</span>
+<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 1th sequence, best=3rd</span>
+                    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 2th sequence, best=2nd, DeltaMin=0.1</span>
+                    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># 3th sequence, best=1st, DeltaMin=0.1</span>
+                    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 4th sequence, best=1st, DeltaMin=0.1</span>
+                    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># 5th sequence, best=2nd, DeltaMin=0.1</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">0</span>    <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1250</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1500</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mi">1750</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
+                    <span class="c1"># 20000,  # XXX larger than horizon, just to see if it is a problem?</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+
+<span class="c1"># Example from the Yahoo! dataset, from article https://arxiv.org/abs/1802.03692</span>
+<span class="k">if</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A very hard piece-wise stationary problem, with 6 arms and 9 change points</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="c1"># red, green, blue, yellow, cyan, red dotted</span>
+                    <span class="p">[</span><span class="mf">0.071</span><span class="p">,</span> <span class="mf">0.041</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 1st segment</span>
+                    <span class="p">[</span><span class="mf">0.055</span><span class="p">,</span> <span class="mf">0.053</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 2nd segment</span>
+                    <span class="p">[</span><span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.063</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 3th segment</span>
+                    <span class="p">[</span><span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 4th segment</span>
+                    <span class="p">[</span><span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.055</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 5th segment</span>
+                    <span class="p">[</span><span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">],</span>  <span class="c1"># 6th segment</span>
+                    <span class="p">[</span><span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">],</span>  <span class="c1"># 7th segment</span>
+                    <span class="p">[</span><span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.057</span><span class="p">,</span> <span class="mf">0.008</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 8th segment</span>
+                    <span class="p">[</span><span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.057</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.011</span><span class="p">],</span>  <span class="c1"># 9th segment</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                <span class="c1"># &quot;changePoints&quot;: [</span>
+                <span class="c1">#     int(0     * HORIZON / 38570.0),   # 1st segment</span>
+                <span class="c1">#     int(4285  * HORIZON / 38570.0),   # 2nd segment</span>
+                <span class="c1">#     int(8571  * HORIZON / 38570.0),   # 3th segment</span>
+                <span class="c1">#     int(12857 * HORIZON / 38570.0),  # 4th segment</span>
+                <span class="c1">#     int(17142 * HORIZON / 38570.0),  # 5th segment</span>
+                <span class="c1">#     int(21428 * HORIZON / 38570.0),  # 6th segment</span>
+                <span class="c1">#     int(25714 * HORIZON / 38570.0),  # 7th segment</span>
+                <span class="c1">#     int(30000 * HORIZON / 38570.0),  # 8th segment</span>
+                <span class="c1">#     int(38570 * HORIZON / 38570.0),  # 9th segment</span>
+                <span class="c1"># ],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+<span class="c1"># Another example from the Yahoo! dataset, from article https://arxiv.org/abs/1802.08380</span>
+<span class="k">if</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># FIXME remove this &quot;False and&quot; to use this problem</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A very hard piece-wise stationary problem, with 5 arms and 9 change points</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="c1"># blue, red, golden, purple, green</span>
+                    <span class="p">[</span><span class="mf">0.070</span><span class="p">,</span> <span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.063</span><span class="p">,</span> <span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.063</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.063</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.055</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.055</span><span class="p">,</span> <span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.052</span><span class="p">,</span> <span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.041</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.052</span><span class="p">,</span> <span class="mf">0.048</span><span class="p">,</span> <span class="mf">0.041</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.052</span><span class="p">,</span> <span class="mf">0.048</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.050</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.050</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.0455</span><span class="p">,</span> <span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.0455</span><span class="p">,</span> <span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.014</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">,</span> <span class="mf">0.014</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.014</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.014</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.050</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.050</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.050</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.0235</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.0405</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.0235</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.0295</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.041</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.051</span><span class="p">,</span> <span class="mf">0.041</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.051</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.051</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">,</span> <span class="mf">0.0375</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">,</span> <span class="mf">0.0375</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">,</span> <span class="mf">0.0375</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.021</span><span class="p">,</span> <span class="mf">0.0375</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.0375</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.020</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.017</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.017</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.014</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.012</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.026</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.019</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.042</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">,</span> <span class="mf">0.0185</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.043</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.017</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.024</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">,</span> <span class="mf">0.036</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.044</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.034</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.048</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.028</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.048</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.029</span><span class="p">,</span> <span class="mf">0.037</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.038</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.047</span><span class="p">,</span> <span class="mf">0.023</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.022</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.031</span><span class="p">,</span> <span class="mf">0.035</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mf">0.049</span><span class="p">,</span> <span class="mf">0.032</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">,</span> <span class="mf">0.027</span><span class="p">,</span> <span class="mf">0.039</span><span class="p">],</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="mf">1e5</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">82</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+
+<span class="c1"># FIXME experimental code to check some condition on the problems</span>
+
+<div class="viewcode-block" id="lowerbound_on_sequence_length"><a class="viewcode-back" href="../docs/configuration_nonstationary.html#configuration_nonstationary.lowerbound_on_sequence_length">[docs]</a><span class="k">def</span> <span class="nf">lowerbound_on_sequence_length</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">gap</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A function that computes the lower-bound (we will find) on the sequence length to have a reasonable bound on the delay of our change-detection algorithm.</span>
+
+<span class="sd">    - It returns the smallest possible sequence length :math:`L = \tau_{m+1} - \tau_m` satisfying:</span>
+
+<span class="sd">    .. math:: L \geq \frac{8}{\Delta^2} \log(T).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">gap</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">condition</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">length</span><span class="p">:</span> <span class="n">length</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">8</span><span class="o">/</span><span class="n">gap</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">condition</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="n">length</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">length</span></div>
+
+
+<div class="viewcode-block" id="check_condition_on_piecewise_stationary_problems"><a class="viewcode-back" href="../docs/configuration_nonstationary.html#configuration_nonstationary.check_condition_on_piecewise_stationary_problems">[docs]</a><span class="k">def</span> <span class="nf">check_condition_on_piecewise_stationary_problems</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">listOfMeans</span><span class="p">,</span> <span class="n">changePoints</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Check some conditions on the piecewise stationary problem.&quot;&quot;&quot;</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">listOfMeans</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For a piecewise stationary problem with M = </span><span class="si">{}</span><span class="s2"> sequences...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">mus_m</span> <span class="o">=</span> <span class="n">listOfMeans</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+        <span class="n">tau_m</span> <span class="o">=</span> <span class="n">changePoints</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+        <span class="n">mus_mp1</span> <span class="o">=</span> <span class="n">listOfMeans</span><span class="p">[</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">tau_mp1</span> <span class="o">=</span> <span class="n">changePoints</span><span class="p">[</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Checking m-th (m = </span><span class="si">{}</span><span class="s2">) sequence, µ_m = </span><span class="si">{}</span><span class="s2">, µ_m+1 = </span><span class="si">{}</span><span class="s2"> and tau_m = </span><span class="si">{}</span><span class="s2"> and tau_m+1 = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">mus_m</span><span class="p">,</span> <span class="n">mus_mp1</span><span class="p">,</span> <span class="n">tau_m</span><span class="p">,</span> <span class="n">tau_mp1</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">mu_i_m</span><span class="p">,</span> <span class="n">mu_i_mp1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">mus_m</span><span class="p">,</span> <span class="n">mus_mp1</span><span class="p">)):</span>
+            <span class="n">gap</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu_i_m</span> <span class="o">-</span> <span class="n">mu_i_mp1</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">tau_mp1</span> <span class="o">-</span> <span class="n">tau_m</span>
+            <span class="n">lowerbound</span> <span class="o">=</span> <span class="n">lowerbound_on_sequence_length</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">gap</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   - For arm i = </span><span class="si">{}</span><span class="s2">, gap = </span><span class="si">{:.3g}</span><span class="s2"> and length = </span><span class="si">{}</span><span class="s2"> with lowerbound on length = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">gap</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="k">if</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="n">lowerbound</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING For arm i = </span><span class="si">{}</span><span class="s2">, gap = </span><span class="si">{:.3g}</span><span class="s2"> and length = </span><span class="si">{}</span><span class="s2"> &lt; lowerbound on length = </span><span class="si">{}</span><span class="s2"> !!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">gap</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
+
+
+<span class="k">for</span> <span class="n">envId</span><span class="p">,</span> <span class="n">env</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">Checking environment number </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">envId</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="n">listOfMeans</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">][</span><span class="s2">&quot;listOfMeans&quot;</span><span class="p">]</span>
+    <span class="n">changePoints</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">][</span><span class="s2">&quot;changePoints&quot;</span><span class="p">]</span>
+    <span class="n">check_condition_on_piecewise_stationary_problems</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">,</span> <span class="n">listOfMeans</span><span class="p">,</span> <span class="n">changePoints</span><span class="p">)</span>
+
+
+<span class="n">CHANGE_POINTS</span> <span class="o">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;changePoints&#39;</span><span class="p">]</span>
+
+<span class="c1"># if False:  # WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="c1">#     configuration[&quot;environment&quot;] = [</span>
+<span class="c1">#         {   # A non stationary problem: every step of the same repetition use a different mean vector!</span>
+<span class="c1">#             &quot;arm_type&quot;: ARM_TYPE,</span>
+<span class="c1">#             &quot;params&quot;: {</span>
+<span class="c1">#                 &quot;newMeans&quot;: randomMeans,</span>
+<span class="c1">#                 # XXX Note that even using geometricChangePoints does not mean random change points *at each repetitions*</span>
+<span class="c1">#                 # &quot;changePoints&quot;: geometricChangePoints(horizon=HORIZON, proba=NB_BREAK_POINTS/HORIZON),</span>
+<span class="c1">#                 &quot;changePoints&quot;: np.linspace(0, HORIZON, num=NB_BREAK_POINTS, dtype=int, endpoint=False),</span>
+<span class="c1">#                 &quot;args&quot;: {</span>
+<span class="c1">#                     &quot;nbArms&quot;: NB_ARMS,</span>
+<span class="c1">#                     &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+<span class="c1">#                     &quot;mingap&quot;: None, &quot;isSorted&quot;: False,</span>
+<span class="c1">#                 },</span>
+<span class="c1">#                 # XXX onlyOneArm is None by default,</span>
+<span class="c1">#                 &quot;onlyOneArm&quot;: None,</span>
+<span class="c1">#                 # XXX but onlyOneArm can be &quot;uniform&quot; to only change *one* arm at each change point,</span>
+<span class="c1">#                 # &quot;onlyOneArm&quot;: &quot;uniform&quot;,</span>
+<span class="c1">#                 # XXX onlyOneArm can also be an integer to only change n arms at each change point,</span>
+<span class="c1">#                 # &quot;onlyOneArm&quot;: 3,</span>
+<span class="c1">#             }</span>
+<span class="c1">#         },</span>
+<span class="c1">#     ]</span>
+
+<span class="c1"># if False:  # WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="c1">#     configuration[&quot;environment&quot;] = [  # XXX Bernoulli arms</span>
+<span class="c1">#         {   # A non stationary problem: every step of the same repetition use a different mean vector!</span>
+<span class="c1">#             &quot;arm_type&quot;: ARM_TYPE,</span>
+<span class="c1">#             &quot;params&quot;: {</span>
+<span class="c1">#                 &quot;newMeans&quot;: continuouslyVaryingMeans,</span>
+<span class="c1">#                 &quot;changePoints&quot;: np.linspace(0, HORIZON, num=NB_BREAK_POINTS, dtype=int),</span>
+<span class="c1">#                 &quot;args&quot;: {</span>
+<span class="c1">#                    &quot;nbArms&quot;: NB_ARMS,</span>
+<span class="c1">#                    &quot;maxSlowChange&quot;: 0.1, &quot;sign&quot;: +1,</span>
+<span class="c1">#                    &quot;mingap&quot;: None, &quot;isSorted&quot;: False,</span>
+<span class="c1">#                    &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+<span class="c1">#                 }</span>
+<span class="c1">#             }</span>
+<span class="c1">#         },</span>
+<span class="c1">#     ]</span>
+
+
+<span class="c1"># if False:  # WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="c1">#     configuration[&quot;environment&quot;] = [  # XXX Bernoulli arms</span>
+<span class="c1">#         {   # A non stationary problem: every step of the same repetition use a different mean vector!</span>
+<span class="c1">#             &quot;arm_type&quot;: ARM_TYPE,</span>
+<span class="c1">#             &quot;params&quot;: {</span>
+<span class="c1">#                 &quot;newMeans&quot;: randomContinuouslyVaryingMeans,</span>
+<span class="c1">#                 &quot;changePoints&quot;: np.linspace(0, HORIZON, num=NB_BREAK_POINTS, dtype=int),</span>
+<span class="c1">#                 &quot;args&quot;: {</span>
+<span class="c1">#                     &quot;nbArms&quot;: NB_ARMS,</span>
+<span class="c1">#                     &quot;maxSlowChange&quot;: 0.1, &quot;horizon&quot;: HORIZON,</span>
+<span class="c1">#                     &quot;mingap&quot;: None, &quot;isSorted&quot;: False,</span>
+<span class="c1">#                     &quot;lower&quot;: LOWER, &quot;amplitude&quot;: AMPLITUDE,</span>
+<span class="c1">#                 }</span>
+<span class="c1">#             }</span>
+<span class="c1">#         },</span>
+<span class="c1">#     ]</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1">#: Number of arms *in the first environment*</span>
+    <span class="n">nbArms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;environment&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;args&#39;</span><span class="p">][</span><span class="s1">&#39;nbArms&#39;</span><span class="p">])</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">nbArms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;environment&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;listOfMeans&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+        <span class="n">nbArms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;environment&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+
+<span class="c1">#: Warning: if using Exponential or Gaussian arms, gives klExp or klGauss to KL-UCB-like policies!</span>
+<span class="n">klucb</span> <span class="o">=</span> <span class="n">klucb_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s1">&#39;environment&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;arm_type&#39;</span><span class="p">]),</span> <span class="n">klucbBern</span><span class="p">)</span>
+
+
+<span class="c1"># XXX compare different values of the experimental sliding window algorithm</span>
+<span class="n">EPSS</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+
+<span class="n">ALPHAS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">TAUS</span>   <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span>
+        <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">HORIZON</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">NB_BREAK_POINTS</span><span class="p">))),</span>  <span class="c1"># &quot;optimal&quot; value according to [Garivier &amp; Moulines, 2008]</span>
+    <span class="p">]</span>
+
+<span class="n">GAMMAS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span>
+        <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">NB_BREAK_POINTS</span><span class="p">)</span> <span class="o">/</span> <span class="n">HORIZON</span><span class="p">))</span> <span class="o">/</span> <span class="mf">4.</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># &quot;optimal&quot; value according to [Garivier &amp; Moulines, 2008]</span>
+    <span class="p">]</span>
+
+<span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="mi">800</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&gt;=</span> <span class="mi">10000</span> <span class="k">else</span> <span class="mi">80</span>
+
+<span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;policies&quot;</span><span class="p">:</span>
+    <span class="p">[</span>  <span class="c1"># XXX Regular adversarial bandits algorithms!</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3PlusPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>  <span class="c1"># XXX Regular stochastic bandits algorithms!</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="c1"># { &quot;archtype&quot;: SWR_UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },  # WARNING experimental!</span>
+        <span class="c1"># { &quot;archtype&quot;: BESA, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;non_binary&quot;: True, } },</span>
+        <span class="c1"># { &quot;archtype&quot;: BayesUCB, &quot;params&quot;: { &quot;posterior&quot;: Beta, } },</span>
+        <span class="c1"># { &quot;archtype&quot;: AdBandits, &quot;params&quot;: { &quot;alpha&quot;: 1, &quot;horizon&quot;: HORIZON, } },</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucb</span><span class="p">,</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="c1"># { &quot;archtype&quot;: SWR_klUCB, &quot;params&quot;: { &quot;klucb&quot;: klucb, } },  # WARNING experimental!</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>  <span class="c1"># XXX This is still highly experimental!</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">DiscountedBeta</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="n">gamma</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="c1"># for gamma in GAMMAS</span>
+        <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># The Exp3R algorithm works reasonably well</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3R</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># XXX The Exp3RPlusPlus variant of Exp3R algorithm works also reasonably well</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3RPlusPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="p">[</span>  <span class="c1"># XXX TODO test the AdSwitch policy and its corrected version</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">AdSwitch</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="n">C1</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">:</span> <span class="n">C2</span><span class="p">,}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">C1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+        <span class="k">for</span> <span class="n">C2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
+    <span class="p">[</span>
+        <span class="c1"># nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
+        <span class="c1"># XXX note that for a fixed T it means nothing…</span>
+        <span class="c1"># XXX But for T=10000 it is at most 100 changes, reasonable!</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">LM_DSEE</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="s2">&quot;DeltaMin&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># XXX Test a few CD-MAB algorithms that need to know NB_BREAK_POINTS</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+            <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
+            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+        <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span>
+            <span class="n">PHT_IndexPolicy</span><span class="p">,</span>  <span class="c1"># OK PHT_IndexPolicy is very much like CUSUM</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
+            <span class="n">klUCB</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Per-arm restart XXX comment to only test global arm</span>
+            <span class="kc">False</span><span class="p">,</span> <span class="c1"># Global restart XXX seems more efficient? (at least more memory efficient!)</span>
+        <span class="p">]</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># XXX Test a few CD-MAB algorithms</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
+            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+        <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">BernoulliGLR_IndexPolicy</span><span class="p">,</span>  <span class="c1"># OK BernoulliGLR_IndexPolicy is very much like CUSUM</span>
+            <span class="n">GaussianGLR_IndexPolicy</span><span class="p">,</span>  <span class="c1"># OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
+            <span class="n">SubGaussianGLR_IndexPolicy</span><span class="p">,</span> <span class="c1"># OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
+            <span class="n">klUCB</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Per-arm restart XXX comment to only test global arm</span>
+            <span class="kc">False</span><span class="p">,</span> <span class="c1"># Global restart XXX seems more efficient? (at least more memory efficient!)</span>
+        <span class="p">]</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># # XXX The Monitored_IndexPolicy works but the default choice of parameters seem bad!</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     { &quot;archtype&quot;: Monitored_IndexPolicy, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;max_nb_random_events&quot;: NB_BREAK_POINTS, &quot;delta&quot;: 0.1, &quot;policy&quot;: UCB, } }</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># XXX The Monitored_IndexPolicy with specific tuning of the input parameters</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">WINDOW_SIZE</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">WINDOW_SIZE</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">NB_ARMS</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span> <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Per-arm restart XXX comment to only test global arm</span>
+            <span class="kc">False</span><span class="p">,</span> <span class="c1"># Global restart XXX seems more efficient? (at least more memory efficient!)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="c1"># UCB,</span>
+            <span class="n">klUCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test UCB</span>
+        <span class="p">]</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># DONE The SW_UCB_Hash algorithm works fine!</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWHash_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;lmbda&quot;</span><span class="p">:</span> <span class="n">lmbda</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">UCB</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
+        <span class="k">for</span> <span class="n">lmbda</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># [0.1, 0.5, 1, 5, 10]</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # XXX experimental sliding window algorithm</span>
+    <span class="c1">#     { &quot;archtype&quot;: SlidingWindowRestart, &quot;params&quot;: { &quot;policy&quot;: policy, &quot;tau&quot;: tau, &quot;threshold&quot;: eps, &quot;full_restart_when_refresh&quot;: True } }</span>
+    <span class="c1">#     for tau in [TAUS[0]] for eps in [EPSS[0]]</span>
+    <span class="c1">#     for policy in [UCB, klUCB, Thompson, BayesUCB]</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # Different versions of the sliding window UCB algorithm</span>
+    <span class="c1">#     { &quot;archtype&quot;: SWUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;tau&quot;: tau, } }</span>
+    <span class="c1">#     for alpha in ALPHAS for tau in TAUS</span>
+    <span class="c1"># ] +</span>
+    <span class="p">[</span>
+        <span class="c1"># --- # XXX experimental other version of the sliding window algorithm, knowing the horizon</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCBPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># # [</span>
+    <span class="c1"># #     # --- # Different versions of the discounted UCB algorithm</span>
+    <span class="c1"># #     { &quot;archtype&quot;: DiscountedUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;gamma&quot;: gamma, &quot;useRealDiscount&quot;: useRealDiscount, } }</span>
+    <span class="c1"># #     for gamma in GAMMAS for alpha in ALPHAS for useRealDiscount in [True, False]</span>
+    <span class="c1"># # ] +</span>
+    <span class="p">[</span>
+        <span class="c1"># --- # XXX experimental discounted UCB algorithm, knowing the horizon</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCBPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
+        <span class="k">for</span> <span class="n">max_nb_random_events</span> <span class="ow">in</span> <span class="p">[</span><span class="n">NB_BREAK_POINTS</span><span class="p">]</span>
+        <span class="c1"># for max_nb_random_events in list(set([50 * NB_BREAK_POINTS, 20 * NB_BREAK_POINTS, 10 * NB_BREAK_POINTS, NB_BREAK_POINTS, 1]))</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># DONE the OracleSequentiallyRestartPolicy with klUCB/UCB policy works quite well, but NOT optimally!</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">OracleSequentiallyRestartPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">CHANGE_POINTS</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
+            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+            <span class="c1"># &quot;full_restart_when_refresh&quot;: full_restart_when_refresh,</span>
+        <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="c1"># UCB,</span>
+            <span class="n">klUCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test UCB</span>
+            <span class="c1"># Exp3PlusPlus,  # XXX comment to only test UCB</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span>  <span class="c1">#, False]</span>
+        <span class="c1"># for full_restart_when_refresh in [True, False]</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="p">[]</span>
+<span class="p">})</span>
+
+
+
+<span class="c1"># XXX Huge hack! Use this if you want to modify the legends</span>
+<span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;append_labels&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">policyId</span><span class="p">:</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;append_label&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">policyId</span><span class="p">,</span> <span class="n">cfg_policy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;policies&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;append_label&quot;</span> <span class="ow">in</span> <span class="n">cfg_policy</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;change_labels&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">policyId</span><span class="p">:</span> <span class="n">cfg_policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;change_label&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">policyId</span><span class="p">,</span> <span class="n">cfg_policy</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;policies&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">&quot;change_label&quot;</span> <span class="ow">in</span> <span class="n">cfg_policy</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loaded experiments configuration from &#39;configuration_nonstationnary.py&#39; :&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;configuration[&#39;policies&#39;] =&quot;</span><span class="p">,</span> <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;policies&quot;</span><span class="p">])</span>  <span class="c1"># DEBUG</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;configuration[&#39;environment&#39;] =&quot;</span><span class="p">,</span> <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">])</span>  <span class="c1"># DEBUG</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
+      Last updated on 14 Dec 2018, 14h.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.9.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
