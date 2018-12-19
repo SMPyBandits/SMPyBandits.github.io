@@ -220,7 +220,8 @@
                                  <span class="s2">&quot;Signatures should be passed as the first &quot;</span>
                                  <span class="s2">&quot;positional argument.&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="jit"><a class="viewcode-back" href="../../docs/Policies.usenumba.html#Arms.usenumba.jit">[docs]</a><span class="k">def</span> <span class="nf">jit</span><span class="p">(</span><span class="n">signature_or_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="p">{},</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+<div class="viewcode-block" id="jit"><a class="viewcode-back" href="../../docs/Policies.usenumba.html#Arms.usenumba.jit">[docs]</a><span class="k">def</span> <span class="nf">jit</span><span class="p">(</span><span class="n">signature_or_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="p">{},</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">pipeline_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This decorator is used to compile a Python function into native code.</span>
 
@@ -240,6 +241,9 @@
 <span class="sd">    target: str</span>
 <span class="sd">        Specifies the target platform to compile for. Valid targets are cpu,</span>
 <span class="sd">        gpu, npyufunc, and cuda. Defaults to cpu.</span>
+
+<span class="sd">    pipeline_class: type numba.compiler.BasePipeline</span>
+<span class="sd">            The compiler pipeline type for customizing the compilation stages.</span>
 
 <span class="sd">    options:</span>
 <span class="sd">        For a cpu target, valid options are:</span>
@@ -264,7 +268,7 @@
 <span class="sd">                The error-model affects divide-by-zero behavior.</span>
 <span class="sd">                Valid values are &#39;python&#39; and &#39;numpy&#39;. The &#39;python&#39; model</span>
 <span class="sd">                raises exception.  The &#39;numpy&#39; model sets the result to</span>
-<span class="sd">                *+/-inf* or *nan*.</span>
+<span class="sd">                *+/-inf* or *nan*. Default value is &#39;python&#39;.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
@@ -331,7 +335,6 @@
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
             <span class="n">cache</span> <span class="o">=</span> <span class="kc">False</span>
 
-
     <span class="c1"># Handle signature</span>
     <span class="k">if</span> <span class="n">signature_or_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># No signature, no function</span>
@@ -350,8 +353,11 @@
         <span class="n">pyfunc</span> <span class="o">=</span> <span class="n">signature_or_function</span>
         <span class="n">sigs</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="n">dispatcher_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">pipeline_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dispatcher_args</span><span class="p">[</span><span class="s1">&#39;pipeline_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline_class</span>
     <span class="n">wrapper</span> <span class="o">=</span> <span class="n">_jit</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="nb">locals</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
-                   <span class="n">targetoptions</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+                   <span class="n">targetoptions</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="o">**</span><span class="n">dispatcher_args</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">pyfunc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">pyfunc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -385,15 +391,20 @@
     <span class="k">return</span> <span class="n">wrapper</span>
 
 
-<span class="k">def</span> <span class="nf">generated_jit</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">generated_jit</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">pipeline_class</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This decorator allows flexible type-based compilation</span>
 <span class="sd">    of a jitted function.  It works as `@jit`, except that the decorated</span>
 <span class="sd">    function is called at compile-time with the *types* of the arguments</span>
 <span class="sd">    and should return an implementation function for those types.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dispatcher_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">pipeline_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dispatcher_args</span><span class="p">[</span><span class="s1">&#39;pipeline_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pipeline_class</span>
     <span class="n">wrapper</span> <span class="o">=</span> <span class="n">_jit</span><span class="p">(</span><span class="n">sigs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">locals</span><span class="o">=</span><span class="p">{},</span> <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
-                   <span class="n">targetoptions</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">impl_kind</span><span class="o">=</span><span class="s1">&#39;generated&#39;</span><span class="p">)</span>
+                   <span class="n">targetoptions</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">impl_kind</span><span class="o">=</span><span class="s1">&#39;generated&#39;</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">dispatcher_args</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">wrapper</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -451,7 +462,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 14 Dec 2018, 14h.
+      Last updated on 19 Dec 2018, 20h.
 
     </p>
   </div>

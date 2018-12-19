@@ -287,6 +287,18 @@ Lots of plotting methods, to have various visualizations.</p>
 </dd></dl>
 
 <dl class="data">
+<dt id="Environment.Evaluator.random_shuffle">
+<code class="descclassname">Environment.Evaluator.</code><code class="descname">random_shuffle</code><em class="property"> = False</em><a class="headerlink" href="#Environment.Evaluator.random_shuffle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use basic random events of shuffling the arms?</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.Evaluator.random_invert">
+<code class="descclassname">Environment.Evaluator.</code><code class="descname">random_invert</code><em class="property"> = False</em><a class="headerlink" href="#Environment.Evaluator.random_invert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use basic random events of inverting the arms?</p>
+</dd></dl>
+
+<dl class="data">
 <dt id="Environment.Evaluator.nb_break_points">
 <code class="descclassname">Environment.Evaluator.</code><code class="descname">nb_break_points</code><em class="property"> = 0</em><a class="headerlink" href="#Environment.Evaluator.nb_break_points" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default nb of random events</p>
@@ -308,6 +320,24 @@ Lots of plotting methods, to have various visualizations.</p>
 <dt id="Environment.Evaluator.MORE_ACCURATE">
 <code class="descclassname">Environment.Evaluator.</code><code class="descname">MORE_ACCURATE</code><em class="property"> = True</em><a class="headerlink" href="#Environment.Evaluator.MORE_ACCURATE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use the count of selections instead of rewards for a more accurate mean/std reward measure.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.Evaluator.FINAL_RANKS_ON_AVERAGE">
+<code class="descclassname">Environment.Evaluator.</code><code class="descname">FINAL_RANKS_ON_AVERAGE</code><em class="property"> = True</em><a class="headerlink" href="#Environment.Evaluator.FINAL_RANKS_ON_AVERAGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Final ranks are printed based on average on last 1% rewards and not only the last rewards</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.Evaluator.USE_JOBLIB_FOR_POLICIES">
+<code class="descclassname">Environment.Evaluator.</code><code class="descname">USE_JOBLIB_FOR_POLICIES</code><em class="property"> = False</em><a class="headerlink" href="#Environment.Evaluator.USE_JOBLIB_FOR_POLICIES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t use joblib to parallelize the simulations on various policies (we parallelize the random Monte Carlo repetitions)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Environment.Evaluator.MAX_NB_OF_LABELS">
+<code class="descclassname">Environment.Evaluator.</code><code class="descname">MAX_NB_OF_LABELS</code><em class="property"> = 50</em><a class="headerlink" href="#Environment.Evaluator.MAX_NB_OF_LABELS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If more than MAX_NB_OF_LABELS labels have to be displayed on a boxplot, don&#8217;t put a legend.</p>
 </dd></dl>
 
 <dl class="class">
@@ -686,13 +716,13 @@ Lots of plotting methods, to have various visualizations.</p>
 
 <dl class="method">
 <dt id="Environment.Evaluator.Evaluator.plotRunningTimes">
-<code class="descname">plotRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>maxNbOfLabels=45</em>, <em>base=1</em>, <em>unit='seconds'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotRunningTimes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plotRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>maxNbOfLabels=50</em>, <em>base=1</em>, <em>unit='seconds'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotRunningTimes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the running times of the different policies, as a box plot for each.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Environment.Evaluator.Evaluator.plotMemoryConsumption">
-<code class="descname">plotMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>maxNbOfLabels=45</em>, <em>base=1024</em>, <em>unit='KiB'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotMemoryConsumption" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plotMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>maxNbOfLabels=50</em>, <em>base=1024</em>, <em>unit='KiB'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotMemoryConsumption" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the memory consumption of the different policies, as a box plot for each.</p>
 </dd></dl>
 
@@ -732,13 +762,13 @@ Lots of plotting methods, to have various visualizations.</p>
 
 <dl class="method">
 <dt id="Environment.Evaluator.Evaluator.printLastRegrets">
-<code class="descname">printLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printLastRegrets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">printLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>moreAccurate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printLastRegrets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print the last regrets of the different policies.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Environment.Evaluator.Evaluator.plotLastRegrets">
-<code class="descname">plotLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>normed=False</em>, <em>subplots=True</em>, <em>nbbins=15</em>, <em>log=False</em>, <em>boxplot=False</em>, <em>maxNbOfLabels=45</em>, <em>normalized_boxplot=True</em>, <em>all_on_separate_figures=False</em>, <em>sharex=False</em>, <em>sharey=False</em>, <em>savefig=None</em>, <em>moreAccurate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotLastRegrets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plotLastRegrets</code><span class="sig-paren">(</span><em>envId=0</em>, <em>normed=False</em>, <em>subplots=True</em>, <em>nbbins=15</em>, <em>log=False</em>, <em>boxplot=False</em>, <em>maxNbOfLabels=50</em>, <em>normalized_boxplot=True</em>, <em>all_on_separate_figures=False</em>, <em>sharex=False</em>, <em>sharey=False</em>, <em>savefig=None</em>, <em>moreAccurate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotLastRegrets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotLastRegrets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot histogram of the regrets R_T for all policies.</p>
 </dd></dl>
 
@@ -805,7 +835,7 @@ Lots of plotting methods, to have various visualizations.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 14 Dec 2018, 14h.
+      Last updated on 19 Dec 2018, 20h.
 
     </p>
   </div>
