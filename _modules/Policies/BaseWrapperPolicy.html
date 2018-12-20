@@ -202,15 +202,17 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.UCB</span> <span class="k">import</span> <span class="n">UCB</span> <span class="k">as</span> <span class="n">DefaultPolicy</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">UCB</span> <span class="k">import</span> <span class="n">UCB</span> <span class="k">as</span> <span class="n">DefaultPolicy</span>
 
 
 <div class="viewcode-block" id="BaseWrapperPolicy"><a class="viewcode-back" href="../../docs/Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy">[docs]</a><span class="k">class</span> <span class="nc">BaseWrapperPolicy</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Base class for any wrapper policy.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BaseWrapperPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">BaseWrapperPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+<div class="viewcode-block" id="BaseWrapperPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">DefaultPolicy</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BaseWrapperPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># --- Policy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span> <span class="o">=</span> <span class="n">policy</span>  <span class="c1"># Class to create the underlying policy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">args</span>  <span class="c1"># To keep them</span>
@@ -218,7 +220,7 @@
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
             <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>  <span class="c1"># To keep them</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Underlying policy</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">policy</span>  <span class="c1">#: Underlying policy</span></div>
 
     <span class="c1"># --- Start game by creating new underlying policy</span>
 
@@ -232,12 +234,9 @@
         <span class="k">if</span> <span class="n">createNewPolicy</span><span class="p">:</span>
             <span class="c1"># print(&quot;INFO: BaseWrapperPolicy: creating a new underlying policy with startGame(createNewPolicy=True)...&quot;)  # DEBUG</span>
             <span class="c1"># del self.policy  # XXX be sure that we delete the attribute and the object?</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
         <span class="c1"># now also start game for the underlying policy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span></div>
-        <span class="c1"># print(&quot;DEBUG: BaseWrapperPolicy underlying policy rewards = {}, pulls = {}...&quot;.format(self.policy.rewards, self.policy.pulls))  # DEBUG</span>
-        <span class="c1"># self.rewards = self.policy.rewards  # just pointers to the underlying arrays!</span>
-        <span class="c1"># self.pulls = self.policy.pulls      # just pointers to the underlying arrays!</span>
 
     <span class="c1"># --- Pass the call to the subpolicy</span>
 
@@ -306,7 +305,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Dec 2018, 20h.
+      Last updated on 20 Dec 2018, 18h.
 
     </p>
   </div>

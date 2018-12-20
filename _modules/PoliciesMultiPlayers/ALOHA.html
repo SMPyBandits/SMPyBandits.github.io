@@ -201,9 +201,15 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
 
-<span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
-<span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
-<span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+
 
 
 <span class="c1"># --- Functions to define [t, t + tnext] intervals</span>
@@ -378,7 +384,7 @@
 
 <div class="viewcode-block" id="ALOHA.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.ALOHA.html#PoliciesMultiPlayers.ALOHA.ALOHA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
                  <span class="n">p0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha_p0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ftnext</span><span class="o">=</span><span class="n">tnext_beta</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># Named argument to give them in any order</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># Named argument to give them in any order</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
 <span class="sd">        - playerAlgo: class to use for every players.</span>
@@ -393,7 +399,7 @@
 
 <span class="sd">        Example:</span>
 
-<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; from Policies import *</span>
 <span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
 <span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
 <span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
@@ -416,7 +422,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
         <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
             <span class="c1"># Initialize internal algorithm (eg. UCB, Thompson etc)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="c1"># Initialize proxy child</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">oneALOHA</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">p0</span><span class="p">,</span> <span class="n">alpha_p0</span><span class="o">=</span><span class="n">alpha_p0</span><span class="p">,</span> <span class="n">ftnext</span><span class="o">=</span><span class="n">ftnext</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">)</span></div>
 
@@ -424,13 +430,6 @@
         <span class="k">return</span> <span class="s2">&quot;ALOHA(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div></div>
 
 
-<span class="c1"># --- Debugging</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="c1"># Code for debugging purposes.</span>
-    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
-    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
            </div>
@@ -446,7 +445,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Dec 2018, 20h.
+      Last updated on 20 Dec 2018, 18h.
 
     </p>
   </div>

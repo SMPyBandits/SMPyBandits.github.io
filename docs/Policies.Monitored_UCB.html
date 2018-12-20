@@ -330,13 +330,9 @@
 </pre></div>
 </div>
 </li>
-<li><p class="first">It uses an additional <span class="math">\(\mathcal{O}(\tau_\max)\)</span> memory for a game of maximum stationary length <span class="math">\(\tau_\max\)</span>.</p>
+<li><p class="first">It uses an additional <span class="math">\(\mathcal{O}(K w)\)</span> memory for a window of size <span class="math">\(w\)</span>.</p>
 </li>
 </ul>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This implementation is still experimental!</p>
-</div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">It can only work on basic index policy based on empirical averages (and an exploration bias), like <code class="xref py py-class docutils literal"><span class="pre">UCB</span></code>, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</p>
@@ -363,12 +359,15 @@ I force <code class="docutils literal"><span class="pre">0.1</span></code> becau
 
 <dl class="class">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">Monitored_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">Monitored_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
 <p>The Monitored-UCB generic policy for non-stationary bandits, from [[&#8220;Nearly Optimal Adaptive Procedure for Piecewise-Stationary Bandit: a Change-Point Detection Approach&#8221;. Yang Cao, Zheng Wen, Branislav Kveton, Yao Xie. arXiv preprint arXiv:1802.03692, 2018]](https://arxiv.org/pdf/1802.03692)</p>
+<ul class="simple">
+<li>For a window size <code class="docutils literal"><span class="pre">w</span></code>, it uses only <span class="math">\(\mathcal{O}(K w)\)</span> memory.</li>
+</ul>
 <dl class="method">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -401,8 +400,8 @@ I force <code class="docutils literal"><span class="pre">0.1</span></code> becau
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.all_rewards">
-<code class="descname">all_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.all_rewards" title="Permalink to this definition">¶</a></dt>
+<dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.last_w_rewards">
+<code class="descname">last_w_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.last_w_rewards" title="Permalink to this definition">¶</a></dt>
 <dd><p>Keep in memory all the rewards obtained since the last restart on that arm.</p>
 </dd></dl>
 
@@ -452,6 +451,10 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
 <li>where <span class="math">\(Y_i\)</span> is the i-th data in the latest w data from this arm (ie, <span class="math">\(X_k(t)\)</span> for <span class="math">\(t = n_k - w + 1\)</span> to <span class="math">\(t = n_k\)</span> current number of samples from arm k).</li>
 <li>where <a class="reference internal" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.threshold_b" title="Policies.Monitored_UCB.Monitored_IndexPolicy.threshold_b"><code class="xref py py-attr docutils literal"><span class="pre">threshold_b</span></code></a> is the threshold b of the test, and <a class="reference internal" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.window_size" title="Policies.Monitored_UCB.Monitored_IndexPolicy.window_size"><code class="xref py py-attr docutils literal"><span class="pre">window_size</span></code></a> is the window-size w.</li>
 </ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME See <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/174">https://github.com/SMPyBandits/SMPyBandits/issues/174</a> i should store only the last <span class="math">\(w\)</span> data.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -481,7 +484,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Dec 2018, 20h.
+      Last updated on 20 Dec 2018, 18h.
 
     </p>
   </div>

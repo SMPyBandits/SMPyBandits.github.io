@@ -337,6 +337,10 @@
 <p class="first admonition-title">Warning</p>
 <p class="last">It is an efficient baseline, but it has no reason to be the best algorithm on a given problem (empirically)! I found that <code class="xref py py-class docutils literal"><span class="pre">Policy.DiscountedThompson.DiscountedThompson</span></code> is usually the most efficient.</p>
 </div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">FIXME I should implement a better oracle, see <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/172">https://github.com/SMPyBandits/SMPyBandits/issues/172</a></p>
+</div>
 <dl class="data">
 <dt id="Policies.OracleSequentiallyRestartPolicy.PER_ARM_RESTART">
 <code class="descclassname">Policies.OracleSequentiallyRestartPolicy.</code><code class="descname">PER_ARM_RESTART</code><em class="property"> = False</em><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.PER_ARM_RESTART" title="Permalink to this definition">¶</a></dt>
@@ -351,18 +355,36 @@
 
 <dl class="class">
 <dt id="Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy">
-<em class="property">class </em><code class="descclassname">Policies.OracleSequentiallyRestartPolicy.</code><code class="descname">OracleSequentiallyRestartPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>changePoints=None</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OracleSequentiallyRestartPolicy.html#OracleSequentiallyRestartPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.OracleSequentiallyRestartPolicy.</code><code class="descname">OracleSequentiallyRestartPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>changePoints=None</em>, <em>listOfMeans=None</em>, <em>reset_for_all_change=False</em>, <em>reset_for_suboptimal_change=False</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OracleSequentiallyRestartPolicy.html#OracleSequentiallyRestartPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
 <p>An oracle policy for non-stationary bandits, restarting an underlying stationary bandit policy at each breakpoint.</p>
 <dl class="method">
 <dt id="Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>changePoints=None</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OracleSequentiallyRestartPolicy.html#OracleSequentiallyRestartPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>changePoints=None</em>, <em>listOfMeans=None</em>, <em>reset_for_all_change=False</em>, <em>reset_for_suboptimal_change=False</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/OracleSequentiallyRestartPolicy.html#OracleSequentiallyRestartPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.changePoints">
 <code class="descname">changePoints</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.changePoints" title="Permalink to this definition">¶</a></dt>
-<dd><p>Locations of the break points (or change points) of the switching bandit problem. If <code class="docutils literal"><span class="pre">None</span></code>, an empty list is used.</p>
+<dd><p>Locations of the break points (or change points) of the switching bandit problem, for each arm. If <code class="docutils literal"><span class="pre">None</span></code>, an empty list is used.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.listOfMeans">
+<code class="descname">listOfMeans</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.listOfMeans" title="Permalink to this definition">¶</a></dt>
+<dd><p>FIXME</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.reset_for_all_change">
+<code class="descname">reset_for_all_change</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.reset_for_all_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>FIXME</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.reset_for_suboptimal_change">
+<code class="descname">reset_for_suboptimal_change</code><em class="property"> = None</em><a class="headerlink" href="#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.reset_for_suboptimal_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>FIXME</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -423,7 +445,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Dec 2018, 20h.
+      Last updated on 20 Dec 2018, 18h.
 
     </p>
   </div>

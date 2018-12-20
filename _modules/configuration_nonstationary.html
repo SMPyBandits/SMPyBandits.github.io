@@ -655,27 +655,27 @@
 
 <span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="p">[</span>
     <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Per-arm restart XXX comment to only test global arm</span>
-    <span class="c1"># False, # Global restart XXX seems more efficient? (at least more memory efficient!)</span>
+    <span class="kc">False</span><span class="p">,</span> <span class="c1"># Global restart XXX seems more efficient? (at least more memory efficient!)</span>
 <span class="p">]</span>
 
 
 <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
     <span class="s2">&quot;policies&quot;</span><span class="p">:</span>
-    <span class="p">[</span>  <span class="c1"># XXX Regular adversarial bandits algorithms!</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3PlusPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
-    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>  <span class="c1"># XXX Regular stochastic bandits algorithms!</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="c1"># { &quot;archtype&quot;: SWR_UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },  # WARNING experimental!</span>
-        <span class="c1"># { &quot;archtype&quot;: BESA, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;non_binary&quot;: True, } },</span>
-        <span class="c1"># { &quot;archtype&quot;: BayesUCB, &quot;params&quot;: { &quot;posterior&quot;: Beta, } },</span>
-        <span class="c1"># { &quot;archtype&quot;: AdBandits, &quot;params&quot;: { &quot;alpha&quot;: 1, &quot;horizon&quot;: HORIZON, } },</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucb</span><span class="p">,</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="c1"># { &quot;archtype&quot;: SWR_klUCB, &quot;params&quot;: { &quot;klucb&quot;: klucb, } },  # WARNING experimental!</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span> <span class="p">}</span> <span class="p">},</span>
-    <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>  <span class="c1"># XXX This is still highly experimental!</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">DiscountedBeta</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="n">gamma</span> <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">]</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [  # XXX Regular adversarial bandits algorithms!</span>
+    <span class="c1">#     { &quot;archtype&quot;: Exp3PlusPlus, &quot;params&quot;: {} },</span>
+    <span class="c1"># ] + [  # XXX Regular stochastic bandits algorithms!</span>
+    <span class="c1">#     { &quot;archtype&quot;: UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },</span>
+    <span class="c1">#     # { &quot;archtype&quot;: SWR_UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },  # WARNING experimental!</span>
+    <span class="c1">#     # { &quot;archtype&quot;: BESA, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;non_binary&quot;: True, } },</span>
+    <span class="c1">#     # { &quot;archtype&quot;: BayesUCB, &quot;params&quot;: { &quot;posterior&quot;: Beta, } },</span>
+    <span class="c1">#     # { &quot;archtype&quot;: AdBandits, &quot;params&quot;: { &quot;alpha&quot;: 1, &quot;horizon&quot;: HORIZON, } },</span>
+    <span class="c1">#     { &quot;archtype&quot;: klUCB, &quot;params&quot;: { &quot;klucb&quot;: klucb, } },</span>
+    <span class="c1">#     # { &quot;archtype&quot;: SWR_klUCB, &quot;params&quot;: { &quot;klucb&quot;: klucb, } },  # WARNING experimental!</span>
+    <span class="c1">#     { &quot;archtype&quot;: Thompson, &quot;params&quot;: { &quot;posterior&quot;: Beta, } },</span>
+    <span class="c1"># ] + [  # XXX This is still highly experimental!</span>
+    <span class="c1">#     { &quot;archtype&quot;: DiscountedThompson, &quot;params&quot;: { &quot;posterior&quot;: DiscountedBeta, &quot;gamma&quot;: gamma } }</span>
+    <span class="c1">#     for gamma in [0.99, 0.9, 0.7]</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># The Exp3R algorithm works reasonably well</span>
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3R</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
@@ -684,82 +684,89 @@
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3RPlusPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
     <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># [  # XXX TODO test the AdSwitch policy and its corrected version</span>
-    <span class="c1">#     { &quot;archtype&quot;: AdSwitch, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;C1&quot;: C1, &quot;C2&quot;: C2,} }</span>
-    <span class="c1">#     for C1 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-    <span class="c1">#     for C2 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-    <span class="c1"># ] +</span>
-    <span class="c1"># # The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
+    <span class="c1"># # [  # XXX TODO test the AdSwitch policy and its corrected version</span>
+    <span class="c1"># #     { &quot;archtype&quot;: AdSwitch, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;C1&quot;: C1, &quot;C2&quot;: C2,} }</span>
+    <span class="c1"># #     for C1 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="c1"># #     for C2 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="c1"># # ] +</span>
+    <span class="c1"># # # The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
+    <span class="c1"># # [</span>
+    <span class="c1"># #     # nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
+    <span class="c1"># #     # XXX note that for a fixed T it means nothing…</span>
+    <span class="c1"># #     # XXX But for T=10000 it is at most 100 changes, reasonable!</span>
+    <span class="c1"># #     { &quot;archtype&quot;: LM_DSEE, &quot;params&quot;: { &quot;nu&quot;: 0.25, &quot;DeltaMin&quot;: 0.1, &quot;a&quot;: 1, &quot;b&quot;: 0.25, } }</span>
+    <span class="c1"># # ] +</span>
+    <span class="c1"># # XXX Test a few CD-MAB algorithms that need to know NB_BREAK_POINTS</span>
     <span class="c1"># [</span>
-    <span class="c1">#     # nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
-    <span class="c1">#     # XXX note that for a fixed T it means nothing…</span>
-    <span class="c1">#     # XXX But for T=10000 it is at most 100 changes, reasonable!</span>
-    <span class="c1">#     { &quot;archtype&quot;: LM_DSEE, &quot;params&quot;: { &quot;nu&quot;: 0.25, &quot;DeltaMin&quot;: 0.1, &quot;a&quot;: 1, &quot;b&quot;: 0.25, } }</span>
+    <span class="c1">#     { &quot;archtype&quot;: archtype, &quot;params&quot;: {</span>
+    <span class="c1">#         &quot;horizon&quot;: HORIZON,</span>
+    <span class="c1">#         &quot;max_nb_random_events&quot;: NB_BREAK_POINTS,</span>
+    <span class="c1">#         &quot;policy&quot;: policy,</span>
+    <span class="c1">#         &quot;per_arm_restart&quot;: per_arm_restart,</span>
+    <span class="c1">#     } }</span>
+    <span class="c1">#     for archtype in [</span>
+    <span class="c1">#         CUSUM_IndexPolicy,</span>
+    <span class="c1">#         PHT_IndexPolicy,  # OK PHT_IndexPolicy is very much like CUSUM</span>
+    <span class="c1">#     ]</span>
+    <span class="c1">#     for policy in [</span>
+    <span class="c1">#         # UCB,  # XXX comment to only test klUCB</span>
+    <span class="c1">#         klUCB,</span>
+    <span class="c1">#     ]</span>
+    <span class="c1">#     for per_arm_restart in PER_ARM_RESTART</span>
     <span class="c1"># ] +</span>
-    <span class="c1"># XXX Test a few CD-MAB algorithms that need to know NB_BREAK_POINTS</span>
-    <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
-            <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
-            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
-            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
-        <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span>
-            <span class="n">PHT_IndexPolicy</span><span class="p">,</span>  <span class="c1"># OK PHT_IndexPolicy is very much like CUSUM</span>
-        <span class="p">]</span>
-        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
-            <span class="n">klUCB</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="n">PER_ARM_RESTART</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># # DONE The SW_UCB_Hash algorithm works fine!</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     { &quot;archtype&quot;: SWHash_IndexPolicy, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;lmbda&quot;: lmbda, &quot;policy&quot;: UCB } }</span>
+    <span class="c1">#     for alpha in ALPHAS</span>
+    <span class="c1">#     for lmbda in [1]  # [0.1, 0.5, 1, 5, 10]</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># # [</span>
+    <span class="c1"># #     # --- # XXX experimental sliding window algorithm</span>
+    <span class="c1"># #     { &quot;archtype&quot;: SlidingWindowRestart, &quot;params&quot;: { &quot;policy&quot;: policy, &quot;tau&quot;: tau, &quot;threshold&quot;: eps, &quot;full_restart_when_refresh&quot;: True } }</span>
+    <span class="c1"># #     for tau in [TAUS[0]] for eps in [EPSS[0]]</span>
+    <span class="c1"># #     for policy in [UCB, klUCB, Thompson, BayesUCB]</span>
+    <span class="c1"># # ] +</span>
+    <span class="c1"># # [</span>
+    <span class="c1"># #     # --- # Different versions of the sliding window UCB algorithm</span>
+    <span class="c1"># #     { &quot;archtype&quot;: SWUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;tau&quot;: tau, } }</span>
+    <span class="c1"># #     for alpha in ALPHAS for tau in TAUS</span>
+    <span class="c1"># # ] +</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # XXX experimental other version of the sliding window algorithm, knowing the horizon</span>
+    <span class="c1">#     { &quot;archtype&quot;: SWUCBPlus, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;alpha&quot;: alpha, } }</span>
+    <span class="c1">#     for alpha in ALPHAS</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># # # [</span>
+    <span class="c1"># # #     # --- # Different versions of the discounted UCB algorithm</span>
+    <span class="c1"># # #     { &quot;archtype&quot;: DiscountedUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;gamma&quot;: gamma, &quot;useRealDiscount&quot;: useRealDiscount, } }</span>
+    <span class="c1"># # #     for gamma in GAMMAS for alpha in ALPHAS for useRealDiscount in [True, False]</span>
+    <span class="c1"># # # ] +</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # XXX experimental discounted UCB algorithm, knowing the horizon</span>
+    <span class="c1">#     { &quot;archtype&quot;: DiscountedUCBPlus, &quot;params&quot;: { &quot;max_nb_random_events&quot;: max_nb_random_events, &quot;alpha&quot;: alpha, &quot;horizon&quot;: HORIZON, } }</span>
+    <span class="c1">#     for alpha in ALPHAS</span>
+    <span class="c1">#     for max_nb_random_events in [NB_BREAK_POINTS]</span>
+    <span class="c1">#     # for max_nb_random_events in list(set([50 * NB_BREAK_POINTS, 20 * NB_BREAK_POINTS, 10 * NB_BREAK_POINTS, NB_BREAK_POINTS, 1]))</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># # XXX The Monitored_IndexPolicy works but the default choice of parameters seem bad!</span>
     <span class="c1"># [</span>
     <span class="c1">#     { &quot;archtype&quot;: Monitored_IndexPolicy, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;max_nb_random_events&quot;: NB_BREAK_POINTS, &quot;delta&quot;: 0.1, &quot;policy&quot;: UCB, } }</span>
     <span class="c1"># ] +</span>
     <span class="c1"># XXX The Monitored_IndexPolicy with specific tuning of the input parameters</span>
     <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">WINDOW_SIZE</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">WINDOW_SIZE</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">NB_ARMS</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span> <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
+            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+            <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span>
+            <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">NB_ARMS</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="o">**</span><span class="mi">2</span><span class="p">)),</span>
+        <span class="p">}</span> <span class="p">}</span>
         <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="n">PER_ARM_RESTART</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="c1"># UCB,</span>
             <span class="n">klUCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test UCB</span>
         <span class="p">]</span>
-    <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># DONE The SW_UCB_Hash algorithm works fine!</span>
-    <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWHash_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;lmbda&quot;</span><span class="p">:</span> <span class="n">lmbda</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">UCB</span> <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
-        <span class="k">for</span> <span class="n">lmbda</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># [0.1, 0.5, 1, 5, 10]</span>
-    <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># [</span>
-    <span class="c1">#     # --- # XXX experimental sliding window algorithm</span>
-    <span class="c1">#     { &quot;archtype&quot;: SlidingWindowRestart, &quot;params&quot;: { &quot;policy&quot;: policy, &quot;tau&quot;: tau, &quot;threshold&quot;: eps, &quot;full_restart_when_refresh&quot;: True } }</span>
-    <span class="c1">#     for tau in [TAUS[0]] for eps in [EPSS[0]]</span>
-    <span class="c1">#     for policy in [UCB, klUCB, Thompson, BayesUCB]</span>
-    <span class="c1"># ] +</span>
-    <span class="c1"># [</span>
-    <span class="c1">#     # --- # Different versions of the sliding window UCB algorithm</span>
-    <span class="c1">#     { &quot;archtype&quot;: SWUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;tau&quot;: tau, } }</span>
-    <span class="c1">#     for alpha in ALPHAS for tau in TAUS</span>
-    <span class="c1"># ] +</span>
-    <span class="p">[</span>
-        <span class="c1"># --- # XXX experimental other version of the sliding window algorithm, knowing the horizon</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCBPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
-    <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># # [</span>
-    <span class="c1"># #     # --- # Different versions of the discounted UCB algorithm</span>
-    <span class="c1"># #     { &quot;archtype&quot;: DiscountedUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;gamma&quot;: gamma, &quot;useRealDiscount&quot;: useRealDiscount, } }</span>
-    <span class="c1"># #     for gamma in GAMMAS for alpha in ALPHAS for useRealDiscount in [True, False]</span>
-    <span class="c1"># # ] +</span>
-    <span class="p">[</span>
-        <span class="c1"># --- # XXX experimental discounted UCB algorithm, knowing the horizon</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCBPlus</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
-        <span class="k">for</span> <span class="n">max_nb_random_events</span> <span class="ow">in</span> <span class="p">[</span><span class="n">NB_BREAK_POINTS</span><span class="p">]</span>
-        <span class="c1"># for max_nb_random_events in list(set([50 * NB_BREAK_POINTS, 20 * NB_BREAK_POINTS, 10 * NB_BREAK_POINTS, NB_BREAK_POINTS, 1]))</span>
+        <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">[</span><span class="n">WINDOW_SIZE</span><span class="p">,</span> <span class="n">NB_ARMS</span><span class="o">*</span><span class="n">WINDOW_SIZE</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">NB_ARMS</span><span class="o">*</span><span class="n">WINDOW_SIZE</span><span class="p">]</span>
     <span class="p">]</span> <span class="o">+</span>
     <span class="c1"># DONE the OracleSequentiallyRestartPolicy with klUCB/UCB policy works quite well, but NOT optimally!</span>
     <span class="p">[</span>
@@ -781,12 +788,15 @@
             <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
             <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
             <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+            <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
             <span class="c1"># &quot;delta&quot;: delta,</span>
             <span class="c1"># &quot;alpha0&quot;: alpha0,</span>
+            <span class="c1"># &quot;lazy_detect_change_only_x_steps&quot;: lazy_detect_change_only_x_steps,</span>
+            <span class="c1"># &quot;lazy_try_value_s_only_x_steps&quot;: lazy_try_value_s_only_x_steps,</span>
         <span class="p">}</span> <span class="p">}</span>
         <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="n">BernoulliGLR_IndexPolicy</span><span class="p">,</span>   <span class="c1"># OK BernoulliGLR_IndexPolicy is very much like CUSUM</span>
-            <span class="c1"># BernoulliGLR_IndexPolicy_Variant,   # TODO BernoulliGLR_IndexPolicy_Variant is working?</span>
+            <span class="n">BernoulliGLR_IndexPolicy_Variant</span><span class="p">,</span>   <span class="c1"># TODO BernoulliGLR_IndexPolicy_Variant is working?</span>
             <span class="n">GaussianGLR_IndexPolicy</span><span class="p">,</span>    <span class="c1"># OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
             <span class="n">SubGaussianGLR_IndexPolicy</span><span class="p">,</span> <span class="c1"># OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
         <span class="p">]</span>
@@ -796,7 +806,9 @@
         <span class="p">]</span>
         <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="n">PER_ARM_RESTART</span>
         <span class="c1"># for delta in [None] #+ [0.1, 0.05, 0.001]  # comment from the + to use default parameter</span>
-        <span class="c1"># for alpha0 in [None] + [0.5, 0.01, 0.001, 0.0001]  # comment from the + to use default parameter</span>
+        <span class="c1"># for alpha0 in [None] + [0.1, 0.01, 0.005, 0.001]  # comment from the + to use default parameter</span>
+        <span class="c1"># for lazy_detect_change_only_x_steps in [0, 2, 10]</span>
+        <span class="c1"># for lazy_try_value_s_only_x_steps in [1, 2, 10]</span>
     <span class="p">]</span> <span class="o">+</span>
     <span class="p">[]</span>
 <span class="p">})</span>
@@ -835,7 +847,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 19 Dec 2018, 20h.
+      Last updated on 20 Dec 2018, 18h.
 
     </p>
   </div>
