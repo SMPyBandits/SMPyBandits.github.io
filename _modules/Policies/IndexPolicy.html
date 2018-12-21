@@ -284,7 +284,7 @@
         <span class="c1">#     return self.choice()</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">availableArms</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: IndexPolicy.choiceFromSubSet(</span><span class="si">{}</span><span class="s2">): the argument availableArms of type </span><span class="si">{}</span><span class="s2"> should not be empty.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">availableArms</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">availableArms</span><span class="p">)))</span>  <span class="c1"># DEBUG</span>
-            <span class="c1"># FIXME if no arms are tagged as available, what to do ? choose an arm at random, or call choice() as if available == &#39;all&#39;</span>
+            <span class="c1"># WARNING if no arms are tagged as available, what to do ? choose an arm at random, or call choice() as if available == &#39;all&#39;</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">availableArms</span><span class="p">:</span>
@@ -338,8 +338,8 @@
 <div class="viewcode-block" id="IndexPolicy.estimatedBestArms"><a class="viewcode-back" href="../../docs/Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy.estimatedBestArms">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedBestArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.&quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">M</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: the parameter &#39;M&#39; has to be between 1 and K = </span><span class="si">{}</span><span class="s2">, but it was </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="c1"># # FIXME this slows down everything, but maybe the only way to make this correct?</span>
-        <span class="c1"># if np.any(np.isinf(self.index)) and set(self.index) == {np.inf}:</span>
+        <span class="c1"># # WARNING this slows down everything, but maybe the only way to make this correct?</span>
+        <span class="c1"># if np.all(np.isinf(self.index)):</span>
         <span class="c1">#     # Initial guess: random estimate of the set Mbest</span>
         <span class="c1">#     choice = np.random.choice(self.nbArms, size=M, replace=False)</span>
         <span class="c1">#     print(&quot;Warning: estimatedBestArms() for self = {} was called with M = {} but all indexes are +inf, so using a random estimate = {} of Mbest instead of the biased [K-M,...,K-1] ...&quot;.format(self, M, choice))  # DEBUG</span>
@@ -362,7 +362,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 20 Dec 2018, 18h.
+      Last updated on 21 Dec 2018, 18h.
 
     </p>
   </div>

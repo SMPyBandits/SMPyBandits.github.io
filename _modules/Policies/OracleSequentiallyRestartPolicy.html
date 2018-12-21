@@ -217,12 +217,20 @@
 
 
 <span class="c1">#: Should we reset one arm empirical average or all? Default is ``False`` for this algorithm.</span>
-<span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1">#: Should we fully restart the algorithm or simply reset one arm empirical average? Default is ``False``, it&#39;s usually more efficient!</span>
 <span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: ``True`` if the algorithm reset one/all arm memories when a change occur on any arm.</span>
+<span class="c1">#: ``False``` if the algorithms only resets one arm memories when a change occur on *this arm* (needs to know ``listOfMeans``) (default, it should be more efficient).</span>
+<span class="n">RESET_FOR_ALL_CHANGE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: ``True`` if the algorithms resets memories of *this arm* no matter if it stays optimal/suboptimal (default, it should be more efficient).</span>
+<span class="c1">#: ``False`` if the algorithm reset memories only when a change make the previously best arm become suboptimal.</span>
+<span class="n">RESET_FOR_SUBOPTIMAL_CHANGE</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <span class="c1"># --- The very generic class</span>
@@ -233,8 +241,8 @@
 <div class="viewcode-block" id="OracleSequentiallyRestartPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.OracleSequentiallyRestartPolicy.html#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
             <span class="n">changePoints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">listOfMeans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">reset_for_all_change</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">reset_for_suboptimal_change</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">reset_for_all_change</span><span class="o">=</span><span class="n">RESET_FOR_ALL_CHANGE</span><span class="p">,</span>
+            <span class="n">reset_for_suboptimal_change</span><span class="o">=</span><span class="n">RESET_FOR_SUBOPTIMAL_CHANGE</span><span class="p">,</span>
             <span class="n">full_restart_when_refresh</span><span class="o">=</span><span class="n">FULL_RESTART_WHEN_REFRESH</span><span class="p">,</span>
             <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -246,22 +254,67 @@
         <span class="n">changePoints</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">tau</span> <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">changePoints</span> <span class="k">if</span> <span class="n">tau</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">changePoints</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: it is useless to use the wrapper OracleSequentiallyRestartPolicy when changePoints = </span><span class="si">{}</span><span class="s2"> is empty, just use the base policy without the wrapper!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">changePoints</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">changePoints</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Locations of the break points (or change points) of the switching bandit problem, for each arm. If ``None``, an empty list is used.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">listOfMeans</span> <span class="o">=</span> <span class="n">listOfMeans</span>  <span class="c1">#: FIXME</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_all_change</span> <span class="o">=</span> <span class="n">reset_for_all_change</span>  <span class="c1">#: FIXME</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_suboptimal_change</span> <span class="o">=</span> <span class="n">reset_for_suboptimal_change</span>  <span class="c1">#: FIXME</span>
-        <span class="c1"># TODO if listOfMeans is given and these options are, store changePoints as a list of list</span>
+        <span class="n">changePoints</span> <span class="o">=</span> <span class="p">[</span><span class="n">changePoints</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_all_change</span> <span class="o">=</span> <span class="n">reset_for_all_change</span>  <span class="c1">#: See :data:`RESET_FOR_ALL_CHANGE`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_suboptimal_change</span> <span class="o">=</span> <span class="n">reset_for_suboptimal_change</span>  <span class="c1">#: See :data:`RESET_FOR_SUBOPTIMAL_CHANGE`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_optimized_changePoints</span><span class="p">(</span><span class="n">changePoints</span><span class="o">=</span><span class="n">changePoints</span><span class="p">,</span> <span class="n">listOfMeans</span><span class="o">=</span><span class="n">listOfMeans</span><span class="p">)</span>  <span class="c1">#: Locations of the break points (or change points) of the switching bandit problem, for each arm. If ``None``, an empty list is used.</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span> <span class="o">=</span> <span class="n">full_restart_when_refresh</span>  <span class="c1"># Should we fully restart the algorithm or simply reset one arm empirical average ?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="o">=</span> <span class="n">per_arm_restart</span>  <span class="c1"># Should we reset one arm empirical average or all?</span>
 
         <span class="c1"># Internal memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Keep in memory all the rewards obtained since the last restart on that arm.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Info: creating a new policy </span><span class="si">{}</span><span class="s2">, with change points = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changePoints</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
 
+<div class="viewcode-block" id="OracleSequentiallyRestartPolicy.compute_optimized_changePoints"><a class="viewcode-back" href="../../docs/Policies.OracleSequentiallyRestartPolicy.html#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.compute_optimized_changePoints">[docs]</a>    <span class="k">def</span> <span class="nf">compute_optimized_changePoints</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">changePoints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">listOfMeans</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Compute the list of change points for each arm.</span>
+
+<span class="sd">        - If :attr:`reset_for_all_change` is ``True``, all change points concern all arms (sub optimal)!</span>
+<span class="sd">        - If :attr:`reset_for_all_change` is ``False``,</span>
+<span class="sd">            + If :attr:`reset_for_suboptimal_change` is ``True``, all change points were the mean of an arm change concern it (still sub optimal)!</span>
+<span class="sd">            + If :attr:`reset_for_suboptimal_change` is ``False``, only the change points were an arm goes from optimal to sub-optimal or sub-optimal to optimal concern it (optimal!)!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">optimized_changePoints</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="p">]</span>
+        <span class="k">if</span> <span class="n">listOfMeans</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">changePoints</span>
+        <span class="k">elif</span> <span class="n">listOfMeans</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">listOfMeans</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">listOfMeans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">listOfMeans</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                <span class="n">taus</span> <span class="o">=</span> <span class="n">changePoints</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+                <span class="n">mus</span> <span class="o">=</span> <span class="n">listOfMeans</span><span class="p">[:,</span> <span class="n">arm</span><span class="p">]</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">last_mu</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+                <span class="n">last_best_mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">listOfMeans</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="p">(</span><span class="n">mu_m</span><span class="p">,</span> <span class="n">tau_m</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">taus</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_all_change</span><span class="p">:</span>
+                        <span class="c1"># this breakpoint location concerns all arm, for this option</span>
+                        <span class="n">optimized_changePoints</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tau_m</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">last_mu</span> <span class="o">!=</span> <span class="n">mu_m</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_suboptimal_change</span><span class="p">:</span>
+                            <span class="c1"># this breakpoint location concerns this arm because its mean changed, for this option</span>
+                            <span class="n">optimized_changePoints</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tau_m</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">best_mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">listOfMeans</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="p">:])</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="p">(</span><span class="n">last_mu</span> <span class="o">==</span> <span class="n">last_best_mu</span> <span class="ow">and</span> <span class="n">mu_m</span> <span class="o">&lt;</span> <span class="n">best_mu</span><span class="p">)</span>  <span class="c1"># it&#39;s not the best anymore!</span>
+                                <span class="ow">or</span> <span class="p">(</span><span class="n">last_mu</span> <span class="o">&lt;</span> <span class="n">last_best_mu</span> <span class="ow">and</span> <span class="n">mu_m</span> <span class="o">==</span> <span class="n">best_mu</span><span class="p">)</span>  <span class="c1"># it&#39;s now the best!</span>
+                                <span class="p">):</span>
+                                <span class="c1"># this breakpoint location concerns this arm because its mean changed and it is not the best anymore, for this option</span>
+                                <span class="n">optimized_changePoints</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tau_m</span><span class="p">)</span>
+                            <span class="n">last_best_mu</span> <span class="o">=</span> <span class="n">best_mu</span>
+                        <span class="n">last_mu</span> <span class="o">=</span> <span class="n">mu_m</span>
+        <span class="k">return</span> <span class="n">optimized_changePoints</span></div>
+
 <div class="viewcode-block" id="OracleSequentiallyRestartPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.OracleSequentiallyRestartPolicy.html#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;OracleRestart-</span><span class="si">{}</span><span class="s2">($\Upsilon_T=</span><span class="si">{}</span><span class="s2">$</span><span class="si">{}{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">changePoints</span><span class="p">),</span> <span class="s2">&quot;, Per-Arm&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">,</span> <span class="s2">&quot;, Restart-with-new-Object&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="n">quality</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">subsub</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_all_change</span>
+        <span class="k">if</span> <span class="n">subsub</span><span class="p">:</span> <span class="n">quality</span> <span class="o">=</span> <span class="s2">&quot;, sub-sub-optimal&quot;</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_all_change</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_for_suboptimal_change</span>
+        <span class="k">if</span> <span class="n">sub</span><span class="p">:</span> <span class="n">quality</span> <span class="o">=</span> <span class="s2">&quot;, sub-optimal&quot;</span>
+        <span class="c1"># opt = not self.reset_for_all_change and self.reset_for_suboptimal_change</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;OracleRestart-</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}{}{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;Per-Arm&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span> <span class="s2">&quot;, Restart-with-new-Object&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">quality</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="OracleSequentiallyRestartPolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.OracleSequentiallyRestartPolicy.html#Policies.OracleSequentiallyRestartPolicy.OracleSequentiallyRestartPolicy.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Give a reward: increase t, pulls, and update cumulated sum of rewards and update small history (sliding window) for that arm (normalized in [0, 1]).</span>
@@ -319,7 +372,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 20 Dec 2018, 18h.
+      Last updated on 21 Dec 2018, 18h.
 
     </p>
   </div>

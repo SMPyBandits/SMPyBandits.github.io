@@ -136,6 +136,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.EpsilonGreedy.html">Policies.EpsilonGreedy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3.html">Policies.Exp3 module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.Exp3R.html">Policies.Exp3R module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.GenericAggregation.html">Policies.GenericAggregation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
@@ -359,7 +360,7 @@ I force <code class="docutils literal"><span class="pre">0.1</span></code> becau
 
 <dl class="class">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">Monitored_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">Monitored_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
 <p>The Monitored-UCB generic policy for non-stationary bandits, from [[&#8220;Nearly Optimal Adaptive Procedure for Piecewise-Stationary Bandit: a Change-Point Detection Approach&#8221;. Yang Cao, Zheng Wen, Branislav Kveton, Yao Xie. arXiv preprint arXiv:1802.03692, 2018]](https://arxiv.org/pdf/1802.03692)</p>
 <ul class="simple">
@@ -367,7 +368,7 @@ I force <code class="docutils literal"><span class="pre">0.1</span></code> becau
 </ul>
 <dl class="method">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -453,7 +454,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">FIXME See <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/174">https://github.com/SMPyBandits/SMPyBandits/issues/174</a> i should store only the last <span class="math">\(w\)</span> data.</p>
+<p class="last">FIXED only the last <span class="math">\(w\)</span> data are stored, using lists that got their first element <a href="#id1"><span class="problematic" id="id2">``</span></a>pop()``ed out (deleted). See <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/174">https://github.com/SMPyBandits/SMPyBandits/issues/174</a></p>
 </div>
 </dd></dl>
 
@@ -484,7 +485,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 20 Dec 2018, 18h.
+      Last updated on 21 Dec 2018, 18h.
 
     </p>
   </div>

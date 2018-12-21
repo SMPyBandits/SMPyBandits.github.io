@@ -349,8 +349,8 @@
                 <span class="n">MB</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">(</span><span class="n">configuration_arms</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MB</span><span class="p">)</span>
             <span class="n">nbArms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MB</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># FIXME</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: right now, the multi-environments evaluator does not work well for MP policies, if there is a number different of arms in the scenarios. FIXME correct this point!&quot;</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># FIXME add support of multi-environments evaluator for MP policies with different number of arms in the scenarios.</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: right now, the multi-environments evaluator does not work well for MP policies, if there is a number different of arms in the scenarios!&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvaluatorMultiPlayers.__initPlayers__"><a class="viewcode-back" href="../../docs/Environment.EvaluatorMultiPlayers.html#Environment.EvaluatorMultiPlayers.EvaluatorMultiPlayers.__initPlayers__">[docs]</a>    <span class="k">def</span> <span class="nf">__initPlayers__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create or initialize players.&quot;&quot;&quot;</span>
@@ -1246,11 +1246,10 @@
         <span class="sd">&quot;&quot;&quot;Get a string of the players for this environment.&quot;&quot;&quot;</span>
         <span class="n">listStrPlayers</span> <span class="o">=</span> <span class="p">[</span><span class="n">_extract</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">__cachedstr__</span><span class="p">)</span> <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">listStrPlayers</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Unique user</span>
-            <span class="k">if</span> <span class="n">latex</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$</span><span class="si">{}</span><span class="s1"> \times$ </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">listStrPlayers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> x </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">listStrPlayers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="c1"># FIXME change this after this week simulations</span>
+            <span class="c1"># if latex:</span>
+            <span class="c1">#     text = r&#39;${} \times$ {}&#39;.format(self.nbPlayers, listStrPlayers[0])</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     text = r&#39;{} x {}&#39;.format(self.nbPlayers, listStrPlayers[0])</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">listStrPlayers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">listStrPlayers</span><span class="p">)</span>
@@ -1413,7 +1412,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 20 Dec 2018, 18h.
+      Last updated on 21 Dec 2018, 18h.
 
     </p>
   </div>
