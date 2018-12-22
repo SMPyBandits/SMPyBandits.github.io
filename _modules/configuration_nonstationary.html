@@ -209,16 +209,12 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: this script &#39;configuration_nonstationary.py&#39; is NOT executable. Use &#39;main.py&#39; or &#39;make single&#39; ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
     <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="c1"># Import arms</span>
+<span class="c1"># Import arms and algorithms</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="o">*</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="o">*</span>
-
-<span class="c1"># Import algorithms</span>
-<span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="o">*</span>
     <span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="o">*</span>
 
 <span class="c1">#: HORIZON : number of time steps of the experiments.</span>
@@ -318,7 +314,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 1 changes are only on one arm at a time</span>
-<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
@@ -343,7 +339,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 2 changes are on all or almost arms at a time</span>
-<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
@@ -368,7 +364,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 3 changes are on all or almost arms at a time, but sequences don&#39;t have same length</span>
-<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+<span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
@@ -428,7 +424,7 @@
     <span class="p">]</span>
 
 <span class="c1"># Another example from the Yahoo! dataset, from article https://arxiv.org/abs/1802.08380</span>
-<span class="k">if</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A very hard piece-wise stationary problem, with 5 arms and 9 change points</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
@@ -560,11 +556,11 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING For arm i = </span><span class="si">{}</span><span class="s2">, gap = </span><span class="si">{:.3g}</span><span class="s2"> and length = </span><span class="si">{}</span><span class="s2"> &lt; lowerbound on length = </span><span class="si">{}</span><span class="s2"> !!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">gap</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">lowerbound</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
 
 
-<span class="k">for</span> <span class="n">envId</span><span class="p">,</span> <span class="n">env</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">Checking environment number </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">envId</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
-    <span class="n">listOfMeans</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">][</span><span class="s2">&quot;listOfMeans&quot;</span><span class="p">]</span>
-    <span class="n">changePoints</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">][</span><span class="s2">&quot;changePoints&quot;</span><span class="p">]</span>
-    <span class="n">check_condition_on_piecewise_stationary_problems</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">,</span> <span class="n">listOfMeans</span><span class="p">,</span> <span class="n">changePoints</span><span class="p">)</span>
+<span class="c1"># for envId, env in enumerate(configuration[&quot;environment&quot;]):</span>
+<span class="c1">#     print(&quot;\n\n\nChecking environment number {}&quot;.format(envId))  # DEBUG</span>
+<span class="c1">#     listOfMeans = env[&quot;params&quot;][&quot;listOfMeans&quot;]</span>
+<span class="c1">#     changePoints = env[&quot;params&quot;][&quot;changePoints&quot;]</span>
+<span class="c1">#     check_condition_on_piecewise_stationary_problems(HORIZON, listOfMeans, changePoints)</span>
 
 
 <span class="n">CHANGE_POINTS</span> <span class="o">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;params&quot;</span><span class="p">][</span><span class="s2">&quot;changePoints&quot;</span><span class="p">]</span>
@@ -860,7 +856,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Dec 2018, 18h.
+      Last updated on 22 Dec 2018, 15h.
 
     </p>
   </div>

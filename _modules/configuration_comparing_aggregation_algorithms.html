@@ -209,11 +209,13 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: this script &#39;configuration_comparing_aggregation_algorithms.py&#39; is NOT executable. Use &#39;main.py configuration_comparing_aggregation_algorithms&#39; or &#39;make comparing_aggregation_algorithms&#39; ...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
     <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="c1"># Import arms</span>
-<span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="o">*</span>
-
-<span class="c1"># Import algorithms</span>
-<span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="c1"># Import arms and algorithms</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">SMPyBandits.Arms</span> <span class="k">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">SMPyBandits.Policies</span> <span class="k">import</span> <span class="o">*</span>
 
 <span class="c1">#: HORIZON : number of time steps of the experiments.</span>
 <span class="c1">#: Warning Should be &gt;= 10000 to be interesting &quot;asymptotically&quot;.</span>
@@ -612,7 +614,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 21 Dec 2018, 18h.
+      Last updated on 22 Dec 2018, 15h.
 
     </p>
   </div>
