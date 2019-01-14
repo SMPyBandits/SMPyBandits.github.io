@@ -35,28 +35,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="Policies package" href="Policies.html"/>
-        <link rel="next" title="Policies.MusicalChairNoSensing module" href="Policies.MusicalChairNoSensing.html"/>
-        <link rel="prev" title="Policies.Monitored_UCB module" href="Policies.Monitored_UCB.html"/> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Policies.MusicalChairNoSensing module" href="Policies.MusicalChairNoSensing.html" />
+    <link rel="prev" title="Policies.Monitored_UCB module" href="Policies.Monitored_UCB.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -73,7 +64,7 @@
 
           
             
-            <img src="../_static/logo.png" class="logo" />
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -218,10 +209,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -232,7 +223,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -244,7 +235,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">SMPyBandits</a>
@@ -252,9 +243,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -318,6 +310,11 @@
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
 <div class="section" id="module-Policies.MusicalChair">
 <span id="policies-musicalchair-module"></span><h1>Policies.MusicalChair module<a class="headerlink" href="#module-Policies.MusicalChair" title="Permalink to this headline">¶</a></h1>
@@ -327,8 +324,8 @@
 <li><dl class="first docutils">
 <dt>1st step</dt>
 <dd><ul class="first last">
-<li>Every player tries uniformly an arm for <span class="math">\(T_0\)</span> steps, counting the empirical means of each arm, and the number of observed collisions <span class="math">\(C_{T_0}\)</span></li>
-<li>Finally, <span class="math">\(N^* = M\)</span> = <code class="docutils literal"><span class="pre">nbPlayers</span></code> is estimated based on nb of collisions <span class="math">\(C_{T_0}\)</span>, and the <span class="math">\(N^*\)</span> best arms are computed from their empirical means</li>
+<li>Every player tries uniformly an arm for <span class="math notranslate nohighlight">\(T_0\)</span> steps, counting the empirical means of each arm, and the number of observed collisions <span class="math notranslate nohighlight">\(C_{T_0}\)</span></li>
+<li>Finally, <span class="math notranslate nohighlight">\(N^* = M\)</span> = <code class="docutils literal notranslate"><span class="pre">nbPlayers</span></code> is estimated based on nb of collisions <span class="math notranslate nohighlight">\(C_{T_0}\)</span>, and the <span class="math notranslate nohighlight">\(N^*\)</span> best arms are computed from their empirical means</li>
 </ul>
 </dd>
 </dl>
@@ -336,7 +333,7 @@
 <li><dl class="first docutils">
 <dt>2nd step:</dt>
 <dd><ul class="first last">
-<li>Every player Choose an arm uniformly, among the <span class="math">\(N^*\)</span> best arms, until she does not encounter collision right after choosing it</li>
+<li>Every player Choose an arm uniformly, among the <span class="math notranslate nohighlight">\(N^*\)</span> best arms, until she does not encounter collision right after choosing it</li>
 <li>When an arm was chosen by only one player, she decides to sit on this chair (= arm)</li>
 </ul>
 </dd>
@@ -346,8 +343,8 @@
 <dt>3rd step:</dt>
 <dd><ul class="first last">
 <li>Every player stays sitted on her chair for the rest of the game</li>
-<li><span class="math">\(\implies\)</span> constant regret if <span class="math">\(N^*\)</span> is well estimated and if the estimated N* best arms were correct</li>
-<li><span class="math">\(\implies\)</span> linear regret otherwise</li>
+<li><span class="math notranslate nohighlight">\(\implies\)</span> constant regret if <span class="math notranslate nohighlight">\(N^*\)</span> is well estimated and if the estimated N* best arms were correct</li>
+<li><span class="math notranslate nohighlight">\(\implies\)</span> linear regret otherwise</li>
 </ul>
 </dd>
 </dl>
@@ -356,31 +353,31 @@
 <dl class="function">
 <dt id="Policies.MusicalChair.optimalT0">
 <code class="descclassname">Policies.MusicalChair.</code><code class="descname">optimalT0</code><span class="sig-paren">(</span><em>nbArms=10</em>, <em>epsilon=0.1</em>, <em>delta=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/MusicalChair.html#optimalT0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.MusicalChair.optimalT0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the lower-bound suggesting &#8220;large-enough&#8221; values for <span class="math">\(T_0\)</span> that should guarantee constant regret with probability at least <span class="math">\(1 - \delta\)</span>, if the gap <span class="math">\(\Delta\)</span> is larger than <span class="math">\(\epsilon\)</span>.</p>
+<dd><p>Compute the lower-bound suggesting “large-enough” values for <span class="math notranslate nohighlight">\(T_0\)</span> that should guarantee constant regret with probability at least <span class="math notranslate nohighlight">\(1 - \delta\)</span>, if the gap <span class="math notranslate nohighlight">\(\Delta\)</span> is larger than <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p>
 <ul class="simple">
 <li>Cf. Theorem 1 of [Shamir et al., 2015](<a class="reference external" href="https://arxiv.org/abs/1512.02866">https://arxiv.org/abs/1512.02866</a>).</li>
 </ul>
 <p>Examples:</p>
 <ul class="simple">
-<li>For <span class="math">\(K=2\)</span> arms, and in order to have a constant regret with probability at least <span class="math">\(90\%\)</span>, if the gap <span class="math">\(\Delta\)</span> is known to be <span class="math">\(\geq 0.05\)</span>, then their theoretical analysis suggests to use <span class="math">\(T_0 \geq 18459\)</span>. That&#8217;s very huge, for just two arms!</li>
+<li>For <span class="math notranslate nohighlight">\(K=2\)</span> arms, and in order to have a constant regret with probability at least <span class="math notranslate nohighlight">\(90\%\)</span>, if the gap <span class="math notranslate nohighlight">\(\Delta\)</span> is known to be <span class="math notranslate nohighlight">\(\geq 0.05\)</span>, then their theoretical analysis suggests to use <span class="math notranslate nohighlight">\(T_0 \geq 18459\)</span>. That’s very huge, for just two arms!</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>     <span class="c1"># Just 2 arms !</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>     <span class="c1"># Just 2 arms !</span>
 <span class="go">18459                           # ==&gt; That&#39;s a LOT of steps for just 2 arms!</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>For a harder problem with <span class="math">\(K=6\)</span> arms, for a risk smaller than <span class="math">\(1\%\)</span> and a gap <span class="math">\(\Delta \geq 0.05\)</span>, they suggest at least <span class="math">\(T_0 \geq 7646924\)</span>, i.e., about 7 millions of trials. That is simply too much for any realistic system, and starts to be too large for simulated systems.</li>
+<li>For a harder problem with <span class="math notranslate nohighlight">\(K=6\)</span> arms, for a risk smaller than <span class="math notranslate nohighlight">\(1\%\)</span> and a gap <span class="math notranslate nohighlight">\(\Delta \geq 0.05\)</span>, they suggest at least <span class="math notranslate nohighlight">\(T_0 \geq 7646924\)</span>, i.e., about 7 millions of trials. That is simply too much for any realistic system, and starts to be too large for simulated systems.</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>    <span class="c1"># Constant regret with &gt;99% proba</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>    <span class="c1"># Constant regret with &gt;99% proba</span>
 <span class="go">7646924                         # ==&gt; That&#39;s a LOT of steps!</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>   <span class="c1"># Reasonable value of epsilon</span>
 <span class="go">764692376                       # ==&gt; That&#39;s a LOT of steps!!!</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>For an even harder problem with <span class="math">\(K=17\)</span> arms, the values given by their Theorem 1 start to be really unrealistic:</li>
+<li>For an even harder problem with <span class="math notranslate nohighlight">\(K=17\)</span> arms, the values given by their Theorem 1 start to be really unrealistic:</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>   <span class="c1"># Constant regret with &gt;99% proba</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>   <span class="c1"># Constant regret with &gt;99% proba</span>
 <span class="go">27331794                        # ==&gt; That&#39;s a LOT of steps!</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">optimalT0</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># Reasonable value of epsilon</span>
 <span class="go">2733179304                      # ==&gt; That&#39;s a LOT of steps!!!</span>
@@ -391,32 +388,32 @@
 <dl class="function">
 <dt id="Policies.MusicalChair.boundOnFinalRegret">
 <code class="descclassname">Policies.MusicalChair.</code><code class="descname">boundOnFinalRegret</code><span class="sig-paren">(</span><em>T0</em>, <em>nbPlayers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/MusicalChair.html#boundOnFinalRegret"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.MusicalChair.boundOnFinalRegret" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use the upper-bound on regret when <span class="math">\(T_0\)</span> and <span class="math">\(M\)</span> are known.</p>
+<dd><p>Use the upper-bound on regret when <span class="math notranslate nohighlight">\(T_0\)</span> and <span class="math notranslate nohighlight">\(M\)</span> are known.</p>
 <ul>
-<li><p class="first">The &#8220;constant&#8221; regret of course grows linearly with <span class="math">\(T_0\)</span>, as:</p>
+<li><p class="first">The “constant” regret of course grows linearly with <span class="math notranslate nohighlight">\(T_0\)</span>, as:</p>
 <blockquote>
-<div><div class="math">
+<div><div class="math notranslate nohighlight">
 \[\forall T \geq T_0, \;\; R_T \leq T_0 K + 2 \mathrm{exp}(2) K.\]</div>
 </div></blockquote>
 </li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">this bound is not a deterministic result, it is only value with a certain probability (at least <span class="math">\(1 - \delta\)</span>, if <span class="math">\(T_0\)</span> is chosen as given by <a class="reference internal" href="#Policies.MusicalChair.optimalT0" title="Policies.MusicalChair.optimalT0"><code class="xref py py-func docutils literal"><span class="pre">optimalT0()</span></code></a>).</p>
+<p class="last">this bound is not a deterministic result, it is only value with a certain probability (at least <span class="math notranslate nohighlight">\(1 - \delta\)</span>, if <span class="math notranslate nohighlight">\(T_0\)</span> is chosen as given by <a class="reference internal" href="#Policies.MusicalChair.optimalT0" title="Policies.MusicalChair.optimalT0"><code class="xref py py-func docutils literal notranslate"><span class="pre">optimalT0()</span></code></a>).</p>
 </div>
 <ul class="simple">
 <li>Cf. Theorem 1 of [Shamir et al., 2015](<a class="reference external" href="https://arxiv.org/abs/1512.02866">https://arxiv.org/abs/1512.02866</a>).</li>
 <li>Examples:</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">18459</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>        <span class="c1"># Crazy constant regret!  </span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">18459</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>        <span class="c1"># Crazy constant regret!  # doctest: +ELLIPSIS</span>
 <span class="go">36947.5..</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">7646924</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>      <span class="c1"># Crazy constant regret!!  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">7646924</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>      <span class="c1"># Crazy constant regret!!  # doctest: +ELLIPSIS</span>
 <span class="go">45881632.6...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">764692376</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>    <span class="c1"># Crazy constant regret!!  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">764692376</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>    <span class="c1"># Crazy constant regret!!  # doctest: +ELLIPSIS</span>
 <span class="go">4588154344.6...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">27331794</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>    <span class="c1"># Crazy constant regret!!  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">27331794</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>    <span class="c1"># Crazy constant regret!!  # doctest: +ELLIPSIS</span>
 <span class="go">464640749.2...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">2733179304</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>  <span class="c1"># Crazy constant regret!!  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">2733179304</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>  <span class="c1"># Crazy constant regret!!  # doctest: +ELLIPSIS</span>
 <span class="go">46464048419.2...</span>
 </pre></div>
 </div>
@@ -425,7 +422,7 @@
 <dl class="class">
 <dt id="Policies.MusicalChair.State">
 <em class="property">class </em><code class="descclassname">Policies.MusicalChair.</code><code class="descname">State</code><a class="headerlink" href="#Policies.MusicalChair.State" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Different states during the Musical Chair algorithm</p>
 <dl class="attribute">
 <dt id="Policies.MusicalChair.State.InitialPhase">
@@ -452,43 +449,12 @@
 <code class="descname">__module__</code><em class="property"> = 'Policies.MusicalChair'</em><a class="headerlink" href="#Policies.MusicalChair.State.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="Policies.MusicalChair.State.__new__">
-<code class="descname">__new__</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Policies.MusicalChair.State.__new__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Policies.MusicalChair.State._generate_next_value_">
-<code class="descname">_generate_next_value_</code><span class="sig-paren">(</span><em>name</em>, <em>start</em>, <em>count</em>, <em>last_values</em><span class="sig-paren">)</span><a class="headerlink" href="#Policies.MusicalChair.State._generate_next_value_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.MusicalChair.State._member_map_">
-<code class="descname">_member_map_</code><em class="property"> = OrderedDict([('NotStarted', &lt;State.NotStarted: 1&gt;), ('InitialPhase', &lt;State.InitialPhase: 2&gt;), ('MusicalChair', &lt;State.MusicalChair: 3&gt;), ('Sitted', &lt;State.Sitted: 4&gt;)])</em><a class="headerlink" href="#Policies.MusicalChair.State._member_map_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.MusicalChair.State._member_names_">
-<code class="descname">_member_names_</code><em class="property"> = ['NotStarted', 'InitialPhase', 'MusicalChair', 'Sitted']</em><a class="headerlink" href="#Policies.MusicalChair.State._member_names_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.MusicalChair.State._member_type_">
-<code class="descname">_member_type_</code><a class="headerlink" href="#Policies.MusicalChair.State._member_type_" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.MusicalChair.State._value2member_map_">
-<code class="descname">_value2member_map_</code><em class="property"> = {1: &lt;State.NotStarted: 1&gt;, 2: &lt;State.InitialPhase: 2&gt;, 3: &lt;State.MusicalChair: 3&gt;, 4: &lt;State.Sitted: 4&gt;}</em><a class="headerlink" href="#Policies.MusicalChair.State._value2member_map_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.MusicalChair.MusicalChair">
 <em class="property">class </em><code class="descclassname">Policies.MusicalChair.</code><code class="descname">MusicalChair</code><span class="sig-paren">(</span><em>nbArms</em>, <em>Time0=0.25</em>, <em>Time1=None</em>, <em>N=None</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/MusicalChair.html#MusicalChair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.MusicalChair.MusicalChair" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
 <p>MusicalChair: implementation of the decentralized multi-player policy from [A Musical Chair approach, Shamir et al., 2015](<a class="reference external" href="https://arxiv.org/abs/1512.02866">https://arxiv.org/abs/1512.02866</a>).</p>
 <dl class="method">
 <dt id="Policies.MusicalChair.MusicalChair.__init__">
@@ -500,12 +466,12 @@
 <li>Time1: optional, only used to compute Time0 if Time0 is fractional (eg. 0.2).</li>
 </ul>
 <p>Example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span><span class="p">,</span> <span class="n">Time0</span><span class="p">,</span> <span class="n">Time1</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">6</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span><span class="p">,</span> <span class="n">Time0</span><span class="p">,</span> <span class="n">Time1</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">player1</span> <span class="o">=</span> <span class="n">MusicalChair</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">Time0</span><span class="p">,</span> <span class="n">Time1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For multi-players use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Selfish</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">MusicalChair</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">Time0</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">Time1</span><span class="o">=</span><span class="n">HORIZON</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">NB_PLAYERS</span><span class="p">)</span><span class="o">.</span><span class="n">children</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Selfish</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">MusicalChair</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">Time0</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">Time1</span><span class="o">=</span><span class="n">HORIZON</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">NB_PLAYERS</span><span class="p">)</span><span class="o">.</span><span class="n">children</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -537,13 +503,13 @@
 <dl class="attribute">
 <dt id="Policies.MusicalChair.MusicalChair.cumulatedRewards">
 <code class="descname">cumulatedRewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.cumulatedRewards" title="Permalink to this definition">¶</a></dt>
-<dd><p>That&#8217;s the s_i(t) of the paper</p>
+<dd><p>That’s the s_i(t) of the paper</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.MusicalChair.MusicalChair.nbObservations">
 <code class="descname">nbObservations</code><em class="property"> = None</em><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.nbObservations" title="Permalink to this definition">¶</a></dt>
-<dd><p>That&#8217;s the o_i of the paper</p>
+<dd><p>That’s the o_i of the paper</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -555,7 +521,7 @@
 <dl class="attribute">
 <dt id="Policies.MusicalChair.MusicalChair.nbCollision">
 <code class="descname">nbCollision</code><em class="property"> = None</em><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.nbCollision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of collisions, that&#8217;s the C_Time0 of the paper</p>
+<dd><p>Number of collisions, that’s the C_Time0 of the paper</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -567,7 +533,8 @@
 <dl class="method">
 <dt id="Policies.MusicalChair.MusicalChair.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/MusicalChair.html#MusicalChair.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>-&gt; str</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Policies.MusicalChair.MusicalChair.startGame">
@@ -581,15 +548,10 @@
 <dd><p>Choose an arm, as described by the Musical Chair algorithm.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Policies.MusicalChair.MusicalChair.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.MusicalChair'</em><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="Policies.MusicalChair.MusicalChair.getReward">
 <code class="descname">getReward</code><span class="sig-paren">(</span><em>arm</em>, <em>reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/MusicalChair.html#MusicalChair.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.getReward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Receive a reward on arm of index &#8216;arm&#8217;, as described by the Musical Chair algorithm.</p>
+<dd><p>Receive a reward on arm of index ‘arm’, as described by the Musical Chair algorithm.</p>
 <ul class="simple">
 <li>If not collision, receive a reward after pulling the arm.</li>
 </ul>
@@ -604,11 +566,16 @@
 <dl class="method">
 <dt id="Policies.MusicalChair.MusicalChair.handleCollision">
 <code class="descname">handleCollision</code><span class="sig-paren">(</span><em>arm</em>, <em>reward=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/MusicalChair.html#MusicalChair.handleCollision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.handleCollision" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handle a collision, on arm of index &#8216;arm&#8217;.</p>
+<dd><p>Handle a collision, on arm of index ‘arm’.</p>
 <ul class="simple">
 <li>Warning: this method has to be implemented in the collision model, it is NOT implemented in the EvaluatorMultiPlayers.</li>
 </ul>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.MusicalChair.MusicalChair.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.MusicalChair'</em><a class="headerlink" href="#Policies.MusicalChair.MusicalChair.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -616,9 +583,7 @@
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -636,12 +601,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 22 Dec 2018, 15h.
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      Last updated on 14 Jan 2019, 19h.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -656,36 +621,25 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.9.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -35,28 +35,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="Policies package" href="Policies.html"/>
-        <link rel="next" title="Policies.klUCB module" href="Policies.klUCB.html"/>
-        <link rel="prev" title="Policies.UniformOnSome module" href="Policies.UniformOnSome.html"/> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Policies.klUCB module" href="Policies.klUCB.html" />
+    <link rel="prev" title="Policies.UniformOnSome module" href="Policies.UniformOnSome.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -73,7 +64,7 @@
 
           
             
-            <img src="../_static/logo.png" class="logo" />
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -218,10 +209,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -232,7 +223,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -244,7 +235,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">SMPyBandits</a>
@@ -252,9 +243,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -318,21 +310,26 @@
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
 <div class="section" id="module-Policies.WrapRange">
 <span id="policies-wraprange-module"></span><h1>Policies.WrapRange module<a class="headerlink" href="#module-Policies.WrapRange" title="Permalink to this headline">¶</a></h1>
-<p>A policy that acts as a wrapper on another policy <cite>P</cite>, which requires to know the range <span class="math">\([a, b]\)</span> of the rewards, by implementing a &#8220;doubling trick&#8221; to adapt to an unknown range of rewards.</p>
-<p>It&#8217;s an interesting variant of the &#8220;doubling trick&#8221;, used to tackle another unknown aspect of sequential experiments: some algorithms need to use rewards in <span class="math">\([0,1]\)</span>, and are easy to use if the rewards known to be in some interval <span class="math">\([a, b]\)</span> (I did this from the very beginning here, with <code class="docutils literal"><span class="pre">[lower,</span> <span class="pre">lower+amplitude]</span></code>).
-But if the interval <span class="math">\([a,b]\)</span> is unknown, what can we do?
-The &#8220;Doubling Trick&#8221;, in this setting, refers to this algorithm:</p>
+<p>A policy that acts as a wrapper on another policy <cite>P</cite>, which requires to know the range <span class="math notranslate nohighlight">\([a, b]\)</span> of the rewards, by implementing a “doubling trick” to adapt to an unknown range of rewards.</p>
+<p>It’s an interesting variant of the “doubling trick”, used to tackle another unknown aspect of sequential experiments: some algorithms need to use rewards in <span class="math notranslate nohighlight">\([0,1]\)</span>, and are easy to use if the rewards known to be in some interval <span class="math notranslate nohighlight">\([a, b]\)</span> (I did this from the very beginning here, with <code class="docutils literal notranslate"><span class="pre">[lower,</span> <span class="pre">lower+amplitude]</span></code>).
+But if the interval <span class="math notranslate nohighlight">\([a,b]\)</span> is unknown, what can we do?
+The “Doubling Trick”, in this setting, refers to this algorithm:</p>
 <ol class="arabic simple">
-<li>Start with <span class="math">\([a_0, b_0] = [0, 1]\)</span>,</li>
-<li>If a reward <span class="math">\(r_t\)</span> is seen below <span class="math">\(a_i\)</span>, use <span class="math">\(a_{i+1} = r_t\)</span>,</li>
-<li>If a reward <span class="math">\(r_t\)</span> is seen above <span class="math">\(b_i\)</span>, use <span class="math">\(b_{i+1} = r_t - a_i\)</span>.</li>
+<li>Start with <span class="math notranslate nohighlight">\([a_0, b_0] = [0, 1]\)</span>,</li>
+<li>If a reward <span class="math notranslate nohighlight">\(r_t\)</span> is seen below <span class="math notranslate nohighlight">\(a_i\)</span>, use <span class="math notranslate nohighlight">\(a_{i+1} = r_t\)</span>,</li>
+<li>If a reward <span class="math notranslate nohighlight">\(r_t\)</span> is seen above <span class="math notranslate nohighlight">\(b_i\)</span>, use <span class="math notranslate nohighlight">\(b_{i+1} = r_t - a_i\)</span>.</li>
 </ol>
-<p>Instead of just doubling the length of the interval (&#8220;doubling trick&#8221;), we use <span class="math">\([r_t, b_i]\)</span> or <span class="math">\([a_i, r_t]\)</span> as it is the smallest interval compatible with the past and the new observation <span class="math">\(r_t\)</span></p>
+<p>Instead of just doubling the length of the interval (“doubling trick”), we use <span class="math notranslate nohighlight">\([r_t, b_i]\)</span> or <span class="math notranslate nohighlight">\([a_i, r_t]\)</span> as it is the smallest interval compatible with the past and the new observation <span class="math notranslate nohighlight">\(r_t\)</span></p>
 <ul class="simple">
-<li>Reference.  I&#8217;m not sure which work is the first to have proposed this idea, but [[Normalized online learning, Stéphane Ross &amp; Paul Mineiro &amp; John Langford, 2013](<a class="reference external" href="https://arxiv.org/pdf/1305.6646.pdf">https://arxiv.org/pdf/1305.6646.pdf</a>)] proposes a similar idea.</li>
+<li>Reference.  I’m not sure which work is the first to have proposed this idea, but [[Normalized online learning, Stéphane Ross &amp; Paul Mineiro &amp; John Langford, 2013](<a class="reference external" href="https://arxiv.org/pdf/1305.6646.pdf">https://arxiv.org/pdf/1305.6646.pdf</a>)] proposes a similar idea.</li>
 </ul>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -341,12 +338,13 @@ The &#8220;Doubling Trick&#8221;, in this setting, refers to this algorithm:</p>
 <dl class="class">
 <dt id="Policies.WrapRange.WrapRange">
 <em class="property">class </em><code class="descclassname">Policies.WrapRange.</code><code class="descname">WrapRange</code><span class="sig-paren">(</span><em>nbArms</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
-<p>A policy that acts as a wrapper on another policy <cite>P</cite>, which requires to know the range <span class="math">\([a, b]\)</span> of the rewards, by implementing a &#8220;doubling trick&#8221; to adapt to an unknown range of rewards.</p>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>A policy that acts as a wrapper on another policy <cite>P</cite>, which requires to know the range <span class="math notranslate nohighlight">\([a, b]\)</span> of the rewards, by implementing a “doubling trick” to adapt to an unknown range of rewards.</p>
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>New policy.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.WrapRange.WrapRange.policy">
@@ -357,7 +355,8 @@ The &#8220;Doubling Trick&#8221;, in this setting, refers to this algorithm:</p>
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>-&gt; str</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.startGame">
@@ -369,77 +368,77 @@ The &#8220;Doubling Trick&#8221;, in this setting, refers to this algorithm:</p>
 <dt id="Policies.WrapRange.WrapRange.getReward">
 <code class="descname">getReward</code><span class="sig-paren">(</span><em>arm</em>, <em>reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.getReward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maybe change the current range and rescale all the past history, and then pass the reward, and update t.</p>
-<p>Let call <span class="math">\(r_s\)</span> the reward at time <span class="math">\(s\)</span>, <span class="math">\(l_{t-1}\)</span> and <span class="math">\(a_{t-1}\)</span> the lower-bound and amplitude of rewards at previous time <span class="math">\(t-1\)</span>, and <span class="math">\(l_t\)</span> and <span class="math">\(a_t\)</span> the new lower-bound and amplitude for current time <span class="math">\(t\)</span>.
-The previous history is <span class="math">\(R_t := \sum_{s=1}^{t-1} r_s\)</span>.</p>
+<p>Let call <span class="math notranslate nohighlight">\(r_s\)</span> the reward at time <span class="math notranslate nohighlight">\(s\)</span>, <span class="math notranslate nohighlight">\(l_{t-1}\)</span> and <span class="math notranslate nohighlight">\(a_{t-1}\)</span> the lower-bound and amplitude of rewards at previous time <span class="math notranslate nohighlight">\(t-1\)</span>, and <span class="math notranslate nohighlight">\(l_t\)</span> and <span class="math notranslate nohighlight">\(a_t\)</span> the new lower-bound and amplitude for current time <span class="math notranslate nohighlight">\(t\)</span>.
+The previous history is <span class="math notranslate nohighlight">\(R_t := \sum_{s=1}^{t-1} r_s\)</span>.</p>
 <p>The generic formula for rescaling the previous history is the following:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[R_t := \frac{(a_{t-1} \times R_t + l_{t-1}) - l_t}{a_t}.\]</div>
 <p>So we have the following efficient algorithm:</p>
 <ol class="arabic simple">
-<li>If <span class="math">\(r &lt; l_{t-1}\)</span>, let <span class="math">\(l_t = r\)</span> and <span class="math">\(R_t := R_t + \frac{l_{t-1} - l_t}{a_t}\)</span>,</li>
-<li>Else if <span class="math">\(r &gt; l_{t-1} + a_{t-1}\)</span>, let <span class="math">\(a_t = r - l_{t-1}\)</span> and <span class="math">\(R_t := R_t \times \frac{a_{t-1}}{a-t}\)</span>,</li>
-<li>Otherwise, nothing to do, the current reward is still correctly in <span class="math">\([l_{t-1}, l_{t-1} + a_{t-1}]\)</span>, so simply keep <span class="math">\(l_t = l_{t-1}\)</span> and <span class="math">\(a_t = a_{t-1}\)</span>.</li>
+<li>If <span class="math notranslate nohighlight">\(r &lt; l_{t-1}\)</span>, let <span class="math notranslate nohighlight">\(l_t = r\)</span> and <span class="math notranslate nohighlight">\(R_t := R_t + \frac{l_{t-1} - l_t}{a_t}\)</span>,</li>
+<li>Else if <span class="math notranslate nohighlight">\(r &gt; l_{t-1} + a_{t-1}\)</span>, let <span class="math notranslate nohighlight">\(a_t = r - l_{t-1}\)</span> and <span class="math notranslate nohighlight">\(R_t := R_t \times \frac{a_{t-1}}{a-t}\)</span>,</li>
+<li>Otherwise, nothing to do, the current reward is still correctly in <span class="math notranslate nohighlight">\([l_{t-1}, l_{t-1} + a_{t-1}]\)</span>, so simply keep <span class="math notranslate nohighlight">\(l_t = l_{t-1}\)</span> and <span class="math notranslate nohighlight">\(a_t = a_{t-1}\)</span>.</li>
 </ol>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.WrapRange.WrapRange.index">
 <code class="descname">index</code><a class="headerlink" href="#Policies.WrapRange.WrapRange.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get attribute <code class="docutils literal"><span class="pre">index</span></code> from the underlying policy.</p>
+<dd><p>Get attribute <code class="docutils literal notranslate"><span class="pre">index</span></code> from the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.choice">
 <code class="descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.choice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choice</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">choice</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.choiceWithRank">
 <code class="descname">choiceWithRank</code><span class="sig-paren">(</span><em>rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.choiceWithRank" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceWithRank</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">choiceWithRank</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.choiceFromSubSet">
 <code class="descname">choiceFromSubSet</code><span class="sig-paren">(</span><em>availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceFromSubSet</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">choiceFromSubSet</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.choiceMultiple">
 <code class="descname">choiceMultiple</code><span class="sig-paren">(</span><em>nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.choiceMultiple" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceMultiple</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">choiceMultiple</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.choiceIMP">
 <code class="descname">choiceIMP</code><span class="sig-paren">(</span><em>nb=1</em>, <em>startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.choiceIMP" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">choiceIMP</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">choiceIMP</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.estimatedOrder">
 <code class="descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.estimatedOrder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">estimatedOrder</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">estimatedOrder</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.estimatedBestArms">
 <code class="descname">estimatedBestArms</code><span class="sig-paren">(</span><em>M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">estimatedBestArms</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">estimatedBestArms</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.computeIndex">
 <code class="descname">computeIndex</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.computeIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">computeIndex</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">computeIndex</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.WrapRange.WrapRange.computeAllIndex">
 <code class="descname">computeAllIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/WrapRange.html#WrapRange.computeAllIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.WrapRange.WrapRange.computeAllIndex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pass the call to <code class="docutils literal"><span class="pre">computeAllIndex</span></code> of the underlying policy.</p>
+<dd><p>Pass the call to <code class="docutils literal notranslate"><span class="pre">computeAllIndex</span></code> of the underlying policy.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -453,9 +452,7 @@ The previous history is <span class="math">\(R_t := \sum_{s=1}^{t-1} r_s\)</span
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -473,12 +470,12 @@ The previous history is <span class="math">\(R_t := \sum_{s=1}^{t-1} r_s\)</span
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 22 Dec 2018, 15h.
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      Last updated on 14 Jan 2019, 19h.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -493,36 +490,25 @@ The previous history is <span class="math">\(R_t := \sum_{s=1}^{t-1} r_s\)</span
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.9.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

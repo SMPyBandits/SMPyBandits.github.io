@@ -35,26 +35,17 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -71,7 +62,7 @@
 
           
             
-            <img src="../../_static/logo.png" class="logo" />
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -108,10 +99,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">SMPyBandits modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -122,7 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -134,7 +125,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">SMPyBandits</a>
@@ -142,9 +133,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -173,8 +165,6 @@
     
     
       <li class="wy-breadcrumbs-aside">
-        
-            
         
       </li>
     
@@ -258,30 +248,22 @@
     <span class="k">pass</span>
 
 
-<span class="c1"># Create global parallelism locks to avoid racing issues with parallel bars</span>
-<span class="c1"># works only if fork available (Linux, MacOSX, but not on Windows)</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">mp_lock</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># multiprocessing lock</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-    <span class="n">mp_lock</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-    <span class="n">mp_lock</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">th_lock</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># thread lock</span>
-<span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-    <span class="n">th_lock</span> <span class="o">=</span> <span class="kc">None</span>
-
-
 <span class="k">class</span> <span class="nc">TqdmDefaultWriteLock</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provide a default write lock for thread and multiprocessing safety.</span>
 <span class="sd">    Works only on platforms supporting `fork` (so Windows is excluded).</span>
+<span class="sd">    You must initialise a `tqdm` or `TqdmDefaultWriteLock` instance</span>
+<span class="sd">    before forking in order for the write lock to work.</span>
 <span class="sd">    On Windows, you need to supply the lock from the parent to the children as</span>
 <span class="sd">    an argument to joblib or the parallelism lib you use.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">global</span> <span class="n">mp_lock</span><span class="p">,</span> <span class="n">th_lock</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">locks</span> <span class="o">=</span> <span class="p">[</span><span class="n">lk</span> <span class="k">for</span> <span class="n">lk</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mp_lock</span><span class="p">,</span> <span class="n">th_lock</span><span class="p">]</span> <span class="k">if</span> <span class="n">lk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="c1"># Create global parallelism locks to avoid racing issues with parallel bars</span>
+        <span class="c1"># works only if fork available (Linux/MacOSX, but not Windows)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_mp_lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_th_lock</span><span class="p">()</span>
+        <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">locks</span> <span class="o">=</span> <span class="p">[</span><span class="n">lk</span> <span class="k">for</span> <span class="n">lk</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">mp_lock</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">th_lock</span><span class="p">]</span> <span class="k">if</span> <span class="n">lk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">lock</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locks</span><span class="p">:</span>
@@ -297,6 +279,31 @@
     <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exc</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_mp_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;mp_lock&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">mp_lock</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># multiprocessing lock</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">mp_lock</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">mp_lock</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_th_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;th_lock&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">th_lock</span> <span class="o">=</span> <span class="n">th</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>  <span class="c1"># thread lock</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">th_lock</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1"># Create a thread lock before instantiation so that no setup needs to be done</span>
+<span class="c1"># before running in a multithreaded environment.</span>
+<span class="c1"># Do not create the multiprocessing lock because it sets the multiprocessing</span>
+<span class="c1"># context and does not allow the user to use &#39;spawn&#39; or &#39;forkserver&#39; methods.</span>
+<span class="n">TqdmDefaultWriteLock</span><span class="o">.</span><span class="n">create_th_lock</span><span class="p">()</span>
+
 
 <div class="viewcode-block" id="tqdm"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm">[docs]</a><span class="k">class</span> <span class="nc">tqdm</span><span class="p">(</span><span class="n">Comparable</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -307,10 +314,9 @@
 
     <span class="n">monitor_interval</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># set to 0 to disable the thread</span>
     <span class="n">monitor</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">_lock</span> <span class="o">=</span> <span class="n">TqdmDefaultWriteLock</span><span class="p">()</span>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="tqdm.format_sizeof"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_sizeof">[docs]</a>    <span class="k">def</span> <span class="nf">format_sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">divisor</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.format_sizeof"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_sizeof">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">divisor</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Formats a number (greater than unity) with SI Order of Magnitude</span>
 <span class="sd">        prefixes.</span>
@@ -339,8 +345,8 @@
             <span class="n">num</span> <span class="o">/=</span> <span class="n">divisor</span>
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:3.1f}</span><span class="s1">Y&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="tqdm.format_interval"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_interval">[docs]</a>    <span class="k">def</span> <span class="nf">format_interval</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.format_interval"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_interval">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_interval</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Formats a number of seconds as a clock time, [H:]MM:SS</span>
 
@@ -361,8 +367,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{0:02d}</span><span class="s1">:</span><span class="si">{1:02d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="tqdm.format_num"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_num">[docs]</a>    <span class="k">def</span> <span class="nf">format_num</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.format_num"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_num">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_num</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Intelligent scientific notation (.3g).</span>
 
@@ -380,8 +386,8 @@
         <span class="n">n</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="tqdm.ema"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.ema">[docs]</a>    <span class="k">def</span> <span class="nf">ema</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.ema"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.ema">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">ema</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Exponential moving average: smoothing to give progressively lower</span>
 <span class="sd">		weights to older values.</span>
@@ -399,8 +405,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">x</span> <span class="k">if</span> <span class="n">mu</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">mu</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="tqdm.status_printer"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.status_printer">[docs]</a>    <span class="k">def</span> <span class="nf">status_printer</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.status_printer"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.status_printer">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">status_printer</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Manage the printing and in-place updating of a line of characters.</span>
 <span class="sd">        Note that if the string is longer than a line, then in-place</span>
@@ -422,8 +428,8 @@
 
         <span class="k">return</span> <span class="n">print_status</span></div>
 
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="tqdm.format_meter"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_meter">[docs]</a>    <span class="k">def</span> <span class="nf">format_meter</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<div class="viewcode-block" id="tqdm.format_meter"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.format_meter">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_meter</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                      <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="n">unit_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bar_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">postfix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unit_divisor</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -633,9 +639,9 @@
         <span class="c1"># Create a new instance</span>
         <span class="n">instance</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="c1"># Add to the list of instances</span>
-        <span class="k">if</span> <span class="s2">&quot;_instances&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_instances&#39;</span><span class="p">):</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span> <span class="o">=</span> <span class="n">WeakSet</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;_lock&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_lock&#39;</span><span class="p">):</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">TqdmDefaultWriteLock</span><span class="p">()</span>
         <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
@@ -652,15 +658,15 @@
         <span class="c1"># Return the instance</span>
         <span class="k">return</span> <span class="n">instance</span></div>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="tqdm._get_free_pos"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm._get_free_pos">[docs]</a>    <span class="k">def</span> <span class="nf">_get_free_pos</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm._get_free_pos"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm._get_free_pos">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_free_pos</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Skips specified instance&quot;&quot;&quot;</span>
         <span class="n">positions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span>
                         <span class="k">if</span> <span class="n">inst</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">instance</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">))</span>
         <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">positions</span><span class="p">))</span></div>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="tqdm._decr_instances"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm._decr_instances">[docs]</a>    <span class="k">def</span> <span class="nf">_decr_instances</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm._decr_instances"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm._decr_instances">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_decr_instances</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove from list and reposition other bars</span>
 <span class="sd">        so that newer bars won&#39;t overlap previous bars</span>
@@ -676,7 +682,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">gui</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
                     <span class="c1"># negative `pos` means fixed</span>
-                    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">pos</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">pos</span><span class="p">):</span>
                         <span class="n">inst</span><span class="o">.</span><span class="n">pos</span> <span class="o">-=</span> <span class="mi">1</span>
                         <span class="c1"># TODO: check this doesn&#39;t overwrite another fixed bar</span>
         <span class="c1"># Kill monitor if no instances are left</span>
@@ -689,8 +695,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">cls</span><span class="o">.</span><span class="n">monitor</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="tqdm.write"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nolock</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.write"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.write">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">nolock</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print a message via tqdm (without overlap with bars)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -700,9 +706,9 @@
             <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
             <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">end</span><span class="p">)</span></div>
 
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="tqdm.external_write_mode"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.external_write_mode">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@contextmanager</span>
-<div class="viewcode-block" id="tqdm.external_write_mode"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.external_write_mode">[docs]</a>    <span class="k">def</span> <span class="nf">external_write_mode</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nolock</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">external_write_mode</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nolock</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Disable tqdm within context and refresh tqdm when exits.</span>
 <span class="sd">        Useful when writing to standard output stream</span>
@@ -728,16 +734,16 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nolock</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="tqdm.set_lock"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.set_lock">[docs]</a>    <span class="k">def</span> <span class="nf">set_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.set_lock"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.set_lock">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">lock</span></div>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="tqdm.get_lock"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.get_lock">[docs]</a>    <span class="k">def</span> <span class="nf">get_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.get_lock"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.get_lock">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_lock</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span></div>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="tqdm.pandas"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.pandas">[docs]</a>    <span class="k">def</span> <span class="nf">pandas</span><span class="p">(</span><span class="n">tclass</span><span class="p">,</span> <span class="o">*</span><span class="n">targs</span><span class="p">,</span> <span class="o">**</span><span class="n">tkwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="tqdm.pandas"><a class="viewcode-back" href="../../docs/Environment.usetqdm.html#Environment.usetqdm.tqdm.pandas">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">pandas</span><span class="p">(</span><span class="n">tclass</span><span class="p">,</span> <span class="o">*</span><span class="n">targs</span><span class="p">,</span> <span class="o">**</span><span class="n">tkwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers the given `tqdm` class with</span>
 <span class="sd">            pandas.core.</span>
@@ -891,8 +897,9 @@
 <span class="sd">            Prefix for the progressbar.</span>
 <span class="sd">        total  : int, optional</span>
 <span class="sd">            The number of expected iterations. If unspecified,</span>
-<span class="sd">            len(iterable) is used if possible. As a last resort, only basic</span>
-<span class="sd">            progress statistics are displayed (no ETA, no progressbar).</span>
+<span class="sd">            len(iterable) is used if possible. If float(&quot;inf&quot;) or as a last</span>
+<span class="sd">            resort, only basic progress statistics are displayed</span>
+<span class="sd">            (no ETA, no progressbar).</span>
 <span class="sd">            If `gui` is True and this parameter needs subsequent updating,</span>
 <span class="sd">            specify an initial arbitrary large positive integer,</span>
 <span class="sd">            e.g. int(9e9).</span>
@@ -990,6 +997,9 @@
                 <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
                 <span class="n">total</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">total</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">):</span>
+            <span class="c1"># Infinite iterations, behave same as unknown</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">disable</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">iterable</span> <span class="o">=</span> <span class="n">iterable</span>
@@ -1472,9 +1482,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1483,12 +1491,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 22 Dec 2018, 15h.
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      Last updated on 14 Jan 2019, 19h.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1503,36 +1511,25 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.9.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -35,28 +35,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="Policies package" href="Policies.html"/>
-        <link rel="next" title="Policies.SparseWrapper module" href="Policies.SparseWrapper.html"/>
-        <link rel="prev" title="Policies.Softmax module" href="Policies.Softmax.html"/> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Policies.SparseWrapper module" href="Policies.SparseWrapper.html" />
+    <link rel="prev" title="Policies.Softmax module" href="Policies.Softmax.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -73,7 +64,7 @@
 
           
             
-            <img src="../_static/logo.png" class="logo" />
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -218,10 +209,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -232,7 +223,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -244,7 +235,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">SMPyBandits</a>
@@ -252,9 +243,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -318,14 +310,19 @@
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
 <div class="section" id="module-Policies.SparseUCB">
 <span id="policies-sparseucb-module"></span><h1>Policies.SparseUCB module<a class="headerlink" href="#module-Policies.SparseUCB" title="Permalink to this headline">¶</a></h1>
 <p>The SparseUCB policy, designed to tackle sparse stochastic bandit problems:</p>
 <ul class="simple">
-<li>This means that only a small subset of size <code class="docutils literal"><span class="pre">s</span></code> of the <code class="docutils literal"><span class="pre">K</span></code> arms has non-zero means.</li>
-<li>The SparseUCB algorithm requires to known <strong>exactly</strong> the value of <code class="docutils literal"><span class="pre">s</span></code>.</li>
-<li>Reference: [[&#8220;Sparse Stochastic Bandits&#8221;, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](<a class="reference external" href="https://arxiv.org/abs/1706.01383">https://arxiv.org/abs/1706.01383</a>)].</li>
+<li>This means that only a small subset of size <code class="docutils literal notranslate"><span class="pre">s</span></code> of the <code class="docutils literal notranslate"><span class="pre">K</span></code> arms has non-zero means.</li>
+<li>The SparseUCB algorithm requires to known <strong>exactly</strong> the value of <code class="docutils literal notranslate"><span class="pre">s</span></code>.</li>
+<li>Reference: [[“Sparse Stochastic Bandits”, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017](<a class="reference external" href="https://arxiv.org/abs/1706.01383">https://arxiv.org/abs/1706.01383</a>)].</li>
 </ul>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -334,12 +331,12 @@
 <dl class="class">
 <dt id="Policies.SparseUCB.Phase">
 <em class="property">class </em><code class="descclassname">Policies.SparseUCB.</code><code class="descname">Phase</code><a class="headerlink" href="#Policies.SparseUCB.Phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Different states during the SparseUCB algorithm.</p>
 <ul class="simple">
-<li><code class="docutils literal"><span class="pre">RoundRobin</span></code> means all are sampled once.</li>
-<li><code class="docutils literal"><span class="pre">ForceLog</span></code> uniformly explores arms that are in the set <span class="math">\(\mathcal{J}(t) \setminus \mathcal{K}(t)\)</span>.</li>
-<li><code class="docutils literal"><span class="pre">UCB</span></code> is the phase that the algorithm should converge to, when a normal UCB selection is done only on the &#8220;good&#8221; arms, i.e., <span class="math">\(\mathcal{K}(t)\)</span>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">RoundRobin</span></code> means all are sampled once.</li>
+<li><code class="docutils literal notranslate"><span class="pre">ForceLog</span></code> uniformly explores arms that are in the set <span class="math notranslate nohighlight">\(\mathcal{J}(t) \setminus \mathcal{K}(t)\)</span>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">UCB</span></code> is the phase that the algorithm should converge to, when a normal UCB selection is done only on the “good” arms, i.e., <span class="math notranslate nohighlight">\(\mathcal{K}(t)\)</span>.</li>
 </ul>
 <dl class="attribute">
 <dt id="Policies.SparseUCB.Phase.ForceLog">
@@ -361,57 +358,31 @@
 <code class="descname">__module__</code><em class="property"> = 'Policies.SparseUCB'</em><a class="headerlink" href="#Policies.SparseUCB.Phase.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="Policies.SparseUCB.Phase.__new__">
-<code class="descname">__new__</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Policies.SparseUCB.Phase.__new__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Policies.SparseUCB.Phase._generate_next_value_">
-<code class="descname">_generate_next_value_</code><span class="sig-paren">(</span><em>name</em>, <em>start</em>, <em>count</em>, <em>last_values</em><span class="sig-paren">)</span><a class="headerlink" href="#Policies.SparseUCB.Phase._generate_next_value_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.SparseUCB.Phase._member_map_">
-<code class="descname">_member_map_</code><em class="property"> = OrderedDict([('RoundRobin', &lt;Phase.RoundRobin: 1&gt;), ('ForceLog', &lt;Phase.ForceLog: 2&gt;), ('UCB', &lt;Phase.UCB: 3&gt;)])</em><a class="headerlink" href="#Policies.SparseUCB.Phase._member_map_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.SparseUCB.Phase._member_names_">
-<code class="descname">_member_names_</code><em class="property"> = ['RoundRobin', 'ForceLog', 'UCB']</em><a class="headerlink" href="#Policies.SparseUCB.Phase._member_names_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.SparseUCB.Phase._member_type_">
-<code class="descname">_member_type_</code><a class="headerlink" href="#Policies.SparseUCB.Phase._member_type_" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.SparseUCB.Phase._value2member_map_">
-<code class="descname">_value2member_map_</code><em class="property"> = {1: &lt;Phase.RoundRobin: 1&gt;, 2: &lt;Phase.ForceLog: 2&gt;, 3: &lt;Phase.UCB: 3&gt;}</em><a class="headerlink" href="#Policies.SparseUCB.Phase._value2member_map_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="data">
 <dt id="Policies.SparseUCB.ALPHA">
 <code class="descclassname">Policies.SparseUCB.</code><code class="descname">ALPHA</code><em class="property"> = 4</em><a class="headerlink" href="#Policies.SparseUCB.ALPHA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default parameter for <span class="math">\(\alpha\)</span> for the UCB indexes.</p>
+<dd><p>Default parameter for <span class="math notranslate nohighlight">\(\alpha\)</span> for the UCB indexes.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.SparseUCB.SparseUCB">
 <em class="property">class </em><code class="descclassname">Policies.SparseUCB.</code><code class="descname">SparseUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>sparsity=None</em>, <em>alpha=4</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SparseUCB.html#SparseUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SparseUCB.SparseUCB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a></p>
 <p>The SparseUCB policy, designed to tackle sparse stochastic bandit problems.</p>
 <ul class="simple">
-<li>By default, assume <code class="docutils literal"><span class="pre">sparsity</span></code> = <code class="docutils literal"><span class="pre">nbArms</span></code>.</li>
+<li>By default, assume <code class="docutils literal notranslate"><span class="pre">sparsity</span></code> = <code class="docutils literal notranslate"><span class="pre">nbArms</span></code>.</li>
 </ul>
 <dl class="method">
 <dt id="Policies.SparseUCB.SparseUCB.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>sparsity=None</em>, <em>alpha=4</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SparseUCB.html#SparseUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li>nbArms: the number of arms,</li>
+<li>lower, amplitude: lower value and known amplitude of the rewards.</li>
+</ul>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.SparseUCB.SparseUCB.sparsity">
@@ -428,13 +399,13 @@
 <dl class="attribute">
 <dt id="Policies.SparseUCB.SparseUCB.force_to_see">
 <code class="descname">force_to_see</code><em class="property"> = None</em><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.force_to_see" title="Permalink to this definition">¶</a></dt>
-<dd><p>Binary array for the set <span class="math">\(\mathcal{J}(t)\)</span>.</p>
+<dd><p>Binary array for the set <span class="math notranslate nohighlight">\(\mathcal{J}(t)\)</span>.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.SparseUCB.SparseUCB.goods">
 <code class="descname">goods</code><em class="property"> = None</em><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.goods" title="Permalink to this definition">¶</a></dt>
-<dd><p>Binary array for the set <span class="math">\(\mathcal{K}(t)\)</span>.</p>
+<dd><p>Binary array for the set <span class="math notranslate nohighlight">\(\mathcal{K}(t)\)</span>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -446,7 +417,8 @@
 <dl class="method">
 <dt id="Policies.SparseUCB.SparseUCB.__str__">
 <code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SparseUCB.html#SparseUCB.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.__str__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>-&gt; str</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Policies.SparseUCB.SparseUCB.startGame">
@@ -457,23 +429,18 @@
 <dl class="method">
 <dt id="Policies.SparseUCB.SparseUCB.update_j">
 <code class="descname">update_j</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SparseUCB.html#SparseUCB.update_j"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.update_j" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recompute the set <span class="math">\(\mathcal{J}(t)\)</span>:</p>
-<div class="math">
+<dd><p>Recompute the set <span class="math notranslate nohighlight">\(\mathcal{J}(t)\)</span>:</p>
+<div class="math notranslate nohighlight">
 \[\mathcal{J}(t) = \left\{ k \in [1,...,K]\;, \frac{X_k(t)}{N_k(t)} \geq \sqrt{\frac{\alpha \log(N_k(t))}{N_k(t)}} \right\}.\]</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Policies.SparseUCB.SparseUCB.update_k">
 <code class="descname">update_k</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SparseUCB.html#SparseUCB.update_k"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.update_k" title="Permalink to this definition">¶</a></dt>
-<dd><p>Recompute the set <span class="math">\(\mathcal{K}(t)\)</span>:</p>
-<div class="math">
+<dd><p>Recompute the set <span class="math notranslate nohighlight">\(\mathcal{K}(t)\)</span>:</p>
+<div class="math notranslate nohighlight">
 \[\mathcal{K}(t) = \left\{ k \in [1,...,K]\;, \frac{X_k(t)}{N_k(t)} \geq \sqrt{\frac{\alpha \log(t)}{N_k(t)}} \right\}.\]</div>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.SparseUCB.SparseUCB.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.SparseUCB'</em><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="Policies.SparseUCB.SparseUCB.choice">
@@ -481,20 +448,20 @@
 <dd><p>Choose the next arm to play:</p>
 <ul class="simple">
 <li>If still in a Round-Robin phase, play the next arm,</li>
-<li>Otherwise, recompute the set <span class="math">\(\mathcal{J}(t)\)</span>,</li>
+<li>Otherwise, recompute the set <span class="math notranslate nohighlight">\(\mathcal{J}(t)\)</span>,</li>
 <li><dl class="first docutils">
-<dt>If it is too small, if <span class="math">\(\mathcal{J}(t) &lt; s\)</span>:</dt>
+<dt>If it is too small, if <span class="math notranslate nohighlight">\(\mathcal{J}(t) &lt; s\)</span>:</dt>
 <dd><ul class="first last">
 <li>Start a new Round-Robin phase from arm 0.</li>
 </ul>
 </dd>
 </dl>
 </li>
-<li>Otherwise, recompute the second set <span class="math">\(\mathcal{K}(t)\)</span>,</li>
+<li>Otherwise, recompute the second set <span class="math notranslate nohighlight">\(\mathcal{K}(t)\)</span>,</li>
 <li><dl class="first docutils">
-<dt>If it is too small, if <span class="math">\(\mathcal{K}(t) &lt; s\)</span>:</dt>
+<dt>If it is too small, if <span class="math notranslate nohighlight">\(\mathcal{K}(t) &lt; s\)</span>:</dt>
 <dd><ul class="first last">
-<li>Play a Force-Log step by choosing an arm uniformly at random from the set <span class="math">\(\mathcal{J}(t) \setminus \mathcal{K}(t)\)</span>.</li>
+<li>Play a Force-Log step by choosing an arm uniformly at random from the set <span class="math notranslate nohighlight">\(\mathcal{J}(t) \setminus \mathcal{K}(t)\)</span>.</li>
 </ul>
 </dd>
 </dl>
@@ -502,7 +469,7 @@
 <li><dl class="first docutils">
 <dt>Otherwise,</dt>
 <dd><ul class="first last">
-<li>Play a UCB step by choosing an arm with highest UCB index from the set <span class="math">\(\mathcal{K}(t)\)</span>.</li>
+<li>Play a UCB step by choosing an arm with highest UCB index from the set <span class="math notranslate nohighlight">\(\mathcal{K}(t)\)</span>.</li>
 </ul>
 </dd>
 </dl>
@@ -510,15 +477,18 @@
 </ul>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Policies.SparseUCB.SparseUCB.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.SparseUCB'</em><a class="headerlink" href="#Policies.SparseUCB.SparseUCB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -536,12 +506,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 22 Dec 2018, 15h.
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      Last updated on 14 Jan 2019, 19h.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -556,36 +526,25 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.9.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -35,28 +35,19 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="SMPyBandits 0.9.4 documentation" href="../index.html"/>
-        <link rel="up" title="Policies package" href="Policies.html"/>
-        <link rel="next" title="Policies.Hedge module" href="Policies.Hedge.html"/>
-        <link rel="prev" title="Policies.ExploreThenCommit module" href="Policies.ExploreThenCommit.html"/> 
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Policies.Hedge module" href="Policies.Hedge.html" />
+    <link rel="prev" title="Policies.ExploreThenCommit module" href="Policies.ExploreThenCommit.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -73,7 +64,7 @@
 
           
             
-            <img src="../_static/logo.png" class="logo" />
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -218,10 +209,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../How_to_run_the_code.html">How to run the code ?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson&#8217;s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -232,7 +223,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal"><span class="pre">logs</span></code> files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
 </ul>
 
             
@@ -244,7 +235,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">SMPyBandits</a>
@@ -252,9 +243,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -318,10 +310,15 @@
 .admonition > p:before {
     margin-right: 4px;  /* make room for the exclamation icon */
 }
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
 </style>
 <div class="section" id="module-Policies.GenericAggregation">
 <span id="policies-genericaggregation-module"></span><h1>Policies.GenericAggregation module<a class="headerlink" href="#module-Policies.GenericAggregation" title="Permalink to this headline">¶</a></h1>
-<p>The GenericAggregation aggregation bandit algorithm: use a bandit policy A (master), managing several &#8220;slave&#8221; algorithms, <span class="math">\(A_1, ..., A_N\)</span>.</p>
+<p>The GenericAggregation aggregation bandit algorithm: use a bandit policy A (master), managing several “slave” algorithms, <span class="math notranslate nohighlight">\(A_1, ..., A_N\)</span>.</p>
 <ul class="simple">
 <li>At every step, one slave algorithm A_i is selected, by the master policy A.</li>
 <li>Then its decision is listen to, played by the master algorithm, and a feedback reward is received.</li>
@@ -331,12 +328,13 @@
 <dl class="class">
 <dt id="Policies.GenericAggregation.GenericAggregation">
 <em class="property">class </em><code class="descclassname">Policies.GenericAggregation.</code><code class="descname">GenericAggregation</code><span class="sig-paren">(</span><em>nbArms</em>, <em>master=None</em>, <em>children=None</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
 <p>The GenericAggregation aggregation bandit algorithm.</p>
 <dl class="method">
 <dt id="Policies.GenericAggregation.GenericAggregation.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>master=None</em>, <em>children=None</em>, <em>lower=0.0</em>, <em>amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>New policy.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Policies.GenericAggregation.GenericAggregation.nbArms">
@@ -360,12 +358,6 @@
 <dt id="Policies.GenericAggregation.GenericAggregation.last_choice">
 <code class="descname">last_choice</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.last_choice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remember the index of the last child trusted for a decision.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.GenericAggregation.GenericAggregation.nbChildren">
-<code class="descname">nbChildren</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.nbChildren" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number N of slave algorithms.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -404,11 +396,6 @@
 <dd><p>Trust one of the slave and listen to his <cite>choiceWithRank</cite>.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Policies.GenericAggregation.GenericAggregation.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.GenericAggregation'</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="Policies.GenericAggregation.GenericAggregation.choiceFromSubSet">
 <code class="descname">choiceFromSubSet</code><span class="sig-paren">(</span><em>availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
@@ -421,6 +408,11 @@
 <dd><p>Trust one of the slave and listen to his <cite>choiceMultiple</cite>.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.GenericAggregation'</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="Policies.GenericAggregation.GenericAggregation.choiceIMP">
 <code class="descname">choiceIMP</code><span class="sig-paren">(</span><em>nb=1</em>, <em>startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choiceIMP" title="Permalink to this definition">¶</a></dt>
@@ -432,7 +424,7 @@
 <code class="descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.estimatedOrder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trust one of the slave and listen to his <cite>estimatedOrder</cite>.</p>
 <ul class="simple">
-<li>Return the estimate order of the arms, as a permutation on <span class="math">\([0,...,K-1]\)</span> that would order the arms by increasing means.</li>
+<li>Return the estimate order of the arms, as a permutation on <span class="math notranslate nohighlight">\([0,...,K-1]\)</span> that would order the arms by increasing means.</li>
 </ul>
 </dd></dl>
 
@@ -446,16 +438,14 @@
 
 <dl class="function">
 <dt id="Policies.GenericAggregation.random">
-<code class="descclassname">Policies.GenericAggregation.</code><code class="descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &rarr; x in the interval [0, 1).<a class="headerlink" href="#Policies.GenericAggregation.random" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.GenericAggregation.</code><code class="descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; x in the interval [0, 1).<a class="headerlink" href="#Policies.GenericAggregation.random" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -473,12 +463,12 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016-2018, Lilian Besson (Naereen).
-      Last updated on 22 Dec 2018, 15h.
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      Last updated on 14 Jan 2019, 19h.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -493,36 +483,25 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.9.4',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
 
   
 
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
