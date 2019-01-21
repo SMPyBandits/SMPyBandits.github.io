@@ -102,7 +102,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -650,13 +649,13 @@
 
 
 <span class="c1"># XXX compare different values of the experimental sliding window algorithm</span>
-<span class="n">EPSS</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+<span class="n">EPSS</span>   <span class="o">=</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">]</span>  <span class="c1">#+ [0.1]</span>
 <span class="n">ALPHAS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">TAUS</span>   <span class="o">=</span> <span class="p">[</span>
         <span class="c1"># 500, 1000, 2000,</span>
         <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">HORIZON</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">NB_BREAK_POINTS</span><span class="p">))),</span>  <span class="c1"># &quot;optimal&quot; value according to [Garivier &amp; Moulines, 2008]</span>
     <span class="p">]</span>
-<span class="n">GAMMAS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.99</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mf">0.9999</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="n">GAMMAS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.99</span><span class="p">]</span> <span class="c1">#+ [0.9999, 0.9, 0.75, 0.5]</span>
 
 <span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="n">NB_ARMS</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">HORIZON</span> <span class="o">/</span> <span class="mi">100</span><span class="p">))</span>  <span class="c1">#: Default window size :math:`w` for the M-UCB and SW-UCB algorithm.</span>
 
@@ -682,13 +681,13 @@
         <span class="c1"># { &quot;archtype&quot;: AdBandits, &quot;params&quot;: { &quot;alpha&quot;: 1, &quot;horizon&quot;: HORIZON, } },</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;klucb&quot;</span><span class="p">:</span> <span class="n">klucb</span><span class="p">,</span> <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;klUCB&quot;</span><span class="p">,</span> <span class="p">},</span>
         <span class="c1"># { &quot;archtype&quot;: SWR_klUCB, &quot;params&quot;: { &quot;klucb&quot;: klucb, } },  # WARNING experimental!</span>
-        <span class="c1"># { &quot;archtype&quot;: Thompson, &quot;params&quot;: { &quot;posterior&quot;: Beta, } },</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">Beta</span><span class="p">,</span> <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Thompson Sampling&quot;</span> <span class="p">},</span>
     <span class="p">]</span> <span class="o">+</span>
     <span class="p">[</span>  <span class="c1"># XXX DiscountedThompson works REALLY well!</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;posterior&quot;</span><span class="p">:</span> <span class="n">DiscountedBeta</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="n">gamma</span><span class="p">,</span> <span class="p">},</span>
-            <span class="c1"># &quot;change_label&quot;: &quot;DTS&quot;,</span>
+            <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;DTS($\gamma=</span><span class="si">{:.5g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gamma</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="n">GAMMAS</span>
     <span class="p">]</span> <span class="o">+</span>
@@ -718,17 +717,24 @@
     <span class="c1">#     for alpha in ALPHAS</span>
     <span class="c1">#     for lmbda in [1]  # [0.1, 0.5, 1, 5, 10]</span>
     <span class="c1"># ] +</span>
-    <span class="c1"># # [</span>
-    <span class="c1"># #     # --- # XXX experimental sliding window algorithm</span>
-    <span class="c1"># #     { &quot;archtype&quot;: SlidingWindowRestart, &quot;params&quot;: { &quot;policy&quot;: policy, &quot;tau&quot;: tau, &quot;threshold&quot;: eps, &quot;full_restart_when_refresh&quot;: True } }</span>
-    <span class="c1"># #     for tau in [TAUS[0]] for eps in [EPSS[0]]</span>
-    <span class="c1"># #     for policy in [UCB, klUCB, Thompson, BayesUCB]</span>
-    <span class="c1"># # ] +</span>
     <span class="p">[</span>
-        <span class="c1"># --- # Different versions of the sliding window UCB algorithm</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span> <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">TAUS</span>
+        <span class="c1"># --- # XXX experimental sliding window algorithm</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SlidingWindowRestart</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
+            <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span>
+            <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="n">eps</span><span class="p">,</span>
+            <span class="s2">&quot;full_restart_when_refresh&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;SW-klUCB($\tau=</span><span class="si">{}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">TAUS</span>
+        <span class="k">for</span> <span class="n">eps</span> <span class="ow">in</span> <span class="n">EPSS</span>
+        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span><span class="n">klUCB</span><span class="p">]</span>
     <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # Different versions of the sliding window UCB algorithm</span>
+    <span class="c1">#     { &quot;archtype&quot;: SWUCB, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;tau&quot;: tau, } }</span>
+    <span class="c1">#     for alpha in ALPHAS for tau in TAUS</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># [</span>
     <span class="c1">#     # --- # XXX experimental other version of the sliding window algorithm, knowing the horizon</span>
     <span class="c1">#     { &quot;archtype&quot;: SWUCBPlus, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;alpha&quot;: alpha, } }</span>
@@ -832,7 +838,31 @@
     <span class="c1">#     # for lazy_detect_change_only_x_steps in [1, 2, 5]  # XXX uncomment to use default value</span>
     <span class="c1">#     # for lazy_try_value_s_only_x_steps in [1, 2, 5]  # XXX uncomment to use default value</span>
     <span class="c1"># ] +</span>
-    <span class="c1"># XXX Test a few CD-MAB algorithms that need to know NB_BREAK_POINTS</span>
+    <span class="c1"># # XXX Test GaussianGLR_IndexPolicy</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     { &quot;archtype&quot;: archtype, &quot;params&quot;: {</span>
+    <span class="c1">#         &quot;horizon&quot;: HORIZON,</span>
+    <span class="c1">#         &quot;policy&quot;: policy,</span>
+    <span class="c1">#         &quot;per_arm_restart&quot;: per_arm_restart,</span>
+    <span class="c1">#         &quot;max_nb_random_events&quot;: NB_BREAK_POINTS,</span>
+    <span class="c1">#         # &quot;lazy_detect_change_only_x_steps&quot;: lazy_detect_change_only_x_steps,</span>
+    <span class="c1">#         # &quot;lazy_try_value_s_only_x_steps&quot;: lazy_try_value_s_only_x_steps,</span>
+    <span class="c1">#     } }</span>
+    <span class="c1">#     for archtype in [</span>
+    <span class="c1">#         # GaussianGLR_IndexPolicy,    # OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
+    <span class="c1">#         # GaussianGLR_IndexPolicy_WithTracking,    # OK GaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
+    <span class="c1">#         GaussianGLR_IndexPolicy_WithDeterministicExploration,    # OK GaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Gaussian GLR and is more efficient</span>
+    <span class="c1">#         # SubGaussianGLR_IndexPolicy, # OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
+    <span class="c1">#     ]</span>
+    <span class="c1">#     for policy in [</span>
+    <span class="c1">#         # UCB,  # XXX comment to only test klUCB</span>
+    <span class="c1">#         klUCB,</span>
+    <span class="c1">#     ]</span>
+    <span class="c1">#     for per_arm_restart in PER_ARM_RESTART</span>
+    <span class="c1">#     # for lazy_detect_change_only_x_steps in [50] #+ [2, 10]  # XXX uncomment to use default value</span>
+    <span class="c1">#     # for lazy_try_value_s_only_x_steps in [50] #+ [2, 10]  # XXX uncomment to use default value</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># XXX Test BernoulliGLR_IndexPolicy</span>
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
@@ -843,12 +873,9 @@
             <span class="s2">&quot;alpha0&quot;</span><span class="p">:</span> <span class="n">alpha0</span><span class="p">,</span>
             <span class="c1"># &quot;lazy_detect_change_only_x_steps&quot;: lazy_detect_change_only_x_steps,</span>
             <span class="c1"># &quot;lazy_try_value_s_only_x_steps&quot;: lazy_try_value_s_only_x_steps,</span>
+            <span class="c1"># &quot;variant&quot;: variant,</span>
         <span class="p">}</span> <span class="p">}</span>
         <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="c1"># GaussianGLR_IndexPolicy,    # OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
-            <span class="c1"># GaussianGLR_IndexPolicy_WithTracking,    # OK GaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
-            <span class="c1"># GaussianGLR_IndexPolicy_WithDeterministicExploration,    # OK GaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Gaussian GLR and is more efficient</span>
-            <span class="c1"># SubGaussianGLR_IndexPolicy, # OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
             <span class="c1"># BernoulliGLR_IndexPolicy,   # OK BernoulliGLR_IndexPolicy is very much like CUSUM</span>
             <span class="c1"># BernoulliGLR_IndexPolicy_WithTracking,   # OK GaussianGLR_IndexPolicy_WithTracking is very much like Bernoulli GLR and is more efficient</span>
             <span class="n">BernoulliGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span>   <span class="c1"># OK GaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Bernoulli GLR and is more efficient</span>
@@ -860,12 +887,13 @@
         <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="n">PER_ARM_RESTART</span>
         <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="c1">#+ [0.1, 0.05, 0.001]  # comment from the + to use default parameter</span>
         <span class="k">for</span> <span class="n">alpha0</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="c1">#+ [0.1, 0.01, 0.005, 0.001]  # comment from the + to use default parameter</span>
-        <span class="c1"># for lazy_detect_change_only_x_steps in [2, 10, 50]  # XXX uncomment to use default value</span>
-        <span class="c1"># for lazy_try_value_s_only_x_steps in [2, 10, 50]  # XXX uncomment to use default value</span>
+        <span class="c1"># for lazy_detect_change_only_x_steps in [50, 10] #+ [2, 10]  # XXX uncomment to use default value</span>
+        <span class="c1"># for lazy_try_value_s_only_x_steps in [50, 10] #+ [2, 10]  # XXX uncomment to use default value</span>
+        <span class="k">for</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span> <span class="n">lazy_try_value_s_only_x_steps</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
+        <span class="c1"># for variant in [None, 1, 2, 3]</span>
     <span class="p">]</span> <span class="o">+</span>
     <span class="p">[]</span>
 <span class="p">})</span>
-
 
 <span class="c1"># XXX Huge hack! Use this if you want to modify the legends</span>
 <span class="n">configuration</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
@@ -897,7 +925,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 21 Jan 2019, 15h.
+      Last updated on 21 Jan 2019, 18h.
 
     </p>
   </div>

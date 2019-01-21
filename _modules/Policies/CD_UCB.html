@@ -102,7 +102,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
@@ -236,7 +235,7 @@
 <span class="c1">#: It is a simple but efficient way to speed up CD tests, see https://github.com/SMPyBandits/SMPyBandits/issues/173</span>
 <span class="c1">#: Default value is 0, to not use this feature, and 10 should speed up the test by x10.</span>
 <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">20</span>
 
 
 <span class="c1"># --- The very generic class</span>
@@ -292,7 +291,7 @@
 
         <span class="n">should_you_try_to_detect</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">should_you_try_to_detect</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_change</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For a player </span><span class="si">{}</span><span class="s2"> a change was detected at time </span><span class="si">{}</span><span class="s2"> for arm </span><span class="si">{}</span><span class="s2"> after seeing reward = </span><span class="si">{}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For a player </span><span class="si">{}</span><span class="s2"> a change was detected at time </span><span class="si">{}</span><span class="s2"> for arm </span><span class="si">{}</span><span class="s2">, after </span><span class="si">{}</span><span class="s2"> pulls of that arm (giving mean reward = </span><span class="si">{}</span><span class="s2">). Last restart on that arm was at tau = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">arm</span><span class="p">]))</span>  <span class="c1"># DEBUG</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
                 <span class="c1"># or reset current memory for ALL THE arms</span>
@@ -372,7 +371,7 @@
     <span class="n">C1_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(((</span><span class="mi">4</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">comb</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="n">M</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">C1_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(((</span><span class="mi">4</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">comb</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="n">M</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">C1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">C1_minus</span><span class="p">,</span> <span class="n">C1_plus</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">C1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">C1</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># FIXME This case of having C1=0 for CUSUM parameters should not happen...</span>
+    <span class="k">if</span> <span class="n">C1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">C1</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># XXX This case of having C1=0 for CUSUM parameters should not happen...</span>
     <span class="n">h</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">C1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">UpsilonT</span><span class="p">)</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">C2</span> <span class="o">*</span> <span class="n">UpsilonT</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">C1</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">UpsilonT</span><span class="p">))</span>
     <span class="n">alpha</span> <span class="o">*=</span> <span class="n">scaleFactor</span>  <span class="c1"># XXX Just divide alpha to not have too large, for CUSUM-UCB.</span>
@@ -495,7 +494,7 @@
 <span class="c1">#: It is a simple but efficient way to speed up GLR tests, see https://github.com/SMPyBandits/SMPyBandits/issues/173</span>
 <span class="c1">#: Default value is 1, to not use this feature, and 10 should speed up the test by x10.</span>
 <span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">20</span>
 
 
 <div class="viewcode-block" id="UCBLCB_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.UCBLCB_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">UCBLCB_IndexPolicy</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">):</span>
@@ -539,15 +538,15 @@
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Detect a change in the current arm, using the two-sided UCB-LCB algorithm [Mukherjee &amp; Maillard, 2018].</span>
 
 <span class="sd">        - Let :math:`\hat{\mu}_{i,t:t&#39;}` the empirical mean of rewards obtained for arm i from time :math:`t` to :math:`t&#39;`, and :math:`N_{i,t:t&#39;}` the number of samples.</span>
-<span class="sd">        - Let :math:`S_{i,t:t&#39;} = \srqt{\frac{\log(4 t^2 / \delta)}{2 N_{i,t:t&#39;}}}` the length of the confidence interval.</span>
+<span class="sd">        - Let :math:`S_{i,t:t&#39;} = \sqrt{\frac{\log(4 t^2 / \delta)}{2 N_{i,t:t&#39;}}}` the length of the confidence interval.</span>
 
 <span class="sd">        - When we have data starting at :math:`t_0=0` (since last restart) and up-to current time :math:`t`, for each *arm* i,</span>
 <span class="sd">            - For each intermediate time steps :math:`t&#39; \in [t_0, t)`,</span>
-<span class="sd">                - Compute :math:`LCB_{before} = \hat{\mu}_{i,t_0:t&#39;} - S_{i,t_0:t&#39;}`,</span>
-<span class="sd">                - Compute :math:`UCB_{before} = \hat{\mu}_{i,t_0:t&#39;} + S_{i,t_0:t&#39;}`,</span>
-<span class="sd">                - Compute :math:`LCB_{after} = \hat{\mu}_{i,t&#39;+1:t} - S_{i,t&#39;+1:t}`,</span>
-<span class="sd">                - Compute :math:`UCB_{after} = \hat{\mu}_{i,t&#39;+1:t} + S_{i,t&#39;+1:t}`,</span>
-<span class="sd">                - If :math:`UCB_{before} &lt; LCB_{after}` or :math:`UCB_{after} &lt; LCB_{before}`, then restart.</span>
+<span class="sd">                - Compute :math:`LCB_{\text{before}} = \hat{\mu}_{i,t_0:t&#39;} - S_{i,t_0:t&#39;}`,</span>
+<span class="sd">                - Compute :math:`UCB_{\text{before}} = \hat{\mu}_{i,t_0:t&#39;} + S_{i,t_0:t&#39;}`,</span>
+<span class="sd">                - Compute :math:`LCB_{\text{after}} = \hat{\mu}_{i,t&#39;+1:t} - S_{i,t&#39;+1:t}`,</span>
+<span class="sd">                - Compute :math:`UCB_{\text{after}} = \hat{\mu}_{i,t&#39;+1:t} + S_{i,t&#39;+1:t}`,</span>
+<span class="sd">                - If :math:`UCB_{\text{before}} &lt; LCB_{\text{after}}` or :math:`UCB_{\text{after}} &lt; LCB_{\text{before}}`, then restart.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">armId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
             <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span>
@@ -612,7 +611,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">sig2x</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="threshold_GaussianGLR"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.threshold_GaussianGLR">[docs]</a><span class="k">def</span> <span class="nf">threshold_GaussianGLR</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="threshold_GaussianGLR"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.threshold_GaussianGLR">[docs]</a><span class="k">def</span> <span class="nf">threshold_GaussianGLR</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the value :math:`c from the corollary of of Theorem 2 from [&quot;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&quot;, O.-A. Maillard, 2018].</span>
 
 <span class="sd">    - The threshold is computed as (with :math:`t_0 = 0`):</span>
@@ -621,27 +620,134 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">delta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span><span class="p">))</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)))</span> <span class="o">*</span> <span class="n">log</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">delta</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">t</span><span class="p">))</span> <span class="o">*</span> <span class="n">log</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="n">delta</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">isinf</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">c</span></div>
 
 
-<div class="viewcode-block" id="threshold_BernoulliGLR"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.threshold_BernoulliGLR">[docs]</a><span class="k">def</span> <span class="nf">threshold_BernoulliGLR</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="c1"># --- Intermediate functions to define the optimal threshold for Bernoulli GLR tests</span>
+
+<div class="viewcode-block" id="function_h"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.function_h">[docs]</a><span class="k">def</span> <span class="nf">function_h</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The function :math:`h(u) = u - \log(u)`.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error: the function h only accepts values larger than 1, not x = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">u</span> <span class="o">-</span> <span class="n">log</span><span class="p">(</span><span class="n">u</span><span class="p">)</span></div>
+
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">root_scalar</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">lambertw</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">exp</span>
+
+<div class="viewcode-block" id="function_h_minus_one"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.function_h_minus_one">[docs]</a><span class="k">def</span> <span class="nf">function_h_minus_one</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The inverse function of :math:`h(u)`, that is :math:`h^{-1}(x) = u \Leftrightarrow h(u) = x`. It is given by the Lambert W function, see :func:`scipy.special.lambertw`:</span>
+
+<span class="sd">    .. math:: h^{-1}(x) = - \mathcal{W}(- \exp(-x)).</span>
+
+<span class="sd">    - Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(105)</span>
+<span class="sd">    &gt;&gt;&gt; y = np.random.randn() ** 2</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;y = {y}&quot;)</span>
+<span class="sd">    y = 0.060184682907834595</span>
+<span class="sd">    &gt;&gt;&gt; x = function_h(y)</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;h(y) = {x}&quot;)</span>
+<span class="sd">    h(y) = 2.8705220786966508</span>
+<span class="sd">    &gt;&gt;&gt; z = function_h_minus_one(x)</span>
+<span class="sd">    &gt;&gt;&gt; print(f&quot;h^-1(x) = {z}&quot;)</span>
+<span class="sd">    h^-1(x) = 0.060184682907834595</span>
+<span class="sd">    &gt;&gt;&gt; assert np.isclose(z, y), &quot;Error: h^-1(h(y)) = z = {z} should be very close to y = {}...&quot;.format(z, y)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error: the function h inverse only accepts values larger than 1, not x = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">sol</span> <span class="o">=</span> <span class="n">root_scalar</span><span class="p">(</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="n">function_h</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x1</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sol</span><span class="o">.</span><span class="n">converged</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sol</span><span class="o">.</span><span class="n">root</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="o">-</span> <span class="n">lambertw</span><span class="p">(</span><span class="o">-</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">real</span></div>
+
+<span class="c1">#: The constant :math:`\frac{3}{2}`, used in the definition of functions :math:`h`, :math:`h^{-1}`, :math:`\tilde{h}` and :math:`\mathcal{T}`.</span>
+<span class="n">constant_power_function_h</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+<span class="c1">#: The constant :math:`h^{-1}(1/\log(\frac{3}{2}))`, used in the definition of function :math:`\tilde{h}`.</span>
+<span class="n">threshold_function_h_tilde</span> <span class="o">=</span> <span class="n">function_h_minus_one</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="n">constant_power_function_h</span><span class="p">))</span>
+
+<span class="c1">#: The constant :math:`\log(\log(\frac{3}{2}))`, used in the definition of function :math:`\tilde{h}`.</span>
+<span class="n">constant_function_h_tilde</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">constant_power_function_h</span><span class="p">))</span>
+
+<div class="viewcode-block" id="function_h_tilde"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.function_h_tilde">[docs]</a><span class="k">def</span> <span class="nf">function_h_tilde</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The function :math:`\tilde{h}(x)`, defined by:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        \tilde{h}(x) = \begin{cases} e^{1/h^{-1}(x)} h^{-1}(x) &amp; \text{~if~} x \ge h^{-1}(1/\ln (3/2)), \\</span>
+<span class="sd">        (3/2) (x-\ln \ln (3/2)) &amp; \text{otherwise}. \end{cases}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">threshold_function_h_tilde</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">function_h_minus_one</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">exp</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">constant_power_function_h</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">constant_function_h_tilde</span><span class="p">)</span></div>
+
+<span class="c1">#: The constant :math:`\zeta(2) = \frac{\pi^2}{6}`.</span>
+<span class="n">zeta_of_two</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">6</span>
+<span class="c1"># import scipy.special</span>
+<span class="c1"># assert np.isclose(scipy.special.zeta(2), zeta_of_two)</span>
+
+<span class="n">constant_function_T_mathcal</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">zeta_of_two</span><span class="p">)</span>
+
+<div class="viewcode-block" id="function_T_mathcal"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.function_T_mathcal">[docs]</a><span class="k">def</span> <span class="nf">function_T_mathcal</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The function :math:`\mathcal{T}(x)`, defined by:</span>
+
+<span class="sd">    .. math:: \mathcal{T}(x) = 2 \tilde h\left(\frac{h^{-1}(1+x) + \ln(2\zeta(2))}{2}\right).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">function_h_tilde</span><span class="p">((</span><span class="n">function_h_minus_one</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">constant_function_T_mathcal</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="approximation_function_T_mathcal"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.approximation_function_T_mathcal">[docs]</a><span class="k">def</span> <span class="nf">approximation_function_T_mathcal</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; An efficiently computed approximation of :math:`\mathcal{T}(x)`, valid for :math:`x \geq 5`:</span>
+
+<span class="sd">    .. math:: \mathcal{T}(x) \simeq x + 4 \log(1 + x + \sqrt(2 x)).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="threshold_BernoulliGLR"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.threshold_BernoulliGLR">[docs]</a><span class="k">def</span> <span class="nf">threshold_BernoulliGLR</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the value :math:`c from the corollary of of Theorem 2 from [&quot;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&quot;, O.-A. Maillard, 2018].</span>
 
-<span class="sd">    - The threshold is computed as:</span>
+<span class="sd">    .. warning:: This is still experimental, you can try different variants of the threshold function:</span>
 
-<span class="sd">    .. math:: \beta(t, \delta) := \log(\frac{1}{\delta}) + \log(1 + \log(s)) + \log(1 + \log(t - s)).</span>
+<span class="sd">    - Variant 0 (*default*) is:</span>
 
-<span class="sd">    .. warning:: FIXME This is still experimental! We need to finish the maths before deciding what threshold to use!</span>
+<span class="sd">    .. math:: \beta(t, \delta) := \log(\frac{3 t^{3/2}}{\delta}) = \log(\frac{1}{\delta}) + \log(3) + 3/2 \log(t).</span>
+
+<span class="sd">    - Variant 1 is smaller:</span>
+
+<span class="sd">    .. math:: \beta(t, \delta) := \log(\frac{1}{\delta}) + \log(1 + \log(t)).</span>
+
+<span class="sd">    - Variant 2 is using :math:`\mathcal{T}`:</span>
+
+<span class="sd">    .. math:: \beta(t, \delta) := 2 * \mathcal{T}(\frac{\log(2 t^{3/2}) / \delta}{2}) + 6 \log(1 + \log(t)).</span>
+
+<span class="sd">    - Variant 3 is using :math:`\tilde{\mathcal{T}}(x) = x + 4 \log(1 + x + \sqrt{2x})` an approximation of :math:`\mathcal{T}(x)` (valid for :math:`x \geq 5`):</span>
+
+<span class="sd">    .. math:: \beta(t, \delta) := 2 * \mathcal{T}(\frac{\log(2 t^{3/2}) / \delta}{2}) + 6 \log(1 + \log(t)).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">delta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">horizon</span>
-    <span class="c1"># c = -log(delta) + log(1 + log(s)) + log(1 + log(t-s))</span>
-    <span class="c1"># c = -log(delta) + log(s) + log(t-s)</span>
-    <span class="c1"># c = -log(delta) + log(1 + log(t))</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="c1"># c = -log(delta) + log(1 + log(s)) + log(1 + log(t-s))  # XXX no longer possible</span>
+    <span class="c1"># c = -log(delta) + log(s) + log(t-s)  # XXX no longer possible</span>
+    <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">variant</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">variant</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">variant</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">function_T_mathcal</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="p">(</span><span class="n">constant_power_function_h</span><span class="p">)</span> <span class="o">/</span> <span class="n">delta</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">variant</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">approximation_function_T_mathcal</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="p">(</span><span class="n">constant_power_function_h</span><span class="p">)</span> <span class="o">/</span> <span class="n">delta</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">isinf</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">c</span></div>
@@ -670,7 +776,7 @@
 
 
 <div class="viewcode-block" id="smart_alpha_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.smart_alpha_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute a smart estimate of the optimal value for the *fixed* forced exploration probability :math:`\alpha`.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute a smart estimate of the optimal value for the *fixed* or *random* forced exploration probability :math:`\alpha` (or tracking based).</span>
 
 <span class="sd">    .. math:: \alpha = \mathrm{scaleFactor} \times \sqrt{\frac{\Upsilon_T}{T} \log(\frac{T}{\Upsilon_T})}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -696,7 +802,7 @@
             <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">kl</span><span class="o">=</span><span class="n">klGauss</span><span class="p">,</span>
             <span class="n">alpha0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exponentBeta</span><span class="o">=</span><span class="n">EXPONENT_BETA</span><span class="p">,</span> <span class="n">alpha_t1</span><span class="o">=</span><span class="n">ALPHA_T1</span><span class="p">,</span>
-            <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span>
+            <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">lazy_try_value_s_only_x_steps</span><span class="o">=</span><span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">):</span>
@@ -711,14 +817,15 @@
         <span class="k">if</span> <span class="n">alpha0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_nb_random_events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">alpha0</span> <span class="o">=</span> <span class="n">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nb_random_events</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha0</span> <span class="o">=</span> <span class="n">alpha0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="o">=</span> <span class="n">variant</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threshold_function</span> <span class="o">=</span> <span class="n">threshold_function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_args_to_kl</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>  <span class="c1"># Tuple of extra arguments to give to the :attr:`kl` function.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kl</span> <span class="o">=</span> <span class="n">kl</span>  <span class="c1">#: The parametrized Kullback-Leibler divergence (:math:`\mathrm{kl}(x,y) = KL(D(x),D(y))`) for the 1-dimensional exponential family :math:`x\mapsto D(x)`. Example: :func:`kullback.klBern` or :func:`kullback.klGauss`.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span> <span class="o">=</span> <span class="n">lazy_try_value_s_only_x_steps</span>  <span class="c1">#: Be lazy and try to detect changes for :math:`s` taking steps of size ``steps_s``.</span></div>
 
-<div class="viewcode-block" id="GLR_IndexPolicy.compute_threshold_h"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.GLR_IndexPolicy.compute_threshold_h">[docs]</a>    <span class="k">def</span> <span class="nf">compute_threshold_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+<div class="viewcode-block" id="GLR_IndexPolicy.compute_threshold_h"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.GLR_IndexPolicy.compute_threshold_h">[docs]</a>    <span class="k">def</span> <span class="nf">compute_threshold_h</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the threshold :math:`h` with :attr:`_threshold_function`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threshold_function</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threshold_function</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_variant</span><span class="p">)</span></div>
 
     <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
     <span class="nd">@property</span>
@@ -741,6 +848,7 @@
             <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Sub</span><span class="si">{}</span><span class="s2">-&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">with_tracking</span> <span class="o">=</span> <span class="s2">&quot;tracking&quot;</span> <span class="k">if</span> <span class="s2">&quot;WithTracking&quot;</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">with_randomexploration</span> <span class="o">=</span> <span class="s2">&quot;random.explo.&quot;</span> <span class="k">if</span> <span class="s2">&quot;DeterministicExploration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;threshold #</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variant</span><span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span>
             <span class="sa">r</span><span class="s2">&quot;$\delta=</span><span class="si">{:.3g}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="c1"># r&quot;$\delta=\frac{1}{T}$&quot;,</span>
@@ -750,6 +858,7 @@
             <span class="sa">r</span><span class="s2">&quot;$\Delta s=</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">with_tracking</span><span class="p">,</span>
             <span class="n">with_randomexploration</span><span class="p">,</span>
+            <span class="n">variant</span><span class="p">,</span>
         <span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">GLR-</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
@@ -766,11 +875,12 @@
 <span class="sd">        - The change is detected if there is a time :math:`s` such that :math:`G^{\mathrm{kl}}_{t_0:s:t} &gt; h`, where :attr:`threshold_h` is the threshold of the test,</span>
 <span class="sd">        - And :math:`\mu_{a,b} = \frac{1}{b-a+1} \sum_{s=a}^{b} y_s` is the mean of the samples between :math:`a` and :math:`b`.</span>
 
-<span class="sd">        .. warning:: This is computationally costly, so an easy way to speed up this test is to use :attr:`lazy_try_value_s_only_x_steps` :math:`= \mathrm{Step_s}` for a small value (e.g., 10), so not test for all :math:`s\in[t_0, t-1]` but only :math:`s\in[t_0, t-1], s % \mathrm{Step_s} = 0` (e.g., one out of every 10 steps).</span>
+<span class="sd">        .. warning:: This is computationally costly, so an easy way to speed up this test is to use :attr:`lazy_try_value_s_only_x_steps` :math:`= \mathrm{Step_s}` for a small value (e.g., 10), so not test for all :math:`s\in[t_0, t-1]` but only :math:`s\in[t_0, t-1], s \mod \mathrm{Step_s} = 0` (e.g., one out of every 10 steps).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
         <span class="n">t0</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">t</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_y</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">threshold_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_threshold_h</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">mean_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_y</span><span class="p">[</span><span class="n">t0</span> <span class="p">:</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">mean_before</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="n">mean_after</span> <span class="o">=</span> <span class="n">mean_all</span>
@@ -791,7 +901,6 @@
             <span class="n">kl_before</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl</span><span class="p">(</span><span class="n">mean_before</span><span class="p">,</span> <span class="n">mean_all</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args_to_kl</span><span class="p">)</span>
             <span class="n">kl_after</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl</span><span class="p">(</span><span class="n">mean_after</span><span class="p">,</span> <span class="n">mean_all</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args_to_kl</span><span class="p">)</span>
             <span class="n">glr</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">t0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">kl_before</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">*</span> <span class="n">kl_after</span>
-            <span class="n">threshold_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_threshold_h</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - For t0 = </span><span class="si">{}</span><span class="s2">, s = </span><span class="si">{}</span><span class="s2">, t = </span><span class="si">{}</span><span class="s2">, the mean before mu(t0,s) = </span><span class="si">{}</span><span class="s2"> and the mean after mu(s+1,t) = </span><span class="si">{}</span><span class="s2"> and the total mean mu(t0,t) = </span><span class="si">{}</span><span class="s2">, so the kl before = </span><span class="si">{}</span><span class="s2"> and kl after = </span><span class="si">{}</span><span class="s2"> and GLR = </span><span class="si">{}</span><span class="s2">, compared to c = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">mean_before</span><span class="p">,</span> <span class="n">mean_after</span><span class="p">,</span> <span class="n">mean_all</span><span class="p">,</span> <span class="n">kl_before</span><span class="p">,</span> <span class="n">kl_after</span><span class="p">,</span> <span class="n">glr</span><span class="p">,</span> <span class="n">threshold_h</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">glr</span> <span class="o">&gt;=</span> <span class="n">threshold_h</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
@@ -802,12 +911,12 @@
     <span class="sd">&quot;&quot;&quot; A variant of the GLR policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven&#39;t been explored enough (with a tracking).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="GLR_IndexPolicy_WithTracking.choice"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.GLR_IndexPolicy_WithTracking.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; If any arm is not explored enough (:math:`n_k &lt; \leq \frac{\alpha}{K} \times (t - n_k)`, play uniformly at random one of these arms, otherwise, pass the call to :meth:`choice` of the underlying policy.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; If any arm is not explored enough (:math:`n_k \leq \frac{\alpha}{K} \times (t - n_k)`, play uniformly at random one of these arms, otherwise, pass the call to :meth:`choice` of the underlying policy.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">number_of_explorations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span>
         <span class="n">min_number_of_explorations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
         <span class="n">not_explored_enough</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">number_of_explorations</span> <span class="o">&lt;=</span> <span class="n">min_number_of_explorations</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1"># FIXME check numerically what I want to prove mathematically</span>
+        <span class="c1"># TODO check numerically what I want to prove mathematically</span>
         <span class="c1"># for arm in range(self.nbArms):</span>
         <span class="c1">#     if number_of_explorations[arm] &gt; 0:</span>
         <span class="c1">#         assert number_of_explorations[arm] &gt;= self.proba_random_exploration * (self.t - self.last_restart_times[arm]) / self.nbArms**2, &quot;Error: for arm k={}, the number of exploration n_k(t) = {} was not &gt;= alpha={} / K={}**2 * (t={} - tau_k(t)={}) and RHS was = {}...&quot;.format(arm, number_of_explorations[arm], self.proba_random_exploration, self.nbArms, self.t, self.last_restart_times[arm], self.proba_random_exploration * (self.t - self.last_restart_times[arm]) / self.nbArms**2)  # DEBUG</span>
@@ -817,7 +926,7 @@
 
 
 <div class="viewcode-block" id="GLR_IndexPolicy_WithDeterministicExploration"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration">[docs]</a><span class="k">class</span> <span class="nc">GLR_IndexPolicy_WithDeterministicExploration</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A variant of the GLR policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A variant of the GLR policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</span>
 
 <span class="sd">    - If :math:`t` is the current time and :math:`\tau` is the latest restarting time, then uniform exploration is done if:</span>
 
@@ -1023,7 +1132,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 21 Jan 2019, 15h.
+      Last updated on 21 Jan 2019, 18h.
 
     </p>
   </div>
