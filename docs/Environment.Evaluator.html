@@ -322,7 +322,7 @@ Lots of plotting methods, to have various visualizations.</p>
 <dl class="data">
 <dt id="Environment.Evaluator.MORE_ACCURATE">
 <code class="descclassname">Environment.Evaluator.</code><code class="descname">MORE_ACCURATE</code><em class="property"> = True</em><a class="headerlink" href="#Environment.Evaluator.MORE_ACCURATE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use the count of selections instead of rewards for a more accurate mean/std reward measure.</p>
+<dd><p>Use the count of selections instead of rewards for a more accurate mean/var reward measure.</p>
 </dd></dl>
 
 <dl class="data">
@@ -405,7 +405,7 @@ Lots of plotting methods, to have various visualizations.</p>
 <dl class="attribute">
 <dt id="Environment.Evaluator.Evaluator.moreAccurate">
 <code class="descname">moreAccurate</code><em class="property"> = None</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.moreAccurate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use the count of selections instead of rewards for a more accurate mean/std reward measure.</p>
+<dd><p>Use the count of selections instead of rewards for a more accurate mean/var reward measure.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -442,6 +442,12 @@ Lots of plotting methods, to have various visualizations.</p>
 <dt id="Environment.Evaluator.Evaluator.showplot">
 <code class="descname">showplot</code><em class="property"> = None</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.showplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show the plot (interactive display or not)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.Evaluator.Evaluator.use_box_plot">
+<code class="descname">use_box_plot</code><em class="property"> = None</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.use_box_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>To use box plot (or violin plot if False). Force to use boxplot if repetitions=1.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -538,6 +544,12 @@ Lots of plotting methods, to have various visualizations.</p>
 <dt id="Environment.Evaluator.Evaluator.memoryConsumption">
 <code class="descname">memoryConsumption</code><em class="property"> = None</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.memoryConsumption" title="Permalink to this definition">¶</a></dt>
 <dd><p>For each env, keep the history of running times</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Environment.Evaluator.Evaluator.numberOfCPDetections">
+<code class="descname">numberOfCPDetections</code><em class="property"> = None</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.numberOfCPDetections" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each env, store the number of change-point detections by each algorithms, to print it’s average at the end (to check if a certain Change-Point detector algorithm detects too few or too many changes).</p>
 </dd></dl>
 
 <dl class="method">
@@ -682,13 +694,25 @@ Lots of plotting methods, to have various visualizations.</p>
 <dl class="method">
 <dt id="Environment.Evaluator.Evaluator.getRunningTimes">
 <code class="descname">getRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.getRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.getRunningTimes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the means and stds and list of running time of the different policies.</p>
+<dd><p>Get the means and vars and list of running time of the different policies.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Environment.Evaluator.Evaluator.getMemoryConsumption">
 <code class="descname">getMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.getMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.getMemoryConsumption" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the means and stds and list of memory consumptions of the different policies.</p>
+<dd><p>Get the means and vars and list of memory consumptions of the different policies.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.Evaluator.Evaluator.getNumberOfCPDetections">
+<code class="descname">getNumberOfCPDetections</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.getNumberOfCPDetections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.getNumberOfCPDetections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the means and vars and list of numberOfCPDetections of the different policies.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.Evaluator.Evaluator.printFinalRanking">
+<code class="descname">printFinalRanking</code><span class="sig-paren">(</span><em>envId=0</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printFinalRanking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printFinalRanking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the final ranking of the different policies.</p>
 </dd></dl>
 
 <dl class="method">
@@ -713,9 +737,21 @@ Lots of plotting methods, to have various visualizations.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Environment.Evaluator.Evaluator.printRunningTimes">
+<code class="descname">printRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>precision=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printRunningTimes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the average+-var running time of the different policies.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Environment.Evaluator.Evaluator.plotRunningTimes">
 <code class="descname">plotRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em>, <em>base=1</em>, <em>unit='seconds'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotRunningTimes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the running times of the different policies, as a box plot for each.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Environment.Evaluator.Evaluator.printMemoryConsumption">
+<code class="descname">printMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printMemoryConsumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the average+-var memory consumption of the different policies.</p>
 </dd></dl>
 
 <dl class="method">
@@ -725,20 +761,14 @@ Lots of plotting methods, to have various visualizations.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.Evaluator.Evaluator.printFinalRanking">
-<code class="descname">printFinalRanking</code><span class="sig-paren">(</span><em>envId=0</em>, <em>moreAccurate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printFinalRanking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printFinalRanking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the final ranking of the different policies.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Environment.Evaluator.Evaluator.printRunningTimes">
-<code class="descname">printRunningTimes</code><span class="sig-paren">(</span><em>envId=0</em>, <em>precision=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printRunningTimes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printRunningTimes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the average+-std running time of the different policies.</p>
+<dt id="Environment.Evaluator.Evaluator.printNumberOfCPDetections">
+<code class="descname">printNumberOfCPDetections</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printNumberOfCPDetections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printNumberOfCPDetections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the average+-var number_of_cp_detections of the different policies.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Environment.Evaluator.Evaluator.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'Environment.Evaluator', '__doc__': ' Evaluator class to run the simulations.', '__init__': &lt;function Evaluator.__init__&gt;, '__initEnvironments__': &lt;function Evaluator.__initEnvironments__&gt;, '__initPolicies__': &lt;function Evaluator.__initPolicies__&gt;, 'compute_cache_rewards': &lt;function Evaluator.compute_cache_rewards&gt;, 'startAllEnv': &lt;function Evaluator.startAllEnv&gt;, 'startOneEnv': &lt;function Evaluator.startOneEnv&gt;, 'saveondisk': &lt;function Evaluator.saveondisk&gt;, 'getPulls': &lt;function Evaluator.getPulls&gt;, 'getBestArmPulls': &lt;function Evaluator.getBestArmPulls&gt;, 'getRewards': &lt;function Evaluator.getRewards&gt;, 'getAverageWeightedSelections': &lt;function Evaluator.getAverageWeightedSelections&gt;, 'getMaxRewards': &lt;function Evaluator.getMaxRewards&gt;, 'getCumulatedRegret_LessAccurate': &lt;function Evaluator.getCumulatedRegret_LessAccurate&gt;, 'getCumulatedRegret_MoreAccurate': &lt;function Evaluator.getCumulatedRegret_MoreAccurate&gt;, 'getCumulatedRegret': &lt;function Evaluator.getCumulatedRegret&gt;, 'getLastRegrets_LessAccurate': &lt;function Evaluator.getLastRegrets_LessAccurate&gt;, 'getAllLastWeightedSelections': &lt;function Evaluator.getAllLastWeightedSelections&gt;, 'getLastRegrets_MoreAccurate': &lt;function Evaluator.getLastRegrets_MoreAccurate&gt;, 'getLastRegrets': &lt;function Evaluator.getLastRegrets&gt;, 'getAverageRewards': &lt;function Evaluator.getAverageRewards&gt;, 'getRewardsSquared': &lt;function Evaluator.getRewardsSquared&gt;, 'getSTDRegret': &lt;function Evaluator.getSTDRegret&gt;, 'getMaxMinReward': &lt;function Evaluator.getMaxMinReward&gt;, 'getRunningTimes': &lt;function Evaluator.getRunningTimes&gt;, 'getMemoryConsumption': &lt;function Evaluator.getMemoryConsumption&gt;, '_xlabel': &lt;function Evaluator._xlabel&gt;, 'plotRegrets': &lt;function Evaluator.plotRegrets&gt;, 'plotBestArmPulls': &lt;function Evaluator.plotBestArmPulls&gt;, 'plotRunningTimes': &lt;function Evaluator.plotRunningTimes&gt;, 'plotMemoryConsumption': &lt;function Evaluator.plotMemoryConsumption&gt;, 'printFinalRanking': &lt;function Evaluator.printFinalRanking&gt;, 'printRunningTimes': &lt;function Evaluator.printRunningTimes&gt;, 'printMemoryConsumption': &lt;function Evaluator.printMemoryConsumption&gt;, 'printLastRegrets': &lt;function Evaluator.printLastRegrets&gt;, 'plotLastRegrets': &lt;function Evaluator.plotLastRegrets&gt;, 'plotHistoryOfMeans': &lt;function Evaluator.plotHistoryOfMeans&gt;, '__dict__': &lt;attribute '__dict__' of 'Evaluator' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Evaluator' objects&gt;})</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'Environment.Evaluator', '__doc__': ' Evaluator class to run the simulations.', '__init__': &lt;function Evaluator.__init__&gt;, '__initEnvironments__': &lt;function Evaluator.__initEnvironments__&gt;, '__initPolicies__': &lt;function Evaluator.__initPolicies__&gt;, 'compute_cache_rewards': &lt;function Evaluator.compute_cache_rewards&gt;, 'startAllEnv': &lt;function Evaluator.startAllEnv&gt;, 'startOneEnv': &lt;function Evaluator.startOneEnv&gt;, 'saveondisk': &lt;function Evaluator.saveondisk&gt;, 'getPulls': &lt;function Evaluator.getPulls&gt;, 'getBestArmPulls': &lt;function Evaluator.getBestArmPulls&gt;, 'getRewards': &lt;function Evaluator.getRewards&gt;, 'getAverageWeightedSelections': &lt;function Evaluator.getAverageWeightedSelections&gt;, 'getMaxRewards': &lt;function Evaluator.getMaxRewards&gt;, 'getCumulatedRegret_LessAccurate': &lt;function Evaluator.getCumulatedRegret_LessAccurate&gt;, 'getCumulatedRegret_MoreAccurate': &lt;function Evaluator.getCumulatedRegret_MoreAccurate&gt;, 'getCumulatedRegret': &lt;function Evaluator.getCumulatedRegret&gt;, 'getLastRegrets_LessAccurate': &lt;function Evaluator.getLastRegrets_LessAccurate&gt;, 'getAllLastWeightedSelections': &lt;function Evaluator.getAllLastWeightedSelections&gt;, 'getLastRegrets_MoreAccurate': &lt;function Evaluator.getLastRegrets_MoreAccurate&gt;, 'getLastRegrets': &lt;function Evaluator.getLastRegrets&gt;, 'getAverageRewards': &lt;function Evaluator.getAverageRewards&gt;, 'getRewardsSquared': &lt;function Evaluator.getRewardsSquared&gt;, 'getSTDRegret': &lt;function Evaluator.getSTDRegret&gt;, 'getMaxMinReward': &lt;function Evaluator.getMaxMinReward&gt;, 'getRunningTimes': &lt;function Evaluator.getRunningTimes&gt;, 'getMemoryConsumption': &lt;function Evaluator.getMemoryConsumption&gt;, 'getNumberOfCPDetections': &lt;function Evaluator.getNumberOfCPDetections&gt;, 'printFinalRanking': &lt;function Evaluator.printFinalRanking&gt;, '_xlabel': &lt;function Evaluator._xlabel&gt;, 'plotRegrets': &lt;function Evaluator.plotRegrets&gt;, 'plotBestArmPulls': &lt;function Evaluator.plotBestArmPulls&gt;, 'printRunningTimes': &lt;function Evaluator.printRunningTimes&gt;, 'plotRunningTimes': &lt;function Evaluator.plotRunningTimes&gt;, 'printMemoryConsumption': &lt;function Evaluator.printMemoryConsumption&gt;, 'plotMemoryConsumption': &lt;function Evaluator.plotMemoryConsumption&gt;, 'printNumberOfCPDetections': &lt;function Evaluator.printNumberOfCPDetections&gt;, 'plotNumberOfCPDetections': &lt;function Evaluator.plotNumberOfCPDetections&gt;, 'printLastRegrets': &lt;function Evaluator.printLastRegrets&gt;, 'plotLastRegrets': &lt;function Evaluator.plotLastRegrets&gt;, 'plotHistoryOfMeans': &lt;function Evaluator.plotHistoryOfMeans&gt;, '__dict__': &lt;attribute '__dict__' of 'Evaluator' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Evaluator' objects&gt;})</em><a class="headerlink" href="#Environment.Evaluator.Evaluator.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -753,9 +783,9 @@ Lots of plotting methods, to have various visualizations.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Environment.Evaluator.Evaluator.printMemoryConsumption">
-<code class="descname">printMemoryConsumption</code><span class="sig-paren">(</span><em>envId=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.printMemoryConsumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.printMemoryConsumption" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the average+-std memory consumption of the different policies.</p>
+<dt id="Environment.Evaluator.Evaluator.plotNumberOfCPDetections">
+<code class="descname">plotNumberOfCPDetections</code><span class="sig-paren">(</span><em>envId=0</em>, <em>savefig=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Environment/Evaluator.html#Evaluator.plotNumberOfCPDetections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Environment.Evaluator.Evaluator.plotNumberOfCPDetections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the number of change-point detections of the different policies, as a box plot for each.</p>
 </dd></dl>
 
 <dl class="method">
@@ -831,7 +861,7 @@ Lots of plotting methods, to have various visualizations.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 14 Jan 2019, 19h.
+      Last updated on 21 Jan 2019, 15h.
 
     </p>
   </div>

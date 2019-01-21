@@ -280,7 +280,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;M-</span><span class="si">{}</span><span class="s2">($w=</span><span class="si">{:g}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">)</span></div>
+        <span class="c1"># return r&quot;M-{}($w={:g}${})&quot;.format(self._policy.__name__, self.window_size, &quot;&quot; if self._per_arm_restart else &quot;, Global&quot;)</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;M-</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;(Global)&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.choice"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Essentially play uniformly at random with probability :math:`\gamma`, otherwise, pass the call to ``choice`` of the underlying policy (eg. UCB).</span>
@@ -382,7 +383,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 14 Jan 2019, 19h.
+      Last updated on 21 Jan 2019, 15h.
 
     </p>
   </div>
