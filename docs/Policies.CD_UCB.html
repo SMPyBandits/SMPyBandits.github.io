@@ -118,6 +118,7 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Policies.CD_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CUSUM_UCB.html">Policies.CUSUM_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedBayesianIndexPolicy.html">Policies.DiscountedBayesianIndexPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedThompson.html">Policies.DiscountedThompson module</a></li>
@@ -129,6 +130,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3R.html">Policies.Exp3R module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.GLR_UCB.html">Policies.GLR_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.GenericAggregation.html">Policies.GenericAggregation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IMED.html">Policies.IMED module</a></li>
@@ -180,6 +182,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCB_forGLR.html">Policies.klUCB_forGLR module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBswitch.html">Policies.klUCBswitch module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
@@ -317,12 +320,12 @@
 </style>
 <div class="section" id="module-Policies.CD_UCB">
 <span id="policies-cd-ucb-module"></span><h1>Policies.CD_UCB module<a class="headerlink" href="#module-Policies.CD_UCB" title="Permalink to this headline">¶</a></h1>
-<p>The CD-UCB generic policy and CUSUM-UCB, PHT-UCB, GLR-UCB policies for non-stationary bandits.</p>
+<p>The CD-UCB generic policy policies for non-stationary bandits.</p>
 <ul>
 <li><p class="first">Reference: [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539)</p>
 </li>
-<li><p class="first">It runs on top of a simple policy, e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">UCB</span></code>, and <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy" title="Policies.CD_UCB.CUSUM_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">CUSUM_IndexPolicy</span></code></a> is a wrapper:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">CUSUM_IndexPolicy</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">UCB</span><span class="p">)</span>
+<li><p class="first">It runs on top of a simple policy, e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">UCB</span></code>, and <a class="reference internal" href="#Policies.CD_UCB.UCBLCB_IndexPolicy" title="Policies.CD_UCB.UCBLCB_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCBLCB_IndexPolicy</span></code></a> is a wrapper:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">UCBLCB_IndexPolicy</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">UCB</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
 </pre></div>
 </div>
@@ -378,7 +381,7 @@
 
 <dl class="data">
 <dt id="Policies.CD_UCB.LAZY_DETECT_CHANGE_ONLY_X_STEPS">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">LAZY_DETECT_CHANGE_ONLY_X_STEPS</code><em class="property"> = 20</em><a class="headerlink" href="#Policies.CD_UCB.LAZY_DETECT_CHANGE_ONLY_X_STEPS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">LAZY_DETECT_CHANGE_ONLY_X_STEPS</code><em class="property"> = 10</em><a class="headerlink" href="#Policies.CD_UCB.LAZY_DETECT_CHANGE_ONLY_X_STEPS" title="Permalink to this definition">¶</a></dt>
 <dd><p>XXX Be lazy and try to detect changes only X steps, where X is small like 10 for instance.
 It is a simple but efficient way to speed up CD tests, see <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/173">https://github.com/SMPyBandits/SMPyBandits/issues/173</a>
 Default value is 0, to not use this feature, and 10 should speed up the test by x10.</p>
@@ -386,12 +389,12 @@ Default value is 0, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.CD_UCB.CD_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">CD_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>epsilon=0.05</em>, <em>proba_random_exploration=None</em>, <em>lazy_detect_change_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">CD_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>epsilon=0.05</em>, <em>proba_random_exploration=None</em>, <em>lazy_detect_change_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
 <p>The CD-UCB generic policy for non-stationary bandits, from [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
 <dl class="method">
 <dt id="Policies.CD_UCB.CD_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>epsilon=0.05</em>, <em>proba_random_exploration=None</em>, <em>lazy_detect_change_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>epsilon=0.05</em>, <em>proba_random_exploration=None</em>, <em>lazy_detect_change_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New policy.</p>
 </dd></dl>
 
@@ -475,7 +478,7 @@ Default value is 0, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.CD_UCB.SlidingWindowRestart_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SlidingWindowRestart_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>epsilon=0.05</em>, <em>proba_random_exploration=None</em>, <em>lazy_detect_change_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SlidingWindowRestart_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>epsilon=0.05</em>, <em>proba_random_exploration=None</em>, <em>lazy_detect_change_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>A more generic implementation is the <a class="reference internal" href="Policies.SlidingWindowRestart.html#module-Policies.SlidingWindowRestart" title="Policies.SlidingWindowRestart"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.SlidingWindowRestart</span></code></a> class.</p>
 <div class="admonition warning">
@@ -500,125 +503,8 @@ Default value is 0, to not use this feature, and 10 should speed up the test by 
 </dd></dl>
 
 <dl class="data">
-<dt id="Policies.CD_UCB.ALPHA0_SCALE_FACTOR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">ALPHA0_SCALE_FACTOR</code><em class="property"> = 0.1</em><a class="headerlink" href="#Policies.CD_UCB.ALPHA0_SCALE_FACTOR" title="Permalink to this definition">¶</a></dt>
-<dd><p>For any algorithm with uniform exploration and a formula to tune it, <span class="math notranslate nohighlight">\(\alpha\)</span> is usually too large and leads to larger regret. Multiplying it by a 0.1 or 0.2 helps,a  lot!</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.compute_h_alpha_from_input_parameters__CUSUM_complicated">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">compute_h_alpha_from_input_parameters__CUSUM_complicated</code><span class="sig-paren">(</span><em>horizon</em>, <em>max_nb_random_events</em>, <em>nbArms=None</em>, <em>epsilon=None</em>, <em>lmbda=None</em>, <em>M=None</em>, <em>scaleFactor=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#compute_h_alpha_from_input_parameters__CUSUM_complicated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.compute_h_alpha_from_input_parameters__CUSUM_complicated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the values <span class="math notranslate nohighlight">\(C_1^+, C_1^-, C_1, C_2, h\)</span> from the formulas in Theorem 2 and Corollary 2 in the paper.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.compute_h_alpha_from_input_parameters__CUSUM">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">compute_h_alpha_from_input_parameters__CUSUM</code><span class="sig-paren">(</span><em>horizon</em>, <em>max_nb_random_events</em>, <em>nbArms=None</em>, <em>epsilon=None</em>, <em>lmbda=None</em>, <em>M=None</em>, <em>scaleFactor=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#compute_h_alpha_from_input_parameters__CUSUM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.compute_h_alpha_from_input_parameters__CUSUM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the values <span class="math notranslate nohighlight">\(h, \alpha\)</span> from the simplified formulas in Theorem 2 and Corollary 2 in the paper.</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}h &amp;= \log(\frac{T}{\Upsilon_T}),\\
-\alpha &amp;= \mathrm{scaleFactor} \times \sqrt{\frac{\Upsilon_T}{T} \log(\frac{T}{\Upsilon_T})}.\end{split}\]</div>
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">CUSUM_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=50</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
-<p>The CUSUM-UCB generic policy for non-stationary bandits, from [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
-<dl class="method">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=50</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.M">
-<code class="descname">M</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.M" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math notranslate nohighlight">\(M\)</span> for the test.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h">
-<code class="descname">threshold_h</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math notranslate nohighlight">\(h\)</span> for the test (threshold).</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.proba_random_exploration">
-<code class="descname">proba_random_exploration</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>What they call <span class="math notranslate nohighlight">\(\alpha\)</span> in their paper: the probability of uniform exploration at each time.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>-&gt; str</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CUSUM_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detect a change in the current arm, using the two-sided CUSUM algorithm [Page, 1954].</p>
-<ul class="simple">
-<li>For each <em>data</em> k, compute:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\begin{split}s_k^- &amp;= (y_k - \hat{u}_0 - \varepsilon) 1(k &gt; M),\\
-s_k^+ &amp;= (\hat{u}_0 - y_k - \varepsilon) 1(k &gt; M),\\
-g_k^+ &amp;= \max(0, g_{k-1}^+ + s_k^+),\\
-g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
-<ul class="simple">
-<li>The change is detected if <span class="math notranslate nohighlight">\(\max(g_k^+, g_k^-) &gt; h\)</span>, where <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h" title="Policies.CD_UCB.CUSUM_IndexPolicy.threshold_h"><code class="xref py py-attr docutils literal notranslate"><span class="pre">threshold_h</span></code></a> is the threshold of the test,</li>
-<li>And <span class="math notranslate nohighlight">\(\hat{u}_0 = \frac{1}{M} \sum_{k=1}^{M} y_k\)</span> is the mean of the first M samples, where M is <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy.M" title="Policies.CD_UCB.CUSUM_IndexPolicy.M"><code class="xref py py-attr docutils literal notranslate"><span class="pre">M</span></code></a> the min number of observation between change points.</li>
-</ul>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.CUSUM_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.CUSUM_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.PHT_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">PHT_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=50</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CUSUM_IndexPolicy" title="Policies.CD_UCB.CUSUM_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CUSUM_IndexPolicy</span></code></a></p>
-<p>The PHT-UCB generic policy for non-stationary bandits, from [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
-<dl class="method">
-<dt id="Policies.CD_UCB.PHT_IndexPolicy.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>-&gt; str</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.PHT_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#PHT_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detect a change in the current arm, using the two-sided PHT algorithm [Hinkley, 1971].</p>
-<ul class="simple">
-<li>For each <em>data</em> k, compute:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\begin{split}s_k^- &amp;= y_k - \hat{y}_k - \varepsilon,\\
-s_k^+ &amp;= \hat{y}_k - y_k - \varepsilon,\\
-g_k^+ &amp;= \max(0, g_{k-1}^+ + s_k^+),\\
-g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
-<ul class="simple">
-<li>The change is detected if <span class="math notranslate nohighlight">\(\max(g_k^+, g_k^-) &gt; h\)</span>, where <code class="xref py py-attr docutils literal notranslate"><span class="pre">threshold_h</span></code> is the threshold of the test,</li>
-<li>And <span class="math notranslate nohighlight">\(\hat{y}_k = \frac{1}{k} \sum_{s=1}^{k} y_s\)</span> is the mean of the first k samples.</li>
-</ul>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.PHT_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.PHT_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="data">
 <dt id="Policies.CD_UCB.LAZY_TRY_VALUE_S_ONLY_X_STEPS">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">LAZY_TRY_VALUE_S_ONLY_X_STEPS</code><em class="property"> = 20</em><a class="headerlink" href="#Policies.CD_UCB.LAZY_TRY_VALUE_S_ONLY_X_STEPS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.CD_UCB.</code><code class="descname">LAZY_TRY_VALUE_S_ONLY_X_STEPS</code><em class="property"> = 10</em><a class="headerlink" href="#Policies.CD_UCB.LAZY_TRY_VALUE_S_ONLY_X_STEPS" title="Permalink to this definition">¶</a></dt>
 <dd><p>XXX Be lazy and try to detect changes for <span class="math notranslate nohighlight">\(s\)</span> taking steps of size <code class="docutils literal notranslate"><span class="pre">steps_s</span></code>. Default is to have <code class="docutils literal notranslate"><span class="pre">steps_s=1</span></code>, but only using <code class="docutils literal notranslate"><span class="pre">steps_s=2</span></code> should already speed up by 2.
 It is a simple but efficient way to speed up GLR tests, see <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/173">https://github.com/SMPyBandits/SMPyBandits/issues/173</a>
 Default value is 1, to not use this feature, and 10 should speed up the test by x10.</p>
@@ -626,7 +512,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.CD_UCB.UCBLCB_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">UCBLCB_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>delta=None</em>, <em>delta0=1.0</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">UCBLCB_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>delta=None</em>, <em>delta0=1.0</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The UCBLCB-UCB generic policy for non-stationary bandits, from [[Improved Changepoint Detection for Piecewise i.i.d Bandits, by S. Mukherjee  &amp; O.-A. Maillard, preprint 2018](<a class="reference external" href="https://subhojyoti.github.io/pdf/aistats_2019.pdf">https://subhojyoti.github.io/pdf/aistats_2019.pdf</a>)].</p>
 <div class="admonition warning">
@@ -635,7 +521,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 </div>
 <dl class="method">
 <dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>delta=None</em>, <em>delta0=1.0</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>delta=None</em>, <em>delta0=1.0</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New policy.</p>
 </dd></dl>
 
@@ -650,6 +536,11 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 <code class="descname">lazy_try_value_s_only_x_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.lazy_try_value_s_only_x_steps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Be lazy and try to detect changes for <span class="math notranslate nohighlight">\(s\)</span> taking steps of size <code class="docutils literal notranslate"><span class="pre">steps_s</span></code>.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__str__">
@@ -696,553 +587,6 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 </ul>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.eps">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">eps</code><em class="property"> = 1e-10</em><a class="headerlink" href="#Policies.CD_UCB.eps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Threshold value: everything in [0, 1] is truncated to [eps, 1 - eps]</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.klBern">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klBern</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klBern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klBern" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kullback-Leibler divergence for Bernoulli distributions. <a class="reference external" href="https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence">https://en.wikipedia.org/wiki/Bernoulli_distribution#Kullback.E2.80.93Leibler_divergence</a></p>
-<div class="math notranslate nohighlight">
-\[\mathrm{KL}(\mathcal{B}(x), \mathcal{B}(y)) = x \log(\frac{x}{y}) + (1-x) \log(\frac{1-x}{1-y}).\]</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.klGauss">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">klGauss</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>sig2x=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#klGauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.klGauss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Kullback-Leibler divergence for Gaussian distributions of means <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> and variances <code class="docutils literal notranslate"><span class="pre">sig2x</span></code> and <code class="docutils literal notranslate"><span class="pre">sig2y</span></code>, <span class="math notranslate nohighlight">\(\nu_1 = \mathcal{N}(x, \sigma_x^2)\)</span> and <span class="math notranslate nohighlight">\(\nu_2 = \mathcal{N}(y, \sigma_x^2)\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\mathrm{KL}(\nu_1, \nu_2) = \frac{(x - y)^2}{2 \sigma_y^2} + \frac{1}{2}\left( \frac{\sigma_x^2}{\sigma_y^2} - 1 \log\left(\frac{\sigma_x^2}{\sigma_y^2}\right) \right).\]</div>
-<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution#Other_properties">https://en.wikipedia.org/wiki/Normal_distribution#Other_properties</a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.threshold_GaussianGLR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_GaussianGLR</code><span class="sig-paren">(</span><em>t</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>variant=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_GaussianGLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_GaussianGLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the value :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>c from the corollary of of Theorem 2 from [“Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds”, O.-A. Maillard, 2018].</p>
-<ul class="simple">
-<li>The threshold is computed as (with <span class="math notranslate nohighlight">\(t_0 = 0\)</span>):</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\beta(t_0, t, \delta) := \left(1 + \frac{1}{t - t_0 + 1}\right) 2 \log\left(\frac{2 (t - t_0) \sqrt{(t - t_0) + 2}}{\delta}\right).\]</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.function_h">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">function_h</code><span class="sig-paren">(</span><em>u</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#function_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.function_h" title="Permalink to this definition">¶</a></dt>
-<dd><p>The function <span class="math notranslate nohighlight">\(h(u) = u - \log(u)\)</span>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.function_h_minus_one">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">function_h_minus_one</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#function_h_minus_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.function_h_minus_one" title="Permalink to this definition">¶</a></dt>
-<dd><p>The inverse function of <span class="math notranslate nohighlight">\(h(u)\)</span>, that is <span class="math notranslate nohighlight">\(h^{-1}(x) = u \Leftrightarrow h(u) = x\)</span>. It is given by the Lambert W function, see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.lambertw.html#scipy.special.lambertw" title="(in SciPy v1.2.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.special.lambertw()</span></code></a>:</p>
-<div class="math notranslate nohighlight">
-\[h^{-1}(x) = - \mathcal{W}(- \exp(-x)).\]</div>
-<ul class="simple">
-<li>Example:</li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">105</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;y = </span><span class="si">{y}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">y = 0.060184682907834595</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">function_h</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;h(y) = </span><span class="si">{x}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">h(y) = 2.8705220786966508</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">function_h_minus_one</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;h^-1(x) = </span><span class="si">{z}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="go">h^-1(x) = 0.060184682907834595</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="s2">&quot;Error: h^-1(h(y)) = z = </span><span class="si">{z}</span><span class="s2"> should be very close to y = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.constant_power_function_h">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">constant_power_function_h</code><em class="property"> = 1.5</em><a class="headerlink" href="#Policies.CD_UCB.constant_power_function_h" title="Permalink to this definition">¶</a></dt>
-<dd><p>The constant <span class="math notranslate nohighlight">\(\frac{3}{2}\)</span>, used in the definition of functions <span class="math notranslate nohighlight">\(h\)</span>, <span class="math notranslate nohighlight">\(h^{-1}\)</span>, <span class="math notranslate nohighlight">\(\tilde{h}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{T}\)</span>.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.threshold_function_h_tilde">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_function_h_tilde</code><em class="property"> = 3.801770285137458</em><a class="headerlink" href="#Policies.CD_UCB.threshold_function_h_tilde" title="Permalink to this definition">¶</a></dt>
-<dd><p>The constant <span class="math notranslate nohighlight">\(h^{-1}(1/\log(\frac{3}{2}))\)</span>, used in the definition of function <span class="math notranslate nohighlight">\(\tilde{h}\)</span>.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.constant_function_h_tilde">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">constant_function_h_tilde</code><em class="property"> = -0.90272045571788</em><a class="headerlink" href="#Policies.CD_UCB.constant_function_h_tilde" title="Permalink to this definition">¶</a></dt>
-<dd><p>The constant <span class="math notranslate nohighlight">\(\log(\log(\frac{3}{2}))\)</span>, used in the definition of function <span class="math notranslate nohighlight">\(\tilde{h}\)</span>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.function_h_tilde">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">function_h_tilde</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#function_h_tilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.function_h_tilde" title="Permalink to this definition">¶</a></dt>
-<dd><p>The function <span class="math notranslate nohighlight">\(\tilde{h}(x)\)</span>, defined by:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\tilde{h}(x) = \begin{cases} e^{1/h^{-1}(x)} h^{-1}(x) &amp; \text{~if~} x \ge h^{-1}(1/\ln (3/2)), \\
-(3/2) (x-\ln \ln (3/2)) &amp; \text{otherwise}. \end{cases}\end{split}\]</div>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.zeta_of_two">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">zeta_of_two</code><em class="property"> = 1.6449340668482264</em><a class="headerlink" href="#Policies.CD_UCB.zeta_of_two" title="Permalink to this definition">¶</a></dt>
-<dd><p>The constant <span class="math notranslate nohighlight">\(\zeta(2) = \frac{\pi^2}{6}\)</span>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.function_T_mathcal">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">function_T_mathcal</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#function_T_mathcal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.function_T_mathcal" title="Permalink to this definition">¶</a></dt>
-<dd><p>The function <span class="math notranslate nohighlight">\(\mathcal{T}(x)\)</span>, defined by:</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{T}(x) = 2 \tilde h\left(\frac{h^{-1}(1+x) + \ln(2\zeta(2))}{2}\right).\]</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.approximation_function_T_mathcal">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">approximation_function_T_mathcal</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#approximation_function_T_mathcal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.approximation_function_T_mathcal" title="Permalink to this definition">¶</a></dt>
-<dd><p>An efficiently computed approximation of <span class="math notranslate nohighlight">\(\mathcal{T}(x)\)</span>, valid for <span class="math notranslate nohighlight">\(x \geq 5\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\mathcal{T}(x) \simeq x + 4 \log(1 + x + \sqrt(2 x)).\]</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.threshold_BernoulliGLR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_BernoulliGLR</code><span class="sig-paren">(</span><em>t</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>variant=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_BernoulliGLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_BernoulliGLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the value :math:<a href="#id3"><span class="problematic" id="id4">`</span></a>c from the corollary of of Theorem 2 from [“Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds”, O.-A. Maillard, 2018].</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This is still experimental, you can try different variants of the threshold function:</p>
-</div>
-<ul class="simple">
-<li>Variant 0 (<em>default</em>) is:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\beta(t, \delta) := \log(\frac{3 t^{3/2}}{\delta}) = \log(\frac{1}{\delta}) + \log(3) + 3/2 \log(t).\]</div>
-<ul class="simple">
-<li>Variant 1 is smaller:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\beta(t, \delta) := \log(\frac{1}{\delta}) + \log(1 + \log(t)).\]</div>
-<ul class="simple">
-<li>Variant 2 is using <span class="math notranslate nohighlight">\(\mathcal{T}\)</span>:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\beta(t, \delta) := 2 * \mathcal{T}(\frac{\log(2 t^{3/2}) / \delta}{2}) + 6 \log(1 + \log(t)).\]</div>
-<ul class="simple">
-<li>Variant 3 is using <span class="math notranslate nohighlight">\(\tilde{\mathcal{T}}(x) = x + 4 \log(1 + x + \sqrt{2x})\)</span> an approximation of <span class="math notranslate nohighlight">\(\mathcal{T}(x)\)</span> (valid for <span class="math notranslate nohighlight">\(x \geq 5\)</span>):</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\beta(t, \delta) := 2 * \mathcal{T}(\frac{\log(2 t^{3/2}) / \delta}{2}) + 6 \log(1 + \log(t)).\]</div>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.EXPONENT_BETA">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">EXPONENT_BETA</code><em class="property"> = 1.01</em><a class="headerlink" href="#Policies.CD_UCB.EXPONENT_BETA" title="Permalink to this definition">¶</a></dt>
-<dd><p>The default value of parameter <span class="math notranslate nohighlight">\(\beta\)</span> for the function <a class="reference internal" href="#Policies.CD_UCB.decreasing_alpha__GLR" title="Policies.CD_UCB.decreasing_alpha__GLR"><code class="xref py py-func docutils literal notranslate"><span class="pre">decreasing_alpha__GLR()</span></code></a>.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.ALPHA_T1">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">ALPHA_T1</code><em class="property"> = 0.05</em><a class="headerlink" href="#Policies.CD_UCB.ALPHA_T1" title="Permalink to this definition">¶</a></dt>
-<dd><p>The default value of parameter <span class="math notranslate nohighlight">\(\alpha_{t=1}\)</span> for the function <a class="reference internal" href="#Policies.CD_UCB.decreasing_alpha__GLR" title="Policies.CD_UCB.decreasing_alpha__GLR"><code class="xref py py-func docutils literal notranslate"><span class="pre">decreasing_alpha__GLR()</span></code></a>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.decreasing_alpha__GLR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">decreasing_alpha__GLR</code><span class="sig-paren">(</span><em>alpha0=None</em>, <em>t=1</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#decreasing_alpha__GLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.decreasing_alpha__GLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Either use a fixed alpha, or compute it with an exponential decay (if <code class="docutils literal notranslate"><span class="pre">alpha0=None</span></code>).</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>I am currently exploring the following variant (November 2018):</p>
-<ul class="simple">
-<li>The probability of uniform exploration, <span class="math notranslate nohighlight">\(\alpha\)</span>, is computed as a function of the current time:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\forall t&gt;0, \alpha = \alpha_t := \alpha_{t=1} \frac{1}{\max(1, t^{\beta})}.\]</div>
-<ul class="last simple">
-<li>with <span class="math notranslate nohighlight">\(\beta &gt; 1, \beta\)</span> = <code class="docutils literal notranslate"><span class="pre">exponentBeta</span></code> (=1.05) and <span class="math notranslate nohighlight">\(\alpha_{t=1} &lt; 1, \alpha_{t=1}\)</span> = <code class="docutils literal notranslate"><span class="pre">alpha_t1</span></code> (=0.01).</li>
-<li>the only requirement on <span class="math notranslate nohighlight">\(\alpha_t\)</span> seems to be that <cite>sum_{t=1}^T alpha_t &lt; +infty</cite> (ie. be finite), which is the case for <span class="math notranslate nohighlight">\(\alpha_t = \alpha = \frac{1}{T}\)</span>, but also any <span class="math notranslate nohighlight">\(\alpha_t = \frac{\alpha_1}{t^{\beta}}\)</span> for any <span class="math notranslate nohighlight">\(\beta&gt;1\)</span> (cf. Riemann series).</li>
-</ul>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.smart_alpha_from_T_UpsilonT">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">smart_alpha_from_T_UpsilonT</code><span class="sig-paren">(</span><em>horizon=1</em>, <em>max_nb_random_events=1</em>, <em>scaleFactor=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#smart_alpha_from_T_UpsilonT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.smart_alpha_from_T_UpsilonT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute a smart estimate of the optimal value for the <em>fixed</em> or <em>random</em> forced exploration probability <span class="math notranslate nohighlight">\(\alpha\)</span> (or tracking based).</p>
-<div class="math notranslate nohighlight">
-\[\alpha = \mathrm{scaleFactor} \times \sqrt{\frac{\Upsilon_T}{T} \log(\frac{T}{\Upsilon_T})}\]</div>
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
-<p>The GLR-UCB generic policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for 1-dimensional exponential families.</p>
-<ul class="simple">
-<li>It works for any 1-dimensional exponential family, you just have to give a <code class="docutils literal notranslate"><span class="pre">kl</span></code> function.</li>
-<li>For instance <code class="xref py py-func docutils literal notranslate"><span class="pre">kullback.klBern()</span></code>, for Bernoulli distributions, gives <a class="reference internal" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy" title="Policies.CD_UCB.GaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianGLR_IndexPolicy</span></code></a>,</li>
-<li>And <code class="xref py py-func docutils literal notranslate"><span class="pre">kullback.klGauss()</span></code> for univariate Gaussian distributions, gives <a class="reference internal" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy" title="Policies.CD_UCB.BernoulliGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">BernoulliGLR_IndexPolicy</span></code></a>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">threshold_function</span></code> computes the threshold <span class="math notranslate nohighlight">\(\beta(s, t, \delta)\)</span>, it can be for instance <a class="reference internal" href="#Policies.CD_UCB.threshold_GaussianGLR" title="Policies.CD_UCB.threshold_GaussianGLR"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_GaussianGLR()</span></code></a> or <a class="reference internal" href="#Policies.CD_UCB.threshold_BernoulliGLR" title="Policies.CD_UCB.threshold_BernoulliGLR"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_BernoulliGLR()</span></code></a>.</li>
-<li>From [“Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds”, O.-A. Maillard, 2018].</li>
-</ul>
-<dl class="method">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.horizon">
-<code class="descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.horizon" title="Permalink to this definition">¶</a></dt>
-<dd><p>The horizon <span class="math notranslate nohighlight">\(T\)</span>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.max_nb_random_events">
-<code class="descname">max_nb_random_events</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.max_nb_random_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of breakpoints <span class="math notranslate nohighlight">\(\Upsilon_T\)</span>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.delta">
-<code class="descname">delta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.delta" title="Permalink to this definition">¶</a></dt>
-<dd><p>The confidence level <span class="math notranslate nohighlight">\(\delta\)</span>. Defaults to <span class="math notranslate nohighlight">\(\delta=\frac{1}{T}\)</span> if <code class="docutils literal notranslate"><span class="pre">horizon</span></code> is given and <code class="docutils literal notranslate"><span class="pre">delta=None</span></code>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.kl">
-<code class="descname">kl</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.kl" title="Permalink to this definition">¶</a></dt>
-<dd><p>The parametrized Kullback-Leibler divergence (<span class="math notranslate nohighlight">\(\mathrm{kl}(x,y) = KL(D(x),D(y))\)</span>) for the 1-dimensional exponential family <span class="math notranslate nohighlight">\(x\mapsto D(x)\)</span>. Example: <code class="xref py py-func docutils literal notranslate"><span class="pre">kullback.klBern()</span></code> or <code class="xref py py-func docutils literal notranslate"><span class="pre">kullback.klGauss()</span></code>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.lazy_try_value_s_only_x_steps">
-<code class="descname">lazy_try_value_s_only_x_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.lazy_try_value_s_only_x_steps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Be lazy and try to detect changes for <span class="math notranslate nohighlight">\(s\)</span> taking steps of size <code class="docutils literal notranslate"><span class="pre">steps_s</span></code>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.compute_threshold_h">
-<code class="descname">compute_threshold_h</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.compute_threshold_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.compute_threshold_h" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the threshold <span class="math notranslate nohighlight">\(h\)</span> with <code class="xref py py-attr docutils literal notranslate"><span class="pre">_threshold_function</span></code>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.proba_random_exploration">
-<code class="descname">proba_random_exploration</code><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>What they call <span class="math notranslate nohighlight">\(\alpha\)</span> in their paper: the probability of uniform exploration at each time.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>-&gt; str</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detect a change in the current arm, using the Generalized Likelihood Ratio test (GLR) and the <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy.kl" title="Policies.CD_UCB.GLR_IndexPolicy.kl"><code class="xref py py-attr docutils literal notranslate"><span class="pre">kl</span></code></a> function.</p>
-<ul class="simple">
-<li>For each <em>time step</em> <span class="math notranslate nohighlight">\(s\)</span> between <span class="math notranslate nohighlight">\(t_0=0\)</span> and <span class="math notranslate nohighlight">\(t\)</span>, compute:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[G^{\mathrm{kl}}_{t_0:s:t} = (s-t_0+1) \mathrm{kl}(\mu_{t_0,s}, \mu_{t_0,t}) + (t-s) \mathrm{kl}(\mu_{s+1,t}, \mu_{t_0,t}).\]</div>
-<ul class="simple">
-<li>The change is detected if there is a time <span class="math notranslate nohighlight">\(s\)</span> such that <span class="math notranslate nohighlight">\(G^{\mathrm{kl}}_{t_0:s:t} &gt; h\)</span>, where <code class="xref py py-attr docutils literal notranslate"><span class="pre">threshold_h</span></code> is the threshold of the test,</li>
-<li>And <span class="math notranslate nohighlight">\(\mu_{a,b} = \frac{1}{b-a+1} \sum_{s=a}^{b} y_s\)</span> is the mean of the samples between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>.</li>
-</ul>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This is computationally costly, so an easy way to speed up this test is to use <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy.lazy_try_value_s_only_x_steps" title="Policies.CD_UCB.GLR_IndexPolicy.lazy_try_value_s_only_x_steps"><code class="xref py py-attr docutils literal notranslate"><span class="pre">lazy_try_value_s_only_x_steps</span></code></a> <span class="math notranslate nohighlight">\(= \mathrm{Step_s}\)</span> for a small value (e.g., 10), so not test for all <span class="math notranslate nohighlight">\(s\in[t_0, t-1]\)</span> but only <span class="math notranslate nohighlight">\(s\in[t_0, t-1], s \mod \mathrm{Step_s} = 0\)</span> (e.g., one out of every 10 steps).</p>
-</div>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy_WithTracking">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Policies.CD_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy</span></code></a></p>
-<p>A variant of the GLR policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven’t been explored enough (with a tracking).</p>
-<dl class="method">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy_WithTracking.choice">
-<code class="descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy_WithTracking.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy_WithTracking.choice" title="Permalink to this definition">¶</a></dt>
-<dd><p>If any arm is not explored enough (<span class="math notranslate nohighlight">\(n_k \leq \frac{\alpha}{K} \times (t - n_k)\)</span>, play uniformly at random one of these arms, otherwise, pass the call to <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy_WithTracking.choice" title="Policies.CD_UCB.GLR_IndexPolicy_WithTracking.choice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">choice()</span></code></a> of the underlying policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy_WithTracking.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy_WithTracking.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Policies.CD_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy</span></code></a></p>
-<p>A variant of the GLR policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</p>
-<ul class="simple">
-<li>If <span class="math notranslate nohighlight">\(t\)</span> is the current time and <span class="math notranslate nohighlight">\(\tau\)</span> is the latest restarting time, then uniform exploration is done if:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\begin{split}A &amp;:= (t - \tau) \mod \lceil \frac{K}{\gamma} \rceil,\\
-A &amp;\leq K \implies A_t = A.\end{split}\]</div>
-<dl class="method">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration.choice">
-<code class="descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GLR_IndexPolicy_WithDeterministicExploration.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration.choice" title="Permalink to this definition">¶</a></dt>
-<dd><p>For some time steps, play uniformly at random one of these arms, otherwise, pass the call to <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration.choice" title="Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration.choice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">choice()</span></code></a> of the underlying policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GaussianGLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>sig2=0.25</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>threshold_function=&lt;function threshold_GaussianGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GaussianGLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Policies.CD_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy</span></code></a></p>
-<p>The GaussianGLR-UCB policy for non-stationary bandits, for fixed-variance Gaussian distributions (ie, <span class="math notranslate nohighlight">\(\sigma^2\)</span> known and fixed).</p>
-<dl class="method">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>sig2=0.25</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>threshold_function=&lt;function threshold_GaussianGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GaussianGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy._sig2">
-<code class="descname">_sig2</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy._sig2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fixed variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> of the Gaussian distributions. Extra parameter given to <code class="xref py py-func docutils literal notranslate"><span class="pre">kullback.klGauss()</span></code>. Default to <span class="math notranslate nohighlight">\(\sigma^2 = \frac{1}{4}\)</span>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy_WithTracking">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GaussianGLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>sig2=0.25</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>threshold_function=&lt;function threshold_GaussianGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GaussianGLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy_WithTracking" title="Policies.CD_UCB.GLR_IndexPolicy_WithTracking"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy_WithTracking</span></code></a>, <a class="reference internal" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy" title="Policies.CD_UCB.GaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GaussianGLR_IndexPolicy</span></code></a></p>
-<p>A variant of the GaussianGLR-UCB policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven’t been explored enough.</p>
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy_WithTracking.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy_WithTracking.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy_WithDeterministicExploration">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">GaussianGLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>sig2=0.25</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>threshold_function=&lt;function threshold_GaussianGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#GaussianGLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration</span></code></a>, <a class="reference internal" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy" title="Policies.CD_UCB.GaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GaussianGLR_IndexPolicy</span></code></a></p>
-<p>A variant of the GaussianGLR-UCB policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</p>
-<dl class="attribute">
-<dt id="Policies.CD_UCB.GaussianGLR_IndexPolicy_WithDeterministicExploration.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.GaussianGLR_IndexPolicy_WithDeterministicExploration.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">BernoulliGLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>kl=&lt;function klBern&gt;</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#BernoulliGLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy" title="Policies.CD_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy</span></code></a></p>
-<p>The BernoulliGLR-UCB policy for non-stationary bandits, for Bernoulli distributions.</p>
-<dl class="method">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>kl=&lt;function klBern&gt;</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#BernoulliGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithTracking">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">BernoulliGLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>kl=&lt;function klBern&gt;</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#BernoulliGLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy_WithTracking" title="Policies.CD_UCB.GLR_IndexPolicy_WithTracking"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy_WithTracking</span></code></a>, <a class="reference internal" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy" title="Policies.CD_UCB.BernoulliGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.BernoulliGLR_IndexPolicy</span></code></a></p>
-<p>A variant of the BernoulliGLR-UCB policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven’t been explored enough.</p>
-<dl class="attribute">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithTracking.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithTracking.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithDeterministicExploration">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">BernoulliGLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>kl=&lt;function klBern&gt;</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#BernoulliGLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.GLR_IndexPolicy_WithDeterministicExploration</span></code></a>, <a class="reference internal" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy" title="Policies.CD_UCB.BernoulliGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.BernoulliGLR_IndexPolicy</span></code></a></p>
-<p>A variant of the BernoulliGLR-UCB policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</p>
-<dl class="attribute">
-<dt id="Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithDeterministicExploration.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.BernoulliGLR_IndexPolicy_WithDeterministicExploration.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.SubGaussianGLR_DELTA">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_DELTA</code><em class="property"> = 0.01</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_DELTA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default confidence level for <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a>.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.SubGaussianGLR_SIGMA">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_SIGMA</code><em class="property"> = 0.25</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_SIGMA" title="Permalink to this definition">¶</a></dt>
-<dd><p>By default, <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a> assumes distributions are 0.25-sub Gaussian, like Bernoulli or any distributions with support on <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
-</dd></dl>
-
-<dl class="data">
-<dt id="Policies.CD_UCB.SubGaussianGLR_JOINT">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_JOINT</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_JOINT" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether to use the joint or disjoint threshold function (<a class="reference internal" href="#Policies.CD_UCB.threshold_SubGaussianGLR_joint" title="Policies.CD_UCB.threshold_SubGaussianGLR_joint"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_SubGaussianGLR_joint()</span></code></a> or <a class="reference internal" href="#Policies.CD_UCB.threshold_SubGaussianGLR_disjoint" title="Policies.CD_UCB.threshold_SubGaussianGLR_disjoint"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_SubGaussianGLR_disjoint()</span></code></a>) for <a class="reference internal" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Policies.CD_UCB.SubGaussianGLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SubGaussianGLR_IndexPolicy</span></code></a>.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.threshold_SubGaussianGLR_joint">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_joint</code><span class="sig-paren">(</span><em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_joint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the threshold :math:<a href="#id5"><span class="problematic" id="id6">`</span></a>b^{text{joint}}_{t_0}(s,t,delta) according to this formula:</p>
-<div class="math notranslate nohighlight">
-\[b^{\text{joint}}_{t_0}(s,t,\delta) := \sigma \sqrt{ \left(\frac{1}{s-t_0+1} + \frac{1}{t-s}\right) \left(1 + \frac{1}{t-t_0+1}\right) 2 \log\left( \frac{2(t-t_0)\sqrt{t-t_0+2}}{\delta} \right)}.\]</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.threshold_SubGaussianGLR_disjoint">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR_disjoint</code><span class="sig-paren">(</span><em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR_disjoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR_disjoint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the threshold <span class="math notranslate nohighlight">\(b^{\text{disjoint}}_{t_0}(s,t,\delta)\)</span> according to this formula:</p>
-<div class="math notranslate nohighlight">
-\[b^{\text{disjoint}}_{t_0}(s,t,\delta) := \sqrt{2} \sigma \sqrt{\frac{1 + \frac{1}{s - t_0 + 1}}{s - t_0 + 1} \log\left( \frac{4 \sqrt{s - t_0 + 2}}{\delta}\right)} + \sqrt{\frac{1 + \frac{1}{t - s + 1}}{t - s + 1} \log\left( \frac{4 (t - t_0) \sqrt{t - s + 1}}{\delta}\right)}.\]</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Policies.CD_UCB.threshold_SubGaussianGLR">
-<code class="descclassname">Policies.CD_UCB.</code><code class="descname">threshold_SubGaussianGLR</code><span class="sig-paren">(</span><em>s</em>, <em>t</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#threshold_SubGaussianGLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.threshold_SubGaussianGLR" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the threshold <span class="math notranslate nohighlight">\(b^{\text{joint}}_{t_0}(s,t,\delta)\)</span> or <span class="math notranslate nohighlight">\(b^{\text{disjoint}}_{t_0}(s,t,\delta)\)</span>.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CD_UCB.</code><code class="descname">SubGaussianGLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>exponentBeta=1.05</em>, <em>alpha_t1=0.1</em>, <em>alpha0=None</em>, <em>lazy_detect_change_only_x_steps=20</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
-<p>The SubGaussianGLR-UCB policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for sub-Gaussian distributions.</p>
-<ul class="simple">
-<li>It works for any sub-Gaussian family of distributions, being <span class="math notranslate nohighlight">\(\sigma^2\)</span>-sub Gaussian <em>with known</em> <span class="math notranslate nohighlight">\(\sigma\)</span>.</li>
-<li>From [“Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds”, O.-A. Maillard, 2018].</li>
-</ul>
-<dl class="method">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>full_restart_when_refresh=False</em>, <em>policy=&lt;class 'Policies.UCB.UCB'&gt;</em>, <em>delta=0.01</em>, <em>sigma=0.25</em>, <em>joint=True</em>, <em>exponentBeta=1.05</em>, <em>alpha_t1=0.1</em>, <em>alpha0=None</em>, <em>lazy_detect_change_only_x_steps=20</em>, <em>lazy_try_value_s_only_x_steps=20</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>New policy.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.horizon">
-<code class="descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.horizon" title="Permalink to this definition">¶</a></dt>
-<dd><p>The horizon <span class="math notranslate nohighlight">\(T\)</span>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.max_nb_random_events">
-<code class="descname">max_nb_random_events</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.max_nb_random_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>The number of breakpoints <span class="math notranslate nohighlight">\(\Upsilon_T\)</span>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.delta">
-<code class="descname">delta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.delta" title="Permalink to this definition">¶</a></dt>
-<dd><p>The confidence level <span class="math notranslate nohighlight">\(\delta\)</span>. Defaults to <span class="math notranslate nohighlight">\(\delta=\frac{1}{T}\)</span> if <code class="docutils literal notranslate"><span class="pre">horizon</span></code> is given and <code class="docutils literal notranslate"><span class="pre">delta=None</span></code>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.sigma">
-<code class="descname">sigma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.sigma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math notranslate nohighlight">\(\sigma\)</span> for the Sub-Gaussian-GLR test.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.joint">
-<code class="descname">joint</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.joint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <code class="docutils literal notranslate"><span class="pre">joint</span></code> for the Sub-Gaussian-GLR test.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.lazy_try_value_s_only_x_steps">
-<code class="descname">lazy_try_value_s_only_x_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.lazy_try_value_s_only_x_steps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Be lazy and try to detect changes for <span class="math notranslate nohighlight">\(s\)</span> taking steps of size <code class="docutils literal notranslate"><span class="pre">steps_s</span></code>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.compute_threshold_h">
-<code class="descname">compute_threshold_h</code><span class="sig-paren">(</span><em>s</em>, <em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.compute_threshold_h"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.compute_threshold_h" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the threshold <span class="math notranslate nohighlight">\(h\)</span> with <a class="reference internal" href="#Policies.CD_UCB.threshold_SubGaussianGLR" title="Policies.CD_UCB.threshold_SubGaussianGLR"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_SubGaussianGLR()</span></code></a>.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.proba_random_exploration">
-<code class="descname">proba_random_exploration</code><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
-<dd><p>What they call <span class="math notranslate nohighlight">\(\alpha\)</span> in their paper: the probability of uniform exploration at each time.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>-&gt; str</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Policies.CD_UCB.SubGaussianGLR_IndexPolicy.detect_change">
-<code class="descname">detect_change</code><span class="sig-paren">(</span><em>arm</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SubGaussianGLR_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SubGaussianGLR_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detect a change in the current arm, using the non-parametric sub-Gaussian Generalized Likelihood Ratio test (GLR) works like this:</p>
-<ul class="simple">
-<li>For each <em>time step</em> <span class="math notranslate nohighlight">\(s\)</span> between <span class="math notranslate nohighlight">\(t_0=0\)</span> and <span class="math notranslate nohighlight">\(t\)</span>, compute:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[G^{\text{sub-}\sigma}_{t_0:s:t} = |\mu_{t_0,s} - \mu_{s+1,t}|.\]</div>
-<ul class="simple">
-<li>The change is detected if there is a time <span class="math notranslate nohighlight">\(s\)</span> such that <span class="math notranslate nohighlight">\(G^{\text{sub-}\sigma}_{t_0:s:t} &gt; b_{t_0}(s,t,\delta)\)</span>, where <span class="math notranslate nohighlight">\(b_{t_0}(s,t,\delta)\)</span> is the threshold of the test,</li>
-<li>The threshold is computed as:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[b_{t_0}(s,t,\delta) := \sigma \sqrt{ \left(\frac{1}{s-t_0+1} + \frac{1}{t-s}\right) \left(1 + \frac{1}{t-t_0+1}\right) 2 \log\left( \frac{2(t-t_0)\sqrt{t-t_0+2}}{\delta} \right)}.\]</div>
-<ul class="simple">
-<li>And <span class="math notranslate nohighlight">\(\mu_{a,b} = \frac{1}{b-a+1} \sum_{s=a}^{b} y_s\)</span> is the mean of the samples between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>.</li>
-</ul>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -1268,7 +612,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 21 Jan 2019, 18h.
+      Last updated on 29 Jan 2019, 11h.
 
     </p>
   </div>

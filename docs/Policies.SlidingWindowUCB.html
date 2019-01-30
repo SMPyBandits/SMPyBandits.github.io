@@ -118,6 +118,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.CD_UCB.html">Policies.CD_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CUSUM_UCB.html">Policies.CUSUM_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedBayesianIndexPolicy.html">Policies.DiscountedBayesianIndexPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedThompson.html">Policies.DiscountedThompson module</a></li>
@@ -129,6 +130,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3R.html">Policies.Exp3R module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.GLR_UCB.html">Policies.GLR_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.GenericAggregation.html">Policies.GenericAggregation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IMED.html">Policies.IMED module</a></li>
@@ -180,6 +182,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCB_forGLR.html">Policies.klUCB_forGLR module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBswitch.html">Policies.klUCBswitch module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
@@ -442,6 +445,87 @@
 
 </dd></dl>
 
+<dl class="data">
+<dt id="Policies.SlidingWindowUCB.constant_c">
+<code class="descclassname">Policies.SlidingWindowUCB.</code><code class="descname">constant_c</code><em class="property"> = 1.0</em><a class="headerlink" href="#Policies.SlidingWindowUCB.constant_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>default value, as it was in pymaBandits v1.0</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.SlidingWindowUCB.tolerance">
+<code class="descclassname">Policies.SlidingWindowUCB.</code><code class="descname">tolerance</code><em class="property"> = 0.0001</em><a class="headerlink" href="#Policies.SlidingWindowUCB.tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the tolerance for computing numerical approximations of the kl-UCB indexes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.SlidingWindowUCB.SWklUCB">
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowUCB.</code><code class="descname">SWklUCB</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=1000</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowUCB.html#SWklUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.SlidingWindowUCB.SWUCB" title="Policies.SlidingWindowUCB.SWUCB"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.SlidingWindowUCB.SWUCB</span></code></a></p>
+<p>An experimental policy, using only a sliding window (of <span class="math notranslate nohighlight">\(\tau\)</span> <em>steps</em>, not counting draws of each arms) instead of using the full-size history, and using klUCB (see <code class="xref py py-class docutils literal notranslate"><span class="pre">Policy.klUCB</span></code>) indexes instead of UCB.</p>
+<dl class="method">
+<dt id="Policies.SlidingWindowUCB.SWklUCB.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=1000</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowUCB.html#SWklUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li>nbArms: the number of arms,</li>
+<li>lower, amplitude: lower value and known amplitude of the rewards.</li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.SlidingWindowUCB.SWklUCB.klucb">
+<code class="descname">klucb</code><em class="property"> = None</em><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCB.klucb" title="Permalink to this definition">¶</a></dt>
+<dd><p>kl function to use</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.SlidingWindowUCB.SWklUCB.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowUCB.html#SWklUCB.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCB.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.SlidingWindowUCB.SWklUCB.computeIndex">
+<code class="descname">computeIndex</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowUCB.html#SWklUCB.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCB.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current index, at time t and after <span class="math notranslate nohighlight">\(N_k(t)\)</span> pulls of arm k:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{\mu'}_k(t) &amp;= \frac{X_{k,\tau}(t)}{N_{k,\tau}(t)} , \\
+U_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu'}_k(t), q) \leq \frac{c \log(\min(t,\tau))}{N_{k,\tau}(t)} \right\},\\
+I_k(t) &amp;= U_k(t),\\
+\text{where}\;\; X_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} X_k(s) \mathbb{1}(A(t) = k),\\
+\text{and}\;\; N_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} \mathbb{1}(A(t) = k).\end{split}\]</div>
+<p>If rewards are in <span class="math notranslate nohighlight">\([a, b]\)</span> (default to <span class="math notranslate nohighlight">\([0, 1]\)</span>) and <span class="math notranslate nohighlight">\(\mathrm{kl}(x, y)\)</span> is the Kullback-Leibler divergence between two distributions of means x and y (see <a class="reference internal" href="Arms.kullback.html#module-Arms.kullback" title="Arms.kullback"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Arms.kullback</span></code></a>),
+and c is the parameter (default to 1).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.SlidingWindowUCB.SWklUCB.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.SlidingWindowUCB'</em><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.SlidingWindowUCB.SWklUCBPlus">
+<em class="property">class </em><code class="descclassname">Policies.SlidingWindowUCB.</code><code class="descname">SWklUCBPlus</code><span class="sig-paren">(</span><em>nbArms</em>, <em>tau=1000</em>, <em>klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowUCB.html#SWklUCBPlus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCBPlus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.SlidingWindowUCB.SWklUCB" title="Policies.SlidingWindowUCB.SWklUCB"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.SlidingWindowUCB.SWklUCB</span></code></a>, <a class="reference internal" href="#Policies.SlidingWindowUCB.SWUCBPlus" title="Policies.SlidingWindowUCB.SWUCBPlus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.SlidingWindowUCB.SWUCBPlus</span></code></a></p>
+<p>An experimental policy, using only a sliding window (of <span class="math notranslate nohighlight">\(\tau\)</span> <em>steps</em>, not counting draws of each arms) instead of using the full-size history, and using klUCB (see <code class="xref py py-class docutils literal notranslate"><span class="pre">Policy.klUCB</span></code>) indexes instead of UCB.</p>
+<ul class="simple">
+<li>Uses <span class="math notranslate nohighlight">\(\tau = 4 \sqrt{T \log(T)}\)</span> if the horizon <span class="math notranslate nohighlight">\(T\)</span> is given, otherwise use the default value.</li>
+</ul>
+<dl class="method">
+<dt id="Policies.SlidingWindowUCB.SWklUCBPlus.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/SlidingWindowUCB.html#SWklUCBPlus.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCBPlus.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.SlidingWindowUCB.SWklUCBPlus.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.SlidingWindowUCB'</em><a class="headerlink" href="#Policies.SlidingWindowUCB.SWklUCBPlus.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -465,7 +549,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 21 Jan 2019, 18h.
+      Last updated on 29 Jan 2019, 11h.
 
     </p>
   </div>

@@ -191,6 +191,7 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
 
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
 
@@ -249,16 +250,16 @@
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           I_k(t) &amp;= \frac{X_{k,\tau}(t)}{N_{k,\tau}(t)} + c_{k,\tau}(t),\\</span>
-<span class="sd">           \text{where}\;\; c_{k,\tau}(t) &amp;:= \sqrt{\alpha \frac{\log(\min(t,\tau))}{N_{k,\tau}(t)}},\\</span>
-<span class="sd">           \text{and}\;\; X_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} X_k(s) \mathbb{1}(A(t) = k),\\</span>
-<span class="sd">           \text{and}\;\; N_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} \mathbb{1}(A(t) = k).</span>
+<span class="sd">            I_k(t) &amp;= \frac{X_{k,\tau}(t)}{N_{k,\tau}(t)} + c_{k,\tau}(t),\\</span>
+<span class="sd">            \text{where}\;\; c_{k,\tau}(t) &amp;:= \sqrt{\alpha \frac{\log(\min(t,\tau))}{N_{k,\tau}(t)}},\\</span>
+<span class="sd">            \text{and}\;\; X_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} X_k(s) \mathbb{1}(A(t) = k),\\</span>
+<span class="sd">            \text{and}\;\; N_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} \mathbb{1}(A(t) = k).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">last_pulls_of_this_arm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choices</span> <span class="o">==</span> <span class="n">arm</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">last_pulls_of_this_arm</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_rewards</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choices</span> <span class="o">==</span> <span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="n">last_pulls_of_this_arm</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)))</span> <span class="o">/</span> <span class="n">last_pulls_of_this_arm</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_rewards</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choices</span> <span class="o">==</span> <span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="n">last_pulls_of_this_arm</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)))</span> <span class="o">/</span> <span class="n">last_pulls_of_this_arm</span><span class="p">)</span></div></div>
 
 
 <span class="c1"># --- Horizon dependent version</span>
@@ -273,7 +274,7 @@
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
-            <span class="n">tau</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
+            <span class="n">tau</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">T</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">tau</span> <span class="o">=</span> <span class="n">TAU</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SWUCBPlus</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -281,6 +282,72 @@
 
 <div class="viewcode-block" id="SWUCBPlus.__str__"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCBPlus.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;SW-UCB+($\tau=</span><span class="si">{}</span><span class="s2">$, $\alpha=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># --- SW-klUCB</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.kullback</span> <span class="k">import</span> <span class="n">klucbBern</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">SystemError</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">kullback</span> <span class="k">import</span> <span class="n">klucbBern</span>
+
+<span class="c1">#: Default value for the constant c used in the computation of KL-UCB index.</span>
+<span class="n">constant_c</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1">#: default value, as it was in pymaBandits v1.0</span>
+<span class="c1"># c = 1.  #: as suggested in the Theorem 1 in https://arxiv.org/pdf/1102.2490.pdf</span>
+
+
+<span class="c1">#: Default value for the tolerance for computing numerical approximations of the kl-UCB indexes.</span>
+<span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1e-4</span>
+
+
+<div class="viewcode-block" id="SWklUCB"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWklUCB">[docs]</a><span class="k">class</span> <span class="nc">SWklUCB</span><span class="p">(</span><span class="n">SWUCB</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; An experimental policy, using only a sliding window (of :math:`\tau` *steps*, not counting draws of each arms) instead of using the full-size history, and using klUCB (see :class:`Policy.klUCB`) indexes instead of UCB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SWklUCB.__init__"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWklUCB.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">TAU</span><span class="p">,</span> <span class="n">klucb</span><span class="o">=</span><span class="n">klucbBern</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SWklUCB</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="n">tau</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span> <span class="o">=</span> <span class="n">klucb</span>  <span class="c1">#: kl function to use</span></div>
+
+<div class="viewcode-block" id="SWklUCB.__str__"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWklUCB.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span><span class="o">.</span><span class="vm">__name__</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Bern&quot;</span><span class="p">:</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;SW-klUCB</span><span class="si">{}</span><span class="s2">($\tau=</span><span class="si">{}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SWklUCB.computeIndex"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWklUCB.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the current index, at time t and after :math:`N_k(t)` pulls of arm k:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \hat{\mu&#39;}_k(t) &amp;= \frac{X_{k,\tau}(t)}{N_{k,\tau}(t)} , \\</span>
+<span class="sd">            U_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu&#39;}_k(t), q) \leq \frac{c \log(\min(t,\tau))}{N_{k,\tau}(t)} \right\},\\</span>
+<span class="sd">            I_k(t) &amp;= U_k(t),\\</span>
+<span class="sd">            \text{where}\;\; X_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} X_k(s) \mathbb{1}(A(t) = k),\\</span>
+<span class="sd">            \text{and}\;\; N_{k,\tau}(t) &amp;:= \sum_{s=t-\tau+1}^{t} \mathbb{1}(A(t) = k).</span>
+
+<span class="sd">        If rewards are in :math:`[a, b]` (default to :math:`[0, 1]`) and :math:`\mathrm{kl}(x, y)` is the Kullback-Leibler divergence between two distributions of means x and y (see :mod:`Arms.kullback`),</span>
+<span class="sd">        and c is the parameter (default to 1).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">last_pulls_of_this_arm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choices</span> <span class="o">==</span> <span class="n">arm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">last_pulls_of_this_arm</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_rewards</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choices</span> <span class="o">==</span> <span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="n">last_pulls_of_this_arm</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="n">constant_c</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">))</span> <span class="o">/</span> <span class="n">last_pulls_of_this_arm</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SWklUCBPlus"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWklUCBPlus">[docs]</a><span class="k">class</span> <span class="nc">SWklUCBPlus</span><span class="p">(</span><span class="n">SWklUCB</span><span class="p">,</span> <span class="n">SWUCBPlus</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; An experimental policy, using only a sliding window (of :math:`\tau` *steps*, not counting draws of each arms) instead of using the full-size history, and using klUCB (see :class:`Policy.klUCB`) indexes instead of UCB.</span>
+
+<span class="sd">    - Uses :math:`\tau = 4 \sqrt{T \log(T)}` if the horizon :math:`T` is given, otherwise use the default value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SWklUCBPlus.__str__"><a class="viewcode-back" href="../../docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWklUCBPlus.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">klucb</span><span class="o">.</span><span class="vm">__name__</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;Bern&quot;</span><span class="p">:</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;SW-klUCB</span><span class="si">{}</span><span class="s2">+($\tau=</span><span class="si">{}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -294,7 +361,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 21 Jan 2019, 18h.
+      Last updated on 29 Jan 2019, 11h.
 
     </p>
   </div>

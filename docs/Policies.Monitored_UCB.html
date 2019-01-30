@@ -118,6 +118,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.CD_UCB.html">Policies.CD_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CORRAL.html">Policies.CORRAL module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.CPUCB.html">Policies.CPUCB module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.CUSUM_UCB.html">Policies.CUSUM_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DMED.html">Policies.DMED module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedBayesianIndexPolicy.html">Policies.DiscountedBayesianIndexPolicy module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.DiscountedThompson.html">Policies.DiscountedThompson module</a></li>
@@ -129,6 +130,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3PlusPlus.html">Policies.Exp3PlusPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Exp3R.html">Policies.Exp3R module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.ExploreThenCommit.html">Policies.ExploreThenCommit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.GLR_UCB.html">Policies.GLR_UCB module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.GenericAggregation.html">Policies.GenericAggregation module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.Hedge.html">Policies.Hedge module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.IMED.html">Policies.IMED module</a></li>
@@ -180,6 +182,7 @@
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBHPlus.html">Policies.klUCBHPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlus.html">Policies.klUCBPlus module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBPlusPlus.html">Policies.klUCBPlusPlus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Policies.klUCB_forGLR.html">Policies.klUCB_forGLR module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBloglog.html">Policies.klUCBloglog module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.klUCBswitch.html">Policies.klUCBswitch module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Policies.kullback.html">Policies.kullback module</a></li>
@@ -338,25 +341,36 @@
 <dt id="Policies.Monitored_UCB.DELTA">
 <code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">DELTA</code><em class="property"> = 0.1</em><a class="headerlink" href="#Policies.Monitored_UCB.DELTA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default value for the parameter <span class="math notranslate nohighlight">\(\delta\)</span>, the lower-bound for <span class="math notranslate nohighlight">\(\delta_k^{(i)}\)</span> the amplitude of change of arm k at break-point 1.
-The default abruptly-changing non-stationary problem draws news means in <span class="math notranslate nohighlight">\([0,1]\)</span> so <span class="math notranslate nohighlight">\(\delta=0\)</span> is the only possible (worst-case) lower-bound on amplitude of changes.
-I force <code class="docutils literal notranslate"><span class="pre">0.1</span></code> because I can force the minimum gap when calling <a class="reference internal" href="Arms.html#Arms.randomMeans" title="Arms.randomMeans"><code class="xref py py-func docutils literal notranslate"><span class="pre">Arms.randomMeans()</span></code></a> to be <code class="docutils literal notranslate"><span class="pre">0.1</span></code>.</p>
+Default is <code class="docutils literal notranslate"><span class="pre">0.05</span></code>.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="Policies.Monitored_UCB.PER_ARM_RESTART">
-<code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">PER_ARM_RESTART</code><em class="property"> = True</em><a class="headerlink" href="#Policies.Monitored_UCB.PER_ARM_RESTART" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should we reset one arm empirical average or all? Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>, it’s usually more efficient!</p>
+<code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">PER_ARM_RESTART</code><em class="property"> = False</em><a class="headerlink" href="#Policies.Monitored_UCB.PER_ARM_RESTART" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we reset one arm empirical average or all? For M-UCB it is <code class="docutils literal notranslate"><span class="pre">False</span></code> by default.</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="Policies.Monitored_UCB.FULL_RESTART_WHEN_REFRESH">
-<code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">FULL_RESTART_WHEN_REFRESH</code><em class="property"> = False</em><a class="headerlink" href="#Policies.Monitored_UCB.FULL_RESTART_WHEN_REFRESH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Should we fully restart the algorithm or simply reset one arm empirical average? Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>, it’s usually more efficient!</p>
+<code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">FULL_RESTART_WHEN_REFRESH</code><em class="property"> = True</em><a class="headerlink" href="#Policies.Monitored_UCB.FULL_RESTART_WHEN_REFRESH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we fully restart the algorithm or simply reset one arm empirical average? For M-UCB it is <code class="docutils literal notranslate"><span class="pre">True</span></code> by default.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.Monitored_UCB.WINDOW_SIZE">
+<code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">WINDOW_SIZE</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Monitored_UCB.WINDOW_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value of the window-size. Give <code class="docutils literal notranslate"><span class="pre">None</span></code> to use the default value computed from a knowledge of the horizon and number of break-points.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.Monitored_UCB.GAMMA_SCALE_FACTOR">
+<code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">GAMMA_SCALE_FACTOR</code><em class="property"> = 1</em><a class="headerlink" href="#Policies.Monitored_UCB.GAMMA_SCALE_FACTOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>For any algorithm with uniform exploration and a formula to tune it, <span class="math notranslate nohighlight">\(\alpha\)</span> is usually too large and leads to larger regret. Multiplying it by a 0.1 or 0.2 helps, a lot!</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">Monitored_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.Monitored_UCB.</code><code class="descname">Monitored_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=True</em>, <em>per_arm_restart=False</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
 <p>The Monitored-UCB generic policy for non-stationary bandits, from [[“Nearly Optimal Adaptive Procedure for Piecewise-Stationary Bandit: a Change-Point Detection Approach”. Yang Cao, Zheng Wen, Branislav Kveton, Yao Xie. arXiv preprint arXiv:1802.03692, 2018]](https://arxiv.org/pdf/1802.03692)</p>
 <ul class="simple">
@@ -364,7 +378,7 @@ I force <code class="docutils literal notranslate"><span class="pre">0.1</span><
 </ul>
 <dl class="method">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>full_restart_when_refresh=True</em>, <em>per_arm_restart=False</em>, <em>horizon=None</em>, <em>delta=0.1</em>, <em>max_nb_random_events=None</em>, <em>w=None</em>, <em>b=None</em>, <em>gamma=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New policy.</p>
 </dd></dl>
 
@@ -426,11 +440,6 @@ I force <code class="docutils literal notranslate"><span class="pre">0.1</span><
 A &amp;\leq K \implies A_t = A.\end{split}\]</div>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.Monitored_UCB'</em><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.getReward">
 <code class="descname">getReward</code><span class="sig-paren">(</span><em>arm</em>, <em>reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Monitored_UCB.html#Monitored_IndexPolicy.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.getReward" title="Permalink to this definition">¶</a></dt>
@@ -439,6 +448,11 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
 <li>Reset the whole empirical average if the change detection algorithm says so.</li>
 </ul>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.Monitored_UCB'</em><a class="headerlink" href="#Policies.Monitored_UCB.Monitored_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Policies.Monitored_UCB.Monitored_IndexPolicy.detect_change">
@@ -481,7 +495,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 21 Jan 2019, 18h.
+      Last updated on 29 Jan 2019, 11h.
 
     </p>
   </div>

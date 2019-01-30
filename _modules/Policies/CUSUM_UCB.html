@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Policies.CUSUM_UCB &mdash; SMPyBandits 0.9.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">SMPyBandits modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.CUSUM_UCB</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.CUSUM_UCB</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; The CUSUM-UCB and PHT-UCB policies for non-stationary bandits.</span>
+
+<span class="sd">- Reference: [[&quot;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&quot;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539)</span>
+<span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :class:`CUSUM_IndexPolicy` is a wrapper:</span>
+
+<span class="sd">    &gt;&gt;&gt; policy = CUSUM_IndexPolicy(nbArms, UCB)</span>
+<span class="sd">    &gt;&gt;&gt; # use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
+
+<span class="sd">- It uses an additional :math:`\mathcal{O}(\tau_\max)` memory for a game of maximum stationary length :math:`\tau_\max`.</span>
+
+<span class="sd">.. warning:: It can only work on basic index policy based on empirical averages (and an exploration bias), like :class:`UCB`, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">isinf</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+    <span class="kn">from</span> <span class="nn">.UCB</span> <span class="k">import</span> <span class="n">UCB</span> <span class="k">as</span> <span class="n">DefaultPolicy</span>
+    <span class="kn">from</span> <span class="nn">.CD_UCB</span> <span class="k">import</span> <span class="n">CD_IndexPolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+    <span class="kn">from</span> <span class="nn">UCB</span> <span class="k">import</span> <span class="n">UCB</span> <span class="k">as</span> <span class="n">DefaultPolicy</span>
+    <span class="kn">from</span> <span class="nn">CD_UCB</span> <span class="k">import</span> <span class="n">CD_IndexPolicy</span>
+
+
+<span class="c1">#: Whether to be verbose when doing the change detection algorithm.</span>
+<span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: Default probability of random exploration :math:`\alpha`.</span>
+<span class="n">PROBA_RANDOM_EXPLORATION</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1">#: Should we reset one arm empirical average or all? For CUSUM-UCB it is ``True`` by default.</span>
+<span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1">#: Should we fully restart the algorithm or simply reset one arm empirical average? For CUSUM-UCB it is ``False`` by default.</span>
+<span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: Precision of the test. For CUSUM/PHT, :math:`\varepsilon` is the drift correction threshold (see algorithm).</span>
+<span class="n">EPSILON</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1">#: Default value of :math:`\lambda`. Used only if :math:`h` and :math:`\alpha` are computed using :func:`compute_h_alpha_from_input_parameters__CUSUM_complicated`.</span>
+<span class="n">LAMBDA</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1">#: Hypothesis on the speed of changes: between two change points, there is at least :math:`M * K` time steps, where K is the number of arms, and M is this constant.</span>
+<span class="n">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c1">#: XXX Be lazy and try to detect changes only X steps, where X is small like 20 for instance.</span>
+<span class="c1">#: It is a simple but efficient way to speed up CD tests, see https://github.com/SMPyBandits/SMPyBandits/issues/173</span>
+<span class="c1">#: Default value is 0, to not use this feature, and 20 should speed up the test by x20.</span>
+<span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<span class="c1"># --- Different change detection algorithms</span>
+
+<span class="c1">#: For any algorithm with uniform exploration and a formula to tune it, :math:`\alpha` is usually too large and leads to larger regret. Multiplying it by a 0.1 or 0.2 helps, a lot!</span>
+<span class="n">ALPHA0_SCALE_FACTOR</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># ALPHA0_SCALE_FACTOR = 0.1</span>
+
+
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">comb</span>
+
+<div class="viewcode-block" id="compute_h_alpha_from_input_parameters__CUSUM_complicated"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.compute_h_alpha_from_input_parameters__CUSUM_complicated">[docs]</a><span class="k">def</span> <span class="nf">compute_h_alpha_from_input_parameters__CUSUM_complicated</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the values :math:`C_1^+, C_1^-, C_1, C_2, h` from the formulas in Theorem 2 and Corollary 2 in the paper.&quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span><span class="p">))</span>
+    <span class="n">UpsilonT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">))</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;compute_h_alpha_from_input_parameters__CUSUM() with:</span><span class="se">\n</span><span class="s2">T = </span><span class="si">{}</span><span class="s2">, UpsilonT = </span><span class="si">{}</span><span class="s2">, K = </span><span class="si">{}</span><span class="s2">, epsilon = </span><span class="si">{}</span><span class="s2">, lmbda = </span><span class="si">{}</span><span class="s2">, M = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">UpsilonT</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="n">C2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">M</span><span class="p">)</span> <span class="o">/</span> <span class="n">lmbda</span>
+    <span class="n">C1_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(((</span><span class="mi">4</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">comb</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="n">M</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">C1_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(((</span><span class="mi">4</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">comb</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span> <span class="o">*</span> <span class="n">M</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span><span class="o">**</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">C1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">C1_minus</span><span class="p">,</span> <span class="n">C1_plus</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">C1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">C1</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># XXX This case of having C1=0 for CUSUM parameters should not happen...</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">C1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">UpsilonT</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">C2</span> <span class="o">*</span> <span class="n">UpsilonT</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">C1</span> <span class="o">*</span> <span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span> <span class="o">/</span> <span class="n">UpsilonT</span><span class="p">))</span>
+    <span class="n">alpha</span> <span class="o">*=</span> <span class="n">scaleFactor</span>  <span class="c1"># XXX Just divide alpha to not have too large, for CUSUM-UCB.</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span>  <span class="c1"># crop to [0, 1]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gave C2 = </span><span class="si">{}</span><span class="s2">, C1- = </span><span class="si">{}</span><span class="s2"> and C1+ = </span><span class="si">{}</span><span class="s2"> so C1 = </span><span class="si">{}</span><span class="s2">, and h = </span><span class="si">{}</span><span class="s2"> and alpha = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">C2</span><span class="p">,</span> <span class="n">C1_minus</span><span class="p">,</span> <span class="n">C1_plus</span><span class="p">,</span> <span class="n">C1</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">return</span> <span class="n">h</span><span class="p">,</span> <span class="n">alpha</span></div>
+
+<div class="viewcode-block" id="compute_h_alpha_from_input_parameters__CUSUM"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.compute_h_alpha_from_input_parameters__CUSUM">[docs]</a><span class="k">def</span> <span class="nf">compute_h_alpha_from_input_parameters__CUSUM</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the values :math:`h, \alpha` from the simplified formulas in Theorem 2 and Corollary 2 in the paper.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        h &amp;= \log(\frac{T}{\Upsilon_T}),\\</span>
+<span class="sd">        \alpha &amp;= \mathrm{scaleFactor} \times \sqrt{\frac{\Upsilon_T}{T} \log(\frac{T}{\Upsilon_T})}.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">horizon</span><span class="p">))</span>
+    <span class="n">UpsilonT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">))</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">T</span> <span class="o">/</span> <span class="n">UpsilonT</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">ratio</span><span class="p">)</span> <span class="o">/</span> <span class="n">ratio</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span>  <span class="c1"># crop to [0, 1]</span>
+    <span class="n">alpha</span> <span class="o">*=</span> <span class="n">scaleFactor</span>  <span class="c1"># XXX Just divide alpha to not have too large, for CUSUM-UCB.</span>
+    <span class="k">return</span> <span class="n">h</span><span class="p">,</span> <span class="n">alpha</span></div>
+
+
+<div class="viewcode-block" id="CUSUM_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.CUSUM_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">CUSUM_IndexPolicy</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The CUSUM-UCB generic policy for non-stationary bandits, from [[&quot;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&quot;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CUSUM_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.CUSUM_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+            <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">lmbda</span><span class="o">=</span><span class="n">LAMBDA</span><span class="p">,</span>
+            <span class="n">min_number_of_observation_between_change_point</span><span class="o">=</span><span class="n">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</span><span class="p">,</span>
+            <span class="n">full_restart_when_refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">per_arm_restart</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CUSUM_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">full_restart_when_refresh</span><span class="o">=</span><span class="n">full_restart_when_refresh</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">per_arm_restart</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># New parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_nb_random_events</span> <span class="o">=</span> <span class="n">max_nb_random_events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">min_number_of_observation_between_change_point</span>  <span class="c1">#: Parameter :math:`M` for the test.</span>
+        <span class="n">h</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">compute_h_alpha_from_input_parameters__CUSUM</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">lmbda</span><span class="o">=</span><span class="n">lmbda</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="n">min_number_of_observation_between_change_point</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span> <span class="o">=</span> <span class="n">h</span>  <span class="c1">#: Parameter :math:`h` for the test (threshold).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span> <span class="o">=</span> <span class="n">alpha</span>  <span class="c1">#: What they call :math:`\alpha` in their paper: the probability of uniform exploration at each time.</span></div>
+
+<div class="viewcode-block" id="CUSUM_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.CUSUM_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># return r&quot;CUSUM-{}($\alpha={:.3g}$, $M={}${}{})&quot;.format(self._policy.__name__, self.proba_random_exploration, self.M, &quot;&quot; if self._per_arm_restart else &quot;, Global&quot;, &quot;, lazy detect {}&quot;.format(self.lazy_detect_change_only_x_steps) if self.lazy_detect_change_only_x_steps != LAZY_DETECT_CHANGE_ONLY_X_STEPS else &quot;&quot;)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global, &quot;</span><span class="p">,</span> <span class="s2">&quot;lazy detect </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;CUSUM-</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CUSUM_IndexPolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.CUSUM_IndexPolicy.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Be sure that the underlying UCB or klUCB indexes are used with :math:`\log(n_t)` for the exploration term, where :math:`n_t = \sum_{i=1}^K N_i(t)` the number of pulls of each arm since its last restart times (different restart time for each arm, CUSUM use local restart only).&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CUSUM_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="c1"># FIXED DONE Be sure that CUSUM UCB use log(n_t) in their UCB and not log(t - tau_i)</span>
+        <span class="c1"># we update the total number of samples available to the underlying policy</span>
+        <span class="n">old_policy_t</span><span class="p">,</span> <span class="n">new_policy_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">old_policy_t</span> <span class="o">!=</span> <span class="n">new_policy_t</span><span class="p">:</span>
+            <span class="c1"># print(&quot;==&gt; WARNING: the policy {}, at global time {}, had a sub_policy.t = {} but a total number of pulls of each arm since its last restart times = {}...\n    WARNING: Forcing UCB or klUCB to use this weird t for their log(t) term...&quot;.format(self, self.t, old_policy_t, new_policy_t))  # DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">new_policy_t</span>  <span class="c1"># XXX SO NOT SURE HERE</span></div>
+
+<div class="viewcode-block" id="CUSUM_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.CUSUM_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Detect a change in the current arm, using the two-sided CUSUM algorithm [Page, 1954].</span>
+
+<span class="sd">        - For each *data* k, compute:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            s_k^- &amp;= (y_k - \hat{u}_0 - \varepsilon) 1(k &gt; M),\\</span>
+<span class="sd">            s_k^+ &amp;= (\hat{u}_0 - y_k - \varepsilon) 1(k &gt; M),\\</span>
+<span class="sd">            g_k^+ &amp;= \max(0, g_{k-1}^+ + s_k^+),\\</span>
+<span class="sd">            g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).</span>
+
+<span class="sd">        - The change is detected if :math:`\max(g_k^+, g_k^-) &gt; h`, where :attr:`threshold_h` is the threshold of the test,</span>
+<span class="sd">        - And :math:`\hat{u}_0 = \frac{1}{M} \sum_{k=1}^{M} y_k` is the mean of the first M samples, where M is :attr:`M` the min number of observation between change points.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gp</span><span class="p">,</span> <span class="n">gm</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># First we use the first M samples to calculate the average :math:`\hat{u_0}`.</span>
+        <span class="n">u0hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_y</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">])</span>  <span class="c1"># DONE okay this is efficient we don&#39;t compute the same means too many times!</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span> <span class="c1"># no need to multiply by (k &gt; self.M)</span>
+            <span class="n">gp</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">gp</span> <span class="o">+</span> <span class="p">(</span><span class="n">u0hat</span> <span class="o">-</span> <span class="n">y_k</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+            <span class="n">gm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">gm</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_k</span> <span class="o">-</span> <span class="n">u0hat</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - For u0hat = </span><span class="si">{}</span><span class="s2">, k = </span><span class="si">{}</span><span class="s2">, y_k = </span><span class="si">{}</span><span class="s2">, gp = </span><span class="si">{}</span><span class="s2">, gm = </span><span class="si">{}</span><span class="s2">, and max(gp, gm) = </span><span class="si">{}</span><span class="s2"> compared to threshold h = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">u0hat</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_k</span><span class="p">,</span> <span class="n">gp</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">gp</span><span class="p">,</span> <span class="n">gm</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="k">if</span> <span class="n">gp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span> <span class="ow">or</span> <span class="n">gm</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+
+<div class="viewcode-block" id="PHT_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.PHT_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">PHT_IndexPolicy</span><span class="p">(</span><span class="n">CUSUM_IndexPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The PHT-UCB generic policy for non-stationary bandits, from [[&quot;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&quot;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PHT_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.PHT_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;PHT-</span><span class="si">{}</span><span class="s2">($\alpha=</span><span class="si">{:.3g}</span><span class="s2">$, $M=</span><span class="si">{}</span><span class="s2">$</span><span class="si">{}{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">,</span> <span class="s2">&quot;, lazy detect </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PHT_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.CUSUM_UCB.html#Policies.CUSUM_UCB.PHT_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Detect a change in the current arm, using the two-sided PHT algorithm [Hinkley, 1971].</span>
+
+<span class="sd">        - For each *data* k, compute:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            s_k^- &amp;= y_k - \hat{y}_k - \varepsilon,\\</span>
+<span class="sd">            s_k^+ &amp;= \hat{y}_k - y_k - \varepsilon,\\</span>
+<span class="sd">            g_k^+ &amp;= \max(0, g_{k-1}^+ + s_k^+),\\</span>
+<span class="sd">            g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).</span>
+
+<span class="sd">        - The change is detected if :math:`\max(g_k^+, g_k^-) &gt; h`, where :attr:`threshold_h` is the threshold of the test,</span>
+<span class="sd">        - And :math:`\hat{y}_k = \frac{1}{k} \sum_{s=1}^{k} y_s` is the mean of the first k samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gp</span><span class="p">,</span> <span class="n">gm</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="c1"># First we use the first M samples to calculate the average :math:`\hat{u_0}`.</span>
+        <span class="n">y_k_hat</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_y</span><span class="p">):</span>
+            <span class="c1"># y_k_hat = np.mean(data_y[:k+1])  # XXX this is not efficient we compute the same means too many times!</span>
+            <span class="n">y_k_hat</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">*</span> <span class="n">y_k_hat</span> <span class="o">+</span> <span class="n">y_k</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># DONE okay this is efficient we don&#39;t compute the same means too many times!</span>
+            <span class="c1"># Note doing this optimization step improves about 12 times faster!</span>
+            <span class="n">gp</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">gp</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_k_hat</span> <span class="o">-</span> <span class="n">y_k</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+            <span class="n">gm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">gm</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_k</span> <span class="o">-</span> <span class="n">y_k_hat</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - For y_k_hat = </span><span class="si">{}</span><span class="s2">, k = </span><span class="si">{}</span><span class="s2">, y_k = </span><span class="si">{}</span><span class="s2">, gp = </span><span class="si">{}</span><span class="s2">, gm = </span><span class="si">{}</span><span class="s2">, and max(gp, gm) = </span><span class="si">{}</span><span class="s2"> compared to threshold h = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_k_hat</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">y_k</span><span class="p">,</span> <span class="n">gp</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">gp</span><span class="p">,</span> <span class="n">gm</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="k">if</span> <span class="n">gp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span> <span class="ow">or</span> <span class="n">gm</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      Last updated on 29 Jan 2019, 11h.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
