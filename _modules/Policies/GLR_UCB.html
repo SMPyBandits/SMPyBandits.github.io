@@ -19,7 +19,7 @@
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Policies.GLR_UCB &mdash; SMPyBandits 0.9.4 documentation</title>
+  <title>Policies.GLR_UCB &mdash; SMPyBandits 0.9.5 documentation</title>
   
 
   
@@ -427,18 +427,48 @@
     <span class="k">return</span> <span class="n">alpha_t1</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span><span class="o">**</span><span class="n">exponentBeta</span></div>
 
 
-<div class="viewcode-block" id="smart_alpha_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_alpha_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">):</span>
+<span class="n">DELTA0_SCALE_FACTOR</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<div class="viewcode-block" id="smart_delta_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_delta_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_delta_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">DELTA0_SCALE_FACTOR</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute a smart estimate of the optimal value for the confidence level :math:`\delta`, with ``scaleFactor`` :math:`= \delta_0\in(0,1)` a constant.</span>
+
+<span class="sd">    - If ``per_arm_restart`` is True (**Local** option):</span>
+
+<span class="sd">    .. math:: \delta = \frac{\delta_0}{\sqrt{K \Upsilon_T T}.</span>
+
+<span class="sd">    - If ``per_arm_restart`` is False (**Global** option):</span>
+
+<span class="sd">    .. math:: \delta = \frac{\delta_0}{\sqrt{\Upsilon_T T}.</span>
+
+<span class="sd">    Note that if :math:`\Upsilon_T` is unknown, it is assumed to be :math:`\Upsilon_T=1`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">max_nb_random_events</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">per_arm_restart</span><span class="p">:</span>
+        <span class="n">product</span> <span class="o">*=</span> <span class="n">nbArms</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">product</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: Upsilon_T = </span><span class="si">{}</span><span class="s2"> should be smaller than horizon T = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">scaleFactor</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DEBUG: smart_delta_from_T_UpsilonT: horizon = </span><span class="si">{}</span><span class="s2">, max_nb_random_events = </span><span class="si">{}</span><span class="s2">, gives delta = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">return</span> <span class="n">delta</span></div>
+
+
+<div class="viewcode-block" id="smart_alpha_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_alpha_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute a smart estimate of the optimal value for the *fixed* or *random* forced exploration probability :math:`\alpha` (or tracking based), with ``scaleFactor`` :math:`= \alpha_0\in(0,1)` a constant.</span>
 
-<span class="sd">    .. math:: \alpha = \alpha_0 \times \sqrt{\frac{\Upsilon_T}{T} \log(\frac{T}{\Upsilon_T})}.</span>
+<span class="sd">    - If ``per_arm_restart`` is True (**Local** option):</span>
 
-<span class="sd">    Note that if :math:`\Upsilon_T` is unknown, a simpler formula is used:</span>
+<span class="sd">    .. math:: \alpha = \alpha_0 \times \sqrt{\frac{K \Upsilon_T}{T} \log(T)}.</span>
 
-<span class="sd">    .. math:: \alpha = \alpha_0 \times \sqrt{\frac{\log(T)}{T}}.</span>
+<span class="sd">    - If ``per_arm_restart`` is False (**Global** option):</span>
+
+<span class="sd">    .. math:: \alpha = \alpha_0 \times \sqrt{\frac{\Upsilon_T}{T} \log(T)}.</span>
+
+<span class="sd">    Note that if :math:`\Upsilon_T` is unknown, it is assumed to be :math:`\Upsilon_T=1`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ratio</span> <span class="o">=</span> <span class="n">max_nb_random_events</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">per_arm_restart</span><span class="p">:</span>
+        <span class="n">ratio</span> <span class="o">*=</span> <span class="n">nbArms</span>
     <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">ratio</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: Upsilon_T = </span><span class="si">{}</span><span class="s2"> should be smaller than horizon T = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="n">scaleFactor</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="o">-</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">ratio</span><span class="p">))</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">scaleFactor</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DEBUG: smart_alpha_from_T_UpsilonT: horizon = </span><span class="si">{}</span><span class="s2">, max_nb_random_events = </span><span class="si">{}</span><span class="s2">, gives alpha = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
     <span class="k">return</span> <span class="n">alpha</span></div>
 
@@ -460,19 +490,22 @@
             <span class="n">alpha0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exponentBeta</span><span class="o">=</span><span class="n">EXPONENT_BETA</span><span class="p">,</span> <span class="n">alpha_t1</span><span class="o">=</span><span class="n">ALPHA_T1</span><span class="p">,</span>
             <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">lazy_try_value_s_only_x_steps</span><span class="o">=</span><span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span><span class="p">,</span>
+            <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">per_arm_restart</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># New parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span>  <span class="c1">#: The horizon :math:`T`.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_nb_random_events</span> <span class="o">=</span> <span class="n">max_nb_random_events</span>  <span class="c1">#: The number of breakpoints :math:`\Upsilon_T`.</span>
         <span class="c1"># if delta is None and horizon is not None: delta = 1.0 / horizon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>  <span class="c1">#: The confidence level :math:`\delta`. Defaults to :math:`\delta=\frac{1}{\sqrt{T}}` if ``horizon`` is given and ``delta=None`` but :math:`\Upsilon_T` is unknown. Defaults to :math:`\delta=\frac{1}{\sqrt{\Upsilon_T T}}` if both :math:`T` and :math:`\Upsilon_T` are given (``horizon`` and ``max_nb_random_events``).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exponentBeta</span> <span class="o">=</span> <span class="n">exponentBeta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_t1</span> <span class="o">=</span> <span class="n">alpha_t1</span>
-        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha0</span> <span class="k">if</span> <span class="n">alpha0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span> <span class="k">if</span> <span class="n">delta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.0</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha0</span> <span class="k">if</span> <span class="n">alpha0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.0</span>
         <span class="k">if</span> <span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">max_nb_random_events</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">alpha</span> <span class="o">*=</span> <span class="n">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nb_random_events</span><span class="p">)</span>
+            <span class="n">delta</span> <span class="o">*=</span> <span class="n">smart_delta_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">per_arm_restart</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">)</span>
+            <span class="n">alpha</span> <span class="o">*=</span> <span class="n">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">per_arm_restart</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>  <span class="c1">#: The confidence level :math:`\delta`. Defaults to :math:`\delta=\frac{1}{\sqrt{T}}` if ``horizon`` is given and ``delta=None`` but :math:`\Upsilon_T` is unknown. Defaults to :math:`\delta=\frac{1}{\sqrt{\Upsilon_T T}}` if both :math:`T` and :math:`\Upsilon_T` are given (``horizon`` and ``max_nb_random_events``).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha0</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="o">=</span> <span class="n">variant</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threshold_function</span> <span class="o">=</span> <span class="n">threshold_function</span>
@@ -512,7 +545,7 @@
             <span class="c1"># &quot;&quot;, # no need to print alpha as it is chosen based on horizon</span>
             <span class="c1"># r&quot;$\alpha={:.3g}$&quot;.format(self._alpha0) if self._alpha0 is not None else r&quot;decreasing $\alpha_t$&quot;,</span>
             <span class="c1"># r&quot;$\alpha={:.3g}$&quot;.format(self._alpha0) if self._alpha0 is not None else r&quot;&quot;, # r&quot;$\alpha=\sqrt{frac{\log(T)}{T}}$&quot;,</span>
-            <span class="sa">r</span><span class="s2">&quot;$\Delta t=</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$\Delta n=</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="sa">r</span><span class="s2">&quot;$\Delta s=</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">with_tracking</span><span class="p">,</span>
             <span class="n">with_randomexploration</span><span class="p">,</span>
@@ -805,7 +838,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 29 Jan 2019, 11h.
+      Last updated on 31 Jan 2019, 11h.
 
     </p>
   </div>

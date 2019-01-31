@@ -19,7 +19,7 @@
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Non-Stationary Stochastic Multi-Armed Bandits &mdash; SMPyBandits 0.9.4 documentation</title>
+  <title>Non-Stationary Stochastic Multi-Armed Bandits &mdash; SMPyBandits 0.9.5 documentation</title>
   
 
   
@@ -116,7 +116,12 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#example-of-simulation-configuration">Example of simulation configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-experiments"><code class="docutils literal notranslate"><span class="pre">How</span> <span class="pre">to</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">experiments</span> <span class="pre">?</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#some-illustrations">Some illustrations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#some-illustrations">Some illustrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#history-of-means-for-this-simple-problem">History of means for this simple problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparison-of-different-algorithms">Comparison of different algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comparison-of-time-and-memory-consumptions">Comparison of time and memory consumptions</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#article">Article?</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#scroll-license-github-license">📜 License ? </a></li>
 </ul>
@@ -273,7 +278,6 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 </ul>
 </li>
 <li>[<a class="reference external" href="https://ewrl.files.wordpress.com/2018/09/ewrl_14_2018_paper_28.pdf">“Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes”. Peter Auer, Pratik Gajane and Ronald Ortner. EWRL 2018, Lille</a>], introduced the <a class="reference external" href="https://smpybandits.github.io/docs/Policies.AdSwitch.html"><code class="docutils literal notranslate"><span class="pre">AdSwitch</span></code></a> algorithm, which does not require to know the number <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code> of change points.<ul>
-<li>TODO code it!</li>
 <li>Be sure how to adapt it to <code class="docutils literal notranslate"><span class="pre">$K\geq2$</span></code> arms and not just <code class="docutils literal notranslate"><span class="pre">$K=2$</span></code> (it shouldn’t be hard).</li>
 <li>TODO adapt it to unknown horizon (using <a class="reference external" href="DoublingTrick.html">doubling tricks?</a>!</li>
 </ul>
@@ -281,7 +285,6 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 <li>[<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01811697/document">“Memory Bandits: a Bayesian approach for the Switching Bandit Problem”. Réda Alami, Odalric Maillard, Raphaël Féraud. 31st Conference on Neural Information Processing Systems (NIPS 2017), hal-01811697</a>], introduced the <a class="reference external" href="XXX"><code class="docutils literal notranslate"><span class="pre">MemoryBandit</span></code></a> algorithm, which does not require to know the number <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code> of change points.<ul>
 <li>They use a generic idea of <a class="reference internal" href="Aggregation.html"><span class="doc">expert aggregation</span></a> with <a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01615424/">an efficient tracking of a growing number of expert</a>. The basic idea is the following: a new expert is started <em>at every time</em>, and at a breakpoint, the expert started just after the breakpoint will essentially be the most efficient one (and we need efficient tracking to know it).</li>
 <li>Their <code class="docutils literal notranslate"><span class="pre">MemoryBandit</span></code> algorithm is very efficient empirically, but not easy to implement and it requires a large memory (although some discussion is given in their article’s appendix, as they evoke an heuristic that reduces the storage requirement).</li>
-<li>TODO code it!</li>
 </ul>
 </li>
 <li>🇫🇷 [<a class="reference external" href="http://oatao.univ-toulouse.fr/17130/1/louedec_17130.pdf">“Algorithme de bandit et obsolescence : un modèle pour la recommandation”. Jonhathan Louëdec, Laurent Rossi, Max Chevalier, Aurélien Garivier and Josiane Mothe. 18ème Conférence francophone sur l’Apprentissage Automatique, 2016 (Marseille, France)</a>] (🇫🇷 <em>in French</em>), introduces and justifies the possible applications of slowly-varying to recommender systems. They studies and present a model with an exponential decrease of the means, and the <a class="reference external" href="XXX"><code class="docutils literal notranslate"><span class="pre">FadingUCB</span></code></a> that is efficient if a bound on the speed of the exponential decrease is known.</li>
@@ -304,10 +307,20 @@ TODO what are the lower-bounds given in the more recent articles?</p>
 <p>A simple python file, <a class="reference external" href="https://smpybandits.github.io/docs/configuration_nonstationary.html"><code class="docutils literal notranslate"><span class="pre">configuration_nonstationary.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.</p>
 <p>For example, we can compare the standard <a class="reference external" href="https://smpybandits.github.io/docs/Policies.UCB.html"><code class="docutils literal notranslate"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="https://smpybandits.github.io/docs/Policies.Thompson.html"><code class="docutils literal notranslate"><span class="pre">Thompson</span></code></a> algorithms, non aware of the non-stationarity, against the non-stationarity aware <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedUCB.html"><code class="docutils literal notranslate"><span class="pre">DiscountedUCB</span></code></a> and <a class="reference external" href="https://smpybandits.github.io/docs/Policies.SlidingWindowUCB.html"><code class="docutils literal notranslate"><span class="pre">SWUCB</span></code></a> algorithms.
 We also included our algorithms <a class="reference external" href="https://smpybandits.github.io/docs/Policies.BernoulliGLR_IndexPolicy.html"><code class="docutils literal notranslate"><span class="pre">Bernoulli-GLR-UCB</span></code></a> using <a class="reference external" href="https://smpybandits.github.io/docs/Policies.klUCB.html"><code class="docutils literal notranslate"><span class="pre">kl-UCB</span></code></a>, and the efficient <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedThompson.html"><code class="docutils literal notranslate"><span class="pre">DiscountedThompson</span></code></a> algorithm.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">10000</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="n">change_points</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">]</span>
+<span class="n">nb_random_events</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">change_points</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># t=0 is not a change-point</span>
+<span class="n">list_of_means</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="c1"># from 0 to 1000</span>
+    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="c1"># from 1000 to 2000</span>
+    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="c1"># from 2000 to 3000</span>
+    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="c1"># from 3000 to 4000</span>
+    <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="c1"># from 4000 to 5000</span>
+<span class="p">]</span>
+
 <span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span>    <span class="c1"># Finite horizon of the simulation</span>
-    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># number of repetitions</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>  <span class="c1"># number of repetitions</span>
     <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>        <span class="c1"># Maximum number of cores for parallelization: use ALL your CPU</span>
     <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>      <span class="c1"># Verbosity for the joblib calls</span>
     <span class="c1"># Environment configuration, you can set up more than one.</span>
@@ -315,42 +328,42 @@ We also included our algorithms <a class="reference external" href="https://smpy
         <span class="p">{</span>   <span class="c1"># A non stationary problem: every step of the same repetition use a different mean vector!</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>  <span class="c1"># 0    to 399</span>
-                    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>  <span class="c1"># 400  to 799</span>
-                    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>  <span class="c1"># 800  to 1199</span>
-                    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>  <span class="c1"># 1200 to 1599</span>
-                    <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># 1600 to end</span>
-                <span class="p">],</span>
-                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="mi">0</span>    <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="mi">400</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="mi">800</span>  <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="mi">1200</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
-                    <span class="nb">int</span><span class="p">(</span><span class="mi">1600</span> <span class="o">*</span> <span class="n">HORIZON</span> <span class="o">/</span> <span class="mf">2000.0</span><span class="p">),</span>
-                    <span class="c1"># 20000,  # XXX larger than horizon, just to see if it is a problem?</span>
-                <span class="p">],</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="n">list_of_means</span><span class="p">,</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">change_points</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">},</span>
     <span class="p">]</span>
     <span class="p">],</span>
     <span class="c1"># Policies that should be simulated, and their parameters.</span>
     <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span>  <span class="c1"># formula from [GarivierMoulines2011]</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">OracleSequentiallyRestartPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
+            <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">change_points</span><span class="p">,</span>
+            <span class="s2">&quot;list_of_means&quot;</span><span class="p">:</span> <span class="n">list_of_means</span><span class="p">,</span>
+            <span class="s2">&quot;reset_for_all_change&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s2">&quot;reset_for_suboptimal_change&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">}}</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span>  <span class="c1"># formula from [GarivierMoulines2011]</span>
             <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">horizon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">nb_random_events</span><span class="p">))</span>
         <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.99</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.9</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.7</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BernoulliGLR_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.95</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.95</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+        <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">nb_random_events</span><span class="p">,</span> <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="c1"># Delta n to speed up</span>
+        <span class="p">}</span> <span class="p">}</span> <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BernoulliGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB_forGLR</span><span class="p">,</span> <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">nb_random_events</span><span class="p">,</span>
+            <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="c1"># Delta n to speed up</span>
+            <span class="s2">&quot;lazy_try_value_s_only_x_steps&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="c1"># Delta s</span>
+            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
         <span class="p">}</span> <span class="p">}</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.99</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.9</span> <span class="p">}</span> <span class="p">},</span>
-        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.7</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">]</span>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
@@ -372,7 +385,38 @@ make nonstationary   <span class="c1"># run and log the main.py script</span>
 <div class="section" id="some-illustrations">
 <span id="some-illustrations"></span><h2>Some illustrations<a class="headerlink" href="#some-illustrations" title="Permalink to this headline">¶</a></h2>
 <p>Here are some plots illustrating the performances of the different <a class="reference external" href="https://smpybandits.github.io/docs/Policies/">policies</a> implemented in this project, against various non-stationary problems (with <a class="reference external" href="https://smpybandits.github.io/docs/Arms.Bernoulli.html"><code class="docutils literal notranslate"><span class="pre">Bernoulli</span></code></a> only).</p>
-<p>FIXME do some plots!</p>
+<div class="section" id="history-of-means-for-this-simple-problem">
+<span id="history-of-means-for-this-simple-problem"></span><h3>History of means for this simple problem<a class="headerlink" href="#history-of-means-for-this-simple-problem" title="Permalink to this headline">¶</a></h3>
+<p>We consider a simple piece-wise stationary problem, with $K=3$ arms, a time horizon $T=5000$ and $N=1000$ repetitions.
+Arm changes concern only one arm at a time, and there is $\Upsilon=4$ changes at times $1000,2000,3000,4000$ ($C_T=\Upsilon_T=4)$.</p>
+<p><img alt="plots/NonStationary_example_HistoryOfMeans.png" src="_images/NonStationary_example_HistoryOfMeans.png" /></p>
+<blockquote>
+<div>Figure 1 : history of means $\mu_i(t)$ for the $K=3$ arms. There is only one change of the optimal arm.</div></blockquote>
+</div>
+<div class="section" id="comparison-of-different-algorithms">
+<span id="comparison-of-different-algorithms"></span><h3>Comparison of different algorithms<a class="headerlink" href="#comparison-of-different-algorithms" title="Permalink to this headline">¶</a></h3>
+<p>By using the configuration snippet shown above, we compare 9 algorithms.
+The plots below show how to perform.
+Our proposal is the GLR-klUCB, with two options for <strong>Local</strong> or <strong>Global</strong> restarts (Generalized Likelihood Ratio test + klUCB), and it outperforms all the previous state-of-the-art approaches.</p>
+<p><img alt="plots/NonStationary_example_Regret.png" src="_images/NonStationary_example_Regret.png" /></p>
+<blockquote>
+<div>Figure 2 : plot of the mean regret $R_t$ as a function of the current time step $t$, for the different algorithms.</div></blockquote>
+<p><img alt="plots/NonStationary_example_BoxPlotRegret.png" src="_images/NonStationary_example_BoxPlotRegret.png" /></p>
+<blockquote>
+<div>Figure 3 : box plot of the regret at $T=5000$, for the different algorithms.</div></blockquote>
+<p><img alt="plots/NonStationary_example_HistogramsRegret.png" src="_images/NonStationary_example_HistogramsRegret.png" /></p>
+<blockquote>
+<div>Figure 4 : plot of the histograms of the regret at $T=5000$, for the different algorithms.</div></blockquote>
+</div>
+<div class="section" id="comparison-of-time-and-memory-consumptions">
+<span id="comparison-of-time-and-memory-consumptions"></span><h3>Comparison of time and memory consumptions<a class="headerlink" href="#comparison-of-time-and-memory-consumptions" title="Permalink to this headline">¶</a></h3>
+<p><img alt="plots/NonStationary_example_RunningTimes.png" src="_images/NonStationary_example_RunningTimes.png" /></p>
+<blockquote>
+<div>Figure 5 : comparison of the running times. Our approach, like other actively adaptive approach, is slower, but drastically more efficient!</div></blockquote>
+<p><img alt="plots/NonStationary_example_MemoryConsumption.png" src="_images/NonStationary_example_MemoryConsumption.png" /></p>
+<blockquote>
+<div>Figure 6 : comparison of the memory consumption. Our approach, like other actively adaptive approach, is more costly, but drastically more efficient!</div></blockquote>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="article">
@@ -422,7 +466,7 @@ make nonstationary   <span class="c1"># run and log the main.py script</span>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 29 Jan 2019, 11h.
+      Last updated on 31 Jan 2019, 11h.
 
     </p>
   </div>

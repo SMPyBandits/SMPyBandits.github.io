@@ -19,7 +19,7 @@
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>configuration_nonstationary &mdash; SMPyBandits 0.9.4 documentation</title>
+  <title>configuration_nonstationary &mdash; SMPyBandits 0.9.5 documentation</title>
   
 
   
@@ -679,9 +679,9 @@
 <span class="n">DELTA_GLOBAL</span> <span class="o">=</span> <span class="n">DELTA_T_UpsilonT</span>
 <span class="n">DELTA_LOCAL</span> <span class="o">=</span> <span class="n">DELTA_T_UpsilonT_K</span>
 
-<span class="n">ALPHA_0</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c1"># ALPHA_0 = 1</span>
 <span class="n">ALPHA_0</span> <span class="o">=</span> <span class="mf">0.05</span>
-<span class="c1"># ALPHA_0 = 0  # FIXME</span>
+<span class="c1"># ALPHA_0 = 0</span>
 
 <span class="n">ALPHA_T</span> <span class="o">=</span> <span class="n">ALPHA_0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">)</span> <span class="o">/</span> <span class="n">HORIZON</span><span class="p">)</span>  <span class="c1"># XXX tune the alpha as a function of T</span>
 <span class="n">ALPHA_T_UpsilonT</span> <span class="o">=</span> <span class="n">ALPHA_0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">UPSILON_T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">)</span> <span class="o">/</span> <span class="n">HORIZON</span><span class="p">)</span>  <span class="c1"># XXX tune the alpha as just a function of T and Upsilon_T</span>
@@ -816,11 +816,11 @@
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
-            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+            <span class="c1"># &quot;per_arm_restart&quot;: per_arm_restart,</span>
             <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
             <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span>
         <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;M-klUCB&quot;</span><span class="p">,</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="n">PER_ARM_RESTART</span>
+        <span class="c1"># for per_arm_restart in PER_ARM_RESTART</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="c1"># UCB,</span>
             <span class="n">klUCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test UCB</span>
@@ -908,7 +908,7 @@
             <span class="c1"># r&quot;\delta 1&quot; if delta == DELTA_1 else r&quot;\delta 2&quot;,</span>
             <span class="c1"># r&quot;\delta={:.3g}&quot;.format(delta),</span>
             <span class="c1"># r&quot;\alpha_0={:.3g}&quot;.format(alpha0),</span>
-            <span class="c1"># &quot;, $\Delta t={}$&quot;.format(lazy_detect_change_only_x_steps) if lazy_detect_change_only_x_steps != 10 else &quot;&quot;,</span>
+            <span class="c1"># &quot;, $\Delta n={}$&quot;.format(lazy_detect_change_only_x_steps) if lazy_detect_change_only_x_steps != 10 else &quot;&quot;,</span>
             <span class="c1"># &quot;, $\Delta s={}$&quot;.format(lazy_try_value_s_only_x_steps) if lazy_try_value_s_only_x_steps != 10 else &quot;&quot;,</span>
         <span class="p">)</span>
         <span class="p">}</span>
@@ -973,7 +973,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 29 Jan 2019, 11h.
+      Last updated on 31 Jan 2019, 11h.
 
     </p>
   </div>

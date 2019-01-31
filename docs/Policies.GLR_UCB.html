@@ -19,7 +19,7 @@
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Policies.GLR_UCB module &mdash; SMPyBandits 0.9.4 documentation</title>
+  <title>Policies.GLR_UCB module &mdash; SMPyBandits 0.9.5 documentation</title>
   
 
   
@@ -552,19 +552,42 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 </dd></dl>
 
 <dl class="function">
+<dt id="Policies.GLR_UCB.smart_delta_from_T_UpsilonT">
+<code class="descclassname">Policies.GLR_UCB.</code><code class="descname">smart_delta_from_T_UpsilonT</code><span class="sig-paren">(</span><em>horizon=1</em>, <em>max_nb_random_events=1</em>, <em>scaleFactor=1.0</em>, <em>per_arm_restart=True</em>, <em>nbArms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#smart_delta_from_T_UpsilonT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.smart_delta_from_T_UpsilonT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a smart estimate of the optimal value for the confidence level <span class="math notranslate nohighlight">\(\delta\)</span>, with <code class="docutils literal notranslate"><span class="pre">scaleFactor</span></code> <span class="math notranslate nohighlight">\(= \delta_0\in(0,1)\)</span> a constant.</p>
+<ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">per_arm_restart</span></code> is True (<strong>Local</strong> option):</li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\delta = \frac{\delta_0}{\sqrt{K \Upsilon_T T}.\]</div>
+<ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">per_arm_restart</span></code> is False (<strong>Global</strong> option):</li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\delta = \frac{\delta_0}{\sqrt{\Upsilon_T T}.\]</div>
+<p>Note that if <span class="math notranslate nohighlight">\(\Upsilon_T\)</span> is unknown, it is assumed to be <span class="math notranslate nohighlight">\(\Upsilon_T=1\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Policies.GLR_UCB.smart_alpha_from_T_UpsilonT">
-<code class="descclassname">Policies.GLR_UCB.</code><code class="descname">smart_alpha_from_T_UpsilonT</code><span class="sig-paren">(</span><em>horizon=1</em>, <em>max_nb_random_events=1</em>, <em>scaleFactor=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#smart_alpha_from_T_UpsilonT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.smart_alpha_from_T_UpsilonT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.GLR_UCB.</code><code class="descname">smart_alpha_from_T_UpsilonT</code><span class="sig-paren">(</span><em>horizon=1</em>, <em>max_nb_random_events=1</em>, <em>scaleFactor=0.1</em>, <em>per_arm_restart=True</em>, <em>nbArms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#smart_alpha_from_T_UpsilonT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.smart_alpha_from_T_UpsilonT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a smart estimate of the optimal value for the <em>fixed</em> or <em>random</em> forced exploration probability <span class="math notranslate nohighlight">\(\alpha\)</span> (or tracking based), with <code class="docutils literal notranslate"><span class="pre">scaleFactor</span></code> <span class="math notranslate nohighlight">\(= \alpha_0\in(0,1)\)</span> a constant.</p>
+<ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">per_arm_restart</span></code> is True (<strong>Local</strong> option):</li>
+</ul>
 <div class="math notranslate nohighlight">
-\[\alpha = \alpha_0 \times \sqrt{\frac{\Upsilon_T}{T} \log(\frac{T}{\Upsilon_T})}.\]</div>
-<p>Note that if <span class="math notranslate nohighlight">\(\Upsilon_T\)</span> is unknown, a simpler formula is used:</p>
+\[\alpha = \alpha_0 \times \sqrt{\frac{K \Upsilon_T}{T} \log(T)}.\]</div>
+<ul class="simple">
+<li>If <code class="docutils literal notranslate"><span class="pre">per_arm_restart</span></code> is False (<strong>Global</strong> option):</li>
+</ul>
 <div class="math notranslate nohighlight">
-\[\alpha = \alpha_0 \times \sqrt{\frac{\log(T)}{T}}.\]</div>
+\[\alpha = \alpha_0 \times \sqrt{\frac{\Upsilon_T}{T} \log(T)}.\]</div>
+<p>Note that if <span class="math notranslate nohighlight">\(\Upsilon_T\)</span> is unknown, it is assumed to be <span class="math notranslate nohighlight">\(\Upsilon_T=1\)</span>.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The GLR-UCB generic policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for 1-dimensional exponential families.</p>
 <ul class="simple">
@@ -576,7 +599,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 </ul>
 <dl class="method">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New policy.</p>
 </dd></dl>
 
@@ -662,7 +685,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy_WithTracking">
-<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Policies.GLR_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.GLR_UCB.GLR_IndexPolicy</span></code></a></p>
 <p>A variant of the GLR policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven’t been explored enough (with a tracking).</p>
 <dl class="method">
@@ -680,7 +703,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration">
-<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Policies.GLR_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.GLR_UCB.GLR_IndexPolicy</span></code></a></p>
 <p>A variant of the GLR policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</p>
 <ul class="simple">
@@ -951,7 +974,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 29 Jan 2019, 11h.
+      Last updated on 31 Jan 2019, 11h.
 
     </p>
   </div>
