@@ -379,7 +379,15 @@ and compare it with <a class="reference external" href="https://smpybandits.gith
 git clone https://github.com/SMPyBandits/SMPyBandits/
 <span class="nb">cd</span> SMPyBandits
 make install         <span class="c1"># install the requirements ONLY ONCE</span>
-make nonstationary   <span class="c1"># run and log the main.py script</span>
+</pre></div>
+</div>
+<p>Then modify the <code class="docutils literal notranslate"><span class="pre">configuration_nonstationary.py</span></code> file, to specify the algorithms you want to compare (use the snippet above for inspiration). And run with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make nonstationary   <span class="c1"># run and log the main.py script</span>
+</pre></div>
+</div>
+<p>There is a couple of different piece-wise stationary problems, that we implemented for our article, and you can use environment variables to modify the experiment to run.
+For instance, to run problems 1 and 2, with horizon T=5000, N=1000 repetitions, using 4 cores, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PROBLEMS</span><span class="o">=</span><span class="m">1</span>,2 <span class="nv">T</span><span class="o">=</span><span class="m">5000</span> <span class="nv">N</span><span class="o">=</span><span class="m">1000</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> <span class="nv">DEBUG</span><span class="o">=</span>False <span class="nv">SAVEALL</span><span class="o">=</span>True make nonstationary
 </pre></div>
 </div>
 </div>
@@ -394,6 +402,10 @@ Arm changes concern only one arm at a time, and there is $\Upsilon=4$ changes at
 <p><img alt="plots/NonStationary_example_HistoryOfMeans.png" src="_images/NonStationary_example_HistoryOfMeans.png" /></p>
 <blockquote>
 <div>Figure 1 : history of means $\mu_i(t)$ for the $K=3$ arms. There is only one change of the optimal arm.</div></blockquote>
+<p>The next figures were obtained with the following command (at the date of writing, 31st of January 2019):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PROBLEMS</span><span class="o">=</span><span class="m">1</span> <span class="nv">T</span><span class="o">=</span><span class="m">5000</span> <span class="nv">N</span><span class="o">=</span><span class="m">1000</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> <span class="nv">DEBUG</span><span class="o">=</span>False <span class="nv">SAVEALL</span><span class="o">=</span>True make nonstationary
+</pre></div>
+</div>
 </div>
 <div class="section" id="comparison-of-different-algorithms">
 <span id="comparison-of-different-algorithms"></span><h3>Comparison of different algorithms<a class="headerlink" href="#comparison-of-different-algorithms" title="Permalink to this headline">¶</a></h3>
@@ -468,7 +480,7 @@ Our proposal is the GLR-klUCB, with two options for <strong>Local</strong> or <s
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 31 Jan 2019, 11h.
+      Last updated on 03 Feb 2019, 18h.
 
     </p>
   </div>

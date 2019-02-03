@@ -649,7 +649,7 @@
         <span class="c1"># 500, 1000, 2000,</span>
         <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">HORIZON</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">NB_BREAK_POINTS</span><span class="p">))),</span>  <span class="c1"># &quot;optimal&quot; value according to [Garivier &amp; Moulines, 2008]</span>
     <span class="p">]</span>
-<span class="n">GAMMAS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.95</span><span class="p">]</span>  <span class="c1">#+ [0.9999, 0.99, 0.75, 0.5]</span>
+<span class="n">GAMMAS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">]</span>  <span class="c1">#+ [0.9999, 0.99, 0.75, 0.5]</span>
 <span class="n">GAMMA_T_UpsilonT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">NB_BREAK_POINTS</span> <span class="o">/</span> <span class="n">HORIZON</span><span class="p">)</span> <span class="o">/</span> <span class="mf">4.</span>
 <span class="c1"># GAMMAS = [GAMMA_T_UpsilonT]</span>
 
@@ -670,6 +670,19 @@
     <span class="n">CT</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[:,</span> <span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[</span><span class="mi">1</span><span class="p">])])</span>
     <span class="n">NUMBER_OF_CHANGE_POINTS</span> <span class="o">=</span> <span class="n">CT</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Using Upsilon_T = </span><span class="si">{}</span><span class="s2"> break-points (time when at least one arm changes), and C_T = </span><span class="si">{}</span><span class="s2"> change-points (number of changes of all arms).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">UPSILON_T</span><span class="p">,</span> <span class="n">NUMBER_OF_CHANGE_POINTS</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+
+<span class="n">DELTA_for_MUCB</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">EPSILON_for_CUSUM</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">PROBLEMS</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># and set(PROBLEMS) &lt;= {1,2,3,4,5,6}:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For this problem, we compute the Delta^change and Delta^opt...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">min_change_on_mean</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">delta</span> <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">min</span><span class="p">([</span><span class="n">delta</span> <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[:,</span> <span class="n">i</span><span class="p">]))</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min_change_on_mean =&quot;</span><span class="p">,</span> <span class="n">min_change_on_mean</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">min_optimality_gap</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">delta</span> <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">min</span><span class="p">([</span><span class="n">delta</span> <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]))</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min_optimality_gap =&quot;</span><span class="p">,</span> <span class="n">min_optimality_gap</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># DELTA_for_MUCB = min_change_on_mean</span>
+    <span class="c1"># EPSILON_for_CUSUM = min_change_on_mean</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DELTA_for_MUCB =&quot;</span><span class="p">,</span> <span class="n">DELTA_for_MUCB</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EPSILON_for_CUSUM =&quot;</span><span class="p">,</span> <span class="n">EPSILON_for_CUSUM</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
 
 <span class="n">DELTA_T</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">HORIZON</span><span class="p">)</span>  <span class="c1"># XXX tune the delta as a function of T</span>
 <span class="n">DELTA_T_UpsilonT</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">UPSILON_T</span> <span class="o">*</span> <span class="n">HORIZON</span><span class="p">)</span>  <span class="c1"># XXX tune the delta as just a function of T and Upsilon_T</span>
@@ -698,7 +711,9 @@
     <span class="c1">#     { &quot;archtype&quot;: Exp3PlusPlus, &quot;params&quot;: {} },</span>
     <span class="c1"># ] +</span>
     <span class="p">[</span>  <span class="c1"># XXX Regular stochastic bandits algorithms!</span>
-        <span class="c1"># { &quot;archtype&quot;: UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },</span>
+        <span class="c1"># # { &quot;archtype&quot;: Uniform, &quot;params&quot;: { } },</span>
+        <span class="c1"># # { &quot;archtype&quot;: EmpiricalMeans, &quot;params&quot;: { } },</span>
+        <span class="c1"># # { &quot;archtype&quot;: UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },</span>
         <span class="c1"># { &quot;archtype&quot;: UCB, &quot;params&quot;: { } },</span>
         <span class="c1"># # { &quot;archtype&quot;: SWR_UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },  # WARNING experimental!</span>
         <span class="c1"># { &quot;archtype&quot;: BESA, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;non_binary&quot;: True, } },</span>
@@ -819,6 +834,7 @@
             <span class="c1"># &quot;per_arm_restart&quot;: per_arm_restart,</span>
             <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
             <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span>
+            <span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="n">DELTA_for_MUCB</span><span class="p">,</span>
         <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;M-klUCB&quot;</span><span class="p">,</span> <span class="p">}</span>
         <span class="c1"># for per_arm_restart in PER_ARM_RESTART</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
@@ -836,6 +852,7 @@
             <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
             <span class="c1"># &quot;min_number_of_observation_between_change_point&quot;: MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT,</span>
             <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span>
+            <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="n">EPSILON_for_CUSUM</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;CUSUM-klUCB&quot;</span><span class="p">,</span>
         <span class="p">}</span>
@@ -973,7 +990,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 31 Jan 2019, 11h.
+      Last updated on 03 Feb 2019, 18h.
 
     </p>
   </div>
