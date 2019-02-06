@@ -429,7 +429,7 @@
 
 <span class="n">DELTA0_SCALE_FACTOR</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-<div class="viewcode-block" id="smart_delta_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_delta_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_delta_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">DELTA0_SCALE_FACTOR</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="smart_delta_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_delta_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_delta_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">DELTA0_SCALE_FACTOR</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute a smart estimate of the optimal value for the confidence level :math:`\delta`, with ``scaleFactor`` :math:`= \delta_0\in(0,1)` a constant.</span>
 
 <span class="sd">    - If ``per_arm_restart`` is True (**Local** option):</span>
@@ -442,16 +442,19 @@
 
 <span class="sd">    Note that if :math:`\Upsilon_T` is unknown, it is assumed to be :math:`\Upsilon_T=1`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">max_nb_random_events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">max_nb_random_events</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">product</span> <span class="o">=</span> <span class="n">max_nb_random_events</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">per_arm_restart</span><span class="p">:</span>
         <span class="n">product</span> <span class="o">*=</span> <span class="n">nbArms</span>
-    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">product</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: Upsilon_T = </span><span class="si">{}</span><span class="s2"> should be smaller than horizon T = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">if</span> <span class="n">product</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: bound Upsilon_T = </span><span class="si">{}</span><span class="s2"> should be smaller than horizon T = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">horizon</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="n">product</span> <span class="o">=</span> <span class="mf">0.1</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="n">scaleFactor</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DEBUG: smart_delta_from_T_UpsilonT: horizon = </span><span class="si">{}</span><span class="s2">, max_nb_random_events = </span><span class="si">{}</span><span class="s2">, gives delta = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">horizon</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
     <span class="k">return</span> <span class="n">delta</span></div>
 
 
-<div class="viewcode-block" id="smart_alpha_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_alpha_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="smart_alpha_from_T_UpsilonT"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.smart_alpha_from_T_UpsilonT">[docs]</a><span class="k">def</span> <span class="nf">smart_alpha_from_T_UpsilonT</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scaleFactor</span><span class="o">=</span><span class="n">ALPHA0_SCALE_FACTOR</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span> <span class="n">nbArms</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute a smart estimate of the optimal value for the *fixed* or *random* forced exploration probability :math:`\alpha` (or tracking based), with ``scaleFactor`` :math:`= \alpha_0\in(0,1)` a constant.</span>
 
 <span class="sd">    - If ``per_arm_restart`` is True (**Local** option):</span>
@@ -464,6 +467,7 @@
 
 <span class="sd">    Note that if :math:`\Upsilon_T` is unknown, it is assumed to be :math:`\Upsilon_T=1`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">max_nb_random_events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">max_nb_random_events</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">ratio</span> <span class="o">=</span> <span class="n">max_nb_random_events</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">per_arm_restart</span><span class="p">:</span>
         <span class="n">ratio</span> <span class="o">*=</span> <span class="n">nbArms</span>
@@ -838,7 +842,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 06 Feb 2019, 10h.
+      Last updated on 06 Feb 2019, 15h.
 
     </p>
   </div>
