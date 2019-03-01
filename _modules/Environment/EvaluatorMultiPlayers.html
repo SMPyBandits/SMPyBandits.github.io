@@ -214,7 +214,7 @@
     <span class="kn">from</span> <span class="nn">.fairnessMeasures</span> <span class="k">import</span> <span class="n">amplitude_fairness</span><span class="p">,</span> <span class="n">std_fairness</span><span class="p">,</span> <span class="n">rajjain_fairness</span><span class="p">,</span> <span class="n">mean_fairness</span><span class="p">,</span> <span class="n">fairnessMeasure</span><span class="p">,</span> <span class="n">fairness_mapping</span>
     <span class="c1"># Local imports, objects and functions</span>
     <span class="kn">from</span> <span class="nn">.CollisionModels</span> <span class="k">import</span> <span class="n">onlyUniqUserGetsReward</span><span class="p">,</span> <span class="n">noCollision</span><span class="p">,</span> <span class="n">closerUserGetsReward</span><span class="p">,</span> <span class="n">rewardIsSharedUniformly</span><span class="p">,</span> <span class="n">defaultCollisionModel</span><span class="p">,</span> <span class="n">full_lost_if_collision</span>
-    <span class="kn">from</span> <span class="nn">.MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">ChangingAtEachRepMAB</span>
+    <span class="kn">from</span> <span class="nn">.MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">ChangingAtEachRepMAB</span><span class="p">,</span> <span class="n">NonStationaryMAB</span><span class="p">,</span> <span class="n">PieceWiseStationaryMAB</span><span class="p">,</span> <span class="n">IncreasingMAB</span>
     <span class="kn">from</span> <span class="nn">.ResultMultiPlayers</span> <span class="k">import</span> <span class="n">ResultMultiPlayers</span>
     <span class="kn">from</span> <span class="nn">.memory_consumption</span> <span class="k">import</span> <span class="n">getCurrentMemory</span><span class="p">,</span> <span class="n">sizeof_fmt</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -226,7 +226,7 @@
     <span class="kn">from</span> <span class="nn">fairnessMeasures</span> <span class="k">import</span> <span class="n">amplitude_fairness</span><span class="p">,</span> <span class="n">std_fairness</span><span class="p">,</span> <span class="n">rajjain_fairness</span><span class="p">,</span> <span class="n">mean_fairness</span><span class="p">,</span> <span class="n">fairnessMeasure</span><span class="p">,</span> <span class="n">fairness_mapping</span>
     <span class="c1"># Local imports, objects and functions</span>
     <span class="kn">from</span> <span class="nn">CollisionModels</span> <span class="k">import</span> <span class="n">onlyUniqUserGetsReward</span><span class="p">,</span> <span class="n">noCollision</span><span class="p">,</span> <span class="n">closerUserGetsReward</span><span class="p">,</span> <span class="n">rewardIsSharedUniformly</span><span class="p">,</span> <span class="n">defaultCollisionModel</span><span class="p">,</span> <span class="n">full_lost_if_collision</span>
-    <span class="kn">from</span> <span class="nn">MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">ChangingAtEachRepMAB</span>
+    <span class="kn">from</span> <span class="nn">MAB</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">,</span> <span class="n">MarkovianMAB</span><span class="p">,</span> <span class="n">ChangingAtEachRepMAB</span><span class="p">,</span> <span class="n">NonStationaryMAB</span><span class="p">,</span> <span class="n">PieceWiseStationaryMAB</span><span class="p">,</span> <span class="n">IncreasingMAB</span>
     <span class="kn">from</span> <span class="nn">ResultMultiPlayers</span> <span class="k">import</span> <span class="n">ResultMultiPlayers</span>
     <span class="kn">from</span> <span class="nn">memory_consumption</span> <span class="k">import</span> <span class="n">getCurrentMemory</span><span class="p">,</span> <span class="n">sizeof_fmt</span>
 
@@ -331,6 +331,7 @@
                 <span class="ow">and</span> <span class="s2">&quot;arm_type&quot;</span> <span class="ow">in</span> <span class="n">configuration_arms</span> <span class="ow">and</span> <span class="s2">&quot;params&quot;</span> <span class="ow">in</span> <span class="n">configuration_arms</span> \
                 <span class="ow">and</span> <span class="s2">&quot;function&quot;</span> <span class="ow">in</span> <span class="n">configuration_arms</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;args&quot;</span> <span class="ow">in</span> <span class="n">configuration_arms</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]:</span>
                     <span class="n">MB</span> <span class="o">=</span> <span class="n">ChangingAtEachRepMAB</span><span class="p">(</span><span class="n">configuration_arms</span><span class="p">)</span>
+            <span class="c1"># FIXME add support for PieceWiseStationaryMAB</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">configuration_arms</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> \
                 <span class="ow">and</span> <span class="s2">&quot;arm_type&quot;</span> <span class="ow">in</span> <span class="n">configuration_arms</span> <span class="ow">and</span> <span class="n">configuration_arms</span><span class="p">[</span><span class="s2">&quot;arm_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Markovian&quot;</span> \
                 <span class="ow">and</span> <span class="s2">&quot;params&quot;</span> <span class="ow">in</span> <span class="n">configuration_arms</span> \
@@ -1380,7 +1381,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      Last updated on 28 Feb 2019, 15h.
+      Last updated on 01 Mar 2019, 17h.
 
     </p>
   </div>
