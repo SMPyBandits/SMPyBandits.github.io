@@ -368,7 +368,7 @@
 
 
 <div class="viewcode-block" id="threshold_BernoulliGLR"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.threshold_BernoulliGLR">[docs]</a><span class="k">def</span> <span class="nf">threshold_BernoulliGLR</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the value :math:`c from the corollary of of Theorem 2 from [&quot;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&quot;, O.-A. Maillard, 2018].</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the value :math:`c` from the corollary of of Theorem 2 from [&quot;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&quot;, O.-A. Maillard, 2018].</span>
 
 <span class="sd">    .. warning:: This is still experimental, you can try different variants of the threshold function:</span>
 
@@ -386,7 +386,7 @@
 
 <span class="sd">    - Variant #3 is using :math:`\tilde{\mathcal{T}}(x) = x + 4 \log(1 + x + \sqrt{2x})` an approximation of :math:`\mathcal{T}(x)` (valid and quite accurate as soon as :math:`x \geq 5`):</span>
 
-<span class="sd">    .. math:: \beta(t, \delta) := 2 \tilde{\mathcal{T}}(x)\left(\frac{\log(2 t^{3/2}) / \delta}{2}\right) + 6 \log(1 + \log(t)).</span>
+<span class="sd">    .. math:: \beta(t, \delta) := 2 \tilde{\mathcal{T}}\left(\frac{\log(2 t^{3/2}) / \delta}{2}\right) + 6 \log(1 + \log(t)).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">delta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">delta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
@@ -402,8 +402,7 @@
         <span class="k">elif</span> <span class="n">variant</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">approximation_function_T_mathcal</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="o">**</span><span class="p">(</span><span class="n">constant_power_function_h</span><span class="p">)</span> <span class="o">/</span> <span class="n">delta</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-
+        <span class="n">c</span> <span class="o">=</span> <span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">log</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">isinf</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
         <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">c</span></div>
@@ -545,7 +544,7 @@
         <span class="k">if</span> <span class="s2">&quot;Sub&quot;</span> <span class="ow">in</span> <span class="n">class_name</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Sub</span><span class="si">{}</span><span class="s2">-&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">with_tracking</span> <span class="o">=</span> <span class="s2">&quot;tracking&quot;</span> <span class="k">if</span> <span class="s2">&quot;WithTracking&quot;</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">with_randomexploration</span> <span class="o">=</span> <span class="s2">&quot;random.explo.&quot;</span> <span class="k">if</span> <span class="s2">&quot;DeterministicExploration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">with_randomexploration</span> <span class="o">=</span> <span class="s2">&quot;random expl.&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">with_tracking</span> <span class="ow">and</span> <span class="s2">&quot;DeterministicExploration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;threshold #</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variant</span><span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="s2">&quot;Local&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span>
@@ -847,7 +846,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 12 Mar 2019, 10h.
+        Last updated on 14 Mar 2019, 17h.
       </span>
 
     </p>
