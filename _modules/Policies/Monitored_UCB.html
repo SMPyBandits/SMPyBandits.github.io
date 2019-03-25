@@ -290,7 +290,8 @@
 
         <span class="c1"># Internal memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last_w_rewards</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Keep in memory all the rewards obtained since the last restart on that arm.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times where each arm was last seen. Start with -1 (never seen)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times of last restarts (for each arm).</span></div>
 
 <div class="viewcode-block" id="Monitored_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.Monitored_UCB.html#Policies.Monitored_UCB.Monitored_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;$w=</span><span class="si">{:g}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window_size</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">window_size</span> <span class="o">!=</span> <span class="n">WINDOW_SIZE</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;, Global&quot;</span><span class="p">)</span>
@@ -343,15 +344,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last_w_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_change</span><span class="p">(</span><span class="n">arm</span><span class="p">):</span>
-            <span class="c1"># print(&quot;For a player {} a change was detected at time {} for arm {} after seeing reward = {}!&quot;.format(self, self.t, arm, reward))  # DEBUG</span>
+            <span class="c1"># print(&quot;For a player {} a change was detected at time {} for arm {}, after {} pulls of that arm (giving mean reward = {:.3g}). Last restart on that arm was at tau = {}&quot;.format(self, self.t, arm, self.last_pulls[arm], np.sum(self.last_w_rewards[arm]) / self.last_pulls[arm], self.last_restart_times[arm]))  # DEBUG</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_update_time_tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
                 <span class="c1"># or reset current memory for ALL THE arms</span>
                 <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">last_w_rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="c1"># reset current memory for THIS arm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_w_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span>
 
@@ -405,7 +408,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 14 Mar 2019, 17h.
+        Last updated on 25 Mar 2019, 20h.
       </span>
 
     </p>
