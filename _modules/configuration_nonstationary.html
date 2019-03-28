@@ -763,7 +763,7 @@
             <span class="c1"># &quot;full_restart_when_refresh&quot;: full_restart_when_refresh,</span>
         <span class="p">}</span> <span class="p">}</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">UCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test klUCB</span>
+            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
             <span class="n">klUCB</span><span class="p">,</span>
             <span class="c1"># Thompson,  # XXX comment to only test klUCB</span>
             <span class="c1"># Exp3PlusPlus,  # XXX comment to only test klUCB</span>
@@ -782,13 +782,13 @@
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Exp3S</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
             <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
-            <span class="s2">&quot;alpha0&quot;</span><span class="p">:</span> <span class="n">alpha0</span><span class="p">,</span>
-            <span class="s2">&quot;gamma0&quot;</span><span class="p">:</span> <span class="n">gamma0</span><span class="p">,</span>
+            <span class="c1"># &quot;alpha0&quot;: alpha0,</span>
+            <span class="c1"># &quot;gamma0&quot;: gamma0,</span>
         <span class="p">}</span> <span class="p">}</span>
         <span class="c1"># for alpha0 in [100, 10, 1, 0.1, 0.01, 0.001]  # try different values for alpha, but using the formula, just a constant scaling</span>
-        <span class="k">for</span> <span class="n">alpha0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># try different values for alpha, but using the formula, just a constant scaling</span>
+        <span class="c1"># # for alpha0 in [100, 50, 1]  # try different values for alpha, but using the formula, just a constant scaling</span>
         <span class="c1"># for gamma0 in [100, 10, 1, 0.1, 0.01, 0.001]  # try different values for alpha, but using the formula, just a constant scaling</span>
-        <span class="k">for</span> <span class="n">gamma0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">]</span>  <span class="c1"># try different values for alpha, but using the formula, just a constant scaling</span>
+        <span class="c1"># # for gamma0 in [10, 1, 0.01]  # try different values for alpha, but using the formula, just a constant scaling</span>
     <span class="p">]</span> <span class="o">+</span>
     <span class="c1"># The Exp3R algorithm works reasonably well</span>
     <span class="p">[</span>
@@ -881,7 +881,7 @@
         <span class="p">}</span>
         <span class="c1"># for per_arm_restart in PER_ARM_RESTART</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">UCB</span><span class="p">,</span>
+            <span class="c1"># UCB,</span>
             <span class="n">klUCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test UCB</span>
         <span class="p">]</span>
         <span class="c1"># for w in [20, 10*NB_ARMS, WINDOW_SIZE, NB_ARMS*WINDOW_SIZE, 2*NB_ARMS*WINDOW_SIZE]</span>
@@ -904,7 +904,7 @@
             <span class="c1"># PHT_IndexPolicy,  # OK PHT_IndexPolicy is very much like CUSUM</span>
         <span class="p">]</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">UCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test klUCB</span>
+            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
             <span class="n">klUCB</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="c1"># for lazy_detect_change_only_x_steps in [1, 2, 5]</span>
@@ -938,10 +938,10 @@
             <span class="s2">&quot;lazy_try_value_s_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_try_value_s_only_x_steps</span><span class="p">,</span>
         <span class="p">}</span> <span class="p">}</span>
         <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="c1"># GaussianGLR_IndexPolicy,    # OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
-            <span class="c1"># GaussianGLR_IndexPolicy_WithTracking,    # OK GaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
+            <span class="n">GaussianGLR_IndexPolicy</span><span class="p">,</span>    <span class="c1"># OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
+            <span class="n">GaussianGLR_IndexPolicy_WithTracking</span><span class="p">,</span>    <span class="c1"># OK GaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
             <span class="n">GaussianGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span>    <span class="c1"># OK GaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Gaussian GLR and is more efficient</span>
-            <span class="c1"># SubGaussianGLR_IndexPolicy, # OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
+            <span class="n">SubGaussianGLR_IndexPolicy</span><span class="p">,</span> <span class="c1"># OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
         <span class="p">]</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
@@ -1050,7 +1050,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 26 Mar 2019, 16h.
+        Last updated on 28 Mar 2019, 20h.
       </span>
 
     </p>

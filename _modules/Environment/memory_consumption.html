@@ -234,11 +234,12 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">linecache</span> <span class="k">import</span> <span class="n">getline</span>
 
+<span class="n">HAS_resource</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">resource</span>
+    <span class="n">HAS_resource</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &#39;resource&#39; module not available, but it is in the standard library.</span><span class="se">\n</span><span class="s2">Have you messed up your Python installation?</span><span class="se">\n</span><span class="s2">Please submit a new bug on https://github.com/SMPyBandits/SMPyBandits/issues/new&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-    <span class="k">raise</span> <span class="n">e</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &#39;resource&#39; module not available, but it is in the standard library.</span><span class="se">\n</span><span class="s2">Have you messed up your Python installation?</span><span class="se">\n</span><span class="s2">Are you on Windows? In this case, it&#39;s okay.</span><span class="se">\n</span><span class="s2">Please submit a new bug on https://github.com/SMPyBandits/SMPyBandits/issues/new&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
 
 
 <div class="viewcode-block" id="getCurrentMemory"><a class="viewcode-back" href="../../docs/Environment.memory_consumption.html#Environment.memory_consumption.getCurrentMemory">[docs]</a><span class="k">def</span> <span class="nf">getCurrentMemory</span><span class="p">(</span><span class="n">thread</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">both</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -263,8 +264,12 @@
 <span class="sd">    .. warning:: This is still experimental for multi-threaded code.</span>
 <span class="sd">    .. warning:: It can break on some systems, see for instance [the issue #142](https://github.com/SMPyBandits/SMPyBandits/issues/142).</span>
 
-<span class="sd">    .. warning:: FIXME even on my own system,, it works for the *last* few policies I test, but fails for the first??</span>
+<span class="sd">    .. warning:: FIXME even on my own system, it works for the *last* few policies I test, but fails for the first??</span>
+
+<span class="sd">    .. warning:: This returns 0 on Microsoft Windows, because the :mod:`resource` module is not available on non-UNIX systems (see https://docs.python.org/3/library/unix.html).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_resource</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">thread</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># https://docs.python.org/3/library/resource.html#resource.RUSAGE_THREAD</span>
@@ -419,7 +424,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 26 Mar 2019, 16h.
+        Last updated on 28 Mar 2019, 20h.
       </span>
 
     </p>
