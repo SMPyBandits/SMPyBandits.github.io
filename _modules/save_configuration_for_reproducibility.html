@@ -209,7 +209,10 @@
         <span class="n">file_start</span> <span class="o">=</span> <span class="n">configuration_filename</span>
         <span class="n">file_end</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">plot_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">configuration_filename</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">,</span> <span class="s1">&#39;__</span><span class="si">{}</span><span class="s1">.py&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hashvalue</span><span class="p">)))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Copying </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_start</span><span class="p">,</span> <span class="n">file_end</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">file_start</span><span class="p">,</span> <span class="n">file_end</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">file_start</span><span class="p">,</span> <span class="n">file_end</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING could not save file </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2">, maybe you are not in the correct folder?</span><span class="se">\n</span><span class="s2">Skipping this step...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_start</span><span class="p">,</span> <span class="n">file_end</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
 
     <span class="c1"># --- DONE Save just the configuration to a minimalist python file</span>
     <span class="n">file_end_just_dict</span> <span class="o">=</span> <span class="n">file_end</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">,</span> <span class="s1">&#39;_minimalist.py&#39;</span><span class="p">)</span>
@@ -273,7 +276,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 28 Mar 2019, 20h.
+        Last updated on 04 Apr 2019, 18h.
       </span>
 
     </p>
