@@ -228,6 +228,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
@@ -538,7 +539,7 @@
 
 <dl class="function">
 <dt id="Policies.BESA.besa_K_actions__non_recursive">
-<code class="descclassname">Policies.BESA.</code><code class="descname">besa_K_actions__non_recursive</code><span class="sig-paren">(</span><em>rewards</em>, <em>pulls</em>, <em>subsample_function=&lt;function subsample_uniform&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#besa_K_actions__non_recursive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.besa_K_actions__non_recursive" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Policies.BESA.</code><code class="descname">besa_K_actions__non_recursive</code><span class="sig-paren">(</span><em>rewards</em>, <em>pulls</em>, <em>actions</em>, <em>subsample_function=&lt;function subsample_uniform&gt;</em>, <em>depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#besa_K_actions__non_recursive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.besa_K_actions__non_recursive" title="Permalink to this definition">¶</a></dt>
 <dd><p>BESA non-recursive selection algorithm for an action set of size <span class="math notranslate nohighlight">\(\mathcal{K} \geq 1\)</span>.</p>
 <ul class="simple">
 <li>No calls to <a class="reference internal" href="#Policies.BESA.besa_two_actions" title="Policies.BESA.besa_two_actions"><code class="xref py py-func docutils literal notranslate"><span class="pre">besa_two_actions()</span></code></a>, just generalize it to K actions instead of 2.</li>
@@ -551,9 +552,9 @@
 <span class="go">array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># arm 1 is better in the first 6 samples</span>
 <span class="go">array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_deterministic</span><span class="p">)</span>  <span class="c1"># doctest: +ELLIPSIS</span>
 <span class="go">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>  <span class="c1"># doctest: +ELLIPSIS</span>
 <span class="go">[1, 3, 0, 2, 2, 3, 1, 1, 3, 1]</span>
 </pre></div>
 </div>
@@ -688,6 +689,11 @@
 </div>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Policies.BESA.BESA.__module__">
+<code class="descname">__module__</code><em class="property"> = 'Policies.BESA'</em><a class="headerlink" href="#Policies.BESA.BESA.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="Policies.BESA.BESA.computeIndex">
 <code class="descname">computeIndex</code><span class="sig-paren">(</span><em>arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/BESA.html#BESA.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.BESA.BESA.computeIndex" title="Permalink to this definition">¶</a></dt>
@@ -707,11 +713,6 @@
 <p class="last">This index <strong>is not</strong> the one used for the choice of arm (which use sub sampling). It’s just the empirical mean of the arm.</p>
 </div>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="Policies.BESA.BESA.__module__">
-<code class="descname">__module__</code><em class="property"> = 'Policies.BESA'</em><a class="headerlink" href="#Policies.BESA.BESA.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="Policies.BESA.BESA.handleCollision">
@@ -745,7 +746,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 07 May 2019, 08h.
+        Last updated on 09 May 2019, 17h.
       </span>
 
     </p>
