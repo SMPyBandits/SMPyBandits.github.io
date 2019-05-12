@@ -35,18 +35,16 @@ We give in the Table below an example of running time of an experiment with T=10
 It clearly illustrates that using more jobs than the number of CPU is sub-optimal, and that as soon as the number of repetitions is large enough, using one job by available CPU core (\ie, here 4 jobs) gives a significant speed-up time.
 Due to the cost of orchestrating the different jobs, and memory exchanges at the end of each repetition, the parallel version is \emph{not} 4 times faster, but empirically we always found it to be 2 to 3.5 times faster.
 
-|-----------------|--------------|--------------|--------------|
-| Repetitions vs number of jobs `N_JOBS` | 1 | 4 (= nb cores) | 20 (> nb cores) |
-|-----------------|--------------|--------------|--------------|
-| 1 repetition    | 15 seconds   | 26 seconds   | 43 seconds   |
-| 10 repetitions  | 87 seconds   | 51 seconds   | 76 seconds   |
-| 100 repetitions | 749 seconds  | 272 seconds  | 308 seconds  |
-| 500 repetitions | 2944 seconds | 1530 seconds | 1846 seconds |
-|-----------------|--------------|--------------|--------------|
+For a simulation with 9 different algorithms, for K=9 arms, a time horizon of T=10000,
+we illustrate the effect on the running time of using `N_JOBS` jobs in parallel.
+For different number of repetitions and different number of jobs `N_JOBS`, for 1, 4 (= nb cores), 20 (> nb cores) jobs:
 
-![plots/About_parallel_computations.png](plots/About_parallel_computations.png)
+- 1 repetition: 15 seconds, 26 seconds, 43 seconds
+- 10 repetitions: 87 seconds, 51 seconds, 76 seconds
+- 100 repetitions: 749 seconds, 272 seconds, 308 seconds
+- 500 repetitions: 2944 seconds, 1530 seconds, 1846 seconds
 
-> The table above shows the effect on the running time of using `N_JOBS` jobs in parallel, for a simulation with 9 different algorithms, for K=9 arms, a time horizon of T=10000.
+![The table above shows the effect on the running time of using `N_JOBS` jobs in parallel, for a simulation with 9 different algorithms, for K=9 arms, a time horizon of T=10000.](plots/About_parallel_computations.png)
 
 ----
 
