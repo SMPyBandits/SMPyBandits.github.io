@@ -764,7 +764,7 @@
             <span class="c1"># &quot;full_restart_when_refresh&quot;: full_restart_when_refresh,</span>
         <span class="p">}</span> <span class="p">}</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="n">UCB</span><span class="p">,</span>  <span class="c1"># XXX comment to only test klUCB</span>
+            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
             <span class="n">klUCB</span><span class="p">,</span>
             <span class="c1"># Thompson,  # XXX comment to only test klUCB</span>
             <span class="c1"># Exp3PlusPlus,  # XXX comment to only test klUCB</span>
@@ -838,11 +838,11 @@
     <span class="c1"># #     { &quot;archtype&quot;: SWUCBPlus, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;alpha&quot;: alpha, } }</span>
     <span class="c1"># #     for alpha in ALPHAS</span>
     <span class="c1"># # ] +</span>
-    <span class="c1"># [</span>
-    <span class="c1">#     # --- # Different versions of the sliding window klUCB algorithm</span>
-    <span class="c1">#     { &quot;archtype&quot;: SWklUCB, &quot;params&quot;: { &quot;tau&quot;: tau, }, &quot;change_label&quot;: &quot;SW-klUCB&quot; }</span>
-    <span class="c1">#     for tau in TAUS</span>
-    <span class="c1"># ] +</span>
+    <span class="p">[</span>
+        <span class="c1"># --- # Different versions of the sliding window klUCB algorithm</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span> <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;SW-klUCB&quot;</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">TAUS</span>
+    <span class="p">]</span> <span class="o">+</span>
     <span class="p">[</span>  <span class="c1"># XXX DiscountedThompson works REALLY well!</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span>
@@ -851,24 +851,24 @@
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="n">GAMMAS</span>
     <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># # # [  # XXX test the AdSwitch policy and its corrected version</span>
-    <span class="c1"># # #     { &quot;archtype&quot;: AdSwitch, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;C1&quot;: C1, &quot;C2&quot;: C2,} }</span>
-    <span class="c1"># # #     for C1 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-    <span class="c1"># # #     for C2 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-    <span class="c1"># # # ] +</span>
-    <span class="c1"># # # # The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
-    <span class="c1"># # # [</span>
-    <span class="c1"># # #     # nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
-    <span class="c1"># # #     # XXX note that for a fixed T it means nothing…</span>
-    <span class="c1"># # #     # XXX But for T=10000 it is at most 100 changes, reasonable!</span>
-    <span class="c1"># # #     { &quot;archtype&quot;: LM_DSEE, &quot;params&quot;: { &quot;nu&quot;: 0.25, &quot;DeltaMin&quot;: 0.1, &quot;a&quot;: 1, &quot;b&quot;: 0.25, } }</span>
-    <span class="c1"># # # ] +</span>
-    <span class="c1"># # # DONE The SW_UCB_Hash algorithm works fine!</span>
-    <span class="c1"># # [</span>
-    <span class="c1"># #     { &quot;archtype&quot;: SWHash_IndexPolicy, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;lmbda&quot;: lmbda, &quot;policy&quot;: UCB } }</span>
-    <span class="c1"># #     for alpha in ALPHAS</span>
-    <span class="c1"># #     for lmbda in [1]  # [0.1, 0.5, 1, 5, 10]</span>
-    <span class="c1"># # ] +</span>
+    <span class="p">[</span>  <span class="c1"># XXX test the AdSwitch policy and its corrected version</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">AdSwitch</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="n">C1</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">:</span> <span class="n">C2</span><span class="p">,}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">C1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+        <span class="k">for</span> <span class="n">C2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
+    <span class="p">[</span>
+        <span class="c1"># nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
+        <span class="c1"># XXX note that for a fixed T it means nothing…</span>
+        <span class="c1"># XXX But for T=10000 it is at most 100 changes, reasonable!</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">LM_DSEE</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="s2">&quot;DeltaMin&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># DONE The SW_UCB_Hash algorithm works fine!</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWHash_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;lmbda&quot;</span><span class="p">:</span> <span class="n">lmbda</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">UCB</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
+        <span class="k">for</span> <span class="n">lmbda</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># [0.1, 0.5, 1, 5, 10]</span>
+    <span class="p">]</span> <span class="o">+</span>
     <span class="c1"># XXX The Monitored_IndexPolicy with specific tuning of the input parameters</span>
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -888,30 +888,30 @@
         <span class="c1"># for w in [20, 10*NB_ARMS, WINDOW_SIZE, NB_ARMS*WINDOW_SIZE, 2*NB_ARMS*WINDOW_SIZE]</span>
         <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">[</span><span class="n">WINDOW_SIZE</span><span class="p">]</span>
     <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># # XXX Test a few CD-MAB algorithms that need to know NB_BREAK_POINTS</span>
-    <span class="c1"># [</span>
-    <span class="c1">#     { &quot;archtype&quot;: archtype, &quot;params&quot;: {</span>
-    <span class="c1">#         &quot;horizon&quot;: HORIZON,</span>
-    <span class="c1">#         &quot;policy&quot;: policy,</span>
-    <span class="c1">#         &quot;max_nb_random_events&quot;: NB_BREAK_POINTS,</span>
-    <span class="c1">#         # &quot;min_number_of_observation_between_change_point&quot;: MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT,</span>
-    <span class="c1">#         &quot;lazy_detect_change_only_x_steps&quot;: lazy_detect_change_only_x_steps,</span>
-    <span class="c1">#         &quot;epsilon&quot;: EPSILON_for_CUSUM,</span>
-    <span class="c1">#     },</span>
-    <span class="c1">#         # &quot;change_label&quot;: &quot;CUSUM-klUCB&quot;,</span>
-    <span class="c1">#     }</span>
-    <span class="c1">#     for archtype in [</span>
-    <span class="c1">#         CUSUM_IndexPolicy,</span>
-    <span class="c1">#         # PHT_IndexPolicy,  # OK PHT_IndexPolicy is very much like CUSUM</span>
-    <span class="c1">#     ]</span>
-    <span class="c1">#     for policy in [</span>
-    <span class="c1">#         # UCB,  # XXX comment to only test klUCB</span>
-    <span class="c1">#         klUCB,</span>
-    <span class="c1">#     ]</span>
-    <span class="c1">#     # for lazy_detect_change_only_x_steps in [1, 2, 5]</span>
-    <span class="c1">#     # for lazy_detect_change_only_x_steps in [1]</span>
-    <span class="c1">#     for lazy_detect_change_only_x_steps in ([20] if HORIZON &lt;= 20000 else ([35] if HORIZON &lt;= 100000 else [50]))</span>
-    <span class="c1"># ] +</span>
+    <span class="c1"># XXX Test a few CD-MAB algorithms that need to know NB_BREAK_POINTS</span>
+    <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
+            <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
+            <span class="c1"># &quot;min_number_of_observation_between_change_point&quot;: MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT,</span>
+            <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span>
+            <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="n">EPSILON_for_CUSUM</span><span class="p">,</span>
+        <span class="p">},</span>
+            <span class="c1"># &quot;change_label&quot;: &quot;CUSUM-klUCB&quot;,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span>
+            <span class="c1"># PHT_IndexPolicy,  # OK PHT_IndexPolicy is very much like CUSUM</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
+            <span class="n">klUCB</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="c1"># for lazy_detect_change_only_x_steps in [1, 2, 5]</span>
+        <span class="c1"># for lazy_detect_change_only_x_steps in [1]</span>
+        <span class="k">for</span> <span class="n">lazy_detect_change_only_x_steps</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">20</span><span class="p">]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">20000</span> <span class="k">else</span> <span class="p">([</span><span class="mi">35</span><span class="p">]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">100000</span> <span class="k">else</span> <span class="p">[</span><span class="mi">50</span><span class="p">]))</span>
+    <span class="p">]</span> <span class="o">+</span>
     <span class="c1"># # # # XXX Test a UCBLCB_IndexPolicy algorithm</span>
     <span class="c1"># # # [</span>
     <span class="c1"># # #     { &quot;archtype&quot;: UCBLCB_IndexPolicy, &quot;params&quot;: {</span>
@@ -967,17 +967,17 @@
             <span class="s2">&quot;lazy_try_value_s_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_try_value_s_only_x_steps</span><span class="p">,</span>
             <span class="c1"># &quot;variant&quot;: variant,</span>
         <span class="p">},</span>
-        <span class="c1"># &quot;change_label&quot;: r&quot;GLR-klUCB({})&quot;.format(&quot;, &quot;.join(s for s in [</span>
-        <span class="c1">#     &quot;Local&quot; if per_arm_restart else &quot;Global&quot;,</span>
-        <span class="c1">#     archname,</span>
-        <span class="c1">#     # &quot;threshold #{}&quot;.format(variant),</span>
-        <span class="c1">#     # r&quot;\delta 1&quot; if delta == DELTA_1 else r&quot;\delta 2&quot;,</span>
-        <span class="c1">#     # r&quot;$\delta={:.3g}$&quot;.format(delta),</span>
-        <span class="c1">#     # r&quot;$\alpha_0={:.3g}$&quot;.format(alpha0),</span>
-        <span class="c1">#     r&quot;$\alpha_0={:.3g}$&quot;.format(mult_alpha0),</span>
-        <span class="c1">#     # # &quot;$\Delta n={}$&quot;.format(lazy_detect_change_only_x_steps) if lazy_detect_change_only_x_steps != 10 else &quot;&quot;,</span>
-        <span class="c1">#     # # &quot;$\Delta s={}$&quot;.format(lazy_try_value_s_only_x_steps) if lazy_try_value_s_only_x_steps != 10 else &quot;&quot;,</span>
-        <span class="c1"># ] if s))</span>
+        <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;GLR-klUCB(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;Local&quot;</span> <span class="k">if</span> <span class="n">per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span>
+            <span class="n">archname</span><span class="p">,</span>
+            <span class="c1"># &quot;threshold #{}&quot;.format(variant),</span>
+            <span class="c1"># r&quot;\delta 1&quot; if delta == DELTA_1 else r&quot;\delta 2&quot;,</span>
+            <span class="c1"># r&quot;$\delta={:.3g}$&quot;.format(delta),</span>
+            <span class="c1"># r&quot;$\alpha_0={:.3g}$&quot;.format(alpha0),</span>
+            <span class="c1"># r&quot;$\alpha_0={:.3g}$&quot;.format(mult_alpha0),</span>
+            <span class="c1"># # &quot;$\Delta n={}$&quot;.format(lazy_detect_change_only_x_steps) if lazy_detect_change_only_x_steps != 10 else &quot;&quot;,</span>
+            <span class="c1"># # &quot;$\Delta s={}$&quot;.format(lazy_try_value_s_only_x_steps) if lazy_try_value_s_only_x_steps != 10 else &quot;&quot;,</span>
+        <span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="p">))</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">archtype</span><span class="p">,</span> <span class="n">archname</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="c1"># (BernoulliGLR_IndexPolicy, &quot;random expl.&quot;),   # OK BernoulliGLR_IndexPolicy is very much like CUSUM</span>
@@ -1001,9 +1001,9 @@
         <span class="c1">#     [ALPHA_GLOBAL],</span>
         <span class="c1"># )</span>
         <span class="k">for</span> <span class="p">(</span><span class="n">per_arm_restart</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha0</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-            <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="p">],</span>  <span class="c1"># False],  # FIXME</span>
-            <span class="p">[</span><span class="n">DELTA_LOCAL</span><span class="p">,</span> <span class="p">],</span>  <span class="c1"># DELTA_GLOBAL],  # FIXME</span>
-            <span class="p">[</span><span class="n">ALPHA_LOCAL</span><span class="p">,</span> <span class="p">],</span>  <span class="c1"># ALPHA_GLOBAL],  # FIXME</span>
+            <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">DELTA_LOCAL</span><span class="p">,</span> <span class="n">DELTA_GLOBAL</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">ALPHA_LOCAL</span><span class="p">,</span> <span class="n">ALPHA_GLOBAL</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="c1"># for delta in [DELTA_1] # + [DELTA_2]  # XXX experimental!</span>
         <span class="c1"># for alpha0 in [ALPHA_1]  # XXX experimental!</span>
@@ -1051,7 +1051,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 12 May 2019, 20h.
+        Last updated on 15 May 2019, 11h.
       </span>
 
     </p>

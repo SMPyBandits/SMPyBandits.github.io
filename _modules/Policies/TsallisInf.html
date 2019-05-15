@@ -259,8 +259,8 @@
 
         <span class="c1"># 1. solve f(x)=1 to get an approximation of the (unique) Lagrange multiplier x</span>
         <span class="k">def</span> <span class="nf">objective_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-            <span class="n">f_of_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">(</span><span class="n">eta_t</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_exponent</span> <span class="p">)</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">f_of_x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">(</span><span class="n">eta_t</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_exponent</span> <span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
         <span class="n">result_of_minimization</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize_scalar</span><span class="p">(</span><span class="n">objective_function</span><span class="p">)</span>
         <span class="c1"># result_of_minimization = opt.minimize(objective_function, 0.0)  # XXX is it not faster?</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">result_of_minimization</span><span class="o">.</span><span class="n">x</span>
@@ -269,6 +269,15 @@
         <span class="n">new_weights</span> <span class="o">=</span> <span class="p">(</span> <span class="n">eta_t</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_exponent</span>
 
         <span class="c1"># print(&quot;DEBUG: {} at time {} (seeing reward {} on arm {}), compute slack variable x = {}, \n    and new_weights = {}...&quot;.format(self, self.t, reward, arm, x, new_weights))  # DEBUG</span>
+
+        <span class="c1"># XXX Handle weird cases, slow down everything but safer!</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)):</span>
+            <span class="n">new_weights</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># set bad values to 0</span>
+        <span class="c1"># Bad case, where the sum is so small that it&#39;s only rounding errors</span>
+        <span class="c1"># or where all values where bad and forced to 0, start with new_weights=[1/K...]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_weights</span><span class="p">),</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># Normalize it!</span>
+            <span class="n">new_weights</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.0</span>
 
         <span class="c1"># 3. Renormalize weights at each step</span>
         <span class="n">new_weights</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)</span>
@@ -289,7 +298,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 12 May 2019, 20h.
+        Last updated on 15 May 2019, 11h.
       </span>
 
     </p>

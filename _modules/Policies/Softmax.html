@@ -260,16 +260,11 @@
             <span class="n">trusts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">rewards</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">)))</span>  <span class="c1"># 1 + pulls to prevent division by 0</span>
         <span class="c1"># XXX Handle weird cases, slow down everything but safer!</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)):</span>
-            <span class="c1"># XXX some value has non-finite trust, probably on the first steps</span>
-            <span class="c1"># 1st case: all values are non-finite (nan): set trusts to 1/N uniform choice</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)):</span>
-                <span class="n">trusts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
-            <span class="c1"># 2nd case: only few values are non-finite: set them to 0</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">trusts</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">trusts</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># set bad values to 0</span>
         <span class="c1"># Bad case, where the sum is so small that it&#39;s only rounding errors</span>
+        <span class="c1"># or where all values where bad and forced to 0, start with trusts=[1/K...]</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trusts</span><span class="p">),</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">trusts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+            <span class="n">trusts</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
         <span class="c1"># Normalize it and return it</span>
         <span class="k">return</span> <span class="n">trusts</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trusts</span><span class="p">)</span>
 
@@ -389,7 +384,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 12 May 2019, 20h.
+        Last updated on 15 May 2019, 11h.
       </span>
 
     </p>
