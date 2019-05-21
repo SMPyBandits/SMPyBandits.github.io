@@ -799,17 +799,17 @@
     <span class="c1"># # [</span>
     <span class="c1"># #     { &quot;archtype&quot;: Exp3RPlusPlus, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, } }</span>
     <span class="c1"># # ] +</span>
-    <span class="p">[</span>
-        <span class="c1"># --- # Different versions of the discounted UCB algorithm</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="n">gamma</span><span class="p">,</span>
-            <span class="c1"># &quot;alpha&quot;: alpha,</span>
-            <span class="c1"># &quot;useRealDiscount&quot;: useRealDiscount,</span>
-        <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="n">GAMMAS</span>
-        <span class="c1"># for alpha in ALPHAS</span>
-        <span class="c1"># for useRealDiscount in [True, False]</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # Different versions of the discounted UCB algorithm</span>
+    <span class="c1">#     { &quot;archtype&quot;: DiscountedklUCB, &quot;params&quot;: {</span>
+    <span class="c1">#         &quot;gamma&quot;: gamma,</span>
+    <span class="c1">#         # &quot;alpha&quot;: alpha,</span>
+    <span class="c1">#         # &quot;useRealDiscount&quot;: useRealDiscount,</span>
+    <span class="c1">#     } }</span>
+    <span class="c1">#     for gamma in GAMMAS</span>
+    <span class="c1">#     # for alpha in ALPHAS</span>
+    <span class="c1">#     # for useRealDiscount in [True, False]</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># # [</span>
     <span class="c1"># #     # --- # XXX experimental discounted UCB algorithm, knowing the horizon</span>
     <span class="c1"># #     { &quot;archtype&quot;: DiscountedklUCBPlus, &quot;params&quot;: { &quot;max_nb_random_events&quot;: NB_BREAK_POINTS, &quot;horizon&quot;: HORIZON, } }</span>
@@ -838,11 +838,11 @@
     <span class="c1"># #     { &quot;archtype&quot;: SWUCBPlus, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;alpha&quot;: alpha, } }</span>
     <span class="c1"># #     for alpha in ALPHAS</span>
     <span class="c1"># # ] +</span>
-    <span class="p">[</span>
-        <span class="c1"># --- # Different versions of the sliding window klUCB algorithm</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span> <span class="n">tau</span><span class="p">,</span> <span class="p">},</span> <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;SW-klUCB&quot;</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="n">TAUS</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # --- # Different versions of the sliding window klUCB algorithm</span>
+    <span class="c1">#     { &quot;archtype&quot;: SWklUCB, &quot;params&quot;: { &quot;tau&quot;: tau, }, &quot;change_label&quot;: &quot;SW-klUCB&quot; }</span>
+    <span class="c1">#     for tau in TAUS</span>
+    <span class="c1"># ] +</span>
     <span class="p">[</span>  <span class="c1"># XXX DiscountedThompson works REALLY well!</span>
         <span class="p">{</span>
             <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span>
@@ -851,24 +851,32 @@
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="n">GAMMAS</span>
     <span class="p">]</span> <span class="o">+</span>
-    <span class="p">[</span>  <span class="c1"># XXX test the AdSwitch policy and its corrected version</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">AdSwitch</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="n">C1</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">:</span> <span class="n">C2</span><span class="p">,}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">C1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-        <span class="k">for</span> <span class="n">C2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-    <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
-    <span class="p">[</span>
-        <span class="c1"># nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
-        <span class="c1"># XXX note that for a fixed T it means nothing…</span>
-        <span class="c1"># XXX But for T=10000 it is at most 100 changes, reasonable!</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">LM_DSEE</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;nu&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="s2">&quot;DeltaMin&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="p">}</span> <span class="p">}</span>
-    <span class="p">]</span> <span class="o">+</span>
-    <span class="c1"># DONE The SW_UCB_Hash algorithm works fine!</span>
-    <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWHash_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">&quot;lmbda&quot;</span><span class="p">:</span> <span class="n">lmbda</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">UCB</span> <span class="p">}</span> <span class="p">}</span>
-        <span class="k">for</span> <span class="n">alpha</span> <span class="ow">in</span> <span class="n">ALPHAS</span>
-        <span class="k">for</span> <span class="n">lmbda</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># [0.1, 0.5, 1, 5, 10]</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [  # XXX test the AdSwitch policy and its corrected version</span>
+    <span class="c1">#     {</span>
+    <span class="c1">#         &quot;archtype&quot;: AdSwitch,</span>
+    <span class="c1">#         &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;C1&quot;: C1, &quot;C2&quot;: C2,},</span>
+    <span class="c1">#         &quot;change_label&quot;: &quot;AdSwitch&quot;,</span>
+    <span class="c1">#     }</span>
+    <span class="c1">#     for C1 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="c1">#     for C2 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># # The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     # nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
+    <span class="c1">#     # XXX note that for a fixed T it means nothing…</span>
+    <span class="c1">#     # XXX But for T=10000 it is at most 100 changes, reasonable!</span>
+    <span class="c1">#     {</span>
+    <span class="c1">#         &quot;archtype&quot;: LM_DSEE,</span>
+    <span class="c1">#         &quot;params&quot;: { &quot;nu&quot;: 0.25, &quot;DeltaMin&quot;: 0.1, &quot;a&quot;: 1, &quot;b&quot;: 0.25, },</span>
+    <span class="c1">#         &quot;change_label&quot;: r&quot;LM-DSEE($\nu=1/4$, $\Delta^{min}=0.1$, $a=1$, $b=1/4$)&quot;,</span>
+    <span class="c1">#     }</span>
+    <span class="c1"># ] +</span>
+    <span class="c1"># # DONE The SW_UCB_Hash algorithm works fine!</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     { &quot;archtype&quot;: SWHash_IndexPolicy, &quot;params&quot;: { &quot;alpha&quot;: alpha, &quot;lmbda&quot;: lmbda, &quot;policy&quot;: UCB } }</span>
+    <span class="c1">#     for alpha in ALPHAS</span>
+    <span class="c1">#     for lmbda in [1]  # [0.1, 0.5, 1, 5, 10]</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># XXX The Monitored_IndexPolicy with specific tuning of the input parameters</span>
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -878,7 +886,7 @@
             <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span>
             <span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="n">DELTA_for_MUCB</span><span class="p">,</span>
         <span class="p">},</span>
-            <span class="c1"># &quot;change_label&quot;: &quot;M-klUCB&quot;,</span>
+            <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;M-klUCB&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="c1"># for per_arm_restart in PER_ARM_RESTART</span>
         <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
@@ -898,7 +906,7 @@
             <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span>
             <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="n">EPSILON_for_CUSUM</span><span class="p">,</span>
         <span class="p">},</span>
-            <span class="c1"># &quot;change_label&quot;: &quot;CUSUM-klUCB&quot;,</span>
+            <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;CUSUM-klUCB&quot;</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span>
@@ -1051,7 +1059,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 15 May 2019, 11h.
+        Last updated on 21 May 2019, 11h.
       </span>
 
     </p>
