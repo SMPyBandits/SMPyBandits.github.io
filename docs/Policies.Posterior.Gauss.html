@@ -250,21 +250,28 @@
 <p class="last">TODO I have to test it!</p>
 </div>
 <ul class="simple">
-<li>Reference: [[<em>Further optimal regret bounds for Thompson sampling</em>, S. Agrawal and N. Goyal, In Artificial Intelligence and Statistics, pages 99–107, 2013.](XXX)]</li>
+<li>Reference: [[<em>Further optimal regret bounds for Thompson sampling</em>, S. Agrawal and N. Goyal, In Artificial Intelligence and Statistics, pages 99–107, 2013.](<a class="reference external" href="http://proceedings.mlr.press/v31/agrawal13a.pdf">http://proceedings.mlr.press/v31/agrawal13a.pdf</a>)]</li>
 </ul>
 <dl class="class">
 <dt id="Policies.Posterior.Gauss.Gauss">
-<em class="property">class </em><code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">Gauss</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.Posterior.Gauss.</code><code class="descname">Gauss</code><span class="sig-paren">(</span><em>mu=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.Posterior.Posterior.html#Policies.Posterior.Posterior.Posterior" title="Policies.Posterior.Posterior.Posterior"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.Posterior.Posterior.Posterior</span></code></a></p>
 <p>Manipulate a posterior of Gaussian experiments, which happens to also be a Gaussian distribution if the prior is Gaussian.</p>
 <p>The posterior distribution is a <span class="math notranslate nohighlight">\(\mathcal{N}(\hat{\mu_k}(t), \hat{\sigma_k}^2(t))\)</span>, where</p>
 <div class="math notranslate nohighlight">
 \[\hat{\mu_k}(t) &amp;= \frac{X_k(t)}{N_k(t)},
 \hat{\sigma_k}^2(t) &amp;= \frac{1}{N_k(t)}.\]</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This works only for prior with a variance <span class="math notranslate nohighlight">\(\sigma^2=1\)</span> !</p>
+</div>
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>mu=0.0</em>, <em>sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a posterior assuming the default is <span class="math notranslate nohighlight">\(\mathcal{N}(0, 1)\)</span>.</p>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>mu=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a posterior assuming the prior is <span class="math notranslate nohighlight">\(\mathcal{N}(\mu, 1)\)</span>.</p>
+<ul class="simple">
+<li>The prior is centered (<span class="math notranslate nohighlight">\(\mu=1\)</span>) by default, but parameter <code class="docutils literal notranslate"><span class="pre">mu</span></code> can be used to change this default.</li>
+</ul>
 </dd></dl>
 
 <dl class="attribute">
@@ -276,7 +283,7 @@
 <dl class="attribute">
 <dt id="Policies.Posterior.Gauss.Gauss.sigma">
 <code class="descname">sigma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.sigma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameter <span class="math notranslate nohighlight">\(\sigma\)</span> of the posterior</p>
+<dd><p>The parameter <span class="math notranslate nohighlight">\(\sigma\)</span> of the posterior</p>
 </dd></dl>
 
 <dl class="method">
@@ -287,7 +294,7 @@
 
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><em>mu=None</em>, <em>sigma=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.reset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reset</code><span class="sig-paren">(</span><em>mu=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reset the for parameters <span class="math notranslate nohighlight">\(\mu, \sigma\)</span>, as when creating a new Gauss posterior.</p>
 </dd></dl>
 
@@ -450,7 +457,7 @@ the probability density function:</p>
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 21 May 2019, 11h.
+        Last updated on 29 May 2019, 09h.
       </span>
 
     </p>

@@ -186,7 +186,7 @@
 
 <span class="sd">.. warning:: TODO I have to test it!</span>
 
-<span class="sd">- Reference: [[*Further optimal regret bounds for Thompson sampling*, S. Agrawal and N. Goyal, In Artificial Intelligence and Statistics, pages 99–107, 2013.](XXX)]</span>
+<span class="sd">- Reference: [[*Further optimal regret bounds for Thompson sampling*, S. Agrawal and N. Goyal, In Artificial Intelligence and Statistics, pages 99–107, 2013.](http://proceedings.mlr.press/v31/agrawal13a.pdf)]</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
 
@@ -216,15 +216,19 @@
 
 <span class="sd">        \hat{\mu_k}(t) &amp;= \frac{X_k(t)}{N_k(t)},</span>
 <span class="sd">        \hat{\sigma_k}^2(t) &amp;= \frac{1}{N_k(t)}.</span>
+<span class="sd">        </span>
+<span class="sd">    .. warning:: This works only for prior with a variance :math:`\sigma^2=1` !</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Gauss.__init__"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Create a posterior assuming the default is :math:`\mathcal{N}(0, 1)`.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>  <span class="c1">#: Parameter :math:`\mu` of the posterior</span>
-        <span class="k">assert</span> <span class="n">sigma</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: parameter &#39;sigma&#39; for Gauss posterior has to be &gt; 0.&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_nu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>  <span class="c1">#: Parameter :math:`\sigma` of the posterior</span>
+<div class="viewcode-block" id="Gauss.__init__"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Create a posterior assuming the prior is :math:`\mathcal{N}(\mu, 1)`.</span>
+<span class="sd">        </span>
+<span class="sd">        - The prior is centered (:math:`\mu=1`) by default, but parameter ``mu`` can be used to change this default.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>  <span class="c1"># initial value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>   <span class="c1">#: Parameter :math:`\mu` of the posterior</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nu</span> <span class="o">=</span> <span class="mf">1.0</span>    <span class="c1"># initial value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1">#: The parameter :math:`\sigma` of the posterior</span>
         <span class="c1"># internal memories</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_nb_data</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># number of samples!</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sum_data</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># sum of samples!</span></div>
@@ -232,12 +236,11 @@
 <div class="viewcode-block" id="Gauss.__str__"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;Gauss(</span><span class="si">{:.3g}</span><span class="s2">, </span><span class="si">{:.3g}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Gauss.reset"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Gauss.reset"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Reset the for parameters :math:`\mu, \sigma`, as when creating a new Gauss posterior.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">mu</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mu</span>
-        <span class="k">if</span> <span class="n">sigma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nu</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nu</span></div>
 
 <div class="viewcode-block" id="Gauss.sample"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Gauss.html#Policies.Posterior.Gauss.Gauss.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Get a random sample :math:`(x, \sigma^2)` from the Gaussian posterior (using :func:`scipy.stats.invgamma` for the variance :math:`\sigma^2` parameter and :func:`numpy.random.normal` for the mean :math:`x`).</span>
@@ -294,7 +297,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 21 May 2019, 11h.
+        Last updated on 29 May 2019, 09h.
       </span>
 
     </p>
