@@ -597,7 +597,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The GLR-UCB generic policy for non-stationary bandits, using the Generalized Likelihood Ratio test (GLR), for 1-dimensional exponential families.</p>
 <ul class="simple">
@@ -609,7 +609,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 </ul>
 <dl class="method">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New policy.</p>
 </dd></dl>
 
@@ -623,6 +623,12 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy.max_nb_random_events">
 <code class="descname">max_nb_random_events</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy.max_nb_random_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of breakpoints <span class="math notranslate nohighlight">\(\Upsilon_T\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GLR_UCB.GLR_IndexPolicy.use_localization">
+<code class="descname">use_localization</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy.use_localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>experiment to use localization of the break-point, ie, restart memory of arm by keeping observations s+1…n instead of just the last one</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -695,7 +701,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy_WithTracking">
-<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithTracking</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithTracking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithTracking" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Policies.GLR_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.GLR_UCB.GLR_IndexPolicy</span></code></a></p>
 <p>A variant of the GLR policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven’t been explored enough (with a tracking).</p>
 <dl class="method">
@@ -713,7 +719,7 @@ Default value is 1, to not use this feature, and 10 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration">
-<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.GLR_UCB.</code><code class="descname">GLR_IndexPolicy_WithDeterministicExploration</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>delta=None</em>, <em>max_nb_random_events=None</em>, <em>kl=&lt;function klGauss&gt;</em>, <em>alpha0=None</em>, <em>exponentBeta=1.01</em>, <em>alpha_t1=0.05</em>, <em>threshold_function=&lt;function threshold_BernoulliGLR&gt;</em>, <em>variant=None</em>, <em>lazy_try_value_s_only_x_steps=10</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GLR_UCB.html#GLR_IndexPolicy_WithDeterministicExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.GLR_UCB.GLR_IndexPolicy" title="Policies.GLR_UCB.GLR_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.GLR_UCB.GLR_IndexPolicy</span></code></a></p>
 <p>A variant of the GLR policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</p>
 <ul class="simple">
@@ -985,7 +991,7 @@ A &amp;\leq K \implies A_t = A.\end{split}\]</div>
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 19 Jun 2019, 19h.
+        Last updated on 28 Jun 2019, 08h.
       </span>
 
     </p>

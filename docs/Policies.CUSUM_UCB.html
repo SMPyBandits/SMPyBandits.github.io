@@ -420,12 +420,12 @@ Default value is 0, to not use this feature, and 20 should speed up the test by 
 
 <dl class="class">
 <dt id="Policies.CUSUM_UCB.CUSUM_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CUSUM_UCB.</code><code class="descname">CUSUM_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CUSUM_UCB.html#CUSUM_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CUSUM_UCB.</code><code class="descname">CUSUM_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CUSUM_UCB.html#CUSUM_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
 <p>The CUSUM-UCB generic policy for non-stationary bandits, from [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
 <dl class="method">
 <dt id="Policies.CUSUM_UCB.CUSUM_IndexPolicy.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CUSUM_UCB.html#CUSUM_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CUSUM_UCB.html#CUSUM_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>New policy.</p>
 </dd></dl>
 
@@ -445,6 +445,12 @@ Default value is 0, to not use this feature, and 20 should speed up the test by 
 <dt id="Policies.CUSUM_UCB.CUSUM_IndexPolicy.proba_random_exploration">
 <code class="descname">proba_random_exploration</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
 <dd><p>What they call <span class="math notranslate nohighlight">\(\alpha\)</span> in their paper: the probability of uniform exploration at each time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CUSUM_UCB.CUSUM_IndexPolicy.use_localization">
+<code class="descname">use_localization</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy.use_localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Experiment to use localization of the break-point, ie, restart memory of arm by keeping observations s+1…n instead of just the last one</p>
 </dd></dl>
 
 <dl class="method">
@@ -486,7 +492,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
 
 <dl class="class">
 <dt id="Policies.CUSUM_UCB.PHT_IndexPolicy">
-<em class="property">class </em><code class="descclassname">Policies.CUSUM_UCB.</code><code class="descname">PHT_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CUSUM_UCB.html#PHT_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CUSUM_UCB.PHT_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Policies.CUSUM_UCB.</code><code class="descname">PHT_IndexPolicy</code><span class="sig-paren">(</span><em>nbArms</em>, <em>horizon=None</em>, <em>max_nb_random_events=None</em>, <em>lmbda=1</em>, <em>min_number_of_observation_between_change_point=100</em>, <em>full_restart_when_refresh=False</em>, <em>per_arm_restart=True</em>, <em>use_localization=False</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CUSUM_UCB.html#PHT_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CUSUM_UCB.PHT_IndexPolicy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Policies.CUSUM_UCB.CUSUM_IndexPolicy" title="Policies.CUSUM_UCB.CUSUM_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CUSUM_UCB.CUSUM_IndexPolicy</span></code></a></p>
 <p>The PHT-UCB generic policy for non-stationary bandits, from [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
 <dl class="method">
@@ -544,7 +550,7 @@ g_k^- &amp;= \max(0, g_{k-1}^- + s_k^-).\end{split}\]</div>
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 19 Jun 2019, 19h.
+        Last updated on 28 Jun 2019, 08h.
       </span>
 
     </p>

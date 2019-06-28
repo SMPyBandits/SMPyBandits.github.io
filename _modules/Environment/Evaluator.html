@@ -1157,10 +1157,10 @@
         <span class="kn">from</span> <span class="nn">types</span> <span class="k">import</span> <span class="n">MethodType</span>
         <span class="n">old_detect_change</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">detect_change</span>
         <span class="k">def</span> <span class="nf">new_detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">did_it_detect_a_change</span> <span class="o">=</span> <span class="n">old_detect_change</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">did_it_detect_a_change</span><span class="p">:</span>
+            <span class="n">response_of_detect_change</span> <span class="o">=</span> <span class="n">old_detect_change</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">response_of_detect_change</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">and</span> <span class="n">response_of_detect_change</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">response_of_detect_change</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="n">response_of_detect_change</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                 <span class="n">result</span><span class="o">.</span><span class="n">number_of_cp_detections</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">did_it_detect_a_change</span>
+            <span class="k">return</span> <span class="n">response_of_detect_change</span>
         <span class="n">policy</span><span class="o">.</span><span class="n">detect_change</span> <span class="o">=</span> <span class="n">MethodType</span><span class="p">(</span><span class="n">new_detect_change</span><span class="p">,</span> <span class="n">policy</span><span class="p">)</span>
 
     <span class="c1"># XXX Experimental support for random events: shuffling or inverting the list of arms, at these time steps</span>
@@ -1286,7 +1286,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 19 Jun 2019, 19h.
+        Last updated on 28 Jun 2019, 08h.
       </span>
 
     </p>
