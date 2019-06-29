@@ -905,9 +905,9 @@
             <span class="c1"># &quot;min_number_of_observation_between_change_point&quot;: MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT,</span>
             <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span>
             <span class="s2">&quot;epsilon&quot;</span><span class="p">:</span> <span class="n">EPSILON_for_CUSUM</span><span class="p">,</span>
-            <span class="s2">&quot;use_experimental_localization&quot;</span><span class="p">:</span> <span class="n">use_experimental_localization</span><span class="p">,</span>
+            <span class="s2">&quot;use_localization&quot;</span><span class="p">:</span> <span class="n">use_localization</span><span class="p">,</span>
         <span class="p">},</span>
-            <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;CUSUM-klUCB</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;(Localization)&quot;</span> <span class="k">if</span> <span class="n">use_experimental_localization</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;CUSUM-klUCB</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;(Localization)&quot;</span> <span class="k">if</span> <span class="n">use_localization</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">archtype</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span>
@@ -917,7 +917,7 @@
             <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
             <span class="n">klUCB</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="k">for</span> <span class="n">use_experimental_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">use_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
         <span class="c1"># for lazy_detect_change_only_x_steps in [1, 2, 5]</span>
         <span class="c1"># for lazy_detect_change_only_x_steps in [1]</span>
         <span class="k">for</span> <span class="n">lazy_detect_change_only_x_steps</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">20</span><span class="p">]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">20000</span> <span class="k">else</span> <span class="p">([</span><span class="mi">35</span><span class="p">]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">100000</span> <span class="k">else</span> <span class="p">[</span><span class="mi">50</span><span class="p">]))</span>
@@ -976,11 +976,11 @@
             <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span>
             <span class="s2">&quot;lazy_try_value_s_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_try_value_s_only_x_steps</span><span class="p">,</span>
             <span class="c1"># &quot;variant&quot;: variant,</span>
-            <span class="s2">&quot;use_experimental_localization&quot;</span><span class="p">:</span> <span class="n">use_experimental_localization</span><span class="p">,</span>
+            <span class="s2">&quot;use_localization&quot;</span><span class="p">:</span> <span class="n">use_localization</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;GLR-klUCB(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="s2">&quot;Local&quot;</span> <span class="k">if</span> <span class="n">per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Localization&quot;</span> <span class="k">if</span> <span class="n">use_experimental_localization</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Localization&quot;</span> <span class="k">if</span> <span class="n">use_localization</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">archname</span><span class="p">,</span>
             <span class="c1"># &quot;threshold #{}&quot;.format(variant),</span>
             <span class="c1"># r&quot;\delta 1&quot; if delta == DELTA_1 else r&quot;\delta 2&quot;,</span>
@@ -1017,7 +1017,7 @@
             <span class="p">[</span><span class="n">DELTA_LOCAL</span><span class="p">,</span> <span class="n">DELTA_GLOBAL</span><span class="p">],</span>
             <span class="p">[</span><span class="n">ALPHA_LOCAL</span><span class="p">,</span> <span class="n">ALPHA_GLOBAL</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="k">for</span> <span class="n">use_experimental_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">use_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
         <span class="c1"># for delta in [DELTA_1] # + [DELTA_2]  # XXX experimental!</span>
         <span class="c1"># for alpha0 in [ALPHA_1]  # XXX experimental!</span>
         <span class="k">for</span> <span class="n">mult_alpha0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># comment from the + to use default parameter</span>
@@ -1064,7 +1064,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 28 Jun 2019, 08h.
+        Last updated on 29 Jun 2019, 08h.
       </span>
 
     </p>

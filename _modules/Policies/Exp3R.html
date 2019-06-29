@@ -299,7 +299,7 @@
         <span class="c1"># XXX Do we have enough samples?</span>
         <span class="n">min_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">min_pulls</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_number_of_pulls_to_test_change</span><span class="p">:</span>  <span class="c1"># no we don&#39;t</span>
-            <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
         <span class="c1"># Yes we do have enough samples</span>
         <span class="n">trusts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">trusts</span>
         <span class="n">k_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">trusts</span><span class="p">)</span>
@@ -309,8 +309,8 @@
             <span class="n">difference_of_mean</span> <span class="o">=</span> <span class="n">means</span><span class="p">[</span><span class="n">otherArm</span><span class="p">]</span> <span class="o">-</span> <span class="n">meanOfTrustedArm</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - For the mean mu(k=</span><span class="si">{}</span><span class="s2">) = </span><span class="si">{}</span><span class="s2"> and mean of trusted arm mu(k_max=</span><span class="si">{}</span><span class="s2">) = </span><span class="si">{}</span><span class="s2">, their difference is </span><span class="si">{}</span><span class="s2">, compared to c = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">otherArm</span><span class="p">,</span> <span class="n">means</span><span class="p">[</span><span class="n">otherArm</span><span class="p">],</span> <span class="n">k_max</span><span class="p">,</span> <span class="n">meanOfTrustedArm</span><span class="p">,</span> <span class="n">difference_of_mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">difference_of_mean</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_h</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div></div>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span></div></div>
 
 
 <span class="c1"># --- Exp3R</span>
@@ -351,7 +351,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 28 Jun 2019, 08h.
+        Last updated on 29 Jun 2019, 08h.
       </span>
 
     </p>
