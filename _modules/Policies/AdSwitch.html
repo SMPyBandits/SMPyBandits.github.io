@@ -237,9 +237,9 @@
             <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">C1</span><span class="o">=</span><span class="n">Constant_C1</span><span class="p">,</span> <span class="n">C2</span><span class="o">=</span><span class="n">Constant_C2</span><span class="p">,</span>
             <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">):</span>
-        <span class="c1"># DONE XXX generalize the algorithm to K &gt; 2 arms!</span>
         <span class="k">if</span> <span class="n">nbArms</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: so far, for the AdSwitch algorithm, only the special case of K=2 arms was explained in the paper, but I generalized it. Maybe it does not work!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FIXME for the generic case of K &gt; 2 arms, use the AdSwitchNew algorithm (paper from 2019)!&quot;</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AdSwitch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="c1"># Parameters</span>
@@ -250,7 +250,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">C1</span> <span class="o">=</span> <span class="n">C1</span>  <span class="c1">#: Parameter :math:`C_1` for the AdSwitch algorithm.</span>
 
         <span class="k">assert</span> <span class="n">C2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: for a AdSwitch policy, the parameter &#39;C2&#39; should be &gt; 0 but was = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">C2</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">C2</span> <span class="o">=</span> <span class="n">C2</span>  <span class="c1">#: Parameter :math:`C_1` for the AdSwitch algorithm.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C2</span> <span class="o">=</span> <span class="n">C2</span>  <span class="c1">#: Parameter :math:`C_2` for the AdSwitch algorithm.</span>
 
         <span class="c1"># Internal memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">Phase</span><span class="o">.</span><span class="n">Estimation</span>  <span class="c1">#: Current phase, exploration or exploitation.</span>
@@ -449,7 +449,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 14 Jul 2019, 18h.
+        Last updated on 06 Oct 2019, 16h.
       </span>
 
     </p>

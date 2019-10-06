@@ -301,7 +301,7 @@
 <dl class="method">
 <dt id="Policies.Posterior.Gauss.Gauss.sample">
 <code class="descname">sample</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Posterior/Gauss.html#Gauss.sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Posterior.Gauss.Gauss.sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a random sample <span class="math notranslate nohighlight">\((x, \sigma^2)\)</span> from the Gaussian posterior (using <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.stats.invgamma()</span></code> for the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> parameter and <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.random.normal.html#numpy.random.normal" title="(in NumPy v1.16)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.normal()</span></code></a> for the mean <span class="math notranslate nohighlight">\(x\)</span>).</p>
+<dd><p>Get a random sample <span class="math notranslate nohighlight">\((x, \sigma^2)\)</span> from the Gaussian posterior (using <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.stats.invgamma()</span></code> for the variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> parameter and <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.normal()</span></code> for the mean <span class="math notranslate nohighlight">\(x\)</span>).</p>
 <ul class="simple">
 <li>Used only by <code class="xref py py-class docutils literal notranslate"><span class="pre">Thompson</span></code> Sampling and <code class="xref py py-class docutils literal notranslate"><span class="pre">AdBandits</span></code> so far.</li>
 </ul>
@@ -365,7 +365,8 @@ unique distribution <a class="footnote-reference" href="#id5" id="id2">[2]</a>.<
 <dt>loc <span class="classifier-delimiter">:</span> <span class="classifier">float or array_like of floats</span></dt>
 <dd>Mean (“centre”) of the distribution.</dd>
 <dt>scale <span class="classifier-delimiter">:</span> <span class="classifier">float or array_like of floats</span></dt>
-<dd>Standard deviation (spread or “width”) of the distribution.</dd>
+<dd>Standard deviation (spread or “width”) of the distribution. Must be
+non-negative.</dd>
 <dt>size <span class="classifier-delimiter">:</span> <span class="classifier">int or tuple of ints, optional</span></dt>
 <dd>Output shape.  If the given shape is, e.g., <code class="docutils literal notranslate"><span class="pre">(m,</span> <span class="pre">n,</span> <span class="pre">k)</span></code>, then
 <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">*</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">k</span></code> samples are drawn.  If size is <code class="docutils literal notranslate"><span class="pre">None</span></code> (default),
@@ -413,12 +414,12 @@ pp. 51, 51, 125.</td></tr>
 </pre></div>
 </div>
 <p>Verify the mean and the variance:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
-<span class="go">True</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="go">0.0  # may vary</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">sigma</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.01</span>
-<span class="go">True</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">abs</span><span class="p">(</span><span class="n">sigma</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">0.1  # may vary</span>
 </pre></div>
 </div>
 <p>Display the histogram of the samples, along with
@@ -429,6 +430,12 @@ the probability density function:</p>
 <span class="gp">... </span>               <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span> <span class="p">(</span><span class="n">bins</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">),</span>
 <span class="gp">... </span>         <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Two-by-four array of samples from N(3, 6.25):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">array([[-4.49401501,  4.00950034, -1.81814867,  7.29718677],   # random</span>
+<span class="go">       [ 0.39924804,  4.68456316,  4.99394529,  4.84057254]])  # random</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -457,7 +464,7 @@ the probability density function:</p>
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 14 Jul 2019, 18h.
+        Last updated on 06 Oct 2019, 16h.
       </span>
 
     </p>

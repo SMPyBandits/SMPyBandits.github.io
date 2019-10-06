@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38514290-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Policies.AdSwitchNew &mdash; SMPyBandits 0.9.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SMPyBandits
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"><em>SMPyBandits</em></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">SMPyBandits modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../How_to_run_the_code.html">How to run the code ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PublicationsWithSMPyBandits.html">List of research publications using Lilian Besson’s SMPyBandits project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Aggregation.html"><strong>Policy aggregation algorithms</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../MultiPlayers.html"><strong>Multi-players simulation environment</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DoublingTrick.html"><strong>Doubling Trick for Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SparseBandits.html"><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.AdSwitchNew</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.AdSwitchNew</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; The AdSwitchNew policy for non-stationary bandits, from [[&quot;Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes&quot;. Peter Auer, Pratik Gajane and Ronald Ortner, 2019]](http://proceedings.mlr.press/v99/auer19a/auer19a.pdf)</span>
+
+<span class="sd">- It uses an additional :math:`\mathcal{O}(\tau_\max)` memory for a game of maximum stationary length :math:`\tau_\max`.</span>
+
+<span class="sd">.. warning:: This implementation is still experimental!</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+
+
+<div class="viewcode-block" id="mymean"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.mymean">[docs]</a><span class="k">def</span> <span class="nf">mymean</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Simply :func:`numpy.mean` on x if x is non empty, otherwise ``0.0``.</span>
+
+<span class="sd">    .. info:: Avoid to see the following warning:</span>
+
+<span class="sd">    &gt;&gt;&gt; np.mean([])</span>
+<span class="sd">    /usr/local/lib/python3.6/dist-packages/numpy/core/fromnumeric.py:2957: RuntimeWarning: Mean of empty slice.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span></div>
+
+
+<span class="c1"># --- Class</span>
+
+<span class="n">Constant_C1</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1">#: Default value for the constant :math:`C_1`. Should be :math:`&gt;0` and as large as possible, but not too large.</span>
+
+<span class="n">DELTA_T</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1">#: A small trick to speed-up the computations, the checks for changes of good/bad arms are going to have a step ``DELTA_T``.</span>
+<span class="n">DELTA_S</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1">#: A small trick to speed-up the computations, the loops on :math:`s_1`, :math:`s_2` and :math:`s` are going to have a step ``DELTA_S``.</span>
+
+
+<div class="viewcode-block" id="AdSwitchNew"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew">[docs]</a><span class="k">class</span> <span class="nc">AdSwitchNew</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The AdSwitchNew policy for non-stationary bandits, from [[&quot;Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes&quot;. Peter Auer, Pratik Gajane and Ronald Ortner, 2019]](http://proceedings.mlr.press/v99/auer19a/auer19a.pdf)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AdSwitchNew.__init__"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+            <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">C1</span><span class="o">=</span><span class="n">Constant_C1</span><span class="p">,</span> <span class="n">delta_s</span><span class="o">=</span><span class="n">DELTA_S</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="n">DELTA_T</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+        <span class="k">if</span> <span class="n">nbArms</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: so far, for the AdSwitchNew algorithm, only the special case of K=2 arms was explained in the paper, but I generalized it. Maybe it does not work!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AdSwitchNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Parameters</span>
+        <span class="k">assert</span> <span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Error: for a AdSwitchNew policy, the parameter &#39;horizon&#39; should be &gt; 0 and not None but was = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span>  <span class="c1">#: Parameter :math:`T` for the AdSwitchNew algorithm, the horizon of the experiment. TODO try to use :class:`DoublingTrickWrapper` to remove the dependency in :math:`T` ?</span>
+
+        <span class="k">assert</span> <span class="n">C1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: for a AdSwitchNew policy, the parameter &#39;C1&#39; should be &gt; 0 but was = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">C1</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C1</span> <span class="o">=</span> <span class="n">C1</span>  <span class="c1">#: Parameter :math:`C_1` for the AdSwitchNew algorithm.</span>
+
+        <span class="k">assert</span> <span class="n">delta_s</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: for a AdSwitchNew policy, the parameter &#39;delta_s&#39; should be &gt; 0 but was = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">delta_s</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_s</span> <span class="o">=</span> <span class="n">delta_s</span>  <span class="c1">#: Parameter :math:`\delta_s` for the AdSwitchNew algorithm.</span>
+
+        <span class="k">assert</span> <span class="n">delta_t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: for a AdSwitchNew policy, the parameter &#39;delta_t&#39; should be &gt; 0 but was = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">delta_t</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span> <span class="o">=</span> <span class="n">delta_t</span>  <span class="c1">#: Parameter :math:`\delta_s` for the AdSwitchNew algorithm.</span>
+
+        <span class="c1"># Internal memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ell</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Variable :math:`\ell` in the algorithm. Count the number of new episode.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Variable :math:`t_l` in the algorithm. Count the starting time of the current episode.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span>  <span class="c1">#: Variable :math:`\mathrm{GOOD}_t` in the algorithm. Set of &quot;good&quot; arms at current time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1">#: Variable :math:`\mathrm{BAD}_t` in the algorithm. Set of &quot;bad&quot; arms at current time. It always satisfies :math:`\mathrm{BAD}_t = \{1,\dots,K\} \setminus \mathrm{GOOD}_t`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Variable :math:`S_t` in the algorithm. A list of sets of sampling obligations of arm :math:`a` at current time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_tilde_of_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: Vector of variables :math:`\tilde{\mu}_{\ell}(a)` in the algorithm. Count the empirical average of arm :math:`a`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gap_Delta_tilde_of_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: Vector of variables :math:`\tilde{\Delta}_{\ell}(a)` in the algorithm. Count the estimate of the gap of arm :math:`a` against the best of the &quot;good&quot; arms.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Memory of all the rewards. A *dictionary* per arm, mapping time to rewards. Growing size until restart of that arm!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_of_plays</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#: Memory of all the past actions played!</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.__str__"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;AdSwitchNew($T=</span><span class="si">{}</span><span class="s2">$, $C_1=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.new_episode"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.new_episode">[docs]</a>    <span class="k">def</span> <span class="nf">new_episode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start a new episode, line 3-6 of the algorithm.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ell</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>  <span class="c1"># FIXME use t-1 or t ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">AdSwitchNew: starting a new episode, number ell = </span><span class="si">{}</span><span class="s2">, at time </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ell</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.startGame"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start the game (fill pulls and rewards with 0).&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AdSwitchNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ell</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu_tilde_of_l</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gap_Delta_tilde_of_l</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_of_plays</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.getReward"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get a reward from an arm.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AdSwitchNew</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">reward</span>
+
+        <span class="n">should_start_new_episode</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># 3. Check for changes of good arms:</span>
+        <span class="c1"># TODO this takes a crazy O(K t^3) time, it HAS to be done faster!</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">good_arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s_1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_s</span><span class="p">):</span>  <span class="c1"># WARNING we could speed up this loop with their trick</span>
+                    <span class="k">for</span> <span class="n">s_2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_s</span><span class="p">):</span>  <span class="c1"># WARNING we could speed up this loop with their trick</span>
+                        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_s</span><span class="p">):</span>  <span class="c1"># WARNING we could speed up this loop with their trick</span>
+                            <span class="c1"># check condition (3)</span>
+                            <span class="n">n_s1_s2_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_s_t</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s_1</span><span class="p">,</span> <span class="n">s_2</span><span class="p">)</span>  <span class="c1"># sub interval [s1, s2] &lt;= [s, t] (s &lt;= s1 &lt;= s2 &lt;= t).</span>
+                            <span class="n">mu_hat_s1_s2_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_hat_s_t</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s_1</span><span class="p">,</span> <span class="n">s_2</span><span class="p">)</span>  <span class="c1"># sub interval [s1, s2] &lt;= [s, t] (s &lt;= s1 &lt;= s2 &lt;= t).</span>
+                            <span class="n">n_s_t_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_s_t</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                            <span class="n">mu_hat_s_t_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_hat_s_t</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                            <span class="n">abs_difference_in_s1s2_st</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu_hat_s1_s2_a</span> <span class="o">-</span> <span class="n">mu_hat_s_t_a</span><span class="p">)</span>
+                            <span class="n">confidence_radius_s1s2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">))</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">n_s1_s2_a</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                            <span class="n">confidence_radius_st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">))</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">n_s_t_a</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                            <span class="n">right_side</span> <span class="o">=</span> <span class="n">confidence_radius_s1s2</span> <span class="o">+</span> <span class="n">confidence_radius_st</span>
+                            <span class="c1"># print(&quot;AdSwitchNew: should we start a new episode, by checking condition (3), with arm {}, s1 = {}, s2 = {}, s = {} and t = {}...&quot;.format(good_arm, s_1, s_2, s, self.t))  # DEBUB</span>
+                            <span class="k">if</span> <span class="n">abs_difference_in_s1s2_st</span> <span class="o">&gt;</span> <span class="n">right_side</span><span class="p">:</span>  <span class="c1"># check condition 3:</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; New episode was started as condition (3) is satisfied!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    n_s1_s2_a =&quot;</span><span class="p">,</span> <span class="n">n_s1_s2_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    mu_hat_s1_s2_a =&quot;</span><span class="p">,</span> <span class="n">mu_hat_s1_s2_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    n_s_t_a =&quot;</span><span class="p">,</span> <span class="n">n_s_t_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    mu_hat_s_t_a =&quot;</span><span class="p">,</span> <span class="n">mu_hat_s_t_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    abs_difference_in_s1s2_st =&quot;</span><span class="p">,</span> <span class="n">abs_difference_in_s1s2_st</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    confidence_radius_s1s2 =&quot;</span><span class="p">,</span> <span class="n">confidence_radius_s1s2</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    confidence_radius_st =&quot;</span><span class="p">,</span> <span class="n">confidence_radius_st</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    right_side =&quot;</span><span class="p">,</span> <span class="n">right_side</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                                <span class="n">should_start_new_episode</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># 4. Check for changes of bad arms, in O(K t):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">bad_arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_s</span><span class="p">):</span>  <span class="c1"># WARNING we could speed up this loop with their trick</span>
+                    <span class="c1"># check condition (4)</span>
+                    <span class="n">n_s_t_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_s_t</span><span class="p">(</span><span class="n">bad_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                    <span class="n">mu_hat_s_t_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_hat_s_t</span><span class="p">(</span><span class="n">bad_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                    <span class="n">abs_difference_in_st_l</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu_hat_s_t_a</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_tilde_of_l</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">])</span>
+                    <span class="n">confidence_radius_st</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">))</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">n_s_t_a</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="n">gap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_Delta_tilde_of_l</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">]</span> <span class="o">/</span> <span class="mi">4</span>
+                    <span class="n">right_side</span> <span class="o">=</span> <span class="n">gap</span> <span class="o">+</span> <span class="n">confidence_radius_st</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AdSwitchNew: should we start a new episode, by checking condition (4), with arm </span><span class="si">{}</span><span class="s2">, s = </span><span class="si">{}</span><span class="s2"> and t = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bad_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>  <span class="c1"># DEBUB</span>
+                    <span class="k">if</span> <span class="n">abs_difference_in_st_l</span> <span class="o">&gt;</span> <span class="n">right_side</span><span class="p">:</span>  <span class="c1"># check condition 4:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; New episode was started as condition (4) is satisfied!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    n_s_t_a =&quot;</span><span class="p">,</span> <span class="n">n_s_t_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    mu_hat_s_t_a =&quot;</span><span class="p">,</span> <span class="n">mu_hat_s_t_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    abs_difference_in_st_l =&quot;</span><span class="p">,</span> <span class="n">abs_difference_in_st_l</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    confidence_radius_st =&quot;</span><span class="p">,</span> <span class="n">confidence_radius_st</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    gap =&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    right_side =&quot;</span><span class="p">,</span> <span class="n">right_side</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="n">should_start_new_episode</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="c1"># 5&#39;. Recompute S_t+1</span>
+                <span class="n">new_set_Stp1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">triplet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">]:</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">triplet</span>
+                    <span class="n">n_s_t_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_s_t</span><span class="p">(</span><span class="n">bad_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">n_s_t_a</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+                        <span class="n">new_set_Stp1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triplet</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_set_Stp1</span>
+
+        <span class="c1"># 5. Evict arms from GOOD_t</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">good_arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+                <span class="c1"># check condition (1)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_of_episode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_s</span><span class="p">):</span>  <span class="c1"># WARNING we could speed up this loop with their trick</span>
+                    <span class="n">mu_hat_s_t_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu_hat_s_t</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                    <span class="n">mu_hat_s_t_good</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mu_hat_s_t</span><span class="p">(</span><span class="n">other_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span><span class="p">]</span>
+                    <span class="n">mu_hat_s_t_best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">mu_hat_s_t_good</span><span class="p">)</span>
+                    <span class="n">gap_Delta</span> <span class="o">=</span> <span class="n">mu_hat_s_t_best</span> <span class="o">-</span> <span class="n">mu_hat_s_t_a</span>
+                    <span class="n">gap_to_check</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C1</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">))</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_s_t</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AdSwitchNew: should arm = </span><span class="si">{}</span><span class="s2"> be evicted, by checking condition (1), with s = </span><span class="si">{}</span><span class="s2"> and t = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">good_arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>  <span class="c1"># DEBUB</span>
+                    <span class="k">if</span> <span class="n">gap_Delta</span> <span class="o">&gt;</span> <span class="n">gap_to_check</span><span class="p">:</span>  <span class="c1"># check condition 1:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==&gt; Evict the arm, it shouldn&#39;t be in GOOD any longer! as condition (1) is satisfied!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    mu_hat_s_t_a =&quot;</span><span class="p">,</span> <span class="n">mu_hat_s_t_a</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    mu_hat_s_t_good =&quot;</span><span class="p">,</span> <span class="n">mu_hat_s_t_good</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    mu_hat_s_t_best =&quot;</span><span class="p">,</span> <span class="n">mu_hat_s_t_best</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    gap_Delta =&quot;</span><span class="p">,</span> <span class="n">gap_Delta</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    gap_to_check =&quot;</span><span class="p">,</span> <span class="n">gap_to_check</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="n">evicted_arm</span> <span class="o">=</span> <span class="n">good_arm</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">evicted_arm</span><span class="p">)</span>  <span class="c1"># added to the bad arms</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">evicted_arm</span><span class="p">)</span>  <span class="c1"># this arm is now evicted</span>
+                        <span class="c1"># compute mu_tilde_l(evicted_arm) and delta_tilde_l(evicted_arm) according to (2)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">mu_tilde_of_l</span><span class="p">[</span><span class="n">evicted_arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">mu_hat_s_t_a</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">gap_Delta_tilde_of_l</span><span class="p">[</span><span class="n">evicted_arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">gap_Delta</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">evicted_arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># clean up set of sampling obligations</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    self.set_BAD =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    self.set_GOOD =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+                        <span class="k">break</span>  <span class="c1"># break the inner for loop on s</span>
+
+        <span class="c1"># set of new good arms = { all arms } \ { bad arms }</span>
+        <span class="c1"># assert self.set_GOOD == set(range(self.nbArms)) - self.set_BAD  # XXX done iteratively, see above</span>
+
+        <span class="k">if</span> <span class="n">should_start_new_episode</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_episode</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.n_s_t"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.n_s_t">[docs]</a>    <span class="k">def</span> <span class="nf">n_s_t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute :math:`n_{[s,t]}(a) := \#\{\tau : s \leq \tau \leq t, a_{\tau} = a \}`, naively by using the dictionary of all plays :attr:`all_rewards`.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;Error: n_s_t only exists for s &lt;= t, but here s = </span><span class="si">{}</span><span class="s2"> and t = </span><span class="si">{}</span><span class="s2"> for arm a = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">all_rewards_of_that_arm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="n">all_rewards_s_to_t</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="n">all_rewards_of_that_arm</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">tau</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_rewards_s_to_t</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.mu_hat_s_t"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.mu_hat_s_t">[docs]</a>    <span class="k">def</span> <span class="nf">mu_hat_s_t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute :math:`\hat{\tau}_{[s,t]}(a) := \frac{1}{n_{[s,t]}(a)} \sum_{\tau : s \leq \tau \leq t, a_{\tau} = a} r_t`, naively by using the dictionary of all plays :attr:`all_rewards`.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">,</span> <span class="s2">&quot;Error: mu_hat_s_t only exists for s &lt;= t, but here s = </span><span class="si">{}</span><span class="s2"> and t = </span><span class="si">{}</span><span class="s2"> for arm a = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">all_rewards_of_that_arm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="n">all_rewards_s_to_t</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="n">all_rewards_of_that_arm</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="n">tau</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">mymean</span><span class="p">(</span><span class="n">all_rewards_s_to_t</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.find_max_i"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.find_max_i">[docs]</a>    <span class="k">def</span> <span class="nf">find_max_i</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gap</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Follow the algorithm and, with a gap estimate :math:`\widehat{\Delta_k}`, find :math:`I_k = \max\{ i : d_i \geq \widehat{\Delta_k} \}`, where :math:`d_i := 2^{-i}`. There is no need to do an exhaustive search:</span>
+
+<span class="sd">        .. math:: I_k := \lfloor - \log_2(\widehat{\Delta_k}) \rfloor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">gap</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: cannot find Ik if gap = </span><span class="si">{}</span><span class="s2"> is not &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gap</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">gap</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">Ik</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Ik</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">gap</span><span class="p">))))</span>  <span class="c1"># XXX Direct formula!</span>
+        <span class="c1"># print(&quot;DEBUG: at time t = {}, with gap Delta_k = {}, I_k = {}&quot;.format(self.t, self.current_estimated_gap, Ik))  # DEBUG</span>
+        <span class="k">return</span> <span class="n">Ik</span></div>
+
+<div class="viewcode-block" id="AdSwitchNew.choice"><a class="viewcode-back" href="../../docs/Policies.AdSwitchNew.html#Policies.AdSwitchNew.AdSwitchNew.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Choose an arm following the different phase of growing lengths according to the AdSwitchNew algorithm.&quot;&quot;&quot;</span>
+        <span class="c1"># 1. Add checks for bad arms:</span>
+        <span class="k">for</span> <span class="n">bad_arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_BAD</span><span class="p">:</span>
+            <span class="n">gap_Delta_hat_of_l_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gap_Delta_tilde_of_l</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_max_i</span><span class="p">(</span><span class="n">gap_Delta_hat_of_l_a</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># ell, K, T = self.ell, self.nbArms, self.horizon</span>
+                <span class="n">probability_to_add_this_triplet</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ell</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">)))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AdSwitchNew: for bad_arm = </span><span class="si">{}</span><span class="s2">, gap Delta = </span><span class="si">{}</span><span class="s2">, and i = </span><span class="si">{}</span><span class="s2">, a new triplet can be added to the set S with probability = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bad_arm</span><span class="p">,</span> <span class="n">gap_Delta_hat_of_l_a</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">probability_to_add_this_triplet</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+                <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="n">probability_to_add_this_triplet</span><span class="p">):</span>
+                    <span class="n">triplet</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">AdSwitchNew: for bad_arm = </span><span class="si">{}</span><span class="s2">, gap Delta = </span><span class="si">{}</span><span class="s2">, and i = </span><span class="si">{}</span><span class="s2">, the triplet = </span><span class="si">{}</span><span class="s2"> was added to the set S with probability = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bad_arm</span><span class="p">,</span> <span class="n">gap_Delta_hat_of_l_a</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">triplet</span><span class="p">,</span> <span class="n">probability_to_add_this_triplet</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">triplet</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    self.set_S[bad_arm] =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">bad_arm</span><span class="p">])</span>  <span class="c1"># DEBUG</span>
+
+        <span class="c1"># 2. Select an arm:</span>
+        <span class="n">these_times_taus</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_GOOD</span> <span class="o">|</span> <span class="p">{</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">a</span><span class="p">]}:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AdSwitchNew: for arm = </span><span class="si">{}</span><span class="s2">, in GOOD_(t) or with set S_t(a) = </span><span class="si">{}</span><span class="s2"> not empty, at time t = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_S</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+
+            <span class="n">look_ahead_in_past</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">look_ahead_in_past</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history_of_plays</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">history_of_plays</span><span class="p">[</span><span class="o">-</span><span class="n">look_ahead_in_past</span><span class="p">]</span> <span class="o">!=</span> <span class="n">arm</span><span class="p">:</span>
+                <span class="n">look_ahead_in_past</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">these_times_taus</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="n">look_ahead_in_past</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">AdSwitchNew: for arm = </span><span class="si">{}</span><span class="s2">, this time tau = </span><span class="si">{}</span><span class="s2">, and t = </span><span class="si">{}</span><span class="s2">, look ahead in past (t - min t&#39;) = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">these_times_taus</span><span class="p">[</span><span class="n">arm</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">look_ahead_in_past</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">these_times_taus</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history_of_plays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chosen_arm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">these_times_taus</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AdSwitchNew: for time t = </span><span class="si">{}</span><span class="s2">, choosing </span><span class="si">{}</span><span class="s2"> = arg min </span><span class="si">{}</span><span class="s2">, adding to history of plays...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">chosen_arm</span><span class="p">,</span> <span class="n">these_times_taus</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+
+        <span class="k">return</span> <span class="n">chosen_arm</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 06 Oct 2019, 16h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
