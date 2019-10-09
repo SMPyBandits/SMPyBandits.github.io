@@ -702,6 +702,27 @@
     <span class="k">pass</span></div>
 
 
+<span class="c1"># --- GLR for sigma=1 Gaussian</span>
+<div class="viewcode-block" id="OurGaussianGLR_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">OurGaussianGLR_IndexPolicy</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The GaussianGLR-UCB policy for non-stationary bandits, for fixed-variance Gaussian distributions (ie, :math:`\sigma^2`=``sig2`` known and fixed), but with our threshold designed for the sub-Bernoulli case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="OurGaussianGLR_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">sig2</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">kl</span><span class="o">=</span><span class="n">klGauss</span><span class="p">,</span> <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OurGaussianGLR_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">kl</span><span class="o">=</span><span class="n">kl</span><span class="p">,</span> <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sig2</span> <span class="o">=</span> <span class="n">sig2</span>  <span class="c1">#: Fixed variance :math:`\sigma^2` of the Gaussian distributions. Extra parameter given to :func:`kullback.klGauss`. Default to :math:`\sigma^2 = \frac{1}{4}`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_args_to_kl</span> <span class="o">=</span> <span class="p">(</span><span class="n">sig2</span><span class="p">,</span> <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="OurGaussianGLR_IndexPolicy_WithTracking"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy_WithTracking">[docs]</a><span class="k">class</span> <span class="nc">OurGaussianGLR_IndexPolicy_WithTracking</span><span class="p">(</span><span class="n">GLR_IndexPolicy_WithTracking</span><span class="p">,</span> <span class="n">OurGaussianGLR_IndexPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A variant of the GaussianGLR-UCB policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven&#39;t been explored enough, but with our threshold designed for the sub-Bernoulli case, but with our threshold designed for the sub-Bernoulli case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="OurGaussianGLR_IndexPolicy_WithDeterministicExploration"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy_WithDeterministicExploration">[docs]</a><span class="k">class</span> <span class="nc">OurGaussianGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">(</span><span class="n">GLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span> <span class="n">OurGaussianGLR_IndexPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A variant of the GaussianGLR-UCB policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed, but with our threshold designed for the sub-Bernoulli case.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
 <span class="c1"># --- Non-Parametric Sub-Gaussian GLR for Sub-Gaussian data</span>
 
 <span class="c1">#: Default confidence level for :class:`SubGaussianGLR_IndexPolicy`.</span>
@@ -855,7 +876,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 06 Oct 2019, 16h.
+        Last updated on 09 Oct 2019, 08h.
       </span>
 
     </p>

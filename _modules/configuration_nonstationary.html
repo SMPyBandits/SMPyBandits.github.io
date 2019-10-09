@@ -282,8 +282,37 @@
 <span class="n">STR_PROBLEMS</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;PROBLEMS&#39;</span><span class="p">,</span> <span class="s1">&#39;1, 2&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="n">PROBLEMS</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">STR_PROBLEMS</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
+<span class="c1"># XXX Pb -1 is purely stationary with 2 arms!</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+<span class="c1"># XXX Pb -1 is purely stationary with K=9 arms!</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
+    <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+
+
 <span class="c1"># XXX Pb 0 changes are only on one arm at a time, only 2 arms</span>
-<span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
@@ -308,7 +337,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 1 changes are only on one arm at a time</span>
-<span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
@@ -333,7 +362,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 2 changes are on all or almost arms at a time</span>
-<span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
@@ -358,7 +387,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 3 changes are on all or almost arms at a time, from https://subhojyoti.github.io/pdf/aistats_2019.pdf</span>
-<span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A simple piece-wise stationary problem</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
@@ -405,7 +434,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 5 Example from the Yahoo! dataset, from article &quot;Nearly Optimal Adaptive Procedure with Change Detection for Piecewise-Stationary Bandit&quot; (M-UCB) https://arxiv.org/abs/1802.03692</span>
-<span class="k">if</span> <span class="mi">5</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="mi">5</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A very hard piece-wise stationary problem, with 6 arms and 9 change points</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
@@ -428,7 +457,7 @@
     <span class="p">]</span>
 
 <span class="c1"># XXX Pb 6 Another example from the Yahoo! dataset, from article &quot;On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems&quot; (SW-UCB#) https://arxiv.org/abs/1802.08380</span>
-<span class="k">if</span> <span class="mi">6</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>  <span class="c1"># WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="k">if</span> <span class="mi">6</span> <span class="ow">in</span> <span class="n">PROBLEMS</span><span class="p">:</span>
     <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span>   <span class="c1"># A very hard piece-wise stationary problem, with 5 arms and 9 change points</span>
             <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">ARM_TYPE</span><span class="p">,</span>
@@ -575,7 +604,7 @@
 <span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;nb_break_points&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">NB_BREAK_POINTS</span>
 
 
-<span class="c1"># if False:  # WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="c1"># if False:</span>
 <span class="c1">#     configuration[&quot;environment&quot;] = [</span>
 <span class="c1">#         {   # A non stationary problem: every step of the same repetition use a different mean vector!</span>
 <span class="c1">#             &quot;arm_type&quot;: ARM_TYPE,</span>
@@ -599,7 +628,7 @@
 <span class="c1">#         },</span>
 <span class="c1">#     ]</span>
 
-<span class="c1"># if False:  # WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="c1"># if False:</span>
 <span class="c1">#     configuration[&quot;environment&quot;] = [  # XXX Bernoulli arms</span>
 <span class="c1">#         {   # A non stationary problem: every step of the same repetition use a different mean vector!</span>
 <span class="c1">#             &quot;arm_type&quot;: ARM_TYPE,</span>
@@ -617,7 +646,7 @@
 <span class="c1">#     ]</span>
 
 
-<span class="c1"># if False:  # WARNING remove this &quot;False and&quot; to use this problem</span>
+<span class="c1"># if False:</span>
 <span class="c1">#     configuration[&quot;environment&quot;] = [  # XXX Bernoulli arms</span>
 <span class="c1">#         {   # A non stationary problem: every step of the same repetition use a different mean vector!</span>
 <span class="c1">#             &quot;arm_type&quot;: ARM_TYPE,</span>
@@ -666,7 +695,8 @@
     <span class="c1"># False, # Global restart XXX seems more efficient? (at least more memory efficient!)</span>
 <span class="p">]</span>
 
-<span class="n">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">CHANGE_POINTS</span><span class="p">))</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">NB_ARMS</span><span class="p">)</span>
+
+<span class="n">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">CHANGE_POINTS</span><span class="p">))</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">NB_ARMS</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">CHANGE_POINTS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">HORIZON</span>
 
 <span class="n">UPSILON_T</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">NB_BREAK_POINTS</span><span class="p">)</span>
 
@@ -678,7 +708,7 @@
 
 <span class="n">DELTA_for_MUCB</span> <span class="o">=</span> <span class="mf">0.1</span>
 <span class="n">EPSILON_for_CUSUM</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">PROBLEMS</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># and set(PROBLEMS) &lt;= {1,2,3,4,5,6}:</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">CHANGE_POINTS</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">PROBLEMS</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># and set(PROBLEMS) &lt;= {1,2,3,4,5,6}:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For this problem, we compute the Delta^change and Delta^opt...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
     <span class="n">min_change_on_mean</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">delta</span> <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">min</span><span class="p">([</span><span class="n">delta</span> <span class="k">for</span> <span class="n">delta</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[:,</span> <span class="n">i</span><span class="p">]))</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">LIST_OF_MEANS</span><span class="p">)[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">if</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;min_change_on_mean =&quot;</span><span class="p">,</span> <span class="n">min_change_on_mean</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
@@ -740,10 +770,10 @@
     <span class="c1"># #     },</span>
     <span class="c1"># # ] +</span>
     <span class="p">[</span>  <span class="c1"># XXX Regular stochastic bandits algorithms!</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Uniform</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="c1"># { &quot;archtype&quot;: Uniform, &quot;params&quot;: { } },</span>
         <span class="c1"># # { &quot;archtype&quot;: EmpiricalMeans, &quot;params&quot;: { } },</span>
         <span class="c1"># # { &quot;archtype&quot;: UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="c1"># { &quot;archtype&quot;: UCB, &quot;params&quot;: { } },</span>
         <span class="c1"># # { &quot;archtype&quot;: SWR_UCBalpha, &quot;params&quot;: { &quot;alpha&quot;: 1, } },  # WARNING experimental!</span>
         <span class="c1"># { &quot;archtype&quot;: BESA, &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;non_binary&quot;: True, } },</span>
         <span class="c1"># { &quot;archtype&quot;: BayesUCB, &quot;params&quot;: { &quot;posterior&quot;: Beta, } },</span>
@@ -851,15 +881,15 @@
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">gamma</span> <span class="ow">in</span> <span class="n">GAMMAS</span>
     <span class="p">]</span> <span class="o">+</span>
-    <span class="p">[</span>  <span class="c1"># XXX test the AdSwitch policy and its corrected version</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">AdSwitch</span><span class="p">,</span>
-            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="n">C1</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">:</span> <span class="n">C2</span><span class="p">,},</span>
-            <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="s2">&quot;AdSwitch&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="n">C1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-        <span class="k">for</span> <span class="n">C2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">#, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [  # XXX test the AdSwitch policy and its corrected version</span>
+    <span class="c1">#     {</span>
+    <span class="c1">#         &quot;archtype&quot;: AdSwitch,</span>
+    <span class="c1">#         &quot;params&quot;: { &quot;horizon&quot;: HORIZON, &quot;C1&quot;: C1, &quot;C2&quot;: C2,},</span>
+    <span class="c1">#         &quot;change_label&quot;: &quot;AdSwitch&quot;,</span>
+    <span class="c1">#     }</span>
+    <span class="c1">#     for C1 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="c1">#     for C2 in [1]  #, 10, 0.1]  # WARNING don&#39;t test too many parameters!</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># # The LM_DSEE algorithm seems to work fine! WARNING it seems TOO efficient!</span>
     <span class="c1"># [</span>
     <span class="c1">#     # nu = 0.5 means there is of the order Upsilon_T = T^0.5 = sqrt(T) change points</span>
@@ -917,7 +947,8 @@
             <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
             <span class="n">klUCB</span><span class="p">,</span>
         <span class="p">]</span>
-        <span class="k">for</span> <span class="n">use_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>  <span class="c1"># FIXME experimental use of localization</span>
+        <span class="c1"># for use_localization in [True, False]  # FIXME experimental use of localization</span>
+        <span class="k">for</span> <span class="n">use_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
         <span class="c1"># for lazy_detect_change_only_x_steps in [1, 2, 5]</span>
         <span class="c1"># for lazy_detect_change_only_x_steps in [1]</span>
         <span class="k">for</span> <span class="n">lazy_detect_change_only_x_steps</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">20</span><span class="p">]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">20000</span> <span class="k">else</span> <span class="p">([</span><span class="mi">35</span><span class="p">]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">100000</span> <span class="k">else</span> <span class="p">[</span><span class="mi">50</span><span class="p">]))</span>
@@ -939,31 +970,34 @@
     <span class="c1"># # #     # for lazy_try_value_s_only_x_steps in [1, 2, 5]  # XXX uncomment to use default value</span>
     <span class="c1"># # # ] +</span>
     <span class="c1"># # # XXX Test GaussianGLR_IndexPolicy</span>
-    <span class="p">[</span>
-        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">HORIZON</span><span class="p">,</span>
-            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">policy</span><span class="p">,</span>
-            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
-            <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">NB_BREAK_POINTS</span><span class="p">,</span>
-            <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span>
-            <span class="s2">&quot;lazy_try_value_s_only_x_steps&quot;</span><span class="p">:</span> <span class="n">lazy_try_value_s_only_x_steps</span><span class="p">,</span>
-        <span class="p">},</span>  <span class="s2">&quot;change_label&quot;</span><span class="p">:</span> <span class="n">archname</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="n">archtype</span><span class="p">,</span> <span class="n">archname</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="c1"># (GaussianGLR_IndexPolicy, &quot;random expl.&quot;),    # OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
-            <span class="c1"># (GaussianGLR_IndexPolicy_WithTracking, &quot;tracking&quot;),    # OK GaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
-            <span class="p">(</span><span class="n">GaussianGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span> <span class="s2">&quot;Gaussian-GLR&quot;</span><span class="p">),</span>    <span class="c1"># OK GaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Gaussian GLR and is more efficient</span>
-            <span class="p">(</span><span class="n">SubGaussianGLR_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;sub-Gaussian GLR&quot;</span><span class="p">),</span> <span class="c1"># OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
-        <span class="p">]</span>
-        <span class="k">for</span> <span class="n">policy</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="c1"># UCB,  # XXX comment to only test klUCB</span>
-            <span class="n">klUCB</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="n">PER_ARM_RESTART</span>
-        <span class="c1"># for lazy_detect_change_only_x_steps in [50] #+ [2, 10]  # XXX uncomment to use default value</span>
-        <span class="c1"># for lazy_try_value_s_only_x_steps in [50] #+ [2, 10]  # XXX uncomment to use default value</span>
-        <span class="k">for</span> <span class="n">lazy_detect_change_only_x_steps</span><span class="p">,</span> <span class="n">lazy_try_value_s_only_x_steps</span> <span class="ow">in</span> <span class="p">([(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">20000</span> <span class="k">else</span> <span class="p">([(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)]</span> <span class="k">if</span> <span class="n">HORIZON</span> <span class="o">&lt;=</span> <span class="mi">100000</span> <span class="k">else</span> <span class="p">[(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)]))</span>
-    <span class="p">]</span> <span class="o">+</span>
+    <span class="c1"># [</span>
+    <span class="c1">#     { &quot;archtype&quot;: archtype, &quot;params&quot;: {</span>
+    <span class="c1">#         &quot;horizon&quot;: HORIZON,</span>
+    <span class="c1">#         &quot;policy&quot;: policy,</span>
+    <span class="c1">#         &quot;per_arm_restart&quot;: per_arm_restart,</span>
+    <span class="c1">#         &quot;max_nb_random_events&quot;: NB_BREAK_POINTS,</span>
+    <span class="c1">#         &quot;lazy_detect_change_only_x_steps&quot;: lazy_detect_change_only_x_steps,</span>
+    <span class="c1">#         &quot;lazy_try_value_s_only_x_steps&quot;: lazy_try_value_s_only_x_steps,</span>
+    <span class="c1">#     },  &quot;change_label&quot;: archname</span>
+    <span class="c1">#     }</span>
+    <span class="c1">#     for archtype, archname in [</span>
+    <span class="c1">#         # (GaussianGLR_IndexPolicy, &quot;random expl.&quot;),    # OK GaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
+    <span class="c1">#         # (GaussianGLR_IndexPolicy_WithTracking, &quot;tracking&quot;),    # OK GaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
+    <span class="c1">#         (GaussianGLR_IndexPolicy_WithDeterministicExploration, &quot;Gaussian-GLR&quot;),    # OK GaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Gaussian GLR and is more efficient</span>
+    <span class="c1">#         (SubGaussianGLR_IndexPolicy, &quot;sub-Gaussian GLR&quot;), # OK SubGaussianGLR_IndexPolicy is very much like Gaussian GLR</span>
+    <span class="c1">#         # (OurGaussianGLR_IndexPolicy, &quot;random expl.&quot;),    # OK OurGaussianGLR_IndexPolicy is very much like Bernoulli GLR</span>
+    <span class="c1">#         # (OurGaussianGLR_IndexPolicy_WithTracking, &quot;tracking&quot;),    # OK OurGaussianGLR_IndexPolicy_WithTracking is very much like Gaussian GLR and is more efficient</span>
+    <span class="c1">#         (OurGaussianGLR_IndexPolicy_WithDeterministicExploration, &quot;Our Gaussian-GLR&quot;),    # OK OurGaussianGLR_IndexPolicy_WithDeterministicExploration is very much like Gaussian GLR and is more efficient</span>
+    <span class="c1">#     ]</span>
+    <span class="c1">#     for policy in [</span>
+    <span class="c1">#         # UCB,  # XXX comment to only test klUCB</span>
+    <span class="c1">#         klUCB,</span>
+    <span class="c1">#     ]</span>
+    <span class="c1">#     for per_arm_restart in PER_ARM_RESTART</span>
+    <span class="c1">#     # for lazy_detect_change_only_x_steps in [50] #+ [2, 10]  # XXX uncomment to use default value</span>
+    <span class="c1">#     # for lazy_try_value_s_only_x_steps in [50] #+ [2, 10]  # XXX uncomment to use default value</span>
+    <span class="c1">#     for lazy_detect_change_only_x_steps, lazy_try_value_s_only_x_steps in ([(10, 10)] if HORIZON &lt;= 20000 else ([(20, 20)] if HORIZON &lt;= 100000 else [(50, 50)]))</span>
+    <span class="c1"># ] +</span>
     <span class="c1"># XXX Test BernoulliGLR_IndexPolicy</span>
     <span class="p">[</span>
         <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">archtype</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1018,7 +1052,8 @@
             <span class="p">[</span><span class="n">DELTA_LOCAL</span><span class="p">,</span> <span class="n">DELTA_GLOBAL</span><span class="p">],</span>
             <span class="p">[</span><span class="n">ALPHA_LOCAL</span><span class="p">,</span> <span class="n">ALPHA_GLOBAL</span><span class="p">],</span>
         <span class="p">)</span>
-        <span class="k">for</span> <span class="n">use_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>  <span class="c1"># FIXME experimental use of localization</span>
+        <span class="c1"># for use_localization in [True, False]  # FIXME experimental use of localization</span>
+        <span class="k">for</span> <span class="n">use_localization</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
         <span class="c1"># for delta in [DELTA_1] # + [DELTA_2]  # XXX experimental!</span>
         <span class="c1"># for alpha0 in [ALPHA_1]  # XXX experimental!</span>
         <span class="k">for</span> <span class="n">mult_alpha0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># comment from the + to use default parameter</span>
@@ -1073,7 +1108,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 06 Oct 2019, 16h.
+        Last updated on 09 Oct 2019, 08h.
       </span>
 
     </p>
