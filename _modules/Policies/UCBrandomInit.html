@@ -1,3 +1,4 @@
+Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -36,6 +37,7 @@
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
         <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
@@ -111,152 +113,3 @@
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">SMPyBandits</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-        
-      <li>Policies.UCBrandomInit</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <h1>Source code for Policies.UCBrandomInit</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot; The UCB index policy, modified to take a random permutation order for the initial exploration of each arm (could reduce collisions in the multi-players setting).</span>
-<span class="sd">Reference: [Lai &amp; Robbins, 1985].</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.2&quot;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.UCB</span> <span class="k">import</span> <span class="n">UCB</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">UCB</span> <span class="k">import</span> <span class="n">UCB</span>
-
-
-<div class="viewcode-block" id="UCBrandomInit"><a class="viewcode-back" href="../../docs/Policies.UCBrandomInit.html#Policies.UCBrandomInit.UCBrandomInit">[docs]</a><span class="k">class</span> <span class="nc">UCBrandomInit</span><span class="p">(</span><span class="n">UCB</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; The UCB index policy, modified to take a random permutation order for the initial exploration of each arm (could reduce collisions in the multi-players setting).</span>
-<span class="sd">    Reference: [Lai &amp; Robbins, 1985].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="UCBrandomInit.__init__"><a class="viewcode-back" href="../../docs/Policies.UCBrandomInit.html#Policies.UCBrandomInit.UCBrandomInit.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">UCBrandomInit</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
-        <span class="c1"># Trying to randomize the order of the initial visit to each arm; as this determinism breaks its habitility to play efficiently in multi-players games</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exploration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span></div>
-        <span class="c1"># The proba that another player has the same is nbPlayers / factorial(nbArms) : should be SMALL !</span>
-        <span class="c1"># print(&quot;One UCB player with _initial_exploration =&quot;, self._initial_exploration)  # DEBUG</span>
-
-<div class="viewcode-block" id="UCBrandomInit.choice"><a class="viewcode-back" href="../../docs/Policies.UCBrandomInit.html#Policies.UCBrandomInit.UCBrandomInit.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>  <span class="c1"># Force to first visit each arm in a certain random order</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exploration</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">]</span>  <span class="c1"># Better: random permutation!</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UCBrandomInit</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span></div></div>
-</pre></div>
-
-           </div>
-           
-          </div>
-          <footer>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
-      <span class="lastupdated">
-        Last updated on 11 Oct 2019, 11h.
-      </span>
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-  
-
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
-</html>
