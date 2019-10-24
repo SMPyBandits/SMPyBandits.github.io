@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,384 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.TrekkingTSN</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.TrekkingTSN</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; TrekkingTSN: implementation of the decentralized multi-player policy from [R.Kumar, A.Yadav, S.J.Darak, M.K.Hanawal, Trekking based Distributed Algorithm for Opportunistic Spectrum Access in Infrastructure-less Network, 2018](XXX).</span>
+
+<span class="sd">- Each player has 3 states, 1st is channel characterization, 2nd is Trekking phase</span>
+<span class="sd">- 1st step</span>
+<span class="sd">    + FIXME</span>
+<span class="sd">- 2nd step:</span>
+<span class="sd">    + FIXME</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility, division</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>  <span class="c1"># For the different states</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+
+
+<span class="c1"># --- Functions to compute the optimal choice of Time0 proposed in [Kumar et al., 2018]</span>
+
+<div class="viewcode-block" id="special_times"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.special_times">[docs]</a><span class="k">def</span> <span class="nf">special_times</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the lower-bound suggesting &quot;large-enough&quot; values for the different parameters :math:`T_{RH}`, :math:`T_{SH}` and :math:`T_{TR}` that should guarantee constant regret with probability at least :math:`1 - \delta`, if the gap :math:`\Delta` is larger than :math:`\epsilon` and the smallest mean is larger than :math:`\theta`.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        T_{RH} &amp;= \frac{\log(\frac{\delta}{3 K})}{\log(1 - \theta (1 - \frac{1}{K})^{K-1}))} \\</span>
+<span class="sd">        T_{SH} &amp;= (2 K / \varepsilon^2) \log(\frac{2 K^2}{\delta / 3}) \\</span>
+<span class="sd">        T_{TR} &amp;= \lceil\frac{\log((\delta / 3) K XXX)}{\log(1 - \theta)} \rceil \frac{(K - 1) K}{2}.</span>
+
+<span class="sd">    - Cf. Theorem 1 of [Kumar et al., 2018](XXX).</span>
+<span class="sd">    - Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; nbArms = 8</span>
+<span class="sd">    &gt;&gt;&gt; theta = Delta = 0.07</span>
+<span class="sd">    &gt;&gt;&gt; epsilon = theta</span>
+<span class="sd">    &gt;&gt;&gt; delta = 0.1</span>
+<span class="sd">    &gt;&gt;&gt; special_times(nbArms=nbArms, theta=theta, epsilon=epsilon, delta=delta)  # doctest: +ELLIPSIS</span>
+<span class="sd">    (197, 26949, -280)</span>
+<span class="sd">    &gt;&gt;&gt; delta = 0.01</span>
+<span class="sd">    &gt;&gt;&gt; special_times(nbArms=nbArms, theta=theta, epsilon=epsilon, delta=delta)  # doctest: +ELLIPSIS</span>
+<span class="sd">    (279, 34468, 616)</span>
+<span class="sd">    &gt;&gt;&gt; delta = 0.001</span>
+<span class="sd">    &gt;&gt;&gt; special_times(nbArms=nbArms, theta=theta, epsilon=epsilon, delta=delta)  # doctest: +ELLIPSIS</span>
+<span class="sd">    (362, 41987, 1512)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">nbArms</span>
+    <span class="n">XXX</span> <span class="o">=</span> <span class="n">K</span>  <span class="c1"># FIXME this is unspecified in their paper (see equation (5))</span>
+    <span class="n">T_RH</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">delta</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">K</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="n">K</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">K</span><span class="o">-</span><span class="mi">1</span><span class="p">))))</span>
+    <span class="n">T_SH</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">K</span> <span class="o">/</span> <span class="n">epsilon</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">K</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">delta</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)))</span>
+    <span class="n">T_TR</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="n">delta</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="n">XXX</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)))</span> <span class="o">*</span> <span class="p">((</span><span class="n">K</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">K</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+    <span class="c1"># XXX this T_TR CANNOT be negative !</span>
+    <span class="k">assert</span> <span class="n">T_RH</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: time T_RH cannot be &lt;= 0 but was found = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T_RH</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">T_SH</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: time T_SH cannot be &lt;= 0 but was found = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T_SH</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># assert T_TR &gt; 0, &quot;Error: time T_TR cannot be &lt;= 0 but was found = {}...&quot;.format(T_TR)  # DEBUG</span>
+    <span class="k">return</span> <span class="n">T_RH</span><span class="p">,</span> <span class="n">T_SH</span><span class="p">,</span> <span class="n">T_TR</span></div>
+
+
+<div class="viewcode-block" id="boundOnFinalRegret"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.boundOnFinalRegret">[docs]</a><span class="k">def</span> <span class="nf">boundOnFinalRegret</span><span class="p">(</span><span class="n">T_RH</span><span class="p">,</span> <span class="n">T_SH</span><span class="p">,</span> <span class="n">T_TR</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Use the upper-bound on regret when :math:`T_{RH}`, :math:`T_{SH}` and :math:`T_{TR}` and :math:`M` are known.</span>
+
+<span class="sd">    - The &quot;constant&quot; regret of course grows linearly with :math:`T_{RH}`, :math:`T_{SH}` and :math:`T_{TR}`, as:</span>
+
+<span class="sd">        .. math:: \forall T \geq T_{RH} + T_{SH} + T_{TR}, \;\; R_T \leq M (T_{RH} + (1 - \frac{M}{K}) T_{SH} + T_{TR}).</span>
+
+<span class="sd">    .. warning:: this bound is not a deterministic result, it is only value with a certain probability (at least :math:`1 - \delta`, if :math:`T_{RH}`, :math:`T_{SH}` and :math:`T_{TR}` is chosen as given by :func:`special_times`).</span>
+
+
+<span class="sd">    - Cf. Theorem 1 of [Kumar et al., 2018](XXX).</span>
+<span class="sd">    - Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(197, 26949, -280, 2, 8)  # doctest: +ELLIPSIS</span>
+<span class="sd">    40257.5</span>
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(279, 34468, 616, 2, 8)   # doctest: +ELLIPSIS</span>
+<span class="sd">    53492.0</span>
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(362, 41987, 1512, 2, 8)  # doctest: +ELLIPSIS</span>
+<span class="sd">    66728.5</span>
+
+<span class="sd">        + For :math:`M=5`:</span>
+
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(197, 26949, -280, 5, 8)  # doctest: +ELLIPSIS</span>
+<span class="sd">    50114.375</span>
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(279, 34468, 616, 5, 8)   # doctest: +ELLIPSIS</span>
+<span class="sd">    69102.5</span>
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(362, 41987, 1512, 5, 8)  # doctest: +ELLIPSIS</span>
+<span class="sd">    88095.625</span>
+
+<span class="sd">        + For :math:`M=K=8`:</span>
+
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(197, 26949, -280, 8, 8)  # doctest: +ELLIPSIS</span>
+<span class="sd">    -664.0  # there is something wrong with T_TR !</span>
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(279, 34468, 616, 8, 8)   # doctest: +ELLIPSIS</span>
+<span class="sd">    7160.0</span>
+<span class="sd">    &gt;&gt;&gt; boundOnFinalRegret(362, 41987, 1512, 8, 8)  # doctest: +ELLIPSIS</span>
+<span class="sd">    14992.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">nbPlayers</span> <span class="o">*</span> <span class="p">(</span><span class="n">T_RH</span> <span class="o">+</span> <span class="n">T_SH</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">)</span><span class="o">/</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">+</span> <span class="n">T_TR</span><span class="p">)</span></div>
+
+
+<span class="c1">#: Different states during the Musical Chair algorithm</span>
+<span class="n">State</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;State&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;NotStarted&#39;</span><span class="p">,</span> <span class="s1">&#39;ChannelCharacterization&#39;</span><span class="p">,</span> <span class="s1">&#39;TrekkingTSN&#39;</span><span class="p">])</span>
+
+
+<span class="c1"># --- Class TrekkingTSN</span>
+
+<div class="viewcode-block" id="TrekkingTSN"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN">[docs]</a><span class="k">class</span> <span class="nc">TrekkingTSN</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; TrekkingTSN: implementation of the single-player policy from [R.Kumar, A.Yadav, S.J.Darak, M.K.Hanawal, Trekking based Distributed Algorithm for Opportunistic Spectrum Access in Infrastructure-less Network, 2018](XXX).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TrekkingTSN.__init__"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+                <span class="n">theta</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span>
+        <span class="p">):</span>  <span class="c1"># Named argument to give them in any order</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbArms: number of arms,</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; nbArms = 8</span>
+<span class="sd">        &gt;&gt;&gt; theta, epsilon, delta = 0.01, 0.1, 0.05</span>
+<span class="sd">        &gt;&gt;&gt; player1 = TrekkingTSN(nbArms, theta=theta, epsilon=epsilon, delta=delta)</span>
+
+<span class="sd">        For multi-players use:</span>
+
+<span class="sd">        &gt;&gt;&gt; configuration[&quot;players&quot;] = Selfish(NB_PLAYERS, TrekkingTSN, nbArms, theta=theta, epsilon=epsilon, delta=delta).children</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TrekkingTSN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">NotStarted</span>  <span class="c1">#: Current state</span>
+
+        <span class="c1"># compute times</span>
+        <span class="n">T_RH</span><span class="p">,</span> <span class="n">T_SH</span><span class="p">,</span> <span class="n">T_TR</span> <span class="o">=</span> <span class="n">special_times</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">theta</span>  <span class="c1">#: Parameter :math:`\theta`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>  <span class="c1">#: Parameter :math:`\epsilon`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>  <span class="c1">#: Parameter :math:`\delta`.</span>
+
+        <span class="c1"># Store parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_RH</span> <span class="o">=</span> <span class="n">T_RH</span>  <span class="c1">#: Parameter :math:`T_{RH}` computed from :func:`special_times`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_SH</span> <span class="o">=</span> <span class="n">T_SH</span>  <span class="c1">#: Parameter :math:`T_{SH}` computed from :func:`special_times`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_CC</span> <span class="o">=</span> <span class="n">T_RH</span> <span class="o">+</span> <span class="n">T_SH</span>  <span class="c1">#: Parameter :math:`T_{CC} = T_{RH} + T_{SH}`</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_TR</span> <span class="o">=</span> <span class="n">T_TR</span>  <span class="c1">#: Parameter :math:`T_{TR}` computed from :func:`special_times`</span>
+
+        <span class="c1"># Internal memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_was_successful</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: That&#39;s the l of the paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Keep memory of the last choice for CC phase</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cumulatedRewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1">#: That&#39;s the V_n of the paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbObservations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: That&#39;s the S_n of the paper</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock_channel</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: That&#39;s the L of the paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># That&#39;s the Yi of the paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># That&#39;s the Mj of the paper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Implementation details</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1">#: Internal times</span></div>
+
+<div class="viewcode-block" id="TrekkingTSN.__str__"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;TSN($</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{:.3g}</span><span class="s2">, </span><span class="si">{}</span><span class="s2"> = </span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;T_</span><span class="si">{RH}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_RH</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;T_</span><span class="si">{SH}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_SH</span><span class="p">)</span>  <span class="c1"># Use current estimate</span></div>
+
+<div class="viewcode-block" id="TrekkingTSN.startGame"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Just reinitialize all the internal memory, and decide how to start (state 1 or 2).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># -1 because t += 1 is done in self.choice()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cumulatedRewards</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbObservations</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock_channel</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">ChannelCharacterization</span></div>
+
+<div class="viewcode-block" id="TrekkingTSN.choice"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Choose an arm, as described by the Musical Chair algorithm.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span>  <span class="c1"># by default, stay on the current arm</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">ChannelCharacterization</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_was_successful</span><span class="p">:</span>
+                <span class="c1"># choose next channel sequentially</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># randomly choose channel</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">TrekkingTSN</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_CC</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_channel</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">]:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># take next best channel</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span>
+
+            <span class="c1"># finally, in Trekking phase, increase Y_J by 1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Keep in memory the last choice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="c1"># and use the permutation to aim at the sorted arm</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">TrekkingTSN</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span></div>
+
+<div class="viewcode-block" id="TrekkingTSN.getReward"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Receive a reward on arm of index &#39;arm&#39;, as described by the Musical Chair algorithm.</span>
+
+<span class="sd">        - If not collision, receive a reward after pulling the arm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;- A TrekkingTSN player receive reward = {} on arm {}, in state {} and time t = {}...&quot;.format(reward, arm, self.state, self.t))  # DEBUG</span>
+        <span class="c1"># If not collision, receive a reward after pulling the arm</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">ChannelCharacterization</span><span class="p">:</span>
+            <span class="c1"># Count the observation, update arm cumulated reward</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nbObservations</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>      <span class="c1"># One observation of this arm</span>
+            <span class="n">r_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cumulatedRewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">r_t</span>  <span class="c1"># More reward</span>
+            <span class="k">if</span> <span class="n">r_t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_was_successful</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     assert self.state == State.TrekkingTSN, &quot;Error: state = {} should be TrekkingTSN here.&quot;.format(self.state)  # DEBUG</span>
+        <span class="c1">#     pass</span>
+
+        <span class="c1"># And if t = T_CC, we are do with the initial CC phase</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_CC</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">ChannelCharacterization</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_endCCPhase</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TrekkingTSN._endCCPhase"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN._endCCPhase">[docs]</a>    <span class="k">def</span> <span class="nf">_endCCPhase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Small computation needed at the end of the initial CC phase.&quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;\n- A TrekkingTSN player has to switch from ChannelCharacterization to TrekkingTSN ...&quot;)  # DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">TrekkingTSN</span>  <span class="c1"># Switch ONCE to state 2</span>
+
+        <span class="c1"># First, we compute the empirical means mu_i</span>
+        <span class="c1"># empiricalMeans = (1. + self.cumulatedRewards) / (1. + self.nbObservations)</span>
+        <span class="n">empiricalMeans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cumulatedRewards</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbObservations</span>
+
+        <span class="c1"># Finally, sort their index by empirical means, decreasing order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">empiricalMeans</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">/</span> <span class="mf">3.</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">empiricalMeans</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_sort</span><span class="p">[</span><span class="n">j</span><span class="p">]]))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TrekkingTSN.handleCollision"><a class="viewcode-back" href="../../docs/Policies.TrekkingTSN.html#Policies.TrekkingTSN.TrekkingTSN.handleCollision">[docs]</a>    <span class="k">def</span> <span class="nf">handleCollision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Handle a collision, on arm of index &#39;arm&#39;.</span>
+
+<span class="sd">        - Warning: this method has to be implemented in the collision model, it is NOT implemented in the EvaluatorMultiPlayers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;- A TrekkingTSN player saw a collision on arm {}, in state {}, and time t = {} ...&quot;.format(arm, self.state, self.t))  # DEBUG</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">ChannelCharacterization</span><span class="p">:</span>
+            <span class="c1"># count one more collision in this initial phase (no matter the arm)</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">State</span><span class="o">.</span><span class="n">TrekkingTSN</span><span class="p">,</span> <span class="s2">&quot;Error: state = </span><span class="si">{}</span><span class="s2"> should be TrekkingTSN here.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lock_channel</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: TrekkingTSN algorithm saw a collision while playing </span><span class="si">{}</span><span class="s2"> and has J = </span><span class="si">{}</span><span class="s2">, but will lock this channel (forever?), that&#39;s not smart... (L = </span><span class="si">{}</span><span class="s2">).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_channel</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">J</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

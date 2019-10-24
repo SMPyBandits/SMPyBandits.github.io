@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,252 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.RandomizedIndexPolicy</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.RandomizedIndexPolicy</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Generic randomized index policy.</span>
+
+<span class="sd">- Reference: [[&quot;On the Optimality of Perturbations in Stochastic and Adversarial Multi-armed Bandit Problems&quot;, by Baekjin Kim, Ambuj Tewari, arXiv:1902.00610]](https://arxiv.org/pdf/1902.00610.pdf)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>  <span class="c1"># XXX dangerous in general, controlled here!</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">SystemError</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+
+
+<span class="c1">#: True to debug information about the perturbations</span>
+<span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="uniform_perturbation"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.uniform_perturbation">[docs]</a><span class="k">def</span> <span class="nf">uniform_perturbation</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">low</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Uniform random perturbation, not from :math:`[0, 1]` but from :math:`[-1, 1]`, that is :math:`\mathcal{U}niform([-1, 1])`.</span>
+
+<span class="sd">    - Reference: see Corollary 6 from [[&quot;On the Optimality of Perturbations in Stochastic and Adversarial Multi-armed Bandit Problems&quot;, by Baekjin Kim, Ambuj Tewari, arXiv:1902.00610]](https://arxiv.org/pdf/1902.00610.pdf)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="normal_perturbation"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.normal_perturbation">[docs]</a><span class="k">def</span> <span class="nf">normal_perturbation</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Normal (Gaussian) random perturbation, with mean ``loc=0`` and scale (sigma2) ``scale=0.25`` (by default), that is :math:`\mathcal{N}ormal(loc, scale)`.</span>
+
+<span class="sd">    - Reference: see Corollary 6 from [[&quot;On the Optimality of Perturbations in Stochastic and Adversarial Multi-armed Bandit Problems&quot;, by Baekjin Kim, Ambuj Tewari, arXiv:1902.00610]](https://arxiv.org/pdf/1902.00610.pdf)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+
+<span class="n">gaussian_perturbation</span> <span class="o">=</span> <span class="n">normal_perturbation</span>
+
+
+<div class="viewcode-block" id="exponential_perturbation"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.exponential_perturbation">[docs]</a><span class="k">def</span> <span class="nf">exponential_perturbation</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Exponential random perturbation, with parameter (:math:`\lambda`) ``scale=0.25`` (by default), that is :math:`\mathcal{E}xponential(\lambda)`.</span>
+
+<span class="sd">    - Reference: see Corollary 7 from [[&quot;On the Optimality of Perturbations in Stochastic and Adversarial Multi-armed Bandit Problems&quot;, by Baekjin Kim, Ambuj Tewari, arXiv:1902.00610]](https://arxiv.org/pdf/1902.00610.pdf)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="gumbel_perturbation"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.gumbel_perturbation">[docs]</a><span class="k">def</span> <span class="nf">gumbel_perturbation</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Gumbel random perturbation, with mean ``loc=0`` and scale ``scale=0.25`` (by default), that is :math:`\mathcal{G}umbel(loc, scale)`.</span>
+
+<span class="sd">    - Reference: see Corollary 7 from [[&quot;On the Optimality of Perturbations in Stochastic and Adversarial Multi-armed Bandit Problems&quot;, by Baekjin Kim, Ambuj Tewari, arXiv:1902.00610]](https://arxiv.org/pdf/1902.00610.pdf)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">gumbel</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span></div>
+
+
+<span class="c1">#: Map perturbation names (like ``&quot;uniform&quot;``) to perturbation functions (like :func:`uniform_perturbation`).</span>
+<span class="n">map_perturbation_str_to_function</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;uniform&quot;</span><span class="p">:</span> <span class="n">uniform_perturbation</span><span class="p">,</span>
+    <span class="s2">&quot;normal&quot;</span><span class="p">:</span> <span class="n">normal_perturbation</span><span class="p">,</span>
+    <span class="s2">&quot;gaussian&quot;</span><span class="p">:</span> <span class="n">gaussian_perturbation</span><span class="p">,</span>
+    <span class="s2">&quot;exponential&quot;</span><span class="p">:</span> <span class="n">exponential_perturbation</span><span class="p">,</span>
+    <span class="s2">&quot;gumbel&quot;</span><span class="p">:</span> <span class="n">gumbel_perturbation</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="RandomizedIndexPolicy"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.RandomizedIndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">RandomizedIndexPolicy</span><span class="p">(</span><span class="n">IndexPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class that implements a generic randomized index policy.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RandomizedIndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.RandomizedIndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="s2">&quot;uniform&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; New generic index policy.</span>
+
+<span class="sd">        - nbArms: the number of arms,</span>
+<span class="sd">        - perturbation: [&quot;uniform&quot;, &quot;normal&quot;, &quot;exponential&quot;, &quot;gaussian&quot;] or a function like :func:`numpy.random.uniform`,</span>
+<span class="sd">        - lower, amplitude: lower value and known amplitude of the rewards.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RandomizedIndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">perturbation</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">perturbation_name</span> <span class="o">=</span> <span class="n">perturbation</span>
+            <span class="n">perturbation</span> <span class="o">=</span> <span class="n">map_perturbation_str_to_function</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">perturbation_name</span><span class="p">,</span> <span class="n">uniform_perturbation</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">perturbation_name</span> <span class="o">=</span> <span class="n">perturbation</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perturbation_name</span> <span class="o">=</span> <span class="n">perturbation_name</span>  <span class="c1">#: Name of the function to generate the random perturbation.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span> <span class="o">=</span> <span class="n">perturbation</span>  <span class="c1">#: Function to generate the random perturbation.</span></div>
+
+<div class="viewcode-block" id="RandomizedIndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.RandomizedIndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; -&gt; str&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation_name</span><span class="p">)</span></div>
+
+    <span class="c1"># --- Basic choice() method</span>
+
+<div class="viewcode-block" id="RandomizedIndexPolicy.computeIndex"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.RandomizedIndexPolicy.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; In a randomized index policy, with distribution :math:`\mathrm{Distribution}` generating perturbations :math:`Z_k(t)`, with index :math:`I_k(t)` and mean :math:`\hat{\mu}_k(t)` for each arm :math:`k`, it chooses an arm with maximal perturbated index (uniformly at random):</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\</span>
+<span class="sd">            Z_k(t) &amp;\sim \mathrm{Distribution}, \\</span>
+<span class="sd">            \mathrm{UCB}_k(t) &amp;= I_k(t) - \hat{\mu}_k(t),\\</span>
+<span class="sd">            A(t) &amp;\sim U(\arg\max_{1 \leq k \leq K} \hat{\mu}_k(t) + \mathrm{UCB}_k(t) \cdot Z_k(t)).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">RandomizedIndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">computeIndex</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="n">ucb</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="n">mean</span>
+        <span class="n">random_perturbation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">()</span>
+        <span class="n">perturbated_index</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">ucb</span> <span class="o">*</span> <span class="n">random_perturbation</span>
+        <span class="k">if</span> <span class="n">VERBOSE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - at time t = </span><span class="si">{}</span><span class="s2">, policy </span><span class="si">{}</span><span class="s2"> would have used index = </span><span class="si">{}</span><span class="s2"> and mean = </span><span class="si">{}</span><span class="s2">, but using its perturbation distribution (</span><span class="si">{}</span><span class="s2">), it sampled a perturbation = </span><span class="si">{}</span><span class="s2">, and the perturbated index was </span><span class="si">{}</span><span class="s2"> instead...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation_name</span><span class="p">,</span> <span class="n">random_perturbation</span><span class="p">,</span> <span class="n">perturbated_index</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">perturbated_index</span></div>
+
+<div class="viewcode-block" id="RandomizedIndexPolicy.computeAllIndex"><a class="viewcode-back" href="../../docs/Policies.RandomizedIndexPolicy.html#Policies.RandomizedIndexPolicy.RandomizedIndexPolicy.computeAllIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeAllIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; In a randomized index policy, with distribution :math:`\mathrm{Distribution}` generating perturbations :math:`Z_k(t)`, with index :math:`I_k(t)` and mean :math:`\hat{\mu}_k(t)` for each arm :math:`k`, it chooses an arm with maximal perturbated index (uniformly at random):</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\</span>
+<span class="sd">            Z_k(t) &amp;\sim \mathrm{Distribution}, \\</span>
+<span class="sd">            \mathrm{UCB}_k(t) &amp;= I_k(t) - \hat{\mu}_k(t),\\</span>
+<span class="sd">            A(t) &amp;\sim U(\arg\max_{1 \leq k \leq K} \hat{\mu}_k(t) + \mathrm{UCB}_k(t) \cdot Z_k(t)).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RandomizedIndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">computeAllIndex</span><span class="p">()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span>
+        <span class="n">ucb</span> <span class="o">=</span> <span class="n">index</span> <span class="o">-</span> <span class="n">means</span>
+        <span class="n">random_perturbations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+            <span class="n">perturbated_index</span> <span class="o">=</span> <span class="n">means</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+</span> <span class="n">ucb</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">*</span> <span class="n">random_perturbations</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">perturbated_index</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">VERBOSE</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - at time t = </span><span class="si">{}</span><span class="s2">, policy </span><span class="si">{}</span><span class="s2"> would have used indexes = </span><span class="si">{}</span><span class="s2"> and means = </span><span class="si">{}</span><span class="s2">, but using its perturbation distribution (</span><span class="si">{}</span><span class="s2">), it sampled perturbations = </span><span class="si">{}</span><span class="s2">, and the perturbated indexes was </span><span class="si">{}</span><span class="s2"> instead...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perturbation_name</span><span class="p">,</span> <span class="n">random_perturbations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

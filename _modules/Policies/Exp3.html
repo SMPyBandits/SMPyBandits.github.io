@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,441 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.Exp3</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.Exp3</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; The Exp3 randomized index policy.</span>
+
+<span class="sd">Reference: [Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems, S.Bubeck &amp; N.Cesa-Bianchi, §3.1](http://research.microsoft.com/en-us/um/people/sebubeck/SurveyBCB12.pdf)</span>
+
+<span class="sd">See also [Evaluation and Analysis of the Performance of the EXP3 Algorithm in Stochastic Environments, Y. Seldin &amp; C. Szepasvari &amp; P. Auer &amp; Y. Abbasi-Adkori, 2012](http://proceedings.mlr.press/v24/seldin12a/seldin12a.pdf).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+
+<span class="c1">#: self.unbiased is a flag to know if the rewards are used as biased estimator,</span>
+<span class="c1">#: i.e., just :math:`r_t`, or unbiased estimators, :math:`r_t / trusts_t`.</span>
+<span class="n">UNBIASED</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">UNBIASED</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1">#: Default :math:`\gamma` parameter.</span>
+<span class="n">GAMMA</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+
+<div class="viewcode-block" id="Exp3"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3">[docs]</a><span class="k">class</span> <span class="nc">Exp3</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The Exp3 randomized index policy.</span>
+
+<span class="sd">    Reference: [Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems, S.Bubeck &amp; N.Cesa-Bianchi, §3.1](http://research.microsoft.com/en-us/um/people/sebubeck/SurveyBCB12.pdf)</span>
+
+<span class="sd">    See also [Evaluation and Analysis of the Performance of the EXP3 Algorithm in Stochastic Environments, Y. Seldin &amp; C. Szepasvari &amp; P. Auer &amp; Y. Abbasi-Adkori, 2012](http://proceedings.mlr.press/v24/seldin12a/seldin12a.pdf).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Exp3.__init__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">GAMMA</span><span class="p">,</span>
+                 <span class="n">unbiased</span><span class="o">=</span><span class="n">UNBIASED</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exp3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gamma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Use a default value for the gamma parameter</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="n">nbArms</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">gamma</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: the &#39;gamma&#39; parameter for Exp3 class has to be in (0, 1].&quot;</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unbiased</span> <span class="o">=</span> <span class="n">unbiased</span>  <span class="c1">#: Unbiased estimators ?</span>
+        <span class="c1"># Internal memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1">#: Weights on the arms</span>
+        <span class="c1"># trying to randomize the order of the initial visit to each arm; as this determinism breaks its habitility to play efficiently in multi-players games</span>
+        <span class="c1"># XXX do even more randomized, take a random permutation of the arm ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exploration</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span></div>
+        <span class="c1"># The proba that another player has the same is nbPlayers / factorial(nbArms) : should be SMALL !</span>
+
+<div class="viewcode-block" id="Exp3.startGame"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start with uniform weights.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exp3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exp3.__str__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Exp3($\gamma: </span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span></div>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Constant :math:`\gamma_t = \gamma`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gamma</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trusts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the trusts probabilities according to Exp3 formula, and the parameter :math:`\gamma_t`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           \mathrm{trusts}&#39;_k(t+1) &amp;= (1 - \gamma_t) w_k(t) + \gamma_t \frac{1}{K}, \\</span>
+<span class="sd">           \mathrm{trusts}(t+1) &amp;= \mathrm{trusts}&#39;(t+1) / \sum_{k=1}^{K} \mathrm{trusts}&#39;_k(t+1).</span>
+
+<span class="sd">        If :math:`w_k(t)` is the current weight from arm k.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Mixture between the weights and the uniform distribution</span>
+        <span class="n">trusts</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+        <span class="c1"># XXX Handle weird cases, slow down everything but safer!</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)):</span>
+            <span class="n">trusts</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># set bad values to 0</span>
+        <span class="c1"># Bad case, where the sum is so small that it&#39;s only rounding errors</span>
+        <span class="c1"># or where all values where bad and forced to 0, start with trusts=[1/K...]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trusts</span><span class="p">),</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">trusts</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
+        <span class="c1"># Normalize it and return it</span>
+        <span class="k">return</span> <span class="n">trusts</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trusts</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Exp3.getReward"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Give a reward: accumulate rewards on that arm k, then update the weight :math:`w_k(t)` and renormalize the weights.</span>
+
+<span class="sd">        - With unbiased estimators, divide by the trust on that arm k, i.e., the probability of observing arm k: :math:`\tilde{r}_k(t) = \frac{r_k(t)}{\mathrm{trusts}_k(t)}`.</span>
+<span class="sd">        - But with a biased estimators, :math:`\tilde{r}_k(t) = r_k(t)`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           w&#39;_k(t+1) &amp;= w_k(t) \times \exp\left( \frac{\tilde{r}_k(t)}{\gamma_t N_k(t)} \right) \\</span>
+<span class="sd">           w(t+1) &amp;= w&#39;(t+1) / \sum_{k=1}^{K} w&#39;_k(t+1).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exp3</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>  <span class="c1"># XXX Call to BasePolicy</span>
+        <span class="c1"># Update weight of THIS arm, with this biased or unbiased reward</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unbiased</span><span class="p">:</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="c1"># Multiplicative weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">reward</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span>
+        <span class="c1"># Renormalize weights at each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span></div>
+
+    <span class="c1"># --- Choice methods</span>
+
+<div class="viewcode-block" id="Exp3.choice"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;One random selection, with probabilities = trusts, thank to :func:`numpy.random.choice`.&quot;&quot;&quot;</span>
+        <span class="c1"># Force to first visit each arm once in the first steps</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>
+            <span class="c1"># DONE we could use a random permutation instead of deterministic order!</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exploration</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exp3.choiceWithRank"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.choiceWithRank">[docs]</a>    <span class="k">def</span> <span class="nf">choiceWithRank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Multiple (rank &gt;= 1) random selection, with probabilities = trusts, thank to :func:`numpy.random.choice`, and select the last one (less probable).</span>
+
+<span class="sd">        - Note that if not enough entries in the trust vector are non-zero, then :func:`choice` is called instead (rank is ignored).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">rank</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)[</span><span class="n">rank</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Exp3.choiceFromSubSet"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.choiceFromSubSet">[docs]</a>    <span class="k">def</span> <span class="nf">choiceFromSubSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">availableArms</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;One random selection, from availableArms, with probabilities = trusts, thank to :func:`numpy.random.choice`.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">availableArms</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">availableArms</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">availableArms</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="n">availableArms</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Exp3.choiceMultiple"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.choiceMultiple">[docs]</a>    <span class="k">def</span> <span class="nf">choiceMultiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Multiple (nb &gt;= 1) random selection, with probabilities = trusts, thank to :func:`numpy.random.choice`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nb</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span></div>
+
+    <span class="c1"># --- Other methods</span>
+
+<div class="viewcode-block" id="Exp3.estimatedOrder"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.estimatedOrder">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the estimate order of the arms, as a permutation on [0..K-1] that would order the arms by increasing trust probabilities.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exp3.estimatedBestArms"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3.estimatedBestArms">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedBestArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">M</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: the parameter &#39;M&#39; has to be between 1 and K = </span><span class="si">{}</span><span class="s2">, but it was </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimatedOrder</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">order</span><span class="p">[</span><span class="o">-</span><span class="n">M</span><span class="p">:]</span></div></div>
+
+
+<span class="c1"># --- Three special cases</span>
+
+<div class="viewcode-block" id="Exp3WithHorizon"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3WithHorizon">[docs]</a><span class="k">class</span> <span class="nc">Exp3WithHorizon</span><span class="p">(</span><span class="n">Exp3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Exp3 with fixed gamma, :math:`\gamma_t = \gamma_0`, chosen with a knowledge of the horizon.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Exp3WithHorizon.__init__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3WithHorizon.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="n">UNBIASED</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exp3WithHorizon</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="n">unbiased</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">horizon</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: the &#39;horizon&#39; parameter for SoftmaxWithHorizon class has to be &gt; 0.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>  <span class="c1">#: Parameter :math:`T` = known horizon of the experiment.</span></div>
+
+<div class="viewcode-block" id="Exp3WithHorizon.__str__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3WithHorizon.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Exp3($T=</span><span class="si">{}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span><span class="p">)</span></div>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Fixed temperature, small, knowing the horizon: :math:`\gamma_t = \sqrt(\frac{2 \log(K)}{T K})` (*heuristic*).</span>
+
+<span class="sd">        - Cf. Theorem 3.1 case #1 of [Bubeck &amp; Cesa-Bianchi, 2012](http://sbubeck.com/SurveyBCB12.pdf).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Exp3Decreasing"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3Decreasing">[docs]</a><span class="k">class</span> <span class="nc">Exp3Decreasing</span><span class="p">(</span><span class="n">Exp3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Exp3 with decreasing parameter :math:`\gamma_t`.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Exp3Decreasing.__str__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3Decreasing.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Exp3(decreasing)&quot;</span></div>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Decreasing gamma with the time: :math:`\gamma_t = \min(\frac{1}{K}, \sqrt(\frac{\log(K)}{t K}))` (*heuristic*).</span>
+
+<span class="sd">        - Cf. Theorem 3.1 case #2 of [Bubeck &amp; Cesa-Bianchi, 2012](http://sbubeck.com/SurveyBCB12.pdf).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="Exp3SoftMix"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3SoftMix">[docs]</a><span class="k">class</span> <span class="nc">Exp3SoftMix</span><span class="p">(</span><span class="n">Exp3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Another Exp3 with decreasing parameter :math:`\gamma_t`.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Exp3SoftMix.__str__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3SoftMix.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Exp3(SoftMix)&quot;</span></div>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Decreasing gamma parameter with the time: :math:`\gamma_t = c \frac{\log(t)}{t}` (*heuristic*).</span>
+
+<span class="sd">        - Cf. [Cesa-Bianchi &amp; Fisher, 1998](http://dl.acm.org/citation.cfm?id=657473).</span>
+<span class="sd">        - Default value for is :math:`c = \sqrt(\frac{\log(K)}{K})`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span></div>
+
+
+<span class="c1"># --- Other variants</span>
+
+
+<span class="n">DELTA</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1">#: Default value for the confidence parameter delta</span>
+
+
+<div class="viewcode-block" id="Exp3ELM"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3ELM">[docs]</a><span class="k">class</span> <span class="nc">Exp3ELM</span><span class="p">(</span><span class="n">Exp3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A variant of Exp3, apparently designed to work better in stochastic environments.</span>
+
+<span class="sd">    - Reference: [Evaluation and Analysis of the Performance of the EXP3 Algorithm in Stochastic Environments, Y. Seldin &amp; C. Szepasvari &amp; P. Auer &amp; Y. Abbasi-Adkori, 2012](http://proceedings.mlr.press/v24/seldin12a/seldin12a.pdf).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Exp3ELM.__init__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3ELM.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">DELTA</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Exp3ELM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="n">unbiased</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">delta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: the &#39;delta&#39; parameter for Exp3ELM class has to be &gt; 0.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>  <span class="c1">#: Confidence parameter, given in input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.</span> <span class="o">/</span> <span class="n">delta</span><span class="p">))</span>  <span class="c1">#: Constant B given by :math:`B = 4 (e - 2) (2 \log K + \log(2 / \delta))`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1">#: Set of available arms, starting from all arms, and it can get reduced at each step.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">varianceTerm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1">#: Estimated variance term, for each arm.</span></div>
+
+<div class="viewcode-block" id="Exp3ELM.__str__"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3ELM.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Exp3ELM($\delta=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Exp3ELM.choice"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3ELM.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Choose among the remaining arms.&quot;&quot;&quot;</span>
+        <span class="c1"># Force to first visit each arm once in the first steps</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_exploration</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Exp3ELM.getReward"><a class="viewcode-back" href="../../docs/Policies.Exp3.html#Policies.Exp3.Exp3ELM.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Get reward and update the weights, as in Exp3, but also update the variance term :math:`V_k(t)` for all arms, and the set of available arms :math:`\mathcal{A}(t)`, by removing arms whose empirical accumulated reward and variance term satisfy a certain inequality.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           a^*(t+1) &amp;= \arg\max_a \hat{R}_{a}(t+1), \\</span>
+<span class="sd">           V_k(t+1) &amp;= V_k(t) + \frac{1}{\mathrm{trusts}_k(t+1)}, \\</span>
+<span class="sd">           \mathcal{A}(t+1) &amp;= \mathcal{A}(t) \setminus \left\{ a : \hat{R}_{a^*(t+1)}(t+1) - \hat{R}_{a}(t+1) &gt; \sqrt{B (V_{a^*(t+1)}(t+1) + V_{a}(t+1))} \right\}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">arm</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">,</span> <span class="s2">&quot;Error: at time </span><span class="si">{}</span><span class="s2">, the arm </span><span class="si">{}</span><span class="s2"> was played by Exp3ELM but it is not in the set of remaining arms </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="c1"># First, use the reward to update the weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="c1"># Update weight of THIS arm, with this biased or unbiased reward</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unbiased</span><span class="p">:</span>
+            <span class="n">reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
+
+        <span class="c1"># Multiplicative weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">reward</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span>
+        <span class="c1"># Renormalize weights at each step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">])</span>
+
+        <span class="c1"># Then update the variance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">varianceTerm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">]</span>
+
+        <span class="c1"># And update the set of available arms</span>
+        <span class="n">a_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">])</span>
+        <span class="c1"># print(&quot;- Exp3ELM identified the arm of best accumulated rewards to be {}, at time {} ...&quot;.format(a_star, self.t))  # DEBUG</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">a_star</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">varianceTerm</span><span class="p">[</span><span class="n">a_star</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">varianceTerm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">]))</span>
+        <span class="n">badArms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">test</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Do we have bad arms ? If yes, remove them</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">badArms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- Exp3ELM identified these arms to be bad at time </span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">, removing them from the set of available arms ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">badArms</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">,</span> <span class="n">badArms</span><span class="p">)</span></div>
+
+        <span class="c1"># # DEBUG</span>
+        <span class="c1"># print(&quot;- Exp3ELM at time {} as this internal memory:\n  - B = {} and delta = {}\n  - Pulls {}\n  - Rewards {}\n  - Weights {}\n  - Variance {}\n  - Trusts {}\n  - a_star {}\n  - Left part of test {}\n  - Right part of test {}\n  - test {}\n  - Bad arms {}\n  - Available arms {}&quot;.format(self.t, self.B, self.delta, self.pulls, self.rewards, self.weights, self.varianceTerm, self.trusts, a_star, (self.rewards[a_star] - self.rewards[self.availableArms]), np.sqrt(self.B * (self.varianceTerm[a_star] + self.varianceTerm[self.availableArms])), test, badArms, self.availableArms))  # DEBUG</span>
+        <span class="c1"># print(input(&quot;[Enter to keep going on]&quot;))  # DEBUG</span>
+
+    <span class="c1"># --- Trusts and gamma coefficient</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trusts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Update the trusts probabilities according to Exp3ELM formula, and the parameter :math:`\gamma_t`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">           \mathrm{trusts}&#39;_k(t+1) &amp;= (1 - |\mathcal{A}_t| \gamma_t) w_k(t) + \gamma_t, \\</span>
+<span class="sd">           \mathrm{trusts}(t+1) &amp;= \mathrm{trusts}&#39;(t+1) / \sum_{k=1}^{K} \mathrm{trusts}&#39;_k(t+1).</span>
+
+<span class="sd">        If :math:`w_k(t)` is the current weight from arm k.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Mixture between the weights and the uniform distribution</span>
+        <span class="n">trusts</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="c1"># XXX Handle weird cases, slow down everything but safer!</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)):</span>
+            <span class="c1"># XXX some value has non-finite trust, probably on the first steps</span>
+            <span class="c1"># 1st case: all values are non-finite (nan): set trusts to 1/N uniform choice</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)):</span>
+                <span class="n">trusts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">),</span> <span class="mf">1.</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">))</span>
+            <span class="c1"># 2nd case: only few values are non-finite: set them to 0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">trusts</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">trusts</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Bad case, where the sum is so small that it&#39;s only rounding errors</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trusts</span><span class="p">),</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">trusts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">),</span> <span class="mf">1.</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">))</span>
+        <span class="c1"># Normalize it and return it</span>
+        <span class="c1"># return trusts</span>
+        <span class="k">return</span> <span class="n">trusts</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trusts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">availableArms</span><span class="p">])</span>
+
+    <span class="c1"># This decorator @property makes this method an attribute, cf. https://docs.python.org/3/library/functions.html#property</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gamma</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Decreasing gamma with the time: :math:`\gamma_t = \min(\frac{1}{K}, \sqrt(\frac{\log(K)}{t K}))` (*heuristic*).</span>
+
+<span class="sd">        - Cf. Theorem 3.1 case #2 of [Bubeck &amp; Cesa-Bianchi, 2012](http://sbubeck.com/SurveyBCB12.pdf).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

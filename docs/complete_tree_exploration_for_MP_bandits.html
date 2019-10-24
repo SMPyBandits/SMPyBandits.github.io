@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -135,3 +134,873 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+      <li>complete_tree_exploration_for_MP_bandits module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/complete_tree_exploration_for_MP_bandits.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-complete_tree_exploration_for_MP_bandits">
+<span id="complete-tree-exploration-for-mp-bandits-module"></span><h1>complete_tree_exploration_for_MP_bandits module<a class="headerlink" href="#module-complete_tree_exploration_for_MP_bandits" title="Permalink to this headline">¶</a></h1>
+<p>Experimental code to perform complete tree exploration for Multi-Player bandits.</p>
+<p>Algorithms:</p>
+<ul class="simple">
+<li><p>Support Selfish 0-greedy, UCB, and klUCB in 3 different variants.</p></li>
+<li><p>Support also RhoRand, RandTopM and MCTopM, even though they are <em>not</em> memory-less, by using another state representation (inlining the memory of each player, eg the ranks for RhoRand).</p></li>
+</ul>
+<p>Features:</p>
+<ul class="simple">
+<li><p>For the means of each arm, <span class="math notranslate nohighlight">\(\mu_1, \dots, \mu_K\)</span>, this script can use exact formal computations with sympy, or fractions with Fraction, or float number.</p></li>
+<li><p>The graph can contain all nodes from root to leafs, or only leafs (with summed probabilities), and possibly only the absorbing nodes are showed.</p></li>
+<li><p>Support export of the tree to a GraphViz dot graph, and can save it to SVG/PNG and LaTeX (with Tikz) and PDF etc.</p></li>
+<li><p>By default, the root is highlighted in green and the absorbing nodes are in red.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>I still have to fix these issues:</p>
+<ul class="simple">
+<li><p>TODO : right now, it is not so efficient, could it be improved? I don’t think I can do anything in a smarter way, in pure Python.</p></li>
+</ul>
+</div>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>‘sympy’ module to use formal means <span class="math notranslate nohighlight">\(\mu_1, \dots, \mu_K\)</span> instead of numbers,</p></li>
+<li><p>‘numpy’ module for computations on indexes (e.g., <code class="docutils literal notranslate"><span class="pre">np.where</span></code>),</p></li>
+<li><p>‘graphviz’ module to generate the graph and save it,</p></li>
+<li><p>‘dot2tex’ module to generate nice LaTeX (with Tikz) graph and save it to PDF.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To use the ‘dot2tex’ module, only Python2 is supported.
+However, I maintain an unpublished port of ‘dot2tex’ for Python3, see
+[here](<a class="reference external" href="https://github.com/Naereen/dot2tex">https://github.com/Naereen/dot2tex</a>), that you can download, and install
+manually (sudo python3 setup.py install) to have ‘dot2tex’ for Python3 also.</p>
+</div>
+<p>About:</p>
+<ul class="simple">
+<li><p><em>Date:</em> 16/09/2017.</p></li>
+<li><p><em>Author:</em> Lilian Besson, (C) 2017</p></li>
+<li><p><em>Licence:</em> MIT Licence (<a class="reference external" href="http://lbesson.mit-license.org">http://lbesson.mit-license.org</a>).</p></li>
+</ul>
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.oo">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">oo</code><em class="property"> = inf</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.oo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for float(‘+inf’).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.PLOT_DIR">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">PLOT_DIR</code><em class="property"> = 'plots/trees'</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.PLOT_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory for the plots</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.tupleit1">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">tupleit1</code><span class="sig-paren">(</span><em class="sig-param">anarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#tupleit1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.tupleit1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a non-hashable 1D numpy array to a hashable tuple.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.tupleit2">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">tupleit2</code><span class="sig-paren">(</span><em class="sig-param">anarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#tupleit2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.tupleit2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a non-hashable 2D numpy array to a hashable tuple-of-tuples.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.prod">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">prod</code><span class="sig-paren">(</span><em class="sig-param">iterator</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#prod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.prod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Product of the values in this iterator.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.WIDTH">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">WIDTH</code><em class="property"> = 200</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.WIDTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the <code class="docutils literal notranslate"><span class="pre">width</span></code> parameter for <a class="reference internal" href="#complete_tree_exploration_for_MP_bandits.wraptext" title="complete_tree_exploration_for_MP_bandits.wraptext"><code class="xref py py-func docutils literal notranslate"><span class="pre">wraptext()</span></code></a> and <code class="xref py py-func docutils literal notranslate"><span class="pre">wraplatex()</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.wraptext">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">wraptext</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">width=200</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#wraptext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.wraptext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap the text, using <code class="docutils literal notranslate"><span class="pre">textwrap</span></code> module, and <code class="docutils literal notranslate"><span class="pre">width</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.mybool">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">mybool</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#mybool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.mybool" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.ONLYLEAFS">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">ONLYLEAFS</code><em class="property"> = True</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.ONLYLEAFS" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, aim at the most concise graph representation by only showing the leafs.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.ONLYABSORBING">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">ONLYABSORBING</code><em class="property"> = False</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.ONLYABSORBING" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, don’t aim at the most concise graph representation by only showing the absorbing leafs.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.CONCISE">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">CONCISE</code><em class="property"> = True</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.CONCISE" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, only show <span class="math notranslate nohighlight">\(\tilde{S}\)</span> and <span class="math notranslate nohighlight">\(N\)</span> in the graph representations, not all the 4 vectors.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.FULLHASH">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">FULLHASH</code><em class="property"> = False</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.FULLHASH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use only Stilde, N for hashing the states.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="complete_tree_exploration_for_MP_bandits.FORMAT">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">FORMAT</code><em class="property"> = 'svg'</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.FORMAT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format used to save the graphs.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.FixedArm">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">FixedArm</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#FixedArm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.FixedArm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fake player j that always targets at arm j.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.UniformExploration">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">UniformExploration</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#UniformExploration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.UniformExploration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fake player j that always targets all arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.ConstantRank">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">ConstantRank</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#ConstantRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.ConstantRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant rank no matter what.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.choices_from_indexes">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">choices_from_indexes</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#choices_from_indexes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.choices_from_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>For deterministic index policies, if more than one index is maximum, return the list of positions attaining this maximum (ties), or only one position.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_0Greedy_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_0Greedy_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_0Greedy_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_0Greedy_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + 0-Greedy index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_0Greedy_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_0Greedy_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_0Greedy_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_0Greedy_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + 0-Greedy index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_0Greedy_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_0Greedy_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_0Greedy_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_0Greedy_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + 0-Greedy index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_UCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_UCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_UCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_UCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + UCB_0.5 index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_UCB">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_UCB</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_UCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_UCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + UCB_0.5 index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_UCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_UCB_Utilde</code><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_UCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + UCB_0.5 index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_UCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_UCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_UCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_UCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + UCB_0.5 index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_KLUCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_KLUCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_KLUCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_KLUCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + Bernoulli KL-UCB index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_KLUCB">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_KLUCB</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_KLUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_KLUCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + Bernoulli KL-UCB index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_KLUCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_KLUCB_Utilde</code><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_KLUCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + Bernoulli KL-UCB index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.Selfish_KLUCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">Selfish_KLUCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#Selfish_KLUCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.Selfish_KLUCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selfish policy + Bernoulli KL-UCB index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.choices_from_indexes_with_rank">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">choices_from_indexes_with_rank</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#choices_from_indexes_with_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.choices_from_indexes_with_rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>For deterministic index policies, if more than one index is maximum, return the list of positions attaining the rank-th largest index (with more than one if ties, or only one position).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RhoRand_UCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RhoRand_UCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RhoRand_UCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RhoRand_UCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + UCB_0.5 index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RhoRand_UCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RhoRand_UCB_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RhoRand_UCB_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RhoRand_UCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + UCB_0.5 index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RhoRand_UCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RhoRand_UCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RhoRand_UCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RhoRand_UCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + UCB_0.5 index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RhoRand_KLUCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RhoRand_KLUCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RhoRand_KLUCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RhoRand_KLUCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + Bernoulli KL-UCB index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RhoRand_KLUCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RhoRand_KLUCB_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RhoRand_KLUCB_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RhoRand_KLUCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + Bernoulli KL-UCB index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RhoRand_KLUCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RhoRand_KLUCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RhoRand_KLUCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RhoRand_KLUCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + Bernoulli KL-UCB index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandomNewRank">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandomNewRank</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandomNewRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandomNewRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand chooses a new uniform rank in {1,..,M} in case of collision, or keep the same.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.default_policy">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">default_policy</code><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.default_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand policy + UCB_0.5 index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.default_update_memory">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">default_update_memory</code><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.default_update_memory" title="Permalink to this definition">¶</a></dt>
+<dd><p>RhoRand chooses a new uniform rank in {1,..,M} in case of collision, or keep the same.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_UCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_UCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_UCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_UCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM policy + UCB_0.5 index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_UCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_UCB_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_UCB_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_UCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM policy + UCB_0.5 index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_UCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_UCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_UCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_UCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM policy + UCB_0.5 index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_KLUCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_KLUCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_KLUCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_KLUCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM policy + Bernoulli KL-UCB index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_KLUCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_KLUCB_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_KLUCB_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_KLUCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM policy + Bernoulli KL-UCB index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_KLUCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_KLUCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_KLUCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_KLUCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM policy + Bernoulli KL-UCB index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.RandTopM_RandomNewChosenArm">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">RandTopM_RandomNewChosenArm</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#RandTopM_RandomNewChosenArm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.RandTopM_RandomNewChosenArm" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopM chooses a new arm after a collision or if the chosen arm lies outside of its estimatedBestArms set, uniformly from the set of estimated M best arms, or keep the same.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.write_to_tuple">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">write_to_tuple</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#write_to_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.write_to_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple cannot be written, this hack fixes that.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_UCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_UCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_UCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_UCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCTopM policy + UCB_0.5 index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_UCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_UCB_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_UCB_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_UCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCTopM policy + UCB_0.5 index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_UCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_UCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_UCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_UCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCTopM policy + UCB_0.5 index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_KLUCB_U">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_KLUCB_U</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_KLUCB_U"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_KLUCB_U" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCTopM policy + Bernoulli KL-UCB index + U feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_KLUCB_Utilde">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_KLUCB_Utilde</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_KLUCB_Utilde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_KLUCB_Utilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCTopM policy + Bernoulli KL-UCB index + Utilde feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_KLUCB_Ubar">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_KLUCB_Ubar</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_KLUCB_Ubar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_KLUCB_Ubar" title="Permalink to this definition">¶</a></dt>
+<dd><p>MCTopM policy + Bernoulli KL-UCB index + Ubar feedback.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.MCTopM_RandomNewChosenArm">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">MCTopM_RandomNewChosenArm</code><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#MCTopM_RandomNewChosenArm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.MCTopM_RandomNewChosenArm" title="Permalink to this definition">¶</a></dt>
+<dd><p>RandTopMC chooses a new arm after if the chosen arm lies outside of its estimatedBestArms set, uniformly from the set of estimated M best arms, or keep the same.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.symbol_means">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">symbol_means</code><span class="sig-paren">(</span><em class="sig-param">K</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#symbol_means"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.symbol_means" title="Permalink to this definition">¶</a></dt>
+<dd><p>Better to work directly with symbols and instantiate the results <em>after</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.random_uniform_means">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">random_uniform_means</code><span class="sig-paren">(</span><em class="sig-param">K</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#random_uniform_means"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.random_uniform_means" title="Permalink to this definition">¶</a></dt>
+<dd><p>If needed, generate an array of K (numerical) uniform means in [0, 1].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.uniform_means">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">uniform_means</code><span class="sig-paren">(</span><em class="sig-param">nbArms=3</em>, <em class="sig-param">delta=0.1</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#uniform_means"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.uniform_means" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of means of arms, well spaced:</p>
+<ul class="simple">
+<li><p>in [lower, lower + amplitude],</p></li>
+<li><p>sorted in increasing order,</p></li>
+<li><p>starting from lower + amplitude * delta, up to lower + amplitude * (1 - delta),</p></li>
+<li><p>and there is nbArms arms.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uniform_means</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="go">array([ 0.1,  0.9])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uniform_means</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="go">array([ 0.1,  0.5,  0.9])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uniform_means</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="mi">9</span><span class="p">)))</span>
+<span class="go">array([ 0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.proba2float">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">proba2float</code><span class="sig-paren">(</span><em class="sig-param">proba</em>, <em class="sig-param">values=None</em>, <em class="sig-param">K=None</em>, <em class="sig-param">names=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#proba2float"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.proba2float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace mu_k by a numerical value and evaluation  the formula.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.simplify">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">simplify</code><span class="sig-paren">(</span><em class="sig-param">proba</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#simplify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.simplify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to simplify the expression of the probability.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.proba2str">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">proba2str</code><span class="sig-paren">(</span><em class="sig-param">proba</em>, <em class="sig-param">latex=False</em>, <em class="sig-param">html_in_var_names=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#proba2str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.proba2str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty print a proba, either a number, a Fraction, or a sympy expression.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.tex2pdf">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">tex2pdf</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#tex2pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.tex2pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Naive call to command line pdflatex, twice.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="complete_tree_exploration_for_MP_bandits.State">
+<em class="property">class </em><code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">State</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">Stilde</em>, <em class="sig-param">N</em>, <em class="sig-param">Ntilde</em>, <em class="sig-param">mus</em>, <em class="sig-param">players</em>, <em class="sig-param">depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Not space-efficient representation of a state in the system we model.</p>
+<ul class="simple">
+<li><p>S, Stilde, N, Ntilde: are arrays of size (M, K),</p></li>
+<li><p>depth, t, M, K: integers, to avoid recomputing them,</p></li>
+<li><p>mus: the problem parameters (only for Bernoulli arms),</p></li>
+<li><p>players: is a list of algorithms,</p></li>
+<li><p>probas: list of transition probabilities,</p></li>
+<li><p>children: list of all possible next states (transitions).</p></li>
+</ul>
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">Stilde</em>, <em class="sig-param">N</em>, <em class="sig-param">Ntilde</em>, <em class="sig-param">mus</em>, <em class="sig-param">players</em>, <em class="sig-param">depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new state. Arrays S, Stilde, N, Ntilde are <em>copied</em> to avoid modify previous values!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.S">
+<code class="sig-name descname">S</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.S" title="Permalink to this definition">¶</a></dt>
+<dd><p>sensing feedback</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.Stilde">
+<code class="sig-name descname">Stilde</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.Stilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of sensing trials</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.N">
+<code class="sig-name descname">N</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.N" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of succesful transmissions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.Ntilde">
+<code class="sig-name descname">Ntilde</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.Ntilde" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of trials without collisions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.depth">
+<code class="sig-name descname">depth</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>current depth of the exploration tree</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.t">
+<code class="sig-name descname">t</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>current time step. Simply = sum(N[0]) = sum(N[i]) for all player i, but easier to compute it once and store it</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.M">
+<code class="sig-name descname">M</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.M" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of players</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.K">
+<code class="sig-name descname">K</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.K" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of arms (channels)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of next state, representing all the possible transitions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.probas">
+<code class="sig-name descname">probas</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.probas" title="Permalink to this definition">¶</a></dt>
+<dd><p>probabilities of transitions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><em class="sig-param">concise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.to_node">
+<code class="sig-name descname">to_node</code><span class="sig-paren">(</span><em class="sig-param">concise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.to_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the state as a small string to be attached to a GraphViz node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.to_dot">
+<code class="sig-name descname">to_dot</code><span class="sig-paren">(</span><em class="sig-param">title=''</em>, <em class="sig-param">name=''</em>, <em class="sig-param">comment=''</em>, <em class="sig-param">latex=False</em>, <em class="sig-param">html_in_var_names=False</em>, <em class="sig-param">ext='svg'</em>, <em class="sig-param">onlyleafs=True</em>, <em class="sig-param">onlyabsorbing=False</em>, <em class="sig-param">concise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.to_dot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.to_dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the state to a .dot graph, using GraphViz. See <a class="reference external" href="http://graphviz.readthedocs.io/">http://graphviz.readthedocs.io/</a> for more details.</p>
+<ul class="simple">
+<li><p>onlyleafs: only print the root and the leafs, to see a concise representation of the tree.</p></li>
+<li><p>onlyabsorbing: only print the absorbing leafs, to see a really concise representation of the tree.</p></li>
+<li><p>concise: weather to use the short representation of states (using <span class="math notranslate nohighlight">\(\tilde{S}\)</span> and <span class="math notranslate nohighlight">\(N\)</span>) or the long one (using the 4 variables).</p></li>
+<li><p>html_in_var_names: experimental use of <code class="docutils literal notranslate"><span class="pre">&lt;SUB&gt;..&lt;/SUB&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;SUP&gt;..&lt;/SUP&gt;</span></code> in the label for the tree.</p></li>
+<li><p>latex: experimental use of <code class="docutils literal notranslate"><span class="pre">_{..}</span></code> and <code class="docutils literal notranslate"><span class="pre">^{..}</span></code> in the label for the tree, to use with dot2tex.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.saveto">
+<code class="sig-name descname">saveto</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">view=True</em>, <em class="sig-param">title=''</em>, <em class="sig-param">name=''</em>, <em class="sig-param">comment=''</em>, <em class="sig-param">latex=False</em>, <em class="sig-param">html_in_var_names=False</em>, <em class="sig-param">ext='svg'</em>, <em class="sig-param">onlyleafs=True</em>, <em class="sig-param">onlyabsorbing=False</em>, <em class="sig-param">concise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.saveto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.saveto" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a new copy of that state with same S, Stilde, N, Ntilde but no probas and no children (and depth=0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.__hash__">
+<code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><em class="sig-param">full=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.__hash__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hash the matrix Stilde and N of the state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.is_absorbing">
+<code class="sig-name descname">is_absorbing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.is_absorbing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.is_absorbing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to detect if this state is absorbing, ie only one transition is possible, and again infinitely for the only child.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Still very experimental!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.has_absorbing_child_whole_subtree">
+<code class="sig-name descname">has_absorbing_child_whole_subtree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.has_absorbing_child_whole_subtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.has_absorbing_child_whole_subtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to detect if this state has an absorbing child in the whole subtree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.explore_from_node_to_depth">
+<code class="sig-name descname">explore_from_node_to_depth</code><span class="sig-paren">(</span><em class="sig-param">depth=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.explore_from_node_to_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.explore_from_node_to_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute recursively the one_depth children of the root and its children.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.compute_one_depth">
+<code class="sig-name descname">compute_one_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.compute_one_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.compute_one_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use all_deltas to store all the possible transitions and their probabilities. Increase depth by 1 at the end.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.all_absorbing_states">
+<code class="sig-name descname">all_absorbing_states</code><span class="sig-paren">(</span><em class="sig-param">depth=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.all_absorbing_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.all_absorbing_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator that yields all the absorbing nodes of the tree, one by one.</p>
+<ul class="simple">
+<li><p>It might not find any,</p></li>
+<li><p>It does so without merging common nodes, in order to find the first absorbing node as quick as possible.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.absorbing_states_one_depth">
+<code class="sig-name descname">absorbing_states_one_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.absorbing_states_one_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.absorbing_states_one_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use all_deltas to yield all the absorbing one-depth child and their probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.find_N_absorbing_states">
+<code class="sig-name descname">find_N_absorbing_states</code><span class="sig-paren">(</span><em class="sig-param">N=1</em>, <em class="sig-param">maxdepth=8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.find_N_absorbing_states"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.find_N_absorbing_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find at least N absorbing states, by considering a large depth.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.all_deltas">
+<code class="sig-name descname">all_deltas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.all_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.all_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator that yields functions transforming state to another state.</p>
+<ul class="simple">
+<li><p>It is memory efficient as it is a generator.</p></li>
+<li><p>Do not convert that to a list or it might use all your system memory: each returned value is a function with code and variables inside!</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.pretty_print_result_recursively">
+<code class="sig-name descname">pretty_print_result_recursively</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.pretty_print_result_recursively"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.pretty_print_result_recursively" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print all the transitions, depth by depth (recursively).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.get_all_leafs">
+<code class="sig-name descname">get_all_leafs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.get_all_leafs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.get_all_leafs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recurse and get all the leafs. Many different state can be present in the list of leafs, with possibly different probabilities (each correspond to a trajectory).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.get_unique_leafs">
+<code class="sig-name descname">get_unique_leafs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.get_unique_leafs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.get_unique_leafs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute all the leafs (deepest children) and merge the common one to compute their full probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.State.proba_reaching_absorbing_state">
+<code class="sig-name descname">proba_reaching_absorbing_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#State.proba_reaching_absorbing_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.proba_reaching_absorbing_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the probability of reaching a leaf that is an absorbing state.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.__dict__">
+<code class="sig-name descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'complete_tree_exploration_for_MP_bandits', '__doc__': 'Not space-efficient representation of a state in the system we model.\n\n    - S, Stilde, N, Ntilde: are arrays of size (M, K),\n    - depth, t, M, K: integers, to avoid recomputing them,\n    - mus: the problem parameters (only for Bernoulli arms),\n    - players: is a list of algorithms,\n    - probas: list of transition probabilities,\n    - children: list of all possible next states (transitions).\n    ', '__init__': &lt;function State.__init__&gt;, '__str__': &lt;function State.__str__&gt;, 'to_node': &lt;function State.to_node&gt;, 'to_dot': &lt;function State.to_dot&gt;, 'saveto': &lt;function State.saveto&gt;, 'copy': &lt;function State.copy&gt;, '__hash__': &lt;function State.__hash__&gt;, 'is_absorbing': &lt;function State.is_absorbing&gt;, 'has_absorbing_child_whole_subtree': &lt;function State.has_absorbing_child_whole_subtree&gt;, 'explore_from_node_to_depth': &lt;function State.explore_from_node_to_depth&gt;, 'compute_one_depth': &lt;function State.compute_one_depth&gt;, 'all_absorbing_states': &lt;function State.all_absorbing_states&gt;, 'absorbing_states_one_depth': &lt;function State.absorbing_states_one_depth&gt;, 'find_N_absorbing_states': &lt;function State.find_N_absorbing_states&gt;, 'all_deltas': &lt;function State.all_deltas&gt;, 'pretty_print_result_recursively': &lt;function State.pretty_print_result_recursively&gt;, 'get_all_leafs': &lt;function State.get_all_leafs&gt;, 'get_unique_leafs': &lt;function State.get_unique_leafs&gt;, 'proba_reaching_absorbing_state': &lt;function State.proba_reaching_absorbing_state&gt;, '__dict__': &lt;attribute '__dict__' of 'State' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'State' objects&gt;})</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'complete_tree_exploration_for_MP_bandits'</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.State.__weakref__">
+<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.State.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory">
+<em class="property">class </em><code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">StateWithMemory</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">Stilde</em>, <em class="sig-param">N</em>, <em class="sig-param">Ntilde</em>, <em class="sig-param">mus</em>, <em class="sig-param">players</em>, <em class="sig-param">update_memories</em>, <em class="sig-param">memories=None</em>, <em class="sig-param">depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#complete_tree_exploration_for_MP_bandits.State" title="complete_tree_exploration_for_MP_bandits.State"><code class="xref py py-class docutils literal notranslate"><span class="pre">complete_tree_exploration_for_MP_bandits.State</span></code></a></p>
+<p>State with a memory for each player, to represent and play with RhoRand etc.</p>
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">S</em>, <em class="sig-param">Stilde</em>, <em class="sig-param">N</em>, <em class="sig-param">Ntilde</em>, <em class="sig-param">mus</em>, <em class="sig-param">players</em>, <em class="sig-param">update_memories</em>, <em class="sig-param">memories=None</em>, <em class="sig-param">depth=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new state. Arrays S, Stilde, N, Ntilde are <em>copied</em> to avoid modify previous values!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.memories">
+<code class="sig-name descname">memories</code><em class="property"> = None</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.memories" title="Permalink to this definition">¶</a></dt>
+<dd><p>Personal memory for all players, can be a rank in {1,..,M} for rhoRand, or anything else.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><em class="sig-param">concise=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.to_node">
+<code class="sig-name descname">to_node</code><span class="sig-paren">(</span><em class="sig-param">concise=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.to_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the state as a small string to be attached to a GraphViz node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a new copy of that state with same S, Stilde, N, Ntilde but no probas and no children (and depth=0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.__hash__">
+<code class="sig-name descname">__hash__</code><span class="sig-paren">(</span><em class="sig-param">full=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.__hash__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hash the matrix Stilde and N of the state and memories of the players (ie. ranks for RhoRand).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.is_absorbing">
+<code class="sig-name descname">is_absorbing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.is_absorbing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.is_absorbing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to detect if this state is absorbing, ie only one transition is possible, and again infinitely for the only child.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Still very experimental!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.all_deltas">
+<code class="sig-name descname">all_deltas</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#StateWithMemory.all_deltas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.all_deltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator that yields functions transforming state to another state.</p>
+<ul class="simple">
+<li><p>It is memory efficient as it is a generator.</p></li>
+<li><p>Do not convert that to a list or it might use all your system memory: each returned value is a function with code and variables inside!</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="complete_tree_exploration_for_MP_bandits.StateWithMemory.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'complete_tree_exploration_for_MP_bandits'</em><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.StateWithMemory.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.main">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">depth=1</em>, <em class="sig-param">players=None</em>, <em class="sig-param">update_memories=None</em>, <em class="sig-param">mus=None</em>, <em class="sig-param">M=2</em>, <em class="sig-param">K=2</em>, <em class="sig-param">S=None</em>, <em class="sig-param">Stilde=None</em>, <em class="sig-param">N=None</em>, <em class="sig-param">Ntilde=None</em>, <em class="sig-param">find_only_N=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute all the transitions, and print them.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="complete_tree_exploration_for_MP_bandits.test">
+<code class="sig-prename descclassname">complete_tree_exploration_for_MP_bandits.</code><code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">depth=1</em>, <em class="sig-param">M=2</em>, <em class="sig-param">K=2</em>, <em class="sig-param">S=None</em>, <em class="sig-param">Stilde=None</em>, <em class="sig-param">N=None</em>, <em class="sig-param">Ntilde=None</em>, <em class="sig-param">mus=None</em>, <em class="sig-param">debug=True</em>, <em class="sig-param">all_players=None</em>, <em class="sig-param">all_update_memories=None</em>, <em class="sig-param">find_only_N=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/complete_tree_exploration_for_MP_bandits.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#complete_tree_exploration_for_MP_bandits.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the main exploration function for various all_players.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configuration.html" class="btn btn-neutral float-right" title="configuration module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="PoliciesMultiPlayers.with_proba.html" class="btn btn-neutral float-left" title="PoliciesMultiPlayers.with_proba module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,249 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.OracleFair</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for PoliciesMultiPlayers.OracleFair</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; OracleFair: a multi-player policy which uses a centralized intelligence to affect users an offset, each one take an orthogonal arm based on (offset + t) % nbBestArms, among the best arms.</span>
+
+<span class="sd">- It allows to have absolutely *no* collision, if there is more channels than users (always assumed).</span>
+<span class="sd">- And it is perfectly fair on every run: each chosen arm is played successively by each player.</span>
+<span class="sd">- Note that it IS affecting players on the best arms: it requires full knowledge of the means of the arms, not simply the number of arms.</span>
+
+<span class="sd">- Note that they need a perfect knowledge on the arms, even this is not physically plausible.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.BaseCentralizedPolicy</span> <span class="k">import</span> <span class="n">BaseCentralizedPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">BaseCentralizedPolicy</span> <span class="k">import</span> <span class="n">BaseCentralizedPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+
+
+<div class="viewcode-block" id="CyclingBest"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.CyclingBest">[docs]</a><span class="k">class</span> <span class="nc">CyclingBest</span><span class="p">(</span><span class="n">BaseCentralizedPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; CyclingBest: select an arm in the best ones (bestArms) as (offset + t) % (len(bestArms)), with offset being decided by the OracleFair multi-player policy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CyclingBest.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.CyclingBest.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">bestArms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cycling with an offset.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>  <span class="c1">#: Offset</span>
+        <span class="k">if</span> <span class="n">bestArms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bestArms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bestArms</span> <span class="o">=</span> <span class="n">bestArms</span>  <span class="c1">#: List of index of the best arms to play</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_bestArms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bestArms</span><span class="p">)</span>  <span class="c1">#: Number of best arms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1">#: Internal time</span></div>
+
+<div class="viewcode-block" id="CyclingBest.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.CyclingBest.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;CyclingBest(</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bestArms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CyclingBest.startGame"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.CyclingBest.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Nothing to do.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CyclingBest.getReward"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.CyclingBest.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Nothing to do.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="CyclingBest.choice"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.CyclingBest.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Chose cycling arm.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bestArms</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_bestArms</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="OracleFair"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.OracleFair">[docs]</a><span class="k">class</span> <span class="nc">OracleFair</span><span class="p">(</span><span class="n">BaseMPPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; OracleFair: a multi-player policy which uses a centralize intelligence to affect users an offset, each one take an orthogonal arm based on (offset + t) % nbArms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OracleFair.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.OracleFair.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">armsMAB</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - armsMAB: MAB object that represents the arms.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;); from Environment import MAB; from Arms import Bernoulli</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; problem = MAB({&#39;arm_type&#39;: Bernoulli, &#39;params&#39;: [0.1, 0.5, 0.9]})  # doctest: +ELLIPSIS,+NORMALIZE_WHITESPACE</span>
+<span class="sd">        ...</span>
+<span class="sd">        &gt;&gt;&gt; s = OracleFair(2, problem)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [1, 2]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [2, 1]</span>
+
+<span class="sd">        - To get a list of usable players, use ``s.children``.</span>
+<span class="sd">        - Warning: ``s._players`` is for internal use</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">nbPlayers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; for OracleFair class has to be &gt; 0.&quot;</span>
+        <span class="n">nbArms</span> <span class="o">=</span> <span class="n">armsMAB</span><span class="o">.</span><span class="n">nbArms</span>
+        <span class="k">if</span> <span class="n">nbPlayers</span> <span class="o">&gt;</span> <span class="n">nbArms</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning, there is more users than arms ... (nbPlayers &gt; nbArms)&quot;</span><span class="p">)</span>  <span class="c1"># XXX</span>
+        <span class="c1"># Attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="n">nbPlayers</span>  <span class="c1">#: Number of players</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms</span>
+        <span class="c1"># Internal vectorial memory</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">arm</span><span class="o">.</span><span class="n">mean</span> <span class="k">for</span> <span class="n">arm</span> <span class="ow">in</span> <span class="n">armsMAB</span><span class="o">.</span><span class="n">arms</span><span class="p">])</span>
+        <span class="n">bestArms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">means</span><span class="p">)[</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">):]</span>
+        <span class="c1"># print(&quot;bestArms =&quot;, bestArms)  # DEBUG</span>
+        <span class="k">if</span> <span class="n">nbPlayers</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">means</span><span class="p">)[</span><span class="o">-</span><span class="n">nbPlayers</span><span class="p">:]</span>  <span class="c1"># Decide the offsets of the centralized players</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[:</span><span class="n">nbArms</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>
+            <span class="c1"># Try to minimize the number of doubled offsets, so all the other players are affected to the *same* arm</span>
+            <span class="n">worseArm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">means</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="n">nbArms</span><span class="p">:]</span> <span class="o">=</span> <span class="n">worseArm</span>
+            <span class="c1"># FIXME improve this, when there is more player than arms, this is not optimal</span>
+            <span class="c1"># indeed, all the collisions will first be in worseArm, but they all cycle! That&#39;s bad</span>
+            <span class="c1"># XXX this &quot;trash&quot; arm with max number of collision will cycle: that&#39;s the best we can do!</span>
+            <span class="c1"># self._offsets[nbArms:] = np.random.choice(nbArms, size=nbPlayers - nbArms, replace=True)</span>
+        <span class="c1"># Shuffle it once, just to be fair in average</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">)</span>
+        <span class="c1"># print(&quot;OracleFair: initialized with {} arms and {} players ...&quot;.format(nbArms, nbPlayers))  # DEBUG</span>
+        <span class="c1"># print(&quot;It decided to use this affectation of arms :&quot;)  # DEBUG</span>
+        <span class="c1"># Internal object memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
+        <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
+            <span class="c1"># print(&quot; - Player number {} will use an offset of {} ...&quot;.format(playerId + 1, self._offsets[playerId]))  # DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">CyclingBest</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">[</span><span class="n">playerId</span><span class="p">],</span> <span class="n">bestArms</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">ChildPointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_printNbCollisions</span><span class="p">()</span>  <span class="c1"># DEBUG</span></div>
+
+<div class="viewcode-block" id="OracleFair.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.OracleFair.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;OracleFair(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div>
+
+<div class="viewcode-block" id="OracleFair._printNbCollisions"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.OracleFair.html#PoliciesMultiPlayers.OracleFair.OracleFair._printNbCollisions">[docs]</a>    <span class="k">def</span> <span class="nf">_printNbCollisions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Print number of collisions. &quot;&quot;&quot;</span>
+        <span class="n">nbPlayersAlone</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">nbPlayersAlone</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==&gt; This affectation will bring collisions! Exactly </span><span class="si">{}</span><span class="s2"> at each step...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">-</span> <span class="n">nbPlayersAlone</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">armId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                <span class="n">nbAffected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_offsets</span> <span class="o">==</span> <span class="n">armId</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">nbAffected</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - For arm number </span><span class="si">{}</span><span class="s2">, there is </span><span class="si">{}</span><span class="s2"> different child player affected on this arm ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">armId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nbAffected</span><span class="p">))</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

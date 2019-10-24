@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -167,3 +166,305 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.OracleFair module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/PoliciesMultiPlayers.OracleFair.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-PoliciesMultiPlayers.OracleFair">
+<span id="policiesmultiplayers-oraclefair-module"></span><h1>PoliciesMultiPlayers.OracleFair module<a class="headerlink" href="#module-PoliciesMultiPlayers.OracleFair" title="Permalink to this headline">¶</a></h1>
+<p>OracleFair: a multi-player policy which uses a centralized intelligence to affect users an offset, each one take an orthogonal arm based on (offset + t) % nbBestArms, among the best arms.</p>
+<ul class="simple">
+<li><p>It allows to have absolutely <em>no</em> collision, if there is more channels than users (always assumed).</p></li>
+<li><p>And it is perfectly fair on every run: each chosen arm is played successively by each player.</p></li>
+<li><p>Note that it IS affecting players on the best arms: it requires full knowledge of the means of the arms, not simply the number of arms.</p></li>
+<li><p>Note that they need a perfect knowledge on the arms, even this is not physically plausible.</p></li>
+</ul>
+<dl class="class">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest">
+<em class="property">class </em><code class="sig-prename descclassname">PoliciesMultiPlayers.OracleFair.</code><code class="sig-name descname">CyclingBest</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">offset</em>, <em class="sig-param">bestArms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#CyclingBest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="PoliciesMultiPlayers.BaseCentralizedPolicy.html#PoliciesMultiPlayers.BaseCentralizedPolicy.BaseCentralizedPolicy" title="PoliciesMultiPlayers.BaseCentralizedPolicy.BaseCentralizedPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoliciesMultiPlayers.BaseCentralizedPolicy.BaseCentralizedPolicy</span></code></a></p>
+<p>CyclingBest: select an arm in the best ones (bestArms) as (offset + t) % (len(bestArms)), with offset being decided by the OracleFair multi-player policy.</p>
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">offset</em>, <em class="sig-param">bestArms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#CyclingBest.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cycling with an offset.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.offset">
+<code class="sig-name descname">offset</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.bestArms">
+<code class="sig-name descname">bestArms</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.bestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of index of the best arms to play</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.nb_bestArms">
+<code class="sig-name descname">nb_bestArms</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.nb_bestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of best arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.t">
+<code class="sig-name descname">t</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#CyclingBest.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#CyclingBest.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nothing to do.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#CyclingBest.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nothing to do.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#CyclingBest.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chose cycling arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.CyclingBest.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'PoliciesMultiPlayers.OracleFair'</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.CyclingBest.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair">
+<em class="property">class </em><code class="sig-prename descclassname">PoliciesMultiPlayers.OracleFair.</code><code class="sig-name descname">OracleFair</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers</em>, <em class="sig-param">armsMAB</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#OracleFair"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="PoliciesMultiPlayers.BaseMPPolicy.html#PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy" title="PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy</span></code></a></p>
+<p>OracleFair: a multi-player policy which uses a centralize intelligence to affect users an offset, each one take an orthogonal arm based on (offset + t) % nbArms.</p>
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers</em>, <em class="sig-param">armsMAB</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#OracleFair.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><p>nbPlayers: number of players to create (in self._players).</p></li>
+<li><p>armsMAB: MAB object that represents the arms.</p></li>
+</ul>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">);</span> <span class="kn">from</span> <span class="nn">Environment</span> <span class="k">import</span> <span class="n">MAB</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">Arms</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">problem</span> <span class="o">=</span> <span class="n">MAB</span><span class="p">({</span><span class="s1">&#39;arm_type&#39;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]})</span>  
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">OracleFair</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">problem</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[1, 2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[2, 1]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>To get a list of usable players, use <code class="docutils literal notranslate"><span class="pre">s.children</span></code>.</p></li>
+<li><p>Warning: <code class="docutils literal notranslate"><span class="pre">s._players</span></code> is for internal use</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair.nbPlayers">
+<code class="sig-name descname">nbPlayers</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair.nbPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of players</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of children, fake algorithms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#OracleFair.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'PoliciesMultiPlayers.OracleFair'</em><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.OracleFair.OracleFair._printNbCollisions">
+<code class="sig-name descname">_printNbCollisions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/OracleFair.html#OracleFair._printNbCollisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.OracleFair.OracleFair._printNbCollisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print number of collisions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="PoliciesMultiPlayers.OracleNotFair.html" class="btn btn-neutral float-right" title="PoliciesMultiPlayers.OracleNotFair module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="PoliciesMultiPlayers.EstimateM.html" class="btn btn-neutral float-left" title="PoliciesMultiPlayers.EstimateM module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

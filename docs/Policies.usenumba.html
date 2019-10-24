@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,273 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.usenumba module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.usenumba.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.usenumba">
+<span id="policies-usenumba-module"></span><h1>Policies.usenumba module<a class="headerlink" href="#module-Policies.usenumba" title="Permalink to this headline">¶</a></h1>
+<p>Import numba.jit or a dummy decorator.</p>
+<dl class="data">
+<dt id="Policies.usenumba.USE_NUMBA">
+<code class="sig-prename descclassname">Policies.usenumba.</code><code class="sig-name descname">USE_NUMBA</code><em class="property"> = True</em><a class="headerlink" href="#Policies.usenumba.USE_NUMBA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the use of numba</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.usenumba.jit">
+<code class="sig-prename descclassname">Policies.usenumba.</code><code class="sig-name descname">jit</code><span class="sig-paren">(</span><em class="sig-param">signature_or_function=None</em>, <em class="sig-param">locals={}</em>, <em class="sig-param">target='cpu'</em>, <em class="sig-param">cache=False</em>, <em class="sig-param">pipeline_class=None</em>, <em class="sig-param">**options</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/numba/decorators.html#jit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.usenumba.jit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This decorator is used to compile a Python function into native code.</p>
+<dl class="simple">
+<dt>signature:</dt><dd><p>The (optional) signature or list of signatures to be compiled.
+If not passed, required signatures will be compiled when the
+decorated function is called, depending on the argument values.
+As a convenience, you can directly pass the function to be compiled
+instead.</p>
+</dd>
+<dt>locals: dict</dt><dd><p>Mapping of local variable names to Numba types. Used to override the
+types deduced by Numba’s type inference engine.</p>
+</dd>
+<dt>target: str</dt><dd><p>Specifies the target platform to compile for. Valid targets are cpu,
+gpu, npyufunc, and cuda. Defaults to cpu.</p>
+</dd>
+<dt>pipeline_class: type numba.compiler.CompilerBase</dt><dd><p>The compiler pipeline type for customizing the compilation stages.</p>
+</dd>
+<dt>options:</dt><dd><dl class="simple">
+<dt>For a cpu target, valid options are:</dt><dd><dl class="simple">
+<dt>nopython: bool</dt><dd><p>Set to True to disable the use of PyObjects and Python API
+calls. The default behavior is to allow the use of PyObjects
+and Python API. Default value is False.</p>
+</dd>
+<dt>forceobj: bool</dt><dd><p>Set to True to force the use of PyObjects for every value.
+Default value is False.</p>
+</dd>
+<dt>looplift: bool</dt><dd><p>Set to True to enable jitting loops in nopython mode while
+leaving surrounding code in object mode. This allows functions
+to allocate NumPy arrays and use Python objects, while the
+tight loops in the function can still be compiled in nopython
+mode. Any arrays that the tight loop uses should be created
+before the loop is entered. Default value is True.</p>
+</dd>
+<dt>error_model: str</dt><dd><p>The error-model affects divide-by-zero behavior.
+Valid values are ‘python’ and ‘numpy’. The ‘python’ model
+raises exception.  The ‘numpy’ model sets the result to
+<em>+/-inf</em> or <em>nan</em>. Default value is ‘python’.</p>
+</dd>
+<dt>inline: str or callable</dt><dd><p>The inline option will determine whether a function is inlined
+at into its caller if called. String options are ‘never’
+(default) which will never inline, and ‘always’, which will
+always inline. If a callable is provided it will be called with
+the call expression node that is requesting inlining, the
+caller’s IR and callee’s IR as arguments, it is expected to
+return Truthy as to whether to inline.
+NOTE: This inlining is performed at the Numba IR level and is in
+no way related to LLVM inlining.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>A callable usable as a compiled function.  Actual compiling will be
+done lazily if no explicit signatures are passed.</p>
+<p>The function can be used in the following ways:</p>
+<ol class="arabic">
+<li><p>jit(signatures, target=’cpu’, <a href="#id1"><span class="problematic" id="id2">**</span></a>targetoptions) -&gt; jit(function)</p>
+<blockquote>
+<div><p>Equivalent to:</p>
+<blockquote>
+<div><p>d = dispatcher(function, targetoptions)
+for signature in signatures:</p>
+<blockquote>
+<div><p>d.compile(signature)</p>
+</div></blockquote>
+</div></blockquote>
+<p>Create a dispatcher object for a python function.  Then, compile
+the function with the given signature(s).</p>
+<p>Example:</p>
+<blockquote>
+<div><p>&#64;jit(“int32(int32, int32)”)
+def foo(x, y):</p>
+<blockquote>
+<div><p>return x + y</p>
+</div></blockquote>
+<p>&#64;jit([“int32(int32, int32)”, “float32(float32, float32)”])
+def bar(x, y):</p>
+<blockquote>
+<div><p>return x + y</p>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p>jit(function, target=’cpu’, <a href="#id3"><span class="problematic" id="id4">**</span></a>targetoptions) -&gt; dispatcher</p>
+<blockquote>
+<div><p>Create a dispatcher function object that specializes at call site.</p>
+<p>Examples:</p>
+<blockquote>
+<div><p>&#64;jit
+def foo(x, y):</p>
+<blockquote>
+<div><p>return x + y</p>
+</div></blockquote>
+<p>&#64;jit(target=’cpu’, nopython=True)
+def bar(x, y):</p>
+<blockquote>
+<div><p>return x + y</p>
+</div></blockquote>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ol>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.with_proba.html" class="btn btn-neutral float-right" title="Policies.with_proba module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.setup.html" class="btn btn-neutral float-left" title="Policies.setup module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

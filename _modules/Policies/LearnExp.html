@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,332 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.LearnExp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.LearnExp</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; The LearnExp aggregation bandit algorithm, similar to Exp4 but not equivalent.</span>
+
+<span class="sd">The algorithm is a master A, managing several &quot;slave&quot; algorithms, :math:`A_1, ..., A_N`.</span>
+
+<span class="sd">- At every step, one slave algorithm is selected, by a random selection from a trust distribution on :math:`[1,...,N]`.</span>
+<span class="sd">- Then its decision is listen to, played by the master algorithm, and a feedback reward is received.</span>
+<span class="sd">- The reward is reweighted by the trust of the listened algorithm, and given back to it *with* a certain probability.</span>
+<span class="sd">- The other slaves, whose decision was not even asked, receive nothing.</span>
+<span class="sd">- The trust probabilities are first uniform, :math:`P_i = 1/N`, and then at every step, after receiving the feedback for *one* arm k (the reward), the trust in each slave Ai is updated: :math:`P_i` by the reward received.</span>
+<span class="sd">- The detail about how to increase or decrease the probabilities are specified in the reference article.</span>
+
+<span class="sd">.. note:: Reference: [[Learning to Use Learners&#39; Advice, A.Singla, H.Hassani &amp; A.Krause, 2017](https://arxiv.org/abs/1702.04825)].</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.7&quot;</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BasePolicy</span> <span class="k">import</span> <span class="n">BasePolicy</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+
+
+<span class="c1"># --- Renormalize function</span>
+
+<div class="viewcode-block" id="renormalize_reward"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.renormalize_reward">[docs]</a><span class="k">def</span> <span class="nf">renormalize_reward</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">trust</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mintrust</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Renormalize the reward to `[0, 1]`:</span>
+
+<span class="sd">    - divide by (`trust/mintrust`) if `unbiased` is `True`.</span>
+<span class="sd">    - simply project to `[0, 1]` if `unbiased` is `False`,</span>
+
+<span class="sd">    .. warning:: If `mintrust` is unknown, the unbiased estimator CANNOT be projected back to a bounded interval.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">unbiased</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mintrust</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="p">(</span><span class="n">trust</span> <span class="o">/</span> <span class="n">mintrust</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">trust</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="n">amplitude</span></div>
+
+
+<div class="viewcode-block" id="unnormalize_reward"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.unnormalize_reward">[docs]</a><span class="k">def</span> <span class="nf">unnormalize_reward</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Project back reward to `[lower, lower + amplitude]`.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">reward</span> <span class="o">*</span> <span class="n">amplitude</span><span class="p">)</span></div>
+
+
+<span class="c1"># --- Parameters for the LearnExp algorithm</span>
+
+<span class="c1"># Default values for the parameters</span>
+
+<span class="c1">#: self.unbiased is a flag to know if the rewards are used as biased estimator,</span>
+<span class="c1">#: i.e., just :math:`r_t`, or unbiased estimators, :math:`r_t / p_t`, if :math:`p_t` is the probability of selecting that arm at time :math:`t`.</span>
+<span class="c1">#: It seemed to work better with unbiased estimators (of course).</span>
+<span class="n">UNBIASED</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">UNBIASED</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Better</span>
+
+
+<span class="c1">#: Default value for the constant Eta in (0, 1]</span>
+<span class="n">ETA</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<span class="c1"># --- LearnExp algorithm</span>
+
+<div class="viewcode-block" id="LearnExp"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp">[docs]</a><span class="k">class</span> <span class="nc">LearnExp</span><span class="p">(</span><span class="n">BasePolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The LearnExp aggregation bandit algorithm, similar to Exp4 but not equivalent.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LearnExp.__init__"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">unbiased</span><span class="o">=</span><span class="n">UNBIASED</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">ETA</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span>
+                 <span class="p">):</span>
+        <span class="c1"># Attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>  <span class="c1">#: Lower values for rewards.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span> <span class="o">=</span> <span class="n">amplitude</span>  <span class="c1">#: Larger values for rewards.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unbiased</span> <span class="o">=</span> <span class="n">unbiased</span>  <span class="c1">#: Flag, see above.</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">eta</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: parameter &#39;eta&#39; for a LearnExp player was expected to be in (0, 1) but = </span><span class="si">{:.3g}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">eta</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">if</span> <span class="n">eta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">eta</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">nbArms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>  <span class="c1">#: Constant parameter :math:`\eta`.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span> <span class="o">=</span> <span class="n">nbChildren</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span>  <span class="c1">#: Number N of slave algorithms.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">eta</span> <span class="o">/</span> <span class="n">nbChildren</span>  <span class="c1">#: Constant :math:`\eta / N`, faster computations if it is stored once.</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: parameter &#39;rate&#39; for a LearnExp player was expected to be &gt; 0, but = </span><span class="si">{:.3g}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+
+        <span class="c1"># Internal object memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#: List of slave algorithms.</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">children</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Creating this child player from a dictionnary &#39;children[</span><span class="si">{}</span><span class="s2">]&#39; = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">child</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+                <span class="n">localparams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="n">lower</span><span class="p">,</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">:</span> <span class="n">amplitude</span><span class="p">}</span>
+                <span class="n">localparams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s1">&#39;archtype&#39;</span><span class="p">](</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">**</span><span class="n">localparams</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Using this not-yet created player &#39;children[</span><span class="si">{}</span><span class="s2">]&#39; = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">child</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">))</span>  <span class="c1"># Create it here!</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Using this already created player &#39;children[</span><span class="si">{}</span><span class="s2">]&#39; = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">child</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1">#: Remember the index of the last child trusted for a decision.</span>
+        <span class="c1"># Initialize the arrays</span>
+        <span class="c1"># Assume uniform prior if not given or if = &#39;uniform&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nbChildren</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">nbChildren</span><span class="p">)</span>  <span class="c1">#: Initial trusts in the slaves :math:`p_j^t`. Default to uniform, but a prior can also be given.</span>
+        <span class="k">if</span> <span class="n">prior</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prior</span> <span class="o">!=</span> <span class="s1">&#39;uniform&#39;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">prior</span><span class="p">)</span> <span class="o">==</span> <span class="n">nbChildren</span><span class="p">,</span> <span class="s2">&quot;Error: the &#39;prior&#39; argument given to LearnExp has to be an array of the good size (</span><span class="si">{}</span><span class="s2">).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbChildren</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span> <span class="o">=</span> <span class="n">prior</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span>  <span class="c1">#: Weights :math:`w_j^t`.</span></div>
+
+<div class="viewcode-block" id="LearnExp.__str__"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Nicely print the name of the algorithm with its relevant parameters.&quot;&quot;&quot;</span>
+        <span class="n">is_unbiased</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unbiased</span> <span class="k">else</span> <span class="s2">&quot;, biased&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;LearnExp($N=</span><span class="si">{}</span><span class="s2">$</span><span class="si">{}</span><span class="s2">, $\eta=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">is_unbiased</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span></div>
+
+    <span class="c1"># --- Start the game</span>
+
+<div class="viewcode-block" id="LearnExp.startGame"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Start the game for each child.&quot;&quot;&quot;</span>
+        <span class="c1"># Start all children</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span></div>
+
+    <span class="c1"># --- Get a reward</span>
+
+<div class="viewcode-block" id="LearnExp.getReward"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Give reward for each child, and then update the trust probabilities.&quot;&quot;&quot;</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+        <span class="n">new_reward</span> <span class="o">=</span> <span class="n">renormalize_reward</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># print(&quot;  A LearnExp player {} received a reward = {:.3g} on arm {} and trust = {:.3g} on that choice = {}, giving {:.3g} ...&quot;.format(self, reward, arm, self.trusts[self.last_choice], self.last_choice, new_reward))  # DEBUG</span>
+
+        <span class="c1"># 1. First, give rewards to that slave, with probability rate / trusts</span>
+        <span class="n">probability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">probability</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;probability&#39; = </span><span class="si">{:.3g}</span><span class="s2"> = rate = </span><span class="si">{:.3g}</span><span class="s2"> / trust_j^t = </span><span class="si">{:.3g}</span><span class="s2"> should have been in [0, 1]...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">probability</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">])</span>  <span class="c1"># DEBUG</span>
+        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="n">probability</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+
+        <span class="c1"># 2. Then reinitialize this array of losses</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">new_reward</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: the normalized reward </span><span class="si">{:.3g}</span><span class="s2"> was NOT in [0, 1] ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_reward</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">new_reward</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unbiased</span><span class="p">:</span>
+            <span class="n">loss</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span>
+
+        <span class="c1"># 3. Update weight of that slave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">*</span> <span class="n">loss</span><span class="p">)</span>
+
+        <span class="c1"># 4. Recomputed the trusts from the weights</span>
+        <span class="c1"># add uniform mixing of proportion rate=eta/N</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trusts</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span>
+        <span class="c1"># self.trusts = trusts / np.sum(trusts)  # XXX maybe this isn&#39;t necessary...</span>
+
+        <span class="c1"># print(&quot;  The most trusted child policy is the {}th with confidence {}...&quot;.format(1 + np.argmax(self.trusts), np.max(self.trusts)))  # DEBUG</span>
+        <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;Error: &#39;trusts&#39; do not sum to 1 but to </span><span class="si">{:.3g}</span><span class="s2"> instead...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
+        <span class="c1"># print(&quot;self.trusts =&quot;, self.trusts)  # DEBUG</span>
+
+    <span class="c1"># --- Choice of arm methods</span>
+
+<div class="viewcode-block" id="LearnExp.choice"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Trust one of the slave and listen to his `choice`.&quot;&quot;&quot;</span>
+        <span class="c1"># 1. first decide who to listen to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span>
+        <span class="c1"># 2. then listen to him</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LearnExp.choiceWithRank"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.choiceWithRank">[docs]</a>    <span class="k">def</span> <span class="nf">choiceWithRank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Trust one of the slave and listen to his `choiceWithRank`.&quot;&quot;&quot;</span>
+        <span class="c1"># 1. first decide who to listen to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span>
+        <span class="c1"># 2. then listen to him</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">choiceWithRank</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearnExp.choiceFromSubSet"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.choiceFromSubSet">[docs]</a>    <span class="k">def</span> <span class="nf">choiceFromSubSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">availableArms</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Trust one of the slave and listen to his `choiceFromSubSet`.&quot;&quot;&quot;</span>
+        <span class="c1"># 1. first decide who to listen to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span>
+        <span class="c1"># 2. then listen to him</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">choiceFromSubSet</span><span class="p">(</span><span class="n">availableArms</span><span class="o">=</span><span class="n">availableArms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearnExp.choiceMultiple"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.choiceMultiple">[docs]</a>    <span class="k">def</span> <span class="nf">choiceMultiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Trust one of the slave and listen to his `choiceMultiple`.&quot;&quot;&quot;</span>
+        <span class="c1"># 1. first decide who to listen to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span>
+        <span class="c1"># 2. then listen to him</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">choiceMultiple</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">nb</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearnExp.choiceIMP"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.choiceIMP">[docs]</a>    <span class="k">def</span> <span class="nf">choiceIMP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">startWithChoiceMultiple</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Trust one of the slave and listen to his `choiceIMP`.&quot;&quot;&quot;</span>
+        <span class="c1"># 1. first decide who to listen to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span>
+        <span class="c1"># 2. then listen to him</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">choiceIMP</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">nb</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearnExp.estimatedOrder"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.estimatedOrder">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Trust one of the slave and listen to his `estimatedOrder`.</span>
+
+<span class="sd">        - Return the estimate order of the arms, as a permutation on :math:`[0,...,K-1]` that would order the arms by increasing means.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 1. first decide who to listen to</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span> <span class="o">=</span> <span class="n">rn</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbChildren</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trusts</span><span class="p">)</span>
+        <span class="c1"># 2. then listen to him</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_choice</span><span class="p">]</span><span class="o">.</span><span class="n">estimatedOrder</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="LearnExp.estimatedBestArms"><a class="viewcode-back" href="../../docs/Policies.LearnExp.html#Policies.LearnExp.LearnExp.estimatedBestArms">[docs]</a>    <span class="k">def</span> <span class="nf">estimatedBestArms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">M</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: the parameter &#39;M&#39; has to be between 1 and K = </span><span class="si">{}</span><span class="s2">, but it was </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">M</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimatedOrder</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">order</span><span class="p">[</span><span class="o">-</span><span class="n">M</span><span class="p">:]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

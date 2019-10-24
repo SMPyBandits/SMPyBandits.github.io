@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,358 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.klUCBswitch module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.klUCBswitch.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.klUCBswitch">
+<span id="policies-klucbswitch-module"></span><h1>Policies.klUCBswitch module<a class="headerlink" href="#module-Policies.klUCBswitch" title="Permalink to this headline">¶</a></h1>
+<p>The kl-UCB-switch policy, for bounded distributions.</p>
+<ul class="simple">
+<li><p>Reference: [Garivier et al, 2018](<a class="reference external" href="https://arxiv.org/abs/1805.05071">https://arxiv.org/abs/1805.05071</a>)</p></li>
+</ul>
+<dl class="data">
+<dt id="Policies.klUCBswitch.TOLERANCE">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">TOLERANCE</code><em class="property"> = 0.0001</em><a class="headerlink" href="#Policies.klUCBswitch.TOLERANCE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the tolerance for computing numerical approximations of the kl-UCB indexes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.threshold_switch_bestchoice">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">threshold_switch_bestchoice</code><span class="sig-paren">(</span><em class="sig-param">T</em>, <em class="sig-param">K</em>, <em class="sig-param">gamma=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#threshold_switch_bestchoice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.threshold_switch_bestchoice" title="Permalink to this definition">¶</a></dt>
+<dd><p>The threshold function <span class="math notranslate nohighlight">\(f(T, K)\)</span>, to know when to switch from using <span class="math notranslate nohighlight">\(I^{KL}_k(t)\)</span> (kl-UCB index) to using <span class="math notranslate nohighlight">\(I^{MOSS}_k(t)\)</span> (MOSS index).</p>
+<div class="math notranslate nohighlight">
+\[f(T, K) := \lfloor (T / K)^{\gamma} \rfloor, \gamma = 1/5.\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.threshold_switch_delayed">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">threshold_switch_delayed</code><span class="sig-paren">(</span><em class="sig-param">T</em>, <em class="sig-param">K</em>, <em class="sig-param">gamma=0.8888888888888888</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#threshold_switch_delayed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.threshold_switch_delayed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Another threshold function <span class="math notranslate nohighlight">\(f(T, K)\)</span>, to know when to switch from using <span class="math notranslate nohighlight">\(I^{KL}_k(t)\)</span> (kl-UCB index) to using <span class="math notranslate nohighlight">\(I^{MOSS}_k(t)\)</span> (MOSS index).</p>
+<div class="math notranslate nohighlight">
+\[f(T, K) := \lfloor (T / K)^{\gamma} \rfloor, \gamma = 8/9.\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.threshold_switch_default">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">threshold_switch_default</code><span class="sig-paren">(</span><em class="sig-param">T</em>, <em class="sig-param">K</em>, <em class="sig-param">gamma=0.2</em><span class="sig-paren">)</span><a class="headerlink" href="#Policies.klUCBswitch.threshold_switch_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>The threshold function <span class="math notranslate nohighlight">\(f(T, K)\)</span>, to know when to switch from using <span class="math notranslate nohighlight">\(I^{KL}_k(t)\)</span> (kl-UCB index) to using <span class="math notranslate nohighlight">\(I^{MOSS}_k(t)\)</span> (MOSS index).</p>
+<div class="math notranslate nohighlight">
+\[f(T, K) := \lfloor (T / K)^{\gamma} \rfloor, \gamma = 1/5.\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.klucbplus_index">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">klucbplus_index</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">pull</em>, <em class="sig-param">horizon</em>, <em class="sig-param">nbArms</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">c=1.0</em>, <em class="sig-param">tolerance=0.0001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klucbplus_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klucbplus_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>One kl-UCB+ index, from [Cappé et al. 13](<a class="reference external" href="https://arxiv.org/pdf/1210.1136.pdf">https://arxiv.org/pdf/1210.1136.pdf</a>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\
+I^{KL+}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}_k(t), q) \leq \frac{c \log(T / (K * N_k(t)))}{N_k(t)} \right\}.\end{split}\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.mossplus_index">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">mossplus_index</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">pull</em>, <em class="sig-param">horizon</em>, <em class="sig-param">nbArms</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#mossplus_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.mossplus_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>One MOSS+ index, from [Audibert &amp; Bubeck, 2010](<a class="reference external" href="http://www.jmlr.org/papers/volume11/audibert10a/audibert10a.pdf">http://www.jmlr.org/papers/volume11/audibert10a/audibert10a.pdf</a>):</p>
+<div class="math notranslate nohighlight">
+\[I^{MOSS+}_k(t) = \frac{X_k(t)}{N_k(t)} + \sqrt{\max\left(0, \frac{\log\left(\frac{T}{K N_k(t)}\right)}{N_k(t)}\right)}.\]</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.klUCBswitch.klUCBswitch">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">klUCBswitch</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">threshold='best'</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">c=1.0</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.klUCB.html#Policies.klUCB.klUCB" title="Policies.klUCB.klUCB"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.klUCB.klUCB</span></code></a></p>
+<p>The kl-UCB-switch policy, for bounded distributions.</p>
+<ul class="simple">
+<li><p>Reference: [Garivier et al, 2018](<a class="reference external" href="https://arxiv.org/abs/1805.05071">https://arxiv.org/abs/1805.05071</a>)</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.klUCBswitch.klUCBswitch.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">threshold='best'</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">c=1.0</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li><p>nbArms: the number of arms,</p></li>
+<li><p>lower, amplitude: lower value and known amplitude of the rewards.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.klUCBswitch.klUCBswitch.horizon">
+<code class="sig-name descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T\)</span> = known horizon of the experiment.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.klUCBswitch.klUCBswitch.constant_threshold_switch">
+<code class="sig-name descname">constant_threshold_switch</code><em class="property"> = None</em><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.constant_threshold_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>For klUCBswitch (not the anytime variant), we can precompute the threshold as it is constant, <span class="math notranslate nohighlight">\(= f(T, K)\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.klUCBswitch.klUCBswitch.use_MOSS_index">
+<code class="sig-name descname">use_MOSS_index</code><em class="property"> = None</em><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.use_MOSS_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize internal memory: at first, every arm uses the kl-UCB index, then some will switch to MOSS. (Array of K bool).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.klUCBswitch.klUCBswitch.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.klUCBswitch.klUCBswitch.computeIndex">
+<code class="sig-name descname">computeIndex</code><span class="sig-paren">(</span><em class="sig-param">arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitch.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current index, at time t and after <span class="math notranslate nohighlight">\(N_k(t)\)</span> pulls of arm k:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}U_k(t) = \begin{cases}
+    U^{KL+}_k(t) &amp; \text{if } N_k(t) \leq f(T, K), \\
+    U^{MOSS+}_k(t) &amp; \text{if } N_k(t) &gt; f(T, K).
+\end{cases}.\end{split}\]</div>
+<ul class="simple">
+<li><p>It starts by using <a class="reference internal" href="#Policies.klUCBswitch.klucbplus_index" title="Policies.klUCBswitch.klucbplus_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">klucbplus_index()</span></code></a>, then it calls <code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_switch()</span></code> to know when to stop and start using <a class="reference internal" href="#Policies.klUCBswitch.mossplus_index" title="Policies.klUCBswitch.mossplus_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">mossplus_index()</span></code></a>.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.klUCBswitch.klUCBswitch.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.klUCBswitch'</em><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitch.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.logplus">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">logplus</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#logplus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.logplus" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <span class="math notranslate nohighlight">\(\log_+\)</span> function.</p>
+<div class="math notranslate nohighlight">
+\[\log_+(x) := \max(0, \log(x)).\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.phi">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">phi</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <span class="math notranslate nohighlight">\(\phi(x)\)</span> function defined in equation (6) in their paper.</p>
+<div class="math notranslate nohighlight">
+\[\phi(x) := \log_+(x (1 + (\log_+(x))^2)).\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.klucb_index">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">klucb_index</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">pull</em>, <em class="sig-param">t</em>, <em class="sig-param">nbArms</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">c=1.0</em>, <em class="sig-param">tolerance=0.0001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klucb_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klucb_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>One kl-UCB index, from [Garivier &amp; Cappé - COLT, 2011](<a class="reference external" href="https://arxiv.org/pdf/1102.2490.pdf">https://arxiv.org/pdf/1102.2490.pdf</a>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\
+I^{KL}_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu}_k(t), q) \leq \frac{c \log(t / N_k(t))}{N_k(t)} \right\}.\end{split}\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.klUCBswitch.moss_index">
+<code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">moss_index</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">pull</em>, <em class="sig-param">t</em>, <em class="sig-param">nbArms</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#moss_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.moss_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>One MOSS index, from [Audibert &amp; Bubeck, 2010](<a class="reference external" href="http://www.jmlr.org/papers/volume11/audibert10a/audibert10a.pdf">http://www.jmlr.org/papers/volume11/audibert10a/audibert10a.pdf</a>):</p>
+<div class="math notranslate nohighlight">
+\[I^{MOSS}_k(t) = \frac{X_k(t)}{N_k(t)} + \sqrt{\max\left(0, \frac{\log\left(\frac{t}{K N_k(t)}\right)}{N_k(t)}\right)}.\]</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.klUCBswitch.klUCBswitchAnytime">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.klUCBswitch.</code><code class="sig-name descname">klUCBswitchAnytime</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">threshold='delayed'</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">c=1.0</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.klUCBswitch.klUCBswitch" title="Policies.klUCBswitch.klUCBswitch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.klUCBswitch.klUCBswitch</span></code></a></p>
+<p>The anytime variant of the kl-UCB-switch policy, for bounded distributions.</p>
+<ul class="simple">
+<li><p>It does not use a doubling trick, but an augmented exploration function (replaces the <span class="math notranslate nohighlight">\(\log_+\)</span> by <span class="math notranslate nohighlight">\(\phi\)</span> in both <a class="reference internal" href="#Policies.klUCBswitch.klucb_index" title="Policies.klUCBswitch.klucb_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">klucb_index()</span></code></a> and <a class="reference internal" href="#Policies.klUCBswitch.moss_index" title="Policies.klUCBswitch.moss_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">moss_index()</span></code></a> from <a class="reference internal" href="#Policies.klUCBswitch.klucbplus_index" title="Policies.klUCBswitch.klucbplus_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">klucbplus_index()</span></code></a> and <a class="reference internal" href="#Policies.klUCBswitch.mossplus_index" title="Policies.klUCBswitch.mossplus_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">mossplus_index()</span></code></a>).</p></li>
+<li><p>Reference: [Garivier et al, 2018](<a class="reference external" href="https://arxiv.org/abs/1805.05071">https://arxiv.org/abs/1805.05071</a>)</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.klUCBswitch.klUCBswitchAnytime.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">threshold='delayed'</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">c=1.0</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li><p>nbArms: the number of arms,</p></li>
+<li><p>lower, amplitude: lower value and known amplitude of the rewards.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.klUCBswitch.klUCBswitchAnytime.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.klUCBswitch'</em><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.klUCBswitch.klUCBswitchAnytime.threshold_switch">
+<code class="sig-name descname">threshold_switch</code><em class="property"> = None</em><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.threshold_switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function, like <a class="reference internal" href="#Policies.klUCBswitch.klUCBswitchAnytime.threshold_switch" title="Policies.klUCBswitch.klUCBswitchAnytime.threshold_switch"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_switch()</span></code></a>, of T and K, to decide when to switch from kl-UCB indexes to MOSS indexes (for each arm).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.klUCBswitch.klUCBswitchAnytime.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.klUCBswitch.klUCBswitchAnytime.computeIndex">
+<code class="sig-name descname">computeIndex</code><span class="sig-paren">(</span><em class="sig-param">arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/klUCBswitch.html#klUCBswitchAnytime.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.klUCBswitch.klUCBswitchAnytime.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current index, at time t and after <span class="math notranslate nohighlight">\(N_k(t)\)</span> pulls of arm k:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}U_k(t) = \begin{cases}
+    U^{KL}_k(t) &amp; \text{if } N_k(t) \leq f(t, K), \\
+    U^{MOSS}_k(t) &amp; \text{if } N_k(t) &gt; f(t, K).
+\end{cases}.\end{split}\]</div>
+<ul class="simple">
+<li><p>It starts by using <a class="reference internal" href="#Policies.klUCBswitch.klucb_index" title="Policies.klUCBswitch.klucb_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">klucb_index()</span></code></a>, then it calls <a class="reference internal" href="#Policies.klUCBswitch.klUCBswitchAnytime.threshold_switch" title="Policies.klUCBswitch.klUCBswitchAnytime.threshold_switch"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_switch()</span></code></a> to know when to stop and start using <a class="reference internal" href="#Policies.klUCBswitch.moss_index" title="Policies.klUCBswitch.moss_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">moss_index()</span></code></a>.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.kullback.html" class="btn btn-neutral float-right" title="Policies.kullback module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.klUCBloglog.html" class="btn btn-neutral float-left" title="Policies.klUCBloglog module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

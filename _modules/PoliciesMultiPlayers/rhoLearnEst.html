@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,201 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.rhoLearnEst</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for PoliciesMultiPlayers.rhoLearnEst</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; rhoLearnEst: implementation of the multi-player policy from [Distributed Algorithms for Learning..., Anandkumar et al., 2010](http://ieeexplore.ieee.org/document/5462144/), using a learning algorithm instead of a random exploration for choosing the rank, and without knowing the number of users.</span>
+
+<span class="sd">- It generalizes :class:`PoliciesMultiPlayers.rhoLearn.rhoLearn` simply by letting the ranks be :math:`\{1,\dots,K\}` and not in :math:`\{1,\dots,M\}`, by hoping the learning algorithm will be *&quot;smart enough&quot;* and learn by itself that ranks should be :math:`\leq M`.</span>
+<span class="sd">- Each child player is selfish, and plays according to an index policy (any index policy, e.g., UCB, Thompson, KL-UCB, BayesUCB etc),</span>
+<span class="sd">- But instead of aiming at the best (the 1-st best) arm, player i aims at the rank_i-th best arm,</span>
+<span class="sd">- At first, every player has a random rank_i from 1 to M, and when a collision occurs, rank_i is given by a second learning algorithm, playing on arms = ranks from [1, .., M], where M is the number of player.</span>
+<span class="sd">- If rankSelection = Uniform, this is like rhoRand, but if it is a smarter policy, it *might* be better! Warning: no theoretical guarantees exist!</span>
+<span class="sd">- Reference: [Proof-of-Concept System for Opportunistic Spectrum Access in Multi-user Decentralized Networks, S.J.Darak, C.Moy, J.Palicot, EAI 2016](https://doi.org/10.4108/eai.5-9-2016.151647), algorithm 2. (for BayesUCB only)</span>
+
+<span class="sd">.. note:: This is fully decentralized: each child player does *not* need to know the (fixed) number of players, it will learn to select ranks only in :math:`\{1,\dots,M\}` instead of :math:`\{1,\dots,K\}`.</span>
+
+<span class="sd">.. warning:: This policy does not work very well!</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.rhoLearn</span> <span class="k">import</span> <span class="n">rhoLearn</span><span class="p">,</span> <span class="n">Uniform</span><span class="p">,</span> <span class="n">oneRhoLearn</span><span class="p">,</span> <span class="n">CHANGE_RANK_EACH_STEP</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">rhoLearn</span> <span class="k">import</span> <span class="n">rhoLearn</span><span class="p">,</span> <span class="n">Uniform</span><span class="p">,</span> <span class="n">oneRhoLearn</span><span class="p">,</span> <span class="n">CHANGE_RANK_EACH_STEP</span>
+
+
+<div class="viewcode-block" id="oneRhoLearnEst"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoLearnEst.html#PoliciesMultiPlayers.rhoLearnEst.oneRhoLearnEst">[docs]</a><span class="k">class</span> <span class="nc">oneRhoLearnEst</span><span class="p">(</span><span class="n">oneRhoLearn</span><span class="p">):</span>
+
+<div class="viewcode-block" id="oneRhoLearnEst.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoLearnEst.html#PoliciesMultiPlayers.rhoLearnEst.oneRhoLearnEst.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>   <span class="c1"># Better to recompute it automatically</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;#</span><span class="si">{}</span><span class="s2">&lt;RhoLearnEst[</span><span class="si">{}</span><span class="s2">, rank</span><span class="si">{}</span><span class="s2"> ~ </span><span class="si">{}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span><span class="p">],</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="s2">&quot;: </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rankSelection</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># --- Class rhoRand</span>
+
+<div class="viewcode-block" id="rhoLearnEst"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoLearnEst.html#PoliciesMultiPlayers.rhoLearnEst.rhoLearnEst">[docs]</a><span class="k">class</span> <span class="nc">rhoLearnEst</span><span class="p">(</span><span class="n">rhoLearn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; rhoLearnEst: implementation of the multi-player policy from [Distributed Algorithms for Learning..., Anandkumar et al., 2010](http://ieeexplore.ieee.org/document/5462144/), using a learning algorithm instead of a random exploration for choosing the rank, and without knowing the number of users.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="rhoLearnEst.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoLearnEst.html#PoliciesMultiPlayers.rhoLearnEst.rhoLearnEst.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">rankSelectionAlgo</span><span class="o">=</span><span class="n">Uniform</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">change_rank_each_step</span><span class="o">=</span><span class="n">CHANGE_RANK_EACH_STEP</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - rankSelectionAlgo: algorithm to use for selecting the ranks.</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Difference with :class:`PoliciesMultiPlayers.rhoLearn.rhoLearn`:</span>
+
+<span class="sd">        - maxRank: maximum rank allowed by the rhoRand child, is not an argument, but it is always nbArms (= K).</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = rhoLearnEst(nbPlayers, nbArms, UCB, UCB)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [9, 4, 6, 12, 1, 6]</span>
+
+<span class="sd">        - To get a list of usable players, use ``s.children``.</span>
+<span class="sd">        - Warning: ``s._players`` is for internal use ONLY!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">nbPlayers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; for rhoRand class has to be &gt; 0.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="n">nbPlayers</span>  <span class="c1">#: Number of players</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rankSelectionAlgo</span> <span class="o">=</span> <span class="n">rankSelectionAlgo</span>  <span class="c1">#: Policy to use to chose the ranks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_rank_each_step</span> <span class="o">=</span> <span class="n">change_rank_each_step</span>  <span class="c1">#: Change rank at every steps?</span>
+        <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">oneRhoLearnEst</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">rankSelectionAlgo</span><span class="p">,</span> <span class="n">change_rank_each_step</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span>
+        <span class="c1"># Fake rankSelection algorithm, for pretty print</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rankSelection</span> <span class="o">=</span> <span class="n">rankSelectionAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="rhoLearnEst.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoLearnEst.html#PoliciesMultiPlayers.rhoLearnEst.rhoLearnEst.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;rhoLearnEst(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">, ranks ~ </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rankSelection</span><span class="p">)</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

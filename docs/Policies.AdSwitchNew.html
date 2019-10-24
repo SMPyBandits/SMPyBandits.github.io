@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,361 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.AdSwitchNew module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.AdSwitchNew.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.AdSwitchNew">
+<span id="policies-adswitchnew-module"></span><h1>Policies.AdSwitchNew module<a class="headerlink" href="#module-Policies.AdSwitchNew" title="Permalink to this headline">¶</a></h1>
+<p>The AdSwitchNew policy for non-stationary bandits, from [[“Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes”. Peter Auer, Pratik Gajane and Ronald Ortner, 2019]](<a class="reference external" href="http://proceedings.mlr.press/v99/auer19a/auer19a.pdf">http://proceedings.mlr.press/v99/auer19a/auer19a.pdf</a>)</p>
+<ul class="simple">
+<li><p>It uses an additional <span class="math notranslate nohighlight">\(\mathcal{O}(\tau_\max)\)</span> memory for a game of maximum stationary length <span class="math notranslate nohighlight">\(\tau_\max\)</span>.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This implementation is still experimental!</p>
+</div>
+<dl class="function">
+<dt id="Policies.AdSwitchNew.mymean">
+<code class="sig-prename descclassname">Policies.AdSwitchNew.</code><code class="sig-name descname">mymean</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#mymean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.mymean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simply <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.mean.html#numpy.mean" title="(in NumPy v1.17)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.mean()</span></code></a> on x if x is non empty, otherwise <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([])</span>
+<span class="go">/usr/local/lib/python3.6/dist-packages/numpy/core/fromnumeric.py:2957: RuntimeWarning: Mean of empty slice.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.AdSwitchNew.Constant_C1">
+<code class="sig-prename descclassname">Policies.AdSwitchNew.</code><code class="sig-name descname">Constant_C1</code><em class="property"> = 16.1</em><a class="headerlink" href="#Policies.AdSwitchNew.Constant_C1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the constant <span class="math notranslate nohighlight">\(C_1\)</span>. Should be <span class="math notranslate nohighlight">\(&gt;0\)</span> and as large as possible, but not too large.
+In their paper, in section 4.2) page 8, an inequality controls C1: (5) states that for all s’, t’, C1 &gt; 8 (2n - 1)/n where n = n_[s’,t’], so C1 &gt; 16.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.AdSwitchNew.DELTA_T">
+<code class="sig-prename descclassname">Policies.AdSwitchNew.</code><code class="sig-name descname">DELTA_T</code><em class="property"> = 50</em><a class="headerlink" href="#Policies.AdSwitchNew.DELTA_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>A small trick to speed-up the computations, the checks for changes of good/bad arms are going to have a step <code class="docutils literal notranslate"><span class="pre">DELTA_T</span></code>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.AdSwitchNew.DELTA_S">
+<code class="sig-prename descclassname">Policies.AdSwitchNew.</code><code class="sig-name descname">DELTA_S</code><em class="property"> = 20</em><a class="headerlink" href="#Policies.AdSwitchNew.DELTA_S" title="Permalink to this definition">¶</a></dt>
+<dd><p>A small trick to speed-up the computations, the loops on <span class="math notranslate nohighlight">\(s_1\)</span>, <span class="math notranslate nohighlight">\(s_2\)</span> and <span class="math notranslate nohighlight">\(s\)</span> are going to have a step <code class="docutils literal notranslate"><span class="pre">DELTA_S</span></code>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.AdSwitchNew.AdSwitchNew">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.AdSwitchNew.</code><code class="sig-name descname">AdSwitchNew</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">C1=16.1</em>, <em class="sig-param">delta_s=20</em>, <em class="sig-param">delta_t=50</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The AdSwitchNew policy for non-stationary bandits, from [[“Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes”. Peter Auer, Pratik Gajane and Ronald Ortner, 2019]](<a class="reference external" href="http://proceedings.mlr.press/v99/auer19a/auer19a.pdf">http://proceedings.mlr.press/v99/auer19a/auer19a.pdf</a>)</p>
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">C1=16.1</em>, <em class="sig-param">delta_s=20</em>, <em class="sig-param">delta_t=50</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.horizon">
+<code class="sig-name descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T\)</span> for the AdSwitchNew algorithm, the horizon of the experiment. TODO try to use <code class="xref py py-class docutils literal notranslate"><span class="pre">DoublingTrickWrapper</span></code> to remove the dependency in <span class="math notranslate nohighlight">\(T\)</span> ?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.C1">
+<code class="sig-name descname">C1</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.C1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(C_1\)</span> for the AdSwitchNew algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.delta_s">
+<code class="sig-name descname">delta_s</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.delta_s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\delta_s\)</span> for the AdSwitchNew algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.delta_t">
+<code class="sig-name descname">delta_t</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.delta_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\delta_s\)</span> for the AdSwitchNew algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.ell">
+<code class="sig-name descname">ell</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.ell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable <span class="math notranslate nohighlight">\(\ell\)</span> in the algorithm. Count the number of new episode.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.start_of_episode">
+<code class="sig-name descname">start_of_episode</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.start_of_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable <span class="math notranslate nohighlight">\(t_l\)</span> in the algorithm. Count the starting time of the current episode.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.set_GOOD">
+<code class="sig-name descname">set_GOOD</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.set_GOOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable <span class="math notranslate nohighlight">\(\mathrm{GOOD}_t\)</span> in the algorithm. Set of “good” arms at current time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.set_BAD">
+<code class="sig-name descname">set_BAD</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.set_BAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable <span class="math notranslate nohighlight">\(\mathrm{BAD}_t\)</span> in the algorithm. Set of “bad” arms at current time. It always satisfies <span class="math notranslate nohighlight">\(\mathrm{BAD}_t = \{1,\dots,K\} \setminus \mathrm{GOOD}_t\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.set_S">
+<code class="sig-name descname">set_S</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.set_S" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable <span class="math notranslate nohighlight">\(S_t\)</span> in the algorithm. A list of sets of sampling obligations of arm <span class="math notranslate nohighlight">\(a\)</span> at current time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.mu_tilde_of_l">
+<code class="sig-name descname">mu_tilde_of_l</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.mu_tilde_of_l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of variables <span class="math notranslate nohighlight">\(\tilde{\mu}_{\ell}(a)\)</span> in the algorithm. Count the empirical average of arm <span class="math notranslate nohighlight">\(a\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.gap_Delta_tilde_of_l">
+<code class="sig-name descname">gap_Delta_tilde_of_l</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.gap_Delta_tilde_of_l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vector of variables <span class="math notranslate nohighlight">\(\tilde{\Delta}_{\ell}(a)\)</span> in the algorithm. Count the estimate of the gap of arm <span class="math notranslate nohighlight">\(a\)</span> against the best of the “good” arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.all_rewards">
+<code class="sig-name descname">all_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.all_rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Memory of all the rewards. A <em>dictionary</em> per arm, mapping time to rewards. Growing size until restart of that arm!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.history_of_plays">
+<code class="sig-name descname">history_of_plays</code><em class="property"> = None</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.history_of_plays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Memory of all the past actions played!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.new_episode">
+<code class="sig-name descname">new_episode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.new_episode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.new_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a new episode, line 3-6 of the algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the game (fill pulls and rewards with 0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.check_changes_good_arms">
+<code class="sig-name descname">check_changes_good_arms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.check_changes_good_arms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.check_changes_good_arms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for changes of good arms.</p>
+<ul class="simple">
+<li><p>I moved this into a function, in order to stop the 4 for loops (<code class="docutils literal notranslate"><span class="pre">good_arm</span></code>, <code class="docutils literal notranslate"><span class="pre">s_1</span></code>, <code class="docutils literal notranslate"><span class="pre">s_2</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span></code>) as soon as a change was detected (early stopping).</p></li>
+<li><p>TODO this takes a crazy O(K t^3) time, it HAS to be done faster!</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.check_changes_bad_arms">
+<code class="sig-name descname">check_changes_bad_arms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.check_changes_bad_arms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.check_changes_bad_arms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for changes of bad arms, in O(K t).</p>
+<ul class="simple">
+<li><p>I moved this into a function, in order to stop the 2 for loops (<code class="docutils literal notranslate"><span class="pre">good_arm</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span></code>) as soon as a change was detected (early stopping).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a reward from an arm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.n_s_t">
+<code class="sig-name descname">n_s_t</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">s</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.n_s_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.n_s_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <span class="math notranslate nohighlight">\(n_{[s,t]}(a) := \#\{\tau : s \leq \tau \leq t, a_{\tau} = a \}\)</span>, naively by using the dictionary of all plays <a class="reference internal" href="#Policies.AdSwitchNew.AdSwitchNew.all_rewards" title="Policies.AdSwitchNew.AdSwitchNew.all_rewards"><code class="xref py py-attr docutils literal notranslate"><span class="pre">all_rewards</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.mu_hat_s_t">
+<code class="sig-name descname">mu_hat_s_t</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">s</em>, <em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.mu_hat_s_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.mu_hat_s_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <span class="math notranslate nohighlight">\(\hat{\tau}_{[s,t]}(a) := \frac{1}{n_{[s,t]}(a)} \sum_{\tau : s \leq \tau \leq t, a_{\tau} = a} r_t\)</span>, naively by using the dictionary of all plays <a class="reference internal" href="#Policies.AdSwitchNew.AdSwitchNew.all_rewards" title="Policies.AdSwitchNew.AdSwitchNew.all_rewards"><code class="xref py py-attr docutils literal notranslate"><span class="pre">all_rewards</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.AdSwitchNew'</em><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.find_max_i">
+<code class="sig-name descname">find_max_i</code><span class="sig-paren">(</span><em class="sig-param">gap</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.find_max_i"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.find_max_i" title="Permalink to this definition">¶</a></dt>
+<dd><p>Follow the algorithm and, with a gap estimate <span class="math notranslate nohighlight">\(\widehat{\Delta_k}\)</span>, find <span class="math notranslate nohighlight">\(I_k = \max\{ i : d_i \geq \widehat{\Delta_k} \}\)</span>, where <span class="math notranslate nohighlight">\(d_i := 2^{-i}\)</span>. There is no need to do an exhaustive search:</p>
+<div class="math notranslate nohighlight">
+\[I_k := \lfloor - \log_2(\widehat{\Delta_k}) \rfloor.\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.AdSwitchNew.AdSwitchNew.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/AdSwitchNew.html#AdSwitchNew.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.AdSwitchNew.AdSwitchNew.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose an arm following the different phase of growing lengths according to the AdSwitchNew algorithm.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.Aggregator.html" class="btn btn-neutral float-right" title="Policies.Aggregator module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.AdSwitch.html" class="btn btn-neutral float-left" title="Policies.AdSwitch module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

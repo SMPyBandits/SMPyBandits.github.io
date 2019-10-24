@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,627 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.BESA</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.BESA</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; The Best Empirical Sampled Average (BESA) algorithm.</span>
+
+<span class="sd">- Reference: [[Sub-Sampling For Multi Armed Bandits, Baransi et al., 2014]](https://hal.archives-ouvertes.fr/hal-01025651)</span>
+<span class="sd">- See also: https://github.com/SMPyBandits/SMPyBandits/issues/103 and https://github.com/SMPyBandits/SMPyBandits/issues/116</span>
+
+<span class="sd">.. warning:: This algorithm works VERY well but it is looks weird at first sight. It sounds &quot;too easy&quot;, so take a look to the article before wondering why it should work.</span>
+
+<span class="sd">.. warning:: Right now, it is between 10 and 25 times slower than :class:`Policies.klUCB` and other single-player policies.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">IndexPolicy</span> <span class="k">import</span> <span class="n">IndexPolicy</span>
+
+
+<span class="c1"># --- Utility functions</span>
+
+
+<div class="viewcode-block" id="subsample_deterministic"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.subsample_deterministic">[docs]</a><span class="k">def</span> <span class="nf">subsample_deterministic</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns :math:`\{1,\dots,n\}` if :math:`n &lt; m` or :math:`\{1,\dots,m\}` if :math:`n \geq m` (*ie*, it is :math:`\{1,\dots,\min(n,m)\}`).</span>
+
+<span class="sd">    .. warning:: The BESA algorithm is efficient only with the random sub-sampling, don&#39;t use this one except for comparing.</span>
+
+<span class="sd">    &gt;&gt;&gt; subsample_deterministic(5, 3)  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([0, 1, 2, 3])</span>
+<span class="sd">    &gt;&gt;&gt; subsample_deterministic(10, 20)  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="subsample_uniform"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.subsample_uniform">[docs]</a><span class="k">def</span> <span class="nf">subsample_uniform</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns a uniform sub-set of size :math:`n`, from :math:`\{1,dots, m\}`.</span>
+
+<span class="sd">    - Fails if n &gt; m.</span>
+
+<span class="sd">    .. note:: The BESA algorithm is efficient only with the random sub-sampling.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; subsample_uniform(3, 5)  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([4, 0, 1])</span>
+<span class="sd">    &gt;&gt;&gt; subsample_uniform(10, 20)  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 7, 16,  2,  3,  1, 18,  5,  4,  0,  8])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<span class="c1"># --- BESA core function, base case and recursive case</span>
+
+
+<span class="c1">#: Numerical tolerance when comparing two means. Should not be zero!</span>
+<span class="n">TOLERANCE</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+
+<div class="viewcode-block" id="inverse_permutation"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.inverse_permutation">[docs]</a><span class="k">def</span> <span class="nf">inverse_permutation</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Inverse the permutation for given input j, that is, it finds i such that p[i] = j.</span>
+
+<span class="sd">    &gt;&gt;&gt; permutation = [1, 0, 3, 2]</span>
+<span class="sd">    &gt;&gt;&gt; inverse_permutation(permutation, 1)</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; inverse_permutation(permutation, 0)</span>
+<span class="sd">    1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">permutation</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pi</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;inverse_permutation(</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">) failed.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">permutation</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="besa_two_actions"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.besa_two_actions">[docs]</a><span class="k">def</span> <span class="nf">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Core algorithm for the BESA selection, for two actions a and b:</span>
+
+<span class="sd">    - N = min(Na, Nb),</span>
+<span class="sd">    - Sub-sample N values from rewards of arm a, and N values from rewards of arm b,</span>
+<span class="sd">    - Compute mean of both samples of size N, call them m_a, m_b,</span>
+<span class="sd">    - If m_a &gt; m_b, choose a,</span>
+<span class="sd">    - Else if m_a &lt; m_b, choose b,</span>
+<span class="sd">    - And in case of a tie, break by choosing i such that Ni is minimal (or random [a, b] if Na=Nb).</span>
+
+<span class="sd">    .. note:: ``rewards`` can be a numpy array of shape (at least) ``(nbArms, max(Na, Nb))`` or a dictionary maping ``a,b`` to lists (or iterators) of lengths ``&gt;= max(Na, Nb)``.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(2345)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; pulls = [6, 10]; K = len(pulls); N = max(pulls)</span>
+<span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 1 is better  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([0.154..., 0.158...])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 0 is better in the first 6 samples  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([0.341..., 0.019...])</span>
+<span class="sd">    &gt;&gt;&gt; besa_two_actions(rewards, pulls, 0, 1, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; [besa_two_actions(rewards, pulls, 0, 1, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0, 0, 1, 1, 0, 0, 1, 0, 0, 0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: no need to call &#39;besa_two_actions&#39; if a = = </span><span class="si">{}</span><span class="s2"> = b = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="n">Na</span><span class="p">,</span> <span class="n">Nb</span> <span class="o">=</span> <span class="n">pulls</span><span class="p">[</span><span class="n">a</span><span class="p">],</span> <span class="n">pulls</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Na</span><span class="p">,</span> <span class="n">Nb</span><span class="p">)</span>
+    <span class="n">Ia</span> <span class="o">=</span> <span class="n">subsample_function</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">Na</span><span class="p">)</span>
+    <span class="c1"># assert all(0 &lt;= i &lt; Na for i in Ia), &quot;Error: indexes in Ia should be between 0 and Na = {}&quot;.format(Na)  # DEBUG</span>
+    <span class="n">Ib</span> <span class="o">=</span> <span class="n">subsample_function</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">Nb</span><span class="p">)</span>
+    <span class="c1"># assert all(0 &lt;= i &lt; Nb for i in Ib), &quot;Error: indexes in Ib should be between 0 and Nb = {}&quot;.format(Nb)  # DEBUG</span>
+    <span class="c1"># assert len(Ia) == len(Ib) == N, &quot;Error in subsample_function, Ia of size = {} and Ib of size = {} should have size N = {} ...&quot;.format(len(Ia), len(Ib), N)  # DEBUG</span>
+    <span class="c1"># Compute sub means</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>  <span class="c1"># faster to compute this</span>
+        <span class="n">sub_mean_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">Ia</span><span class="p">])</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="n">sub_mean_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">Ib</span><span class="p">])</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># than this for other data type (eg. dict mapping int to list)</span>
+        <span class="n">sub_mean_a</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ia</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+        <span class="n">sub_mean_b</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">b</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ib</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+    <span class="c1"># assert 0 &lt;= min(sub_mean_a, sub_mean_b) &lt;= max(sub_mean_a, sub_mean_b) &lt;= 1</span>
+    <span class="c1"># XXX I tested and these manual branching steps are the most efficient solution it is faster than using np.argmax()</span>
+    <span class="k">if</span> <span class="n">sub_mean_a</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">sub_mean_b</span> <span class="o">+</span> <span class="n">TOLERANCE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="k">elif</span> <span class="n">sub_mean_b</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">sub_mean_a</span> <span class="o">+</span> <span class="n">TOLERANCE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">b</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># 0 &lt;= abs(sub_mean_a - sub_mean_b) &lt;= TOLERANCE</span>
+        <span class="k">if</span> <span class="n">Na</span> <span class="o">&lt;</span> <span class="n">Nb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">a</span>
+        <span class="k">elif</span> <span class="n">Na</span> <span class="o">&gt;</span> <span class="n">Nb</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">b</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># if no way of breaking the tie, choose uniformly at random</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">])</span></div>
+            <span class="c1"># chosen_arm = np.random.choice([a, b])</span>
+            <span class="c1"># print(&quot;Warning: arms a = {} and b = {} had same sub-samples means = {:.3g} = {:.3g} and nb selections = {} = {}... so choosing uniformly at random {}!&quot;.format(a, b, sub_mean_a, sub_mean_b, Na, Nb, chosen_arm))  # WARNING</span>
+            <span class="c1"># return chosen_arm</span>
+
+
+<div class="viewcode-block" id="besa_K_actions__non_randomized"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.besa_K_actions__non_randomized">[docs]</a><span class="k">def</span> <span class="nf">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; BESA recursive selection algorithm for an action set of size :math:`\mathcal{K} \geq 1`.</span>
+
+<span class="sd">    - I prefer to implement for a discrete action set :math:`\{\text{left}, \dots, \text{right}\}` (end *included*) instead of a generic ``actions`` vector, to speed up the code, but it is less readable.</span>
+<span class="sd">    - The depth argument is just for pretty printing debugging information (useless).</span>
+
+<span class="sd">    .. warning:: The binary tournament is NOT RANDOMIZED here, this version is only for testing.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; pulls = [5, 6, 7, 8]; K = len(pulls); N = max(pulls)</span>
+<span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 0 is better</span>
+<span class="sd">    array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 1 is better in the first 6 samples</span>
+<span class="sd">    array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="sd">    &gt;&gt;&gt; besa_K_actions__non_randomized(rewards, pulls, 0, K-1, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; [besa_K_actions__non_randomized(rewards, pulls, 0, K-1, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
+<span class="sd">    [3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># assert left &lt;= right, &quot;Error: in &#39;besa_K_actions&#39; function, left = {} was not &lt;= right = {}...&quot;.format(left, right)  # DEBUG</span>
+    <span class="c1"># print(&quot;In &#39;besa_K_actions&#39;, left = {} and right = {} for this call.&quot;.format(left, right))  # DEBUG</span>
+    <span class="k">if</span> <span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">left</span>
+    <span class="k">elif</span> <span class="n">right</span> <span class="o">==</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pivot</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="c1"># print(&quot;Using pivot = {}, left = {} and right = {}...&quot;.format(pivot, left, right))  # DEBUG</span>
+        <span class="n">chosen_left</span> <span class="o">=</span> <span class="n">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">pivot</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># assert left &lt;= chosen_left &lt;= pivot, &quot;Error: the output chosen_left = {} from tournament from left = {} to pivot = {} should be between the two...&quot;.format(chosen_left, left, pivot)  # DEBUG</span>
+        <span class="n">chosen_right</span> <span class="o">=</span> <span class="n">besa_K_actions__non_randomized</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">pivot</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># assert pivot + 1 &lt;= chosen_right &lt;= right, &quot;Error: the output chosen_right = {} from tournament from pivot + 1 = {} to right = {} should be between the two...&quot;.format(chosen_right, pivot + 1, right)  # DEBUG</span>
+        <span class="c1"># print(&quot;The two recursive calls gave chosen_left = {}, chosen_right = {}...&quot;.format(chosen_left, chosen_right))  # DEBUG</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">chosen_left</span><span class="p">,</span> <span class="n">chosen_right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="c1"># print(&quot;{}In &#39;besa_K_actions&#39;, left = {} and right = {} gave chosen_arm = {}.&quot;.format(&quot;\t&quot; * depth, left, right, chosen_arm))  # DEBUG</span>
+    <span class="k">return</span> <span class="n">chosen_arm</span></div>
+
+
+<div class="viewcode-block" id="besa_K_actions__smart_divideandconquer"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.besa_K_actions__smart_divideandconquer">[docs]</a><span class="k">def</span> <span class="nf">besa_K_actions__smart_divideandconquer</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">random_permutation_of_arm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; BESA recursive selection algorithm for an action set of size :math:`\mathcal{K} \geq 1`.</span>
+
+<span class="sd">    - I prefer to implement for a discrete action set :math:`\{\text{left}, \dots, \text{right}\}` (end *included*) instead of a generic ``actions`` vector, to speed up the code, but it is less readable.</span>
+<span class="sd">    - The depth argument is just for pretty printing debugging information (useless).</span>
+
+<span class="sd">    .. note:: The binary tournament is RANDOMIZED here, as it should be.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; pulls = [5, 6, 7, 8]; K = len(pulls); N = max(pulls)</span>
+<span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 0 is better</span>
+<span class="sd">    array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 1 is better in the first 6 samples</span>
+<span class="sd">    array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="sd">    &gt;&gt;&gt; besa_K_actions__smart_divideandconquer(rewards, pulls, 0, K-1, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; [besa_K_actions__smart_divideandconquer(rewards, pulls, 0, K-1, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
+<span class="sd">    [3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># assert left &lt;= right, &quot;Error: in &#39;besa_K_actions__smart_divideandconquer&#39; function, left = {} was not &lt;= right = {}...&quot;.format(left, right)  # DEBUG</span>
+    <span class="c1"># print(&quot;In &#39;besa_K_actions__smart_divideandconquer&#39;, left = {} and right = {} for this call.&quot;.format(left, right))  # DEBUG</span>
+    <span class="k">if</span> <span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">left</span>
+    <span class="k">elif</span> <span class="n">right</span> <span class="o">==</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pivot</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="c1"># print(&quot;Using pivot = {}, left = {} and right = {}...&quot;.format(pivot, left, right))  # DEBUG</span>
+        <span class="n">chosen_left</span> <span class="o">=</span> <span class="n">besa_K_actions__smart_divideandconquer</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">pivot</span><span class="p">,</span> <span class="n">random_permutation_of_arm</span><span class="o">=</span><span class="n">random_permutation_of_arm</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># chosen_left = inverse_permutation(random_permutation_of_arm, chosen_left)</span>
+        <span class="c1"># assert left &lt;= chosen_left &lt;= pivot, &quot;Error: the output chosen_left = {} from tournament from left = {} to pivot = {} should be between the two...&quot;.format(chosen_left, left, pivot)  # DEBUG</span>
+        <span class="n">chosen_right</span> <span class="o">=</span> <span class="n">besa_K_actions__smart_divideandconquer</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">pivot</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">random_permutation_of_arm</span><span class="o">=</span><span class="n">random_permutation_of_arm</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># chosen_right = inverse_permutation(random_permutation_of_arm, chosen_right)</span>
+        <span class="c1"># assert pivot + 1 &lt;= chosen_right &lt;= right, &quot;Error: the output chosen_right = {} from tournament from pivot + 1 = {} to right = {} should be between the two...&quot;.format(chosen_right, pivot + 1, right)  # DEBUG</span>
+        <span class="c1"># print(&quot;The two recursive calls gave chosen_left = {}, chosen_right = {}...&quot;.format(chosen_left, chosen_right))  # DEBUG</span>
+        <span class="k">if</span> <span class="n">random_permutation_of_arm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">chosen_left</span><span class="p">,</span> <span class="n">chosen_right</span> <span class="o">=</span> <span class="n">random_permutation_of_arm</span><span class="p">[</span><span class="n">chosen_left</span><span class="p">],</span> <span class="n">random_permutation_of_arm</span><span class="p">[</span><span class="n">chosen_right</span><span class="p">]</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">chosen_left</span><span class="p">,</span> <span class="n">chosen_right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="c1"># print(&quot;{}In &#39;besa_K_actions__smart_divideandconquer&#39;, left = {} and right = {} gave chosen_arm = {}.&quot;.format(&quot;\t&quot; * depth, left, right, chosen_arm))  # DEBUG</span>
+    <span class="k">if</span> <span class="n">random_permutation_of_arm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">inverse_permutation</span><span class="p">(</span><span class="n">random_permutation_of_arm</span><span class="p">,</span> <span class="n">chosen_arm</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">chosen_arm</span></div>
+
+
+<div class="viewcode-block" id="besa_K_actions"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.besa_K_actions">[docs]</a><span class="k">def</span> <span class="nf">besa_K_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; BESA recursive selection algorithm for an action set of size :math:`\mathcal{K} \geq 1`.</span>
+
+<span class="sd">    - The divide and conquer is implemented for a generic list of actions, it&#39;s slower but simpler to write! Left and right divisions are just ``actions[:len(actions)//2]`` and ``actions[len(actions)//2:]``.</span>
+<span class="sd">    - Actions is assumed to be shuffled *before* calling this function!</span>
+<span class="sd">    - The depth argument is just for pretty printing debugging information (useless).</span>
+
+<span class="sd">    .. note:: The binary tournament is RANDOMIZED here, *as it should be*.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; pulls = [5, 6, 7, 8]; K = len(pulls); N = max(pulls)</span>
+<span class="sd">    &gt;&gt;&gt; actions = np.arange(K)</span>
+<span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 0 is better</span>
+<span class="sd">    array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 1 is better in the first 6 samples</span>
+<span class="sd">    array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="sd">    &gt;&gt;&gt; besa_K_actions(rewards, pulls, actions, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; [besa_K_actions(rewards, pulls, actions, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
+<span class="sd">    [3, 3, 2, 3, 3, 0, 0, 0, 2, 3]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(&quot;In &#39;besa_K_actions&#39;, actions = {} for this call.&quot;.format(actions))  # DEBUG</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">actions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># actions is already shuffled!</span>
+        <span class="n">actions_left</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">actions_right</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="c1"># print(&quot;Using actions_left = {} and actions_right = {}...&quot;.format(actions_left, actions_right))  # DEBUG</span>
+        <span class="n">chosen_left</span> <span class="o">=</span> <span class="n">besa_K_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions_left</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">chosen_right</span> <span class="o">=</span> <span class="n">besa_K_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions_right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># print(&quot;The two recursive calls gave chosen_left = {}, chosen_right = {}...&quot;.format(chosen_left, chosen_right))  # DEBUG</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">chosen_left</span><span class="p">,</span> <span class="n">chosen_right</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="c1"># print(&quot;{}In &#39;besa_K_actions&#39;, actions = {} gave chosen_arm = {}.&quot;.format(&quot;\t&quot; * depth, actions, chosen_arm))  # DEBUG</span>
+    <span class="k">return</span> <span class="n">chosen_arm</span></div>
+
+
+<div class="viewcode-block" id="besa_K_actions__non_binary"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.besa_K_actions__non_binary">[docs]</a><span class="k">def</span> <span class="nf">besa_K_actions__non_binary</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; BESA recursive selection algorithm for an action set of size :math:`\mathcal{K} \geq 1`.</span>
+
+<span class="sd">    - Instead of doing this binary tree tournaments (which results in :math:`\mathcal{O}(K^2)` calls to the 2-arm procedure), we can do a line tournaments: 1 vs 2, winner vs 3, winner vs 4 etc, winner vs K-1 (which results in :math:`\mathcal{O}(K)` calls),</span>
+<span class="sd">    - Actions is assumed to be shuffled *before* calling this function!</span>
+<span class="sd">    - The depth argument is just for pretty printing debugging information (useless).</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; pulls = [5, 6, 7, 8]; K = len(pulls); N = max(pulls)</span>
+<span class="sd">    &gt;&gt;&gt; actions = np.arange(K)</span>
+<span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 0 is better</span>
+<span class="sd">    array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 1 is better in the first 6 samples</span>
+<span class="sd">    array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="sd">    &gt;&gt;&gt; besa_K_actions__non_binary(rewards, pulls, actions, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; [besa_K_actions__non_binary(rewards, pulls, actions, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
+<span class="sd">    [3, 3, 3, 2, 0, 3, 3, 3, 3, 3]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(&quot;In &#39;besa_K_actions__non_binary&#39;, actions = {} for this call.&quot;.format(actions))  # DEBUG</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">actions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)):</span>
+            <span class="n">chosen_arm</span> <span class="o">=</span> <span class="n">besa_two_actions</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">chosen_arm</span><span class="p">,</span> <span class="n">actions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_function</span><span class="p">)</span>
+    <span class="c1"># print(&quot;{}In &#39;besa_K_actions__non_binary&#39;, actions = {} gave chosen_arm = {}.&quot;.format(&quot;\t&quot; * depth, actions, chosen_arm))  # DEBUG</span>
+    <span class="k">return</span> <span class="n">chosen_arm</span></div>
+
+
+<div class="viewcode-block" id="besa_K_actions__non_recursive"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.besa_K_actions__non_recursive">[docs]</a><span class="k">def</span> <span class="nf">besa_K_actions__non_recursive</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="n">subsample_uniform</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; BESA non-recursive selection algorithm for an action set of size :math:`\mathcal{K} \geq 1`.</span>
+
+<span class="sd">    - No calls to :func:`besa_two_actions`, just generalize it to K actions instead of 2.</span>
+<span class="sd">    - Actions is assumed to be shuffled *before* calling this function!</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; pulls = [5, 6, 7, 8]; K = len(pulls); N = max(pulls)</span>
+<span class="sd">    &gt;&gt;&gt; rewards = np.random.randn(K, N)</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards, axis=1)  # arm 0 is better</span>
+<span class="sd">    array([ 0.09876921, -0.18561207,  0.04463033,  0.0653539 ])</span>
+<span class="sd">    &gt;&gt;&gt; np.mean(rewards[:, :min(pulls)], axis=1)  # arm 1 is better in the first 6 samples</span>
+<span class="sd">    array([-0.06401484,  0.17366346,  0.05323033, -0.09514708])</span>
+<span class="sd">    &gt;&gt;&gt; besa_K_actions__non_recursive(rewards, pulls, None, subsample_function=subsample_deterministic)  # doctest: +ELLIPSIS</span>
+<span class="sd">    3</span>
+<span class="sd">    &gt;&gt;&gt; [besa_K_actions__non_recursive(rewards, pulls, None, subsample_function=subsample_uniform) for _ in range(10)]  # doctest: +ELLIPSIS</span>
+<span class="sd">    [1, 3, 0, 2, 2, 3, 1, 1, 3, 1]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+    <span class="n">min_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">pulls</span><span class="p">)</span>
+    <span class="n">sub_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+        <span class="n">Ik</span> <span class="o">=</span> <span class="n">subsample_function</span><span class="p">(</span><span class="n">min_pulls</span><span class="p">,</span> <span class="n">pulls</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="c1"># sub_means[k] = np.mean(rewards[k, Ik])</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rewards</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>  <span class="c1"># faster to compute this</span>
+            <span class="n">sub_means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">Ik</span><span class="p">])</span> <span class="o">/</span> <span class="n">min_pulls</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># than this for other data type (eg. dict mapping int to list)</span>
+            <span class="n">sub_means</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rewards</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">Ik</span><span class="p">)</span> <span class="o">/</span> <span class="n">min_pulls</span>
+    <span class="n">max_sub_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">sub_means</span><span class="p">)</span>
+    <span class="n">which_are_best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">sub_means</span> <span class="o">==</span> <span class="n">max_sub_means</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">best_less_sampled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pulls</span><span class="p">)[</span><span class="n">which_are_best</span><span class="p">]</span>
+    <span class="c1"># return which_are_best[np.argmin(best_less_sampled)]</span>
+    <span class="k">return</span> <span class="n">which_are_best</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">best_less_sampled</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">best_less_sampled</span><span class="p">))[</span><span class="mi">0</span><span class="p">])]</span></div>
+
+
+<span class="c1"># --- The BESA policy</span>
+
+
+<div class="viewcode-block" id="BESA"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA">[docs]</a><span class="k">class</span> <span class="nc">BESA</span><span class="p">(</span><span class="n">IndexPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The Best Empirical Sampled Average (BESA) algorithm.</span>
+
+<span class="sd">    - Reference: [[Sub-Sampling For Multi Armed Bandits, Baransi et al., 2014]](https://hal.inria.fr/hal-01025651)</span>
+
+<span class="sd">    .. warning:: The BESA algorithm requires to store all the history of rewards, so its memory usage for :math:`T` rounds with :math:`K` arms is :math:`\mathcal{O}(K T)`, which is huge for large :math:`T`, be careful! Aggregating different BESA instances is probably a bad idea because of this limitation!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BESA.__init__"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">minPullsOfEachArm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">randomized_tournament</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_subsample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">non_binary</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">non_recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BESA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="c1"># --- Arguments</span>
+        <span class="c1"># XXX find a solution to not need to horizon?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">=</span> <span class="n">horizon</span>  <span class="c1">#: Just to know the memory to allocate for rewards. It could be implemented without knowing the horizon, by using lists to keep all the reward history, but this would be way slower!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">minPullsOfEachArm</span><span class="p">))</span>  <span class="c1">#: Minimum number of pulls of each arm before using the BESA algorithm. Using 1 might not be the best choice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">randomized_tournament</span> <span class="o">=</span> <span class="n">randomized_tournament</span>  <span class="c1">#: Whether to use a deterministic or random tournament.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_subsample</span> <span class="o">=</span> <span class="n">random_subsample</span>  <span class="c1">#: Whether to use a deterministic or random sub-sampling procedure.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">non_binary</span> <span class="o">=</span> <span class="n">non_binary</span>  <span class="c1">#: Whether to use :func:`besa_K_actions` or :func:`besa_K_actions__non_binary` for the selection of K arms.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">non_recursive</span> <span class="o">=</span> <span class="n">non_recursive</span>  <span class="c1">#: Whether to use :func:`besa_K_actions` or :func:`besa_K_actions__non_recursive` for the selection of K arms.</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span><span class="n">non_binary</span> <span class="ow">and</span> <span class="n">non_recursive</span><span class="p">),</span> <span class="s2">&quot;Error: BESA cannot use simultaneously non_binary and non_recursive option...&quot;</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subsample_function</span> <span class="o">=</span> <span class="n">subsample_uniform</span> <span class="k">if</span> <span class="n">random_subsample</span> <span class="k">else</span> <span class="n">subsample_deterministic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_besa_function</span> <span class="o">=</span> <span class="n">besa_K_actions</span>
+        <span class="k">if</span> <span class="n">non_binary</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_besa_function</span> <span class="o">=</span> <span class="n">besa_K_actions__non_binary</span>
+        <span class="k">if</span> <span class="n">non_recursive</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_besa_function</span> <span class="o">=</span> <span class="n">besa_K_actions__non_recursive</span>
+        <span class="c1"># --- Internal memory</span>
+        <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Error: BESA algorithm can only work for at least 2 arms.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_left</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># just keep them in memory to increase readability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_right</span> <span class="o">=</span> <span class="n">nbArms</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># just keep them in memory to increase readability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_actions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># just keep them in memory to increase readability</span>
+
+        <span class="c1"># Memory to store all the rewards</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_has_horizon</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_horizon</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">horizon</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1">#: Keep **all** rewards of each arms. It consumes a :math:`\mathcal{O}(K T)` memory, that&#39;s really bad!!</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="o">-</span><span class="mf">1e5</span><span class="p">)</span>  <span class="c1"># Just security, to be sure they don&#39;t count as zero in some computation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span> <span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span> <span class="p">}</span></div>
+
+<div class="viewcode-block" id="BESA.__str__"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; -&gt; str&quot;&quot;&quot;</span>
+        <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">,</span> <span class="n">b4</span><span class="p">,</span> <span class="n">b5</span><span class="p">,</span> <span class="n">b6</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_subsample</span><span class="p">,</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomized_tournament</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_horizon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_binary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_recursive</span>
+        <span class="k">return</span> <span class="s2">&quot;BESA</span><span class="si">{}{}{}{}{}{}{}{}{}{}{}{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;(&quot;</span> <span class="k">if</span> <span class="p">(</span><span class="n">b1</span> <span class="ow">or</span> <span class="n">b2</span> <span class="ow">or</span> <span class="n">b3</span> <span class="ow">or</span> <span class="n">b4</span> <span class="ow">or</span> <span class="n">b5</span> <span class="ow">or</span> <span class="n">b6</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;non-random subsample&quot;</span> <span class="k">if</span> <span class="n">b1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;, &quot;</span> <span class="k">if</span> <span class="n">b1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">b2</span> <span class="ow">or</span> <span class="n">b3</span> <span class="ow">or</span> <span class="n">b4</span> <span class="ow">or</span> <span class="n">b5</span> <span class="ow">or</span> <span class="n">b6</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;non-random tournament&quot;</span> <span class="k">if</span> <span class="n">b2</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;, &quot;</span> <span class="k">if</span> <span class="n">b2</span> <span class="ow">and</span> <span class="p">(</span><span class="n">b3</span> <span class="ow">or</span> <span class="n">b4</span> <span class="ow">or</span> <span class="n">b5</span> <span class="ow">or</span> <span class="n">b6</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$T_0=</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span><span class="p">)</span> <span class="k">if</span> <span class="n">b3</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;, &quot;</span> <span class="k">if</span> <span class="n">b3</span> <span class="ow">and</span> <span class="p">(</span><span class="n">b4</span> <span class="ow">or</span> <span class="n">b5</span> <span class="ow">or</span> <span class="n">b6</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;anytime&quot;</span> <span class="k">if</span> <span class="n">b4</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;, &quot;</span> <span class="k">if</span> <span class="n">b4</span> <span class="ow">and</span> <span class="p">(</span><span class="n">b5</span> <span class="ow">or</span> <span class="n">b6</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;non-binary&quot;</span> <span class="k">if</span> <span class="n">b5</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;, &quot;</span> <span class="k">if</span> <span class="n">b5</span> <span class="ow">and</span> <span class="n">b6</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;non-recursive&quot;</span> <span class="k">if</span> <span class="n">b6</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;)&quot;</span> <span class="k">if</span> <span class="p">(</span><span class="n">b1</span> <span class="ow">or</span> <span class="n">b2</span> <span class="ow">or</span> <span class="n">b3</span> <span class="ow">or</span> <span class="n">b4</span> <span class="ow">or</span> <span class="n">b5</span> <span class="ow">or</span> <span class="n">b6</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BESA.getReward"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Add the current reward in the global history.</span>
+
+<span class="sd">        .. note:: There is no need to normalize the reward in [0,1], that&#39;s one of the strong point of the BESA algorithm.&quot;&quot;&quot;</span>
+        <span class="c1"># XXX find a solution to not need to horizon?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_horizon</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]]</span> <span class="o">=</span> <span class="n">reward</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BESA</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span></div>
+
+    <span class="c1"># --- Basic choice() and handleCollision() method</span>
+
+<div class="viewcode-block" id="BESA.choice"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Applies the BESA procedure with the current data history.&quot;&quot;&quot;</span>
+        <span class="c1"># if some arm has never been selected, force to explore it!</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomized_tournament</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_actions</span><span class="p">)</span>
+            <span class="c1"># print(&quot;Calling &#39;besa_K_actions&#39; with actions list = {}...&quot;.format(self._actions))  # DEBUG</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_besa_function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+    <span class="c1"># --- Others choice...() methods, partly implemented</span>
+
+<div class="viewcode-block" id="BESA.choiceFromSubSet"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.choiceFromSubSet">[docs]</a>    <span class="k">def</span> <span class="nf">choiceFromSubSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">availableArms</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Applies the BESA procedure with the current data history, to the restricted set of arm.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">availableArms</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># if some arm has never been selected, force to explore it!</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">availableArms</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">availableArms</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">availableArms</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomized_tournament</span><span class="p">:</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+                <span class="c1"># print(&quot;Calling &#39;besa_K_actions&#39; with actions list = {}...&quot;.format(actions))  # DEBUG</span>
+                <span class="k">return</span> <span class="n">besa_K_actions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BESA.choiceMultiple"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.choiceMultiple">[docs]</a>    <span class="k">def</span> <span class="nf">choiceMultiple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Applies the multiple-choice BESA procedure with the current data history:</span>
+
+<span class="sd">        1. select a first arm with basic BESA procedure with full action set,</span>
+<span class="sd">        2. remove it from the set of actions,</span>
+<span class="sd">        3. restart step 1 with new smaller set of actions, until ``nb`` arm where chosen by basic BESA.</span>
+
+<span class="sd">        .. note:: This was not studied or published before, and there is no theoretical results about it!</span>
+
+<span class="sd">        .. warning:: This is very inefficient! The BESA procedure is already quite slow (with my current naive implementation), this is crazily slow!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">nb</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">choice</span><span class="p">()])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">))</span>
+            <span class="n">choices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb</span><span class="p">):</span>
+                <span class="c1"># if some arm has never been selected, force to explore it!</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">actions</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span><span class="p">):</span>
+                    <span class="n">choice_n</span> <span class="o">=</span> <span class="n">actions</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">actions</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minPullsOfEachArm</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomized_tournament</span><span class="p">:</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+                    <span class="c1"># print(&quot;Calling &#39;besa_K_actions&#39; with actions list = {}...&quot;.format(actions))  # DEBUG</span>
+                    <span class="n">choice_n</span> <span class="o">=</span> <span class="n">besa_K_actions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">subsample_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_subsample_function</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c1"># now, store it, remove it from action set</span>
+                <span class="n">choices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice_n</span><span class="p">)</span>
+                <span class="n">actions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">choice_n</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BESA.choiceWithRank"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.choiceWithRank">[docs]</a>    <span class="k">def</span> <span class="nf">choiceWithRank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Applies the ranked BESA procedure with the current data history:</span>
+
+<span class="sd">        1. use :meth:`choiceMultiplie` to select ``rank`` actions,</span>
+<span class="sd">        2. then take the ``rank``-th chosen action (the last one).</span>
+
+<span class="sd">        .. note:: This was not studied or published before, and there is no theoretical results about it!</span>
+
+<span class="sd">        .. warning:: This is very inefficient! The BESA procedure is already quite slow (with my current naive implementation), this is crazily slow!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choiceMultiple</span><span class="p">(</span><span class="n">nb</span><span class="o">=</span><span class="n">rank</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">choices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+    <span class="c1"># XXX self.index is NOT used to choose arm, only to estimate their order</span>
+
+<div class="viewcode-block" id="BESA.computeIndex"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.computeIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Compute the current index of arm &#39;arm&#39;.</span>
+
+<span class="sd">        .. warning:: This index **is not** the one used for the choice of arm (which use sub sampling). It&#39;s just the empirical mean of the arm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BESA.computeAllIndex"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.computeAllIndex">[docs]</a>    <span class="k">def</span> <span class="nf">computeAllIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Compute the current index of arm &#39;arm&#39; (vectorized).</span>
+
+<span class="sd">        .. warning:: This index **is not** the one used for the choice of arm (which use sub sampling). It&#39;s just the empirical mean of the arm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pulls</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;+inf&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BESA.handleCollision"><a class="viewcode-back" href="../../docs/Policies.BESA.html#Policies.BESA.BESA.handleCollision">[docs]</a>    <span class="k">def</span> <span class="nf">handleCollision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Nothing special to do.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

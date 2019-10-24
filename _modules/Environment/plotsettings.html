@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,576 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Environment.plotsettings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Environment.plotsettings</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; plotsettings: use it like this, in the Environment folder:</span>
+
+<span class="sd">&gt;&gt;&gt; import sys; sys.path.insert(0, &#39;..&#39;)</span>
+<span class="sd">&gt;&gt;&gt; from .plotsettings import BBOX_INCHES, signature, maximizeWindow, palette, makemarkers, add_percent_formatter, wraptext, wraplatex, legend, show_and_save, nrows_ncols</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">wrap</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="c1"># mpl.use(&#39;Agg&#39;)  # XXX is it a good idea? Nope, use &quot;export MPLBACKEND=&#39;Agg&#39;&quot; in your bashrc ... Cf. http://stackoverflow.com/a/4935945/ and http://matplotlib.org/faq/usage_faq.html#what-is-a-backend</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.ticker</span> <span class="k">as</span> <span class="nn">mtick</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Customize here if you want a signature on the titles or xlabel, of each plot</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">locale</span>  <span class="c1"># See this bug, http://numba.pydata.org/numba-doc/dev/user/faq.html#llvm-locale-bug</span>
+<span class="n">locale</span><span class="o">.</span><span class="n">setlocale</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">LC_TIME</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)</span>
+<span class="n">monthyear</span> <span class="o">=</span> <span class="s2">&quot;{:%b.%Y}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">())</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>  <span class="c1">#: Month.Year date</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">getenv</span>
+
+<span class="c1"># Backup figure objects</span>
+<span class="kn">from</span> <span class="nn">pickle</span> <span class="k">import</span> <span class="n">dump</span> <span class="k">as</span> <span class="n">pickle_dump</span>
+
+<span class="k">if</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">(By Lilian Besson, </span><span class="si">{}</span><span class="s2">, cf. SMPyBandits.GitHub.io - MIT Licensed)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">monthyear</span><span class="p">)</span>  <span class="c1">#: A small string to use as a signature</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="n">DPI</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c1">#: DPI to use for the figures</span>
+<span class="c1"># FIGSIZE = (19.80, 10.80)  #: Figure size, in inches!</span>
+<span class="n">FIGSIZE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>  <span class="c1">#: Figure size, in inches!</span>
+<span class="c1"># FIGSIZE = (12.4, 7)  #: Figure size, in inches!</span>
+<span class="c1"># FIGSIZE = (8, 6)  #: Figure size, in inches!</span>
+<span class="c1"># FIGSIZE = (8, 4.5)  #: Figure size, in inches!</span>
+
+<span class="c1"># Customize the colormap</span>
+<span class="n">HLS</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1">#: Use the HLS mapping, or HUSL mapping</span>
+<span class="n">VIRIDIS</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Use the Viridis colormap</span>
+
+<span class="c1"># Bbox in inches. Only the given portion of the figure is saved. If &#39;tight&#39;, try to figure out the tight bbox of the figure.</span>
+<span class="n">BBOX_INCHES</span> <span class="o">=</span> <span class="s2">&quot;tight&quot;</span>  <span class="c1">#: Use this parameter for bbox</span>
+<span class="n">BBOX_INCHES</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># use a clever color palette, eg http://seaborn.pydata.org/api.html#color-palettes</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="s2">&quot;talk&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;hls&quot;</span> <span class="k">if</span> <span class="n">HLS</span> <span class="k">else</span> <span class="s2">&quot;husl&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s2">&quot;sans-serif&quot;</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+
+    <span class="c1"># Use tex by default http://matplotlib.org/2.0.0/users/dflt_style_changes.html#math-text</span>
+    <span class="c1"># mpl.rcParams[&#39;text.usetex&#39;] = True  # XXX force use of LaTeX</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sans-serif&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.sans-serif&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;DejaVu Sans&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cm&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.rm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;serif&quot;</span>
+
+    <span class="c1"># Configure size for axes and x and y labels</span>
+    <span class="c1"># Cf. https://stackoverflow.com/a/12444777/</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;x-small&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;x-small&quot;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span>
+
+    <span class="c1"># Configure the DPI of all images, once and for all!</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DPI</span>
+    <span class="c1"># print(&quot; - Setting dpi of all figures to&quot;, DPI, &quot;...&quot;)  # DEBUG</span>
+
+    <span class="c1"># Configure figure size, even of if saved directly and not displayed, use HD screen</span>
+    <span class="c1"># cf. https://en.wikipedia.org/wiki/Computer_display_standard</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FIGSIZE</span>
+    <span class="c1"># print(&quot; - Setting &#39;figsize&#39; of all figures to&quot;, FIGSIZE, &quot;...&quot;)  # DEBUG</span>
+
+    <span class="c1"># XXX Set up a discrete version of the Viridis map for axes.prop_cycle</span>
+
+
+<div class="viewcode-block" id="palette"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.palette">[docs]</a><span class="k">def</span> <span class="nf">palette</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">hls</span><span class="o">=</span><span class="n">HLS</span><span class="p">,</span> <span class="n">viridis</span><span class="o">=</span><span class="n">VIRIDIS</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Use a smart palette from seaborn, for nb different plots on the same figure.</span>
+
+<span class="sd">    - Ref: http://seaborn.pydata.org/generated/seaborn.hls_palette.html#seaborn.hls_palette</span>
+
+<span class="sd">    &gt;&gt;&gt; palette(10, hls=True)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [(0.86..., 0.37..., 0.33...), (0.86...,.65..., 0.33...), (0.78..., 0.86...,.33...), (0.49..., 0.86...,.33...), (0.33..., 0.86...,.46...), (0.33..., 0.86...,.74...), (0.33..., 0.68..., 0.86...) (0.33..., 0.40..., 0.86...) (0.56..., 0.33..., 0.86...) (0.84..., 0.33..., 0.86...)]</span>
+<span class="sd">    &gt;&gt;&gt; palette(10, hls=False)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [[0.96..., 0.44..., 0.53...], [0.88..., 0.52..., 0.19...], [0.71..., 0.60..., 0.19...], [0.54..., 0.65..., 0.19...], [0.19..., 0.69..., 0.34...], [0.20..., 0.68..., 0.58...],[0.21..., 0.67..., 0.69...], [0.22..., 0.65..., 0.84...], [0.55..., 0.57..., 0.95...], [0.85..., 0.44..., 0.95...]]</span>
+<span class="sd">    &gt;&gt;&gt; palette(10, viridis=True)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [(0.28..., 0.13..., 0.44...), (0.26..., 0.24..., 0.52...), (0.22..., 0.34..., 0.54...), (0.17..., 0.43..., 0.55...), (0.14..., 0.52..., 0.55...), (0.11..., 0.60..., 0.54...), (0.16..., 0.69..., 0.49...), (0.31..., 0.77..., 0.41...), (0.52..., 0.83..., 0.28...), (0.76..., 0.87..., 0.13...)]</span>
+
+<span class="sd">    - To visualize:</span>
+
+<span class="sd">    &gt;&gt;&gt; sns.palplot(palette(10, hls=True))  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; sns.palplot(palette(10, hls=False))  # use HUSL by default  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; sns.palplot(palette(10, viridis=True))  # doctest: +SKIP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">viridis</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">nb</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sns</span><span class="o">.</span><span class="n">hls_palette</span><span class="p">(</span><span class="n">nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="n">nb</span><span class="p">]</span> <span class="k">if</span> <span class="n">hls</span> <span class="k">else</span> <span class="n">sns</span><span class="o">.</span><span class="n">husl_palette</span><span class="p">(</span><span class="n">nb</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[:</span><span class="n">nb</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="makemarkers"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.makemarkers">[docs]</a><span class="k">def</span> <span class="nf">makemarkers</span><span class="p">(</span><span class="n">nb</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Give a list of cycling markers. See http://matplotlib.org/api/markers_api.html</span>
+
+<span class="sd">    .. note:: This what I consider the *optimal* sequence of markers, they are clearly differentiable one from another and all are pretty.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; makemarkers(7)</span>
+<span class="sd">    [&#39;o&#39;, &#39;D&#39;, &#39;v&#39;, &#39;p&#39;, &#39;&lt;&#39;, &#39;s&#39;, &#39;^&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; makemarkers(12)</span>
+<span class="sd">    [&#39;o&#39;, &#39;D&#39;, &#39;v&#39;, &#39;p&#39;, &#39;&lt;&#39;, &#39;s&#39;, &#39;^&#39;, &#39;*&#39;, &#39;h&#39;, &#39;&gt;&#39;, &#39;o&#39;, &#39;D&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">allmarkers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">]</span>
+    <span class="n">longlist</span> <span class="o">=</span> <span class="n">allmarkers</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">allmarkers</span><span class="p">))))</span>  <span class="c1"># Cycle the good number of time</span>
+    <span class="k">return</span> <span class="n">longlist</span><span class="p">[:</span><span class="n">nb</span><span class="p">]</span>  <span class="c1"># Truncate</span></div>
+
+
+<span class="c1">#: Default parameter for legend(): if True, the legend is placed at the right side of the figure, not on it.</span>
+<span class="c1">#: This is almost mandatory for plots with more than 10 algorithms (good for experimenting, bad for publications).</span>
+<span class="n">PUTATRIGHT</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">PUTATRIGHT</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: Shrink factor if the legend is displayed on the right of the plot.</span>
+<span class="c1">#:</span>
+<span class="c1">#: .. warning:: I still don&#39;t really understand how this works. Just manually decrease if the legend takes more space (i.e., more algorithms with longer names)</span>
+<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.60</span>
+<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.65</span>
+<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.70</span>
+<span class="n">SHRINKFACTOR</span> <span class="o">=</span> <span class="mf">0.75</span>
+
+<span class="c1">#: Default parameter for maximum number of label to display in the legend INSIDE the figure</span>
+<span class="n">MAXNBOFLABELINFIGURE</span> <span class="o">=</span> <span class="mi">8</span>
+
+
+<div class="viewcode-block" id="legend"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.legend">[docs]</a><span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="n">putatright</span><span class="o">=</span><span class="n">PUTATRIGHT</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-small&quot;</span><span class="p">,</span>
+        <span class="n">shrinkfactor</span><span class="o">=</span><span class="n">SHRINKFACTOR</span><span class="p">,</span> <span class="n">maxnboflabelinfigure</span><span class="o">=</span><span class="n">MAXNBOFLABELINFIGURE</span><span class="p">,</span>
+        <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;plt.legend() with good options, cf. http://matplotlib.org/users/recipes.html#transparent-fancy-legends.</span>
+
+<span class="sd">    - It can place the legend to the right also, see https://stackoverflow.com/a/4701285/.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">len_leg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">putatright</span> <span class="o">=</span> <span class="n">len_leg</span> <span class="o">&gt;</span> <span class="n">maxnboflabelinfigure</span>
+        <span class="k">if</span> <span class="n">len_leg</span> <span class="o">&gt;</span> <span class="n">maxnboflabelinfigure</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: forcing to use putatright = </span><span class="si">{}</span><span class="s2"> because there is </span><span class="si">{}</span><span class="s2"> items in the legend.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">putatright</span><span class="p">,</span> <span class="n">len_leg</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># print(&quot;    e =&quot;, e)  # DEBUG</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># fig = plt.gcf()</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span>  <span class="c1"># HACK</span>
+    <span class="k">if</span> <span class="n">putatright</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Shrink current axis by 20% on xaxis and 10% on yaxis</span>
+            <span class="n">delta_rect</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">shrinkfactor</span><span class="p">)</span><span class="o">/</span><span class="mf">6.25</span>
+            <span class="c1"># XXX rect = [left, bottom, right, top] in normalized (0, 1) figure coordinates.</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="n">delta_rect</span><span class="p">,</span> <span class="n">delta_rect</span><span class="p">,</span> <span class="n">shrinkfactor</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">delta_rect</span><span class="p">])</span>
+            <span class="c1"># Put a legend to the right of the current axis</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">framealpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="maximizeWindow"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.maximizeWindow">[docs]</a><span class="k">def</span> <span class="nf">maximizeWindow</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Experimental function to try to maximize a plot.</span>
+
+<span class="sd">    - Tries as well as possible to maximize the figure.</span>
+<span class="sd">    - Cf. https://stackoverflow.com/q/12439588/</span>
+
+<span class="sd">    .. warning:: This function is still experimental, but &quot;it works on my machine&quot; so I keep it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># plt.show(block=True)</span>
+    <span class="c1"># plt.tight_layout()</span>
+    <span class="n">figManager</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_current_fig_manager</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">figManager</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">showMaximized</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">figManager</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">Maximize</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">figManager</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">state</span><span class="p">(</span><span class="s1">&#39;zoomed&#39;</span><span class="p">)</span>  <span class="c1"># works fine on Windows!</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">figManager</span><span class="o">.</span><span class="n">full_screen_toggle</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Note: Unable to maximize window...&quot;</span><span class="p">)</span></div>
+                    <span class="c1"># plt.show()</span>
+
+
+<span class="c1">#: List of formats to use for saving the figures, by default.</span>
+<span class="c1">#: It is a smart idea to save in both a raster and vectorial formats</span>
+<span class="n">FORMATS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
+<span class="c1"># FORMATS = (&#39;png&#39;, &#39;pdf&#39;, &#39;eps&#39;)</span>
+<span class="c1"># FORMATS = (&#39;png&#39;, &#39;pdf&#39;, &#39;eps&#39;, &#39;svg&#39;)</span>
+
+
+<div class="viewcode-block" id="show_and_save"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.show_and_save">[docs]</a><span class="k">def</span> <span class="nf">show_and_save</span><span class="p">(</span><span class="n">showplot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">savefig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">formats</span><span class="o">=</span><span class="n">FORMATS</span><span class="p">,</span> <span class="n">pickleit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Maximize the window if need to show it, save it if needed, and then show it or close it.</span>
+
+<span class="sd">    - Inspired by https://tomspur.blogspot.fr/2015/08/publication-ready-figures-with.html#Save-the-figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">showplot</span><span class="p">:</span>
+        <span class="n">maximizeWindow</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">savefig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pickleit</span> <span class="ow">and</span> <span class="n">fig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="s2">&quot;pickle&quot;</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">savefig</span><span class="p">,</span> <span class="n">form</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving raw figure with format </span><span class="si">{}</span><span class="s2">, to file &#39;</span><span class="si">{}</span><span class="s2">&#39;...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;bw&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">pickle_dump</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;       Saved! &#39;</span><span class="si">{}</span><span class="s2">&#39; created of size &#39;</span><span class="si">{}</span><span class="s2">b&#39;, at &#39;{:</span><span class="si">%c</span><span class="s2">}&#39; ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getatime</span><span class="p">(</span><span class="n">path</span><span class="p">))))</span>
+        <span class="k">for</span> <span class="n">form</span> <span class="ow">in</span> <span class="n">formats</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">savefig</span><span class="p">,</span> <span class="n">form</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving figure with format </span><span class="si">{}</span><span class="s2">, to file &#39;</span><span class="si">{}</span><span class="s2">&#39;...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="n">BBOX_INCHES</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;       Saved! &#39;</span><span class="si">{}</span><span class="s2">&#39; created of size &#39;</span><span class="si">{}</span><span class="s2">b&#39;, at &#39;{:</span><span class="si">%c</span><span class="s2">}&#39; ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getatime</span><span class="p">(</span><span class="n">path</span><span class="p">))))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: could not save current figure to </span><span class="si">{}</span><span class="s2"> because of error </span><span class="si">{}</span><span class="s2">... Skipping!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">showplot</span> <span class="k">else</span> <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to show the figure for some unknown reason...&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span></div>
+
+
+<div class="viewcode-block" id="add_percent_formatter"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.add_percent_formatter">[docs]</a><span class="k">def</span> <span class="nf">add_percent_formatter</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;xaxis&quot;</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">oldformatter</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.2g%%</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">formatter</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{x:.1%}</span><span class="s2">&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Small function to use a Percentage formatter for xaxis or yaxis, of a certain amplitude.</span>
+
+<span class="sd">    - which can be &quot;xaxis&quot; or &quot;yaxis&quot;,</span>
+<span class="sd">    - amplitude is a float, default to 1.</span>
+
+<span class="sd">    - More detail at http://stackoverflow.com/a/36320013/</span>
+<span class="sd">    - Not that the use of matplotlib.ticker.PercentFormatter require matplotlib &gt;= 2.0.1</span>
+<span class="sd">    - But if not available, use matplotlib.ticker.StrMethodFormatter(&quot;{:.0%}&quot;) instead</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Which axis to use ?</span>
+    <span class="k">if</span> <span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span>
+    <span class="k">elif</span> <span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;yaxis&quot;</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown value &#39;</span><span class="si">{}</span><span class="s2">&#39; for &#39;which&#39; in function add_percent_formatter() : only xaxis,yaxis are accepted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">which</span><span class="p">))</span>
+    <span class="c1"># Which formatter to use ?</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">my_frmt</span> <span class="o">=</span> <span class="n">mtick</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>  <span class="c1"># Use new format string</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">my_frmt</span> <span class="o">=</span> <span class="n">mtick</span><span class="o">.</span><span class="n">FormatStrFormatter</span><span class="p">(</span><span class="n">oldformatter</span><span class="p">)</span>  <span class="c1"># Use old format string, better looking but not correctly scaled</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">mtick</span><span class="p">,</span> <span class="s1">&#39;PercentFormatter&#39;</span><span class="p">):</span>
+        <span class="n">my_frmt</span> <span class="o">=</span> <span class="n">mtick</span><span class="o">.</span><span class="n">PercentFormatter</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>
+    <span class="c1"># Use it!</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">my_frmt</span><span class="p">)</span></div>
+
+
+<span class="c1">#: Default value for the ``width`` parameter for :func:`wraptext` and :func:`wraplatex`.</span>
+<span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">95</span>
+
+
+<div class="viewcode-block" id="wraptext"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.wraptext">[docs]</a><span class="k">def</span> <span class="nf">wraptext</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">WIDTH</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Wrap the text, using ``textwrap`` module, and ``width``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="wraplatex"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.wraplatex">[docs]</a><span class="k">def</span> <span class="nf">wraplatex</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">WIDTH</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Wrap the text, for LaTeX, using ``textwrap`` module, and ``width``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;$</span><span class="se">\n</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="nrows_ncols"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.nrows_ncols">[docs]</a><span class="k">def</span> <span class="nf">nrows_ncols</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return (nrows, ncols) to create a subplots for N plots of the good size.</span>
+
+<span class="sd">    &gt;&gt;&gt; for N in range(1, 22):</span>
+<span class="sd">    ...     nrows, ncols = nrows_ncols(N)</span>
+<span class="sd">    ...     print(&quot;For N = {:&gt;2}, {} rows and {} cols are enough.&quot;.format(N, nrows, ncols))</span>
+<span class="sd">    For N =  1, 1 rows and 1 cols are enough.</span>
+<span class="sd">    For N =  2, 2 rows and 1 cols are enough.</span>
+<span class="sd">    For N =  3, 2 rows and 2 cols are enough.</span>
+<span class="sd">    For N =  4, 2 rows and 2 cols are enough.</span>
+<span class="sd">    For N =  5, 3 rows and 2 cols are enough.</span>
+<span class="sd">    For N =  6, 3 rows and 2 cols are enough.</span>
+<span class="sd">    For N =  7, 3 rows and 3 cols are enough.</span>
+<span class="sd">    For N =  8, 3 rows and 3 cols are enough.</span>
+<span class="sd">    For N =  9, 3 rows and 3 cols are enough.</span>
+<span class="sd">    For N = 10, 4 rows and 3 cols are enough.</span>
+<span class="sd">    For N = 11, 4 rows and 3 cols are enough.</span>
+<span class="sd">    For N = 12, 4 rows and 3 cols are enough.</span>
+<span class="sd">    For N = 13, 4 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 14, 4 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 15, 4 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 16, 4 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 17, 5 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 18, 5 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 19, 5 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 20, 5 rows and 4 cols are enough.</span>
+<span class="sd">    For N = 21, 5 rows and 5 cols are enough.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">)))</span>
+    <span class="n">ncols</span> <span class="o">=</span> <span class="n">N</span> <span class="o">//</span> <span class="n">nrows</span>
+    <span class="k">while</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="n">nrows</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">:</span>
+        <span class="n">ncols</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span></div>
+
+
+<div class="viewcode-block" id="addTextForWorstCases"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.addTextForWorstCases">[docs]</a><span class="k">def</span> <span class="nf">addTextForWorstCases</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">patches</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">normed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add some text labels to the patches of an histogram, for the last &#39;rate&#39;%.</span>
+
+<span class="sd">    Use it like this, to add labels for the bins in the 65% largest values n::</span>
+
+<span class="sd">        &gt;&gt;&gt; n, bins, patches = plt.hist(...)</span>
+<span class="sd">        &gt;&gt;&gt; addTextForWorstCases(ax, n, bins, patches, rate=0.65)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># DONE add an automatic detection of the cases where a regret was found to not be O(log(T)) to display on the histogram the count of bad cases</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;rate&#39; = </span><span class="si">{:.3g}</span><span class="s2"> should be in [0, 1].&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">patches</span><span class="p">,</span> <span class="s1">&#39;patches&#39;</span><span class="p">):</span>
+        <span class="c1"># assert isinstance(patches, mpl.container.BarContainer)  # DEBUG</span>
+        <span class="n">patches</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">patches</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">patches</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">patches</span> <span class="o">=</span> <span class="p">[</span><span class="n">patches</span><span class="p">]</span>
+    <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">patches</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">nx</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">patches</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:.3%}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span> <span class="k">if</span> <span class="n">normed</span> <span class="k">else</span> <span class="s2">&quot;</span><span class="si">{:.3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.015</span> <span class="o">*</span> <span class="n">nx</span>  <span class="c1"># 1.5% higher than the top of the patch rectangle</span>
+        <span class="c1"># Simple detection can be if a box is for a regret larger than some fraction of T</span>
+        <span class="k">if</span> <span class="n">nx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">rate</span> <span class="o">*</span> <span class="n">max_x</span><span class="p">):</span>
+            <span class="c1"># print(&quot;Writing text =&quot;, text, &quot;at x =&quot;, x, &quot;and y =&quot;, y)  # DEBUG</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="myviolinplot"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.myviolinplot">[docs]</a><span class="k">def</span> <span class="nf">myviolinplot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">nonsymmetrical</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">nonsymmetrical</span><span class="o">=</span><span class="n">nonsymmetrical</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="s2">&quot;stick&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">NameError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">sns</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">cut</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inner</span><span class="o">=</span><span class="s2">&quot;stick&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="violin_or_box_plot"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.violin_or_box_plot">[docs]</a><span class="k">def</span> <span class="nf">violin_or_box_plot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">boxplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Automatically add labels to a box or violin plot.</span>
+
+<span class="sd">    .. warning:: Requires pandas (https://pandas.pydata.org/) to add the xlabel for violin plots.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">boxplot</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">showmeans</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">meanline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+            <span class="n">dict_of_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">label</span><span class="p">:</span> <span class="n">column</span>
+                <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dict_of_data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">myviolinplot</span><span class="p">(</span><span class="n">nonsymmetrical</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">violin_or_box_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">boxplot</span><span class="o">=</span><span class="n">boxplot</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">myviolinplot</span><span class="p">(</span><span class="n">nonsymmetrical</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="n">MAX_NB_OF_LABELS</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1">#: If more than MAX_NB_OF_LABELS labels have to be displayed on a boxplot, don&#39;t put a legend.</span>
+
+
+<div class="viewcode-block" id="adjust_xticks_subplots"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.adjust_xticks_subplots">[docs]</a><span class="k">def</span> <span class="nf">adjust_xticks_subplots</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(),</span> <span class="n">maxNbOfLabels</span><span class="o">=</span><span class="n">MAX_NB_OF_LABELS</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Adjust the size of the xticks, and maybe change size of ylabel.</span>
+
+<span class="sd">    - See https://stackoverflow.com/a/37708190/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">maxNbOfLabels</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">max_length_of_labels</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">])</span>
+    <span class="n">locs</span><span class="p">,</span> <span class="n">xticks_labels</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">()</span>  <span class="c1"># XXX don&#39;t name xticks_labels, labels or it erases the argument of the function and labels are not correctly displayed.</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">locs</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;xx-small&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">max_length_of_labels</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">max_length_of_labels</span><span class="o">/</span><span class="mf">135.0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ylabel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;x-small&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">max_length_of_labels</span><span class="o">/</span><span class="mf">90.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="table_to_latex"><a class="viewcode-back" href="../../docs/Environment.plotsettings.html#Environment.plotsettings.table_to_latex">[docs]</a><span class="k">def</span> <span class="nf">table_to_latex</span><span class="p">(</span><span class="n">mean_data</span><span class="p">,</span> <span class="n">std_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fmt_function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name_of_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">erase_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Tries to print the data from the input array or collection of array or :class:`pandas.DataFrame` to the stdout and to the file ``filename`` (if it does not exist).</span>
+
+<span class="sd">    - Give ``std_data`` to print ``mean +- std`` instead of just ``mean`` from ``mean_data``,</span>
+<span class="sd">    - Give a list to ``labels`` to use a header of the table,</span>
+<span class="sd">    - Give a formatting function to ``fmt_function``, like :func:`IPython.core.magics.execution._format_time` to print running times, or :func:`memory_consumption.sizeof_fmt` to print memory usages, or ``lambda s: &quot;{:.3g}&quot;.format(s)`` to print ``float`` values (default),</span>
+<span class="sd">    - Uses :func:`tabulate.tabulate` (https://bitbucket.org/astanin/python-tabulate/) or :func:`pandas.DataFrame.to_latex` (https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_latex.html#pandas.DataFrame.to_latex).</span>
+
+<span class="sd">    .. warning:: FIXME this is still experimental! And useless, most of the time we simply do a copy/paste from the terminal to the LaTeX in the article...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fmt_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="n">fmt_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{:.3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">output_string</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">input_data</span> <span class="o">=</span> <span class="n">mean_data</span>
+    <span class="k">if</span> <span class="n">std_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">format_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> \pm </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fmt_function</span><span class="p">(</span><span class="n">xi</span><span class="p">),</span> <span class="n">fmt_function</span><span class="p">(</span><span class="n">yi</span><span class="p">)))</span>
+        <span class="n">input_data</span> <span class="o">=</span> <span class="n">format_data</span><span class="p">(</span><span class="n">mean_data</span><span class="p">,</span> <span class="n">std_data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">format_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">fmt_function</span><span class="p">)</span>
+        <span class="n">input_data</span> <span class="o">=</span> <span class="n">format_data</span><span class="p">(</span><span class="n">mean_data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using input_data of shape = </span><span class="si">{}</span><span class="s2"> and size = </span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="n">input_data</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># 1. try with pandas module</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+        <span class="n">output_string</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_latex</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: the pandas module is not available, install it with &#39;pip install pandas&#39; or &#39;conda install pandas&#39;.&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># 2. if pandas failed, try with tabulate</span>
+    <span class="k">if</span> <span class="n">output_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">tabulate</span>
+            <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">output_string</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">tabulate</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;latex_raw&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output_string</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">tabulate</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;latex_raw&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: the tabulate module is not available, install it with &#39;pip install tabulate&#39; or &#39;conda install tabulate&#39;.&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">erase_output</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: the file named &#39;</span><span class="si">{}</span><span class="s2">&#39; already exists, and option &#39;erase_output&#39; is False.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="n">name_of_table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">output_string</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span><span class="si">%%</span><span class="s2"> LaTeX code for a table, produced by SMPyBandits.Environment.plotsetting.table_to_latex()</span>
+<span class="s2">\begin</span><span class="si">{table}</span><span class="s2"></span>
+<span class="si">%s</span><span class="s2"></span>
+<span class="s2">\caption{</span><span class="si">%s</span><span class="s2">}</span>
+<span class="s2">\end</span><span class="si">{table}</span><span class="s2">&quot;&quot;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">output_string</span><span class="p">,</span> <span class="n">name_of_table</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The data from object (shape = </span><span class="si">{}</span><span class="s2"> and size = </span><span class="si">{}</span><span class="s2">) can be pretty printed in a LaTeX table looking like this one:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">input_data</span><span class="p">)))</span>  <span class="c1"># DEBUG</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output_string</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The data from object (shape = </span><span class="si">{}</span><span class="s2"> and size = </span><span class="si">{}</span><span class="s2">) will be saved to the file </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">input_data</span><span class="p">),</span> <span class="n">filename</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">output_string</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">open_file</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

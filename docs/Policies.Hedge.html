@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,334 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.Hedge module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.Hedge.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.Hedge">
+<span id="policies-hedge-module"></span><h1>Policies.Hedge module<a class="headerlink" href="#module-Policies.Hedge" title="Permalink to this headline">¶</a></h1>
+<p>The Hedge randomized index policy.</p>
+<p>Reference: [Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems, S.Bubeck &amp; N.Cesa-Bianchi](<a class="reference external" href="http://research.microsoft.com/en-us/um/people/sebubeck/SurveyBCB12.pdf">http://research.microsoft.com/en-us/um/people/sebubeck/SurveyBCB12.pdf</a>)</p>
+<dl class="data">
+<dt id="Policies.Hedge.EPSILON">
+<code class="sig-prename descclassname">Policies.Hedge.</code><code class="sig-name descname">EPSILON</code><em class="property"> = 0.01</em><a class="headerlink" href="#Policies.Hedge.EPSILON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default <span class="math notranslate nohighlight">\(\varepsilon\)</span> parameter.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.Hedge.Hedge">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.Hedge.</code><code class="sig-name descname">Hedge</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">epsilon=0.01</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The Hedge randomized index policy.</p>
+<p>Reference: [Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems, S.Bubeck &amp; N.Cesa-Bianchi, §3.1](<a class="reference external" href="http://research.microsoft.com/en-us/um/people/sebubeck/SurveyBCB12.pdf">http://research.microsoft.com/en-us/um/people/sebubeck/SurveyBCB12.pdf</a>).</p>
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">epsilon=0.01</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Hedge.Hedge.weights">
+<code class="sig-name descname">weights</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Hedge.Hedge.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weights on the arms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start with uniform weights.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.epsilon">
+<em class="property">property </em><code class="sig-name descname">epsilon</code><a class="headerlink" href="#Policies.Hedge.Hedge.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant <span class="math notranslate nohighlight">\(\varepsilon_t = \varepsilon\)</span>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.trusts">
+<em class="property">property </em><code class="sig-name descname">trusts</code><a class="headerlink" href="#Policies.Hedge.Hedge.trusts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the trusts probabilities according to Hedge formula, and the parameter <span class="math notranslate nohighlight">\(\varepsilon_t\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathrm{trusts}'_k(t+1) &amp;= (1 - \varepsilon_t) w_k(t) + \varepsilon_t \frac{1}{K}, \\
+\mathrm{trusts}(t+1) &amp;= \mathrm{trusts}'(t+1) / \sum_{k=1}^{K} \mathrm{trusts}'_k(t+1).\end{split}\]</div>
+<p>If <span class="math notranslate nohighlight">\(w_k(t)\)</span> is the current weight from arm k.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give a reward: accumulate rewards on that arm k, then update the weight <span class="math notranslate nohighlight">\(w_k(t)\)</span> and renormalize the weights.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}w'_k(t+1) &amp;= w_k(t) \times \exp\left( \frac{\tilde{r}_k(t)}{\varepsilon_t N_k(t)} \right) \\
+w(t+1) &amp;= w'(t+1) / \sum_{k=1}^{K} w'_k(t+1).\end{split}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>One random selection, with probabilities = trusts, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiple (rank &gt;= 1) random selection, with probabilities = trusts, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>, and select the last one (less probable).</p>
+<ul class="simple">
+<li><p>Note that if not enough entries in the trust vector are non-zero, then <a class="reference internal" href="#Policies.Hedge.Hedge.choice" title="Policies.Hedge.Hedge.choice"><code class="xref py py-func docutils literal notranslate"><span class="pre">choice()</span></code></a> is called instead (rank is ignored).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.choiceFromSubSet">
+<code class="sig-name descname">choiceFromSubSet</code><span class="sig-paren">(</span><em class="sig-param">availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>One random selection, from availableArms, with probabilities = trusts, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiple (nb &gt;= 1) random selection, with probabilities = trusts, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.estimatedOrder">
+<code class="sig-name descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the estimate order of the arms, as a permutation on [0..K-1] that would order the arms by increasing trust probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.Hedge.estimatedBestArms">
+<code class="sig-name descname">estimatedBestArms</code><span class="sig-paren">(</span><em class="sig-param">M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#Hedge.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.Hedge.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Hedge.Hedge.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.Hedge'</em><a class="headerlink" href="#Policies.Hedge.Hedge.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.Hedge.HedgeWithHorizon">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.Hedge.</code><code class="sig-name descname">HedgeWithHorizon</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#HedgeWithHorizon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.HedgeWithHorizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.Hedge.Hedge" title="Policies.Hedge.Hedge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.Hedge.Hedge</span></code></a></p>
+<p>Hedge with fixed epsilon, <span class="math notranslate nohighlight">\(\varepsilon_t = \varepsilon_0\)</span>, chosen with a knowledge of the horizon.</p>
+<dl class="method">
+<dt id="Policies.Hedge.HedgeWithHorizon.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#HedgeWithHorizon.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.HedgeWithHorizon.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Hedge.HedgeWithHorizon.horizon">
+<code class="sig-name descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Hedge.HedgeWithHorizon.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T\)</span> = known horizon of the experiment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.HedgeWithHorizon.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#HedgeWithHorizon.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.HedgeWithHorizon.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.HedgeWithHorizon.epsilon">
+<em class="property">property </em><code class="sig-name descname">epsilon</code><a class="headerlink" href="#Policies.Hedge.HedgeWithHorizon.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fixed temperature, small, knowing the horizon: <span class="math notranslate nohighlight">\(\varepsilon_t = \sqrt(\frac{2 \log(K)}{T K})\)</span> (<em>heuristic</em>).</p>
+<ul class="simple">
+<li><p>Cf. Theorem 3.1 case #1 of [Bubeck &amp; Cesa-Bianchi, 2012](<a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">http://sbubeck.com/SurveyBCB12.pdf</a>).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Hedge.HedgeWithHorizon.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.Hedge'</em><a class="headerlink" href="#Policies.Hedge.HedgeWithHorizon.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.Hedge.HedgeDecreasing">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.Hedge.</code><code class="sig-name descname">HedgeDecreasing</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">epsilon=0.01</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#HedgeDecreasing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.HedgeDecreasing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.Hedge.Hedge" title="Policies.Hedge.Hedge"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.Hedge.Hedge</span></code></a></p>
+<p>Hedge with decreasing parameter <span class="math notranslate nohighlight">\(\varepsilon_t\)</span>.</p>
+<dl class="method">
+<dt id="Policies.Hedge.HedgeDecreasing.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Hedge.html#HedgeDecreasing.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Hedge.HedgeDecreasing.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Hedge.HedgeDecreasing.epsilon">
+<em class="property">property </em><code class="sig-name descname">epsilon</code><a class="headerlink" href="#Policies.Hedge.HedgeDecreasing.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decreasing epsilon with the time: <span class="math notranslate nohighlight">\(\varepsilon_t = \min(\frac{1}{K}, \sqrt(\frac{\log(K)}{t K}))\)</span> (<em>heuristic</em>).</p>
+<ul class="simple">
+<li><p>Cf. Theorem 3.1 case #2 of [Bubeck &amp; Cesa-Bianchi, 2012](<a class="reference external" href="http://sbubeck.com/SurveyBCB12.pdf">http://sbubeck.com/SurveyBCB12.pdf</a>).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Hedge.HedgeDecreasing.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.Hedge'</em><a class="headerlink" href="#Policies.Hedge.HedgeDecreasing.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.IMED.html" class="btn btn-neutral float-right" title="Policies.IMED module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.GenericAggregation.html" class="btn btn-neutral float-left" title="Policies.GenericAggregation module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

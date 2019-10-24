@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,286 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Environment.notify</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Environment.notify</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines one useful function :func:`notify()` to (try to) send a desktop notification.</span>
+
+<span class="sd">- Only tested on Ubuntu and Debian desktops.</span>
+<span class="sd">- Should work on any FreeDesktop compatible desktop, see https://wiki.ubuntu.com/NotifyOSD.</span>
+
+<span class="sd">.. warning:: Experimental support of Mac OS X has been added since #143 (https://github.com/SMPyBandits/SMPyBandits/issues/143).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">getcwd</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">exists</span><span class="p">,</span> <span class="n">join</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span>
+
+
+<span class="n">VERBOUS</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># Constants for the program</span>
+<span class="n">PROGRAM_NAME</span> <span class="o">=</span> <span class="s2">&quot;SMPyBandits&quot;</span>  <span class="c1">#: Program name</span>
+
+<span class="c1"># ICON_PATH = join(&quot;..&quot;, &quot;logo.png&quot;)  #: Icon to use</span>
+<span class="n">ICON_PATH</span> <span class="o">=</span> <span class="s2">&quot;logo.png&quot;</span>  <span class="c1">#: Icon to use</span>
+
+
+<span class="c1"># Define the icon loaded function</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">gi</span> <span class="k">import</span> <span class="n">require_version</span>
+    <span class="n">require_version</span><span class="p">(</span><span class="s1">&#39;GdkPixbuf&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0&#39;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">gi.repository</span> <span class="k">import</span> <span class="n">GdkPixbuf</span>
+
+    <span class="k">def</span> <span class="nf">load_icon</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Load and open the icon. &quot;&quot;&quot;</span>
+        <span class="c1"># Loading the icon...</span>
+        <span class="k">if</span> <span class="n">exists</span><span class="p">(</span><span class="n">ICON_PATH</span><span class="p">):</span>
+            <span class="c1"># Use GdkPixbuf to create the proper image type</span>
+            <span class="n">iconpng</span> <span class="o">=</span> <span class="n">GdkPixbuf</span><span class="o">.</span><span class="n">Pixbuf</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">ICON_PATH</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iconpng</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># print(&quot;iconpng =&quot;, iconpng)  # DEBUG</span>
+        <span class="k">return</span> <span class="n">iconpng</span>
+
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">VERBOUS</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error, gi.repository.GdkPixbuf seems to not be available, so notification icons will not be available ...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On Ubuntu, if you want notification icons to work, install the &#39;python-gobject&#39; and &#39;libnotify-bin&#39; packages.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(For more details, cf. &#39;http://www.devdungeon.com/content/desktop-notifications-python-libnotify&#39;)&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="load_icon"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.load_icon">[docs]</a>    <span class="k">def</span> <span class="nf">load_icon</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Load and open the icon. &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<span class="c1">#: Trying to import gi.repository.Notify</span>
+<span class="n">has_Notify</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">gi</span> <span class="k">import</span> <span class="n">require_version</span>
+    <span class="n">require_version</span><span class="p">(</span><span class="s1">&#39;Notify&#39;</span><span class="p">,</span> <span class="s1">&#39;0.7&#39;</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">gi.repository</span> <span class="k">import</span> <span class="n">Notify</span>
+    <span class="c1"># One time initialization of libnotify</span>
+    <span class="n">Notify</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+    <span class="n">has_Notify</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">VERBOUS</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error, gi.repository.Notify seems to not be available, so notification will not be available ...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On Ubuntu, if you want notifications to work, install the &#39;python-gobject&#39; and &#39;libnotify-bin&#39; packages.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(For more details, cf. &#39;http://www.devdungeon.com/content/desktop-notifications-python-libnotify&#39;)&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Define the first notify function, with gi.repository.Notify</span>
+<div class="viewcode-block" id="notify_gi"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify_gi">[docs]</a><span class="k">def</span> <span class="nf">notify_gi</span><span class="p">(</span><span class="n">body</span><span class="p">,</span>
+        <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span>
+        <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
+    <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Send a notification, with gi.repository.Notify.</span>
+
+<span class="sd">    - icon can be &quot;dialog-information&quot;, &quot;dialog-warn&quot;, &quot;dialog-error&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Trying to fix a bug:</span>
+        <span class="c1"># g-dbus-error-quark: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name :1.5124 was not provided by any .service files (2)</span>
+        <span class="n">Notify</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">PROGRAM_NAME</span><span class="p">)</span>
+        <span class="c1"># XXX maybe the PROGRAM_NAME should be random?</span>
+
+        <span class="c1"># Cf. http://www.devdungeon.com/content/desktop-notifications-python-libnotify</span>
+        <span class="c1"># Create the notification object</span>
+        <span class="n">notification</span> <span class="o">=</span> <span class="n">Notify</span><span class="o">.</span><span class="n">Notification</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+            <span class="n">summary</span><span class="p">,</span>  <span class="c1"># Title of the notification</span>
+            <span class="n">body</span><span class="p">,</span>     <span class="c1"># Optional content of the notification</span>
+            <span class="n">icon</span>      <span class="c1"># XXX Should not indicate it here</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Lowest urgency (LOW, NORMAL or CRITICAL)</span>
+        <span class="n">notification</span><span class="o">.</span><span class="n">set_urgency</span><span class="p">(</span><span class="n">Notify</span><span class="o">.</span><span class="n">Urgency</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+
+        <span class="c1"># add duration, lower than 10 seconds (5 second is enough).</span>
+        <span class="n">notification</span><span class="o">.</span><span class="n">set_timeout</span><span class="p">(</span><span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+
+        <span class="c1"># Actually show the notification on screen</span>
+        <span class="n">notification</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c1"># Ugly! XXX Catches too general exception</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">notify.notify(): Error, notify.notify() failed, with this exception&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<span class="c1"># Define the second notify function, with a subprocess call to &#39;notify-send&#39;</span>
+<div class="viewcode-block" id="notify_cli"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify_cli">[docs]</a><span class="k">def</span> <span class="nf">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span>
+        <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span>
+        <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># In seconds,</span>
+        <span class="n">gnulinux</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Send a notification, with a subprocess call to &#39;notify-send&#39;.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): Trying to use the command line program &#39;notify-send&#39; ...&quot;</span><span class="p">)</span>
+        <span class="n">icon</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">icon</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gnulinux</span><span class="p">:</span>
+            <span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;notify-send&quot;</span><span class="p">,</span> <span class="s2">&quot;--expire-time=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span> <span class="s2">&quot;--icon=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">icon</span><span class="p">,</span> <span class="n">summary</span><span class="p">,</span> <span class="n">body</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): A notification have been sent, with summary = &#39;</span><span class="si">%s</span><span class="s2">&#39;, body = &#39;</span><span class="si">%s</span><span class="s2">&#39;, expire-time=&#39;</span><span class="si">%s</span><span class="s2">&#39; and icon=&#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">timeout</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">icon</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Cf. https://superuser.com/a/345455</span>
+            <span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;osascript&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;tell Application </span><span class="se">\&quot;</span><span class="s2">Finder</span><span class="se">\&quot;</span><span class="s2"> to display dialog </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">body</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): A notification have been sent, with body = &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">body</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="c1"># Ugly! XXX Catches too general exception</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">notify.notify(): </span><span class="si">%s</span><span class="s2"> : not-found ! Returned exception is </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;notify-send&quot;</span> <span class="k">if</span> <span class="n">gnulinux</span> <span class="k">else</span> <span class="s2">&quot;osascript&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gnulinux</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">summary</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">gnulinux</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<span class="c1"># Define the unified notify.notify() function</span>
+<div class="viewcode-block" id="notify"><a class="viewcode-back" href="../../docs/Environment.notify.html#Environment.notify.notify">[docs]</a><span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="n">body</span><span class="p">,</span>
+        <span class="n">summary</span><span class="o">=</span><span class="n">PROGRAM_NAME</span><span class="p">,</span>
+        <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># In seconds</span>
+    <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Send a notification, using one of the previously defined method, until it works. Usually it works.&quot;&quot;&quot;</span>
+    <span class="c1"># print(&quot;Notification: &#39;{}&#39;, from &#39;{}&#39; with icon &#39;{}&#39;.&quot;.format(body, summary, icon))  # DEBUG</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_Notify</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;notify.notify(): Warning, desktop notification from Python seems to not be available ...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">summary</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">return_code</span> <span class="o">=</span> <span class="n">notify_gi</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">summary</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">return_code</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">return_code</span> <span class="o">=</span> <span class="n">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">summary</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">return_code</span> <span class="o">=</span> <span class="n">notify_cli</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="n">summary</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">return_code</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">notify</span><span class="p">(</span><span class="s2">&quot;Test body Test body Test body ! From &#39;notify(...)&#39; with icon=terminal ...&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;terminal&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

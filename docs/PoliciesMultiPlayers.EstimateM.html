@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -167,3 +166,428 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.EstimateM module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/PoliciesMultiPlayers.EstimateM.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-PoliciesMultiPlayers.EstimateM">
+<span id="policiesmultiplayers-estimatem-module"></span><h1>PoliciesMultiPlayers.EstimateM module<a class="headerlink" href="#module-PoliciesMultiPlayers.EstimateM" title="Permalink to this headline">¶</a></h1>
+<p>EstimateM: generic wrapper on a multi-player decentralized learning policy, to learn on the run the number of players, adapted from rhoEst from [Distributed Algorithms for Learning…, Anandkumar et al., 2010](<a class="reference external" href="http://ieeexplore.ieee.org/document/5462144/">http://ieeexplore.ieee.org/document/5462144/</a>).</p>
+<ul class="simple">
+<li><p>The procedure to estimate <span class="math notranslate nohighlight">\(\hat{M}_i(t)\)</span> is not so simple, but basically everyone starts with <span class="math notranslate nohighlight">\(\hat{M}_i(0) = 1\)</span>, and when colliding <span class="math notranslate nohighlight">\(\hat{M}_i(t+1) = \hat{M}_i(t) + 1\)</span>, for some time (with a complicated threshold).</p></li>
+<li><p>My choice for the threshold function, see <a class="reference internal" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t" title="PoliciesMultiPlayers.EstimateM.threshold_on_t"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_on_t()</span></code></a>, does not need the horizon either, and uses <span class="math notranslate nohighlight">\(t\)</span> instead.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is fully decentralized: each child player does NOT need to know the number of players and does NOT require the horizon <span class="math notranslate nohighlight">\(T\)</span>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is still very experimental!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a less generic approach, see the policies defined in <code class="xref py py-class docutils literal notranslate"><span class="pre">rhoEst.rhoEst</span></code> (generalizing <code class="xref py py-class docutils literal notranslate"><span class="pre">rhoRand.rhoRand</span></code>) and <code class="xref py py-class docutils literal notranslate"><span class="pre">RandTopMEst.RandTopMEst</span></code> (generalizing <code class="xref py py-class docutils literal notranslate"><span class="pre">RandTopM.RandTopM</span></code>).</p>
+</div>
+<dl class="function">
+<dt id="PoliciesMultiPlayers.EstimateM.threshold_on_t_with_horizon">
+<code class="sig-prename descclassname">PoliciesMultiPlayers.EstimateM.</code><code class="sig-name descname">threshold_on_t_with_horizon</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">nbPlayersEstimate</em>, <em class="sig-param">horizon=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#threshold_on_t_with_horizon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t_with_horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <span class="math notranslate nohighlight">\(\xi(T, k)\)</span> used as a threshold in <code class="xref py py-class docutils literal notranslate"><span class="pre">rhoEstPlus</span></code>.</p>
+<ul class="simple">
+<li><p><cite>0</cite> if <cite>nbPlayersEstimate</cite> is <cite>0</cite>,</p></li>
+<li><p><cite>1</cite> if <cite>nbPlayersEstimate</cite> is <cite>1</cite>,</p></li>
+<li><p>any function such that: <span class="math notranslate nohighlight">\(\xi(T, k) = \omega(\log T)\)</span> for all <cite>k &gt; 1</cite>. (cf. <a class="reference external" href="http://mathworld.wolfram.com/Little-OmegaNotation.html">http://mathworld.wolfram.com/Little-OmegaNotation.html</a>). I choose <span class="math notranslate nohighlight">\(\log(1 + T)^2\)</span> or <span class="math notranslate nohighlight">\(\log(1 + T) \log(1 + \log(1 + T))\)</span>, as it seems to work just fine and satisfies the condition (25) from [Distributed Algorithms for Learning…, Anandkumar et al., 2010](<a class="reference external" href="http://ieeexplore.ieee.org/document/5462144/">http://ieeexplore.ieee.org/document/5462144/</a>).</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It requires the horizon <span class="math notranslate nohighlight">\(T\)</span>, and does not use the current time <span class="math notranslate nohighlight">\(t\)</span>.</p>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_with_horizon</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">14.287...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_with_horizon</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>  
+<span class="go">16.357...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PoliciesMultiPlayers.EstimateM.threshold_on_t_doubling_trick">
+<code class="sig-prename descclassname">PoliciesMultiPlayers.EstimateM.</code><code class="sig-name descname">threshold_on_t_doubling_trick</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">nbPlayersEstimate</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">base=2</em>, <em class="sig-param">min_fake_horizon=1000</em>, <em class="sig-param">T0=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#threshold_on_t_doubling_trick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t_doubling_trick" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trick to have a threshold depending on a growing horizon (doubling-trick).</p>
+<ul class="simple">
+<li><p>Instead of using <span class="math notranslate nohighlight">\(t\)</span> or <span class="math notranslate nohighlight">\(T\)</span>, a fake horizon <span class="math notranslate nohighlight">\(T_t\)</span> is used, corresponding to the horizon a doubling-trick algorithm would be using at time <span class="math notranslate nohighlight">\(t\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(T_t = T_0 b^{\lceil \log_b(t) \rceil}\)</span> is the default choice, for <span class="math notranslate nohighlight">\(b=2\)</span> <span class="math notranslate nohighlight">\(T_0 = 10\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(T_t\)</span> is too small, <code class="docutils literal notranslate"><span class="pre">min_fake_horizon</span></code> is used instead.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is ongoing research!</p>
+</div>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_doubling_trick</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">14.356...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t_doubling_trick</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>  
+<span class="go">14.356...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PoliciesMultiPlayers.EstimateM.threshold_on_t">
+<code class="sig-prename descclassname">PoliciesMultiPlayers.EstimateM.</code><code class="sig-name descname">threshold_on_t</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">nbPlayersEstimate</em>, <em class="sig-param">horizon=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#threshold_on_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <span class="math notranslate nohighlight">\(\xi(t, k)\)</span> used as a threshold in <code class="xref py py-class docutils literal notranslate"><span class="pre">rhoEst</span></code>.</p>
+<ul class="simple">
+<li><p><cite>0</cite> if <cite>nbPlayersEstimate</cite> is <cite>0</cite>,</p></li>
+<li><p><cite>1</cite> if <cite>nbPlayersEstimate</cite> is <cite>1</cite>,</p></li>
+<li><p>My heuristic to be any-time (ie, without needing to know the horizon) is to use a function of <span class="math notranslate nohighlight">\(t\)</span> (current time) and not <span class="math notranslate nohighlight">\(T\)</span> (horizon).</p></li>
+<li><p>The choice which seemed to perform the best in practice was <span class="math notranslate nohighlight">\(\xi(t, k) = c t\)</span> for a small constant <span class="math notranslate nohighlight">\(c\)</span> (like 5 or 10).</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  
+<span class="go">47.730...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">threshold_on_t</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>  
+<span class="go">47.730...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM">
+<em class="property">class </em><code class="sig-prename descclassname">PoliciesMultiPlayers.EstimateM.</code><code class="sig-name descname">oneEstimateM</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">playerAlgo</em>, <em class="sig-param">threshold</em>, <em class="sig-param">decentralizedPolicy</em>, <em class="sig-param">*args</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">args_decentralizedPolicy=None</em>, <em class="sig-param">kwargs_decentralizedPolicy=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="PoliciesMultiPlayers.ChildPointer.html#PoliciesMultiPlayers.ChildPointer.ChildPointer" title="PoliciesMultiPlayers.ChildPointer.ChildPointer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoliciesMultiPlayers.ChildPointer.ChildPointer</span></code></a></p>
+<p>Class that acts as a child policy, but in fact it pass all its method calls to the mother class, who passes it to its i-th player.</p>
+<ul class="simple">
+<li><p>The procedure to estimate <span class="math notranslate nohighlight">\(\hat{M}_i(t)\)</span> is not so simple, but basically everyone starts with <span class="math notranslate nohighlight">\(\hat{M}_i(0) = 1\)</span>, and when colliding <span class="math notranslate nohighlight">\(\hat{M}_i(t+1) = \hat{M}_i(t) + 1\)</span>, for some time (with a complicated threshold).</p></li>
+</ul>
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">playerAlgo</em>, <em class="sig-param">threshold</em>, <em class="sig-param">decentralizedPolicy</em>, <em class="sig-param">*args</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">args_decentralizedPolicy=None</em>, <em class="sig-param">kwargs_decentralizedPolicy=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.threshold">
+<code class="sig-name descname">threshold</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Threshold function</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.nbPlayersEstimate">
+<code class="sig-name descname">nbPlayersEstimate</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.nbPlayersEstimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of players. Optimistic: start by assuming it is alone!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.collisionCount">
+<code class="sig-name descname">collisionCount</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.collisionCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count collisions on each arm, since last increase of nbPlayersEstimate</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.timeSinceLastCollision">
+<code class="sig-name descname">timeSinceLastCollision</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.timeSinceLastCollision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time since last collision. Don’t remember why I thought using this could be useful… But it’s not!</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.t">
+<code class="sig-name descname">t</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.updateNbPlayers">
+<code class="sig-name descname">updateNbPlayers</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.updateNbPlayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.updateNbPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the value of <code class="docutils literal notranslate"><span class="pre">nbPlayersEstimate</span></code>, and propagate the change to the underlying policy, for parameters called <code class="docutils literal notranslate"><span class="pre">maxRank</span></code> or <code class="docutils literal notranslate"><span class="pre">nbPlayers</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.handleCollision">
+<code class="sig-name descname">handleCollision</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.handleCollision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.handleCollision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select a new rank, and maybe update nbPlayersEstimate.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>One transmission without collision.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.choice() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.choiceWithRank() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceFromSubSet">
+<code class="sig-name descname">choiceFromSubSet</code><span class="sig-paren">(</span><em class="sig-param">availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.choiceFromSubSet() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.choiceMultiple() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceIMP">
+<code class="sig-name descname">choiceIMP</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.choiceIMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.choiceIMP() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.estimatedOrder">
+<code class="sig-name descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.estimatedOrder() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.estimatedBestArms">
+<code class="sig-name descname">estimatedBestArms</code><span class="sig-paren">(</span><em class="sig-param">M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#oneEstimateM.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the call to self._policy.estimatedBestArms() with the player’s ID number.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.oneEstimateM.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'PoliciesMultiPlayers.EstimateM'</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.oneEstimateM.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM">
+<em class="property">class </em><code class="sig-prename descclassname">PoliciesMultiPlayers.EstimateM.</code><code class="sig-name descname">EstimateM</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers</em>, <em class="sig-param">nbArms</em>, <em class="sig-param">decentralizedPolicy</em>, <em class="sig-param">playerAlgo</em>, <em class="sig-param">policyArgs=None</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">threshold=&lt;function threshold_on_t_doubling_trick&gt;</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#EstimateM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="PoliciesMultiPlayers.BaseMPPolicy.html#PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy" title="PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy</span></code></a></p>
+<p>EstimateM: a generic wrapper for an efficient multi-players learning policy, with no prior knowledge of the number of player, and using any other MP policy.</p>
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers</em>, <em class="sig-param">nbArms</em>, <em class="sig-param">decentralizedPolicy</em>, <em class="sig-param">playerAlgo</em>, <em class="sig-param">policyArgs=None</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">threshold=&lt;function threshold_on_t_doubling_trick&gt;</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#EstimateM.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><p>nbPlayers: number of players to create (in self._players).</p></li>
+<li><p>nbArms: number of arms.</p></li>
+<li><p>decentralizedPolicy: base MP decentralized policy.</p></li>
+<li><p>threshold: the threshold function to use, see <a class="reference internal" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t_with_horizon" title="PoliciesMultiPlayers.EstimateM.threshold_on_t_with_horizon"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_on_t_with_horizon()</span></code></a>, <a class="reference internal" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t_doubling_trick" title="PoliciesMultiPlayers.EstimateM.threshold_on_t_doubling_trick"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_on_t_doubling_trick()</span></code></a> or <a class="reference internal" href="#PoliciesMultiPlayers.EstimateM.threshold_on_t" title="PoliciesMultiPlayers.EstimateM.threshold_on_t"><code class="xref py py-func docutils literal notranslate"><span class="pre">threshold_on_t()</span></code></a> above.</p></li>
+<li><p><cite>policyArgs</cite>: named arguments (dictionnary), given to <code class="docutils literal notranslate"><span class="pre">decentralizedPolicy</span></code>.</p></li>
+<li><p><cite>*args</cite>, <cite>**kwargs</cite>: arguments, named arguments, given to <code class="docutils literal notranslate"><span class="pre">decentralizedPolicy</span></code> (will probably be given to the single-player decentralized policy under the hood, don’t care).</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span><span class="p">;</span> <span class="kn">from</span> <span class="nn">PoliciesMultiPlayers</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">EstimateM</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">rhoRand</span><span class="p">,</span> <span class="n">UCBalpha</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[0, 3]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>To get a list of usable players, use <code class="docutils literal notranslate"><span class="pre">s.children</span></code>.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">s._players</span></code> is for internal use ONLY!</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM.nbPlayers">
+<code class="sig-name descname">nbPlayers</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM.nbPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of players</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of children, fake algorithms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/EstimateM.html#EstimateM.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.EstimateM.EstimateM.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'PoliciesMultiPlayers.EstimateM'</em><a class="headerlink" href="#PoliciesMultiPlayers.EstimateM.EstimateM.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="PoliciesMultiPlayers.OracleFair.html" class="btn btn-neutral float-right" title="PoliciesMultiPlayers.OracleFair module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="PoliciesMultiPlayers.DepRound.html" class="btn btn-neutral float-left" title="PoliciesMultiPlayers.DepRound module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

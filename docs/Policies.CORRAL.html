@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,403 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.CORRAL module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.CORRAL.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.CORRAL">
+<span id="policies-corral-module"></span><h1>Policies.CORRAL module<a class="headerlink" href="#module-Policies.CORRAL" title="Permalink to this headline">¶</a></h1>
+<p>The CORRAL aggregation bandit algorithm, similar to Exp4 but not exactly equivalent.</p>
+<p>The algorithm is a master A, managing several “slave” algorithms, <span class="math notranslate nohighlight">\(A_1, ..., A_N\)</span>.</p>
+<ul class="simple">
+<li><p>At every step, one slave algorithm is selected, by a random selection from a trust distribution on <span class="math notranslate nohighlight">\([1,...,N]\)</span>.</p></li>
+<li><p>Then its decision is listen to, played by the master algorithm, and a feedback reward is received.</p></li>
+<li><p>The reward is reweighted by the trust of the listened algorithm, and given back to it.</p></li>
+<li><p>The other slaves, whose decision was not even asked, receive a zero reward, or no reward at all.</p></li>
+<li><p>The trust probabilities are first uniform, <span class="math notranslate nohighlight">\(P_i = 1/N\)</span>, and then at every step, after receiving the feedback for <em>one</em> arm k (the reward), the trust in each slave Ai is updated: <span class="math notranslate nohighlight">\(P_i\)</span> by the reward received.</p></li>
+<li><p>The detail about how to increase or decrease the probabilities are specified in the reference article.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Reference: [[“Corralling a Band of Bandit Algorithms”, by A. Agarwal, H. Luo, B. Neyshabur, R.E. Schapire, 01.2017](<a class="reference external" href="https://arxiv.org/abs/1612.06246v2">https://arxiv.org/abs/1612.06246v2</a>)].</p>
+</div>
+<dl class="function">
+<dt id="Policies.CORRAL.renormalize_reward">
+<code class="sig-prename descclassname">Policies.CORRAL.</code><code class="sig-name descname">renormalize_reward</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">trust=1.0</em>, <em class="sig-param">unbiased=True</em>, <em class="sig-param">mintrust=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#renormalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.renormalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renormalize the reward to <cite>[0, 1]</cite>:</p>
+<ul class="simple">
+<li><p>divide by (<cite>trust/mintrust</cite>) if <cite>unbiased</cite> is <cite>True</cite>.</p></li>
+<li><p>simply project to <cite>[0, 1]</cite> if <cite>unbiased</cite> is <cite>False</cite>,</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If <cite>mintrust</cite> is unknown, the unbiased estimator CANNOT be projected back to a bounded interval.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CORRAL.unnormalize_reward">
+<code class="sig-prename descclassname">Policies.CORRAL.</code><code class="sig-name descname">unnormalize_reward</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#unnormalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.unnormalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project back reward to <cite>[lower, lower + amplitude]</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.CORRAL.log_Barrier_OMB">
+<code class="sig-prename descclassname">Policies.CORRAL.</code><code class="sig-name descname">log_Barrier_OMB</code><span class="sig-paren">(</span><em class="sig-param">trusts</em>, <em class="sig-param">losses</em>, <em class="sig-param">rates</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#log_Barrier_OMB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.log_Barrier_OMB" title="Permalink to this definition">¶</a></dt>
+<dd><p>A step of the <em>log-barrier Online Mirror Descent</em>, updating the trusts:</p>
+<ul class="simple">
+<li><p>Find <span class="math notranslate nohighlight">\(\lambda \in [\min_i l_{t,i}, \max_i l_{t,i}]\)</span> such that <span class="math notranslate nohighlight">\(\sum_i \frac{1}{1/p_{t,i} + \eta_{t,i}(l_{t,i} - \lambda)} = 1\)</span>.</p></li>
+<li><p>Return <span class="math notranslate nohighlight">\(\mathbf{p}_{t+1,i}\)</span> such that <span class="math notranslate nohighlight">\(\frac{1}{p_{t+1,i}} = \frac{1}{p_{t,i}} + \eta_{t,i}(l_{t,i} - \lambda)\)</span>.</p></li>
+<li><p>Note: uses <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize_scalar.html#scipy.optimize.minimize_scalar" title="(in SciPy v1.3.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.minimize_scalar()</span></code></a> for the optimization.</p></li>
+<li><p>Reference: [Learning in games: Robustness of fast convergence, by D.Foster, Z.Li, T.Lykouris, K.Sridharan, and E.Tardos, NIPS 2016].</p></li>
+</ul>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CORRAL.UNBIASED">
+<code class="sig-prename descclassname">Policies.CORRAL.</code><code class="sig-name descname">UNBIASED</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CORRAL.UNBIASED" title="Permalink to this definition">¶</a></dt>
+<dd><p>self.unbiased is a flag to know if the rewards are used as biased estimator,
+i.e., just <span class="math notranslate nohighlight">\(r_t\)</span>, or unbiased estimators, <span class="math notranslate nohighlight">\(r_t / p_t\)</span>, if <span class="math notranslate nohighlight">\(p_t\)</span> is the probability of selecting that arm at time <span class="math notranslate nohighlight">\(t\)</span>.
+It seemed to work better with unbiased estimators (of course).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CORRAL.BROADCAST_ALL">
+<code class="sig-prename descclassname">Policies.CORRAL.</code><code class="sig-name descname">BROADCAST_ALL</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CORRAL.BROADCAST_ALL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to give back a reward to only one slave algorithm (default, <cite>False</cite>) or to all slaves who voted for the same arm</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.CORRAL.CORRAL">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.CORRAL.</code><code class="sig-name descname">CORRAL</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">children=None</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">rate=None</em>, <em class="sig-param">unbiased=True</em>, <em class="sig-param">broadcast_all=False</em>, <em class="sig-param">prior='uniform'</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The CORRAL aggregation bandit algorithm, similar to Exp4 but not exactly equivalent.</p>
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">children=None</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">rate=None</em>, <em class="sig-param">unbiased=True</em>, <em class="sig-param">broadcast_all=False</em>, <em class="sig-param">prior='uniform'</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.lower">
+<code class="sig-name descname">lower</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.lower" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.amplitude">
+<code class="sig-name descname">amplitude</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.amplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Larger values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.unbiased">
+<code class="sig-name descname">unbiased</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.unbiased" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag, see above.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.broadcast_all">
+<code class="sig-name descname">broadcast_all</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.broadcast_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag, see above.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.gamma">
+<code class="sig-name descname">gamma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant <span class="math notranslate nohighlight">\(\gamma = 1 / T\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.beta">
+<code class="sig-name descname">beta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant <span class="math notranslate nohighlight">\(\beta = \exp(1 / \log(T))\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.rates">
+<code class="sig-name descname">rates</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.rates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of the learning rate (will be <strong>increasing</strong> in time).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of slave algorithms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.trusts">
+<code class="sig-name descname">trusts</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.trusts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial trusts in the slaves. Default to uniform, but a prior can also be given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.bar_trusts">
+<code class="sig-name descname">bar_trusts</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.bar_trusts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial bar trusts in the slaves. Default to uniform, but a prior can also be given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.choices">
+<code class="sig-name descname">choices</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep track of the last choices of each slave, to know whom to update if update_all_children is false.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.last_choice">
+<code class="sig-name descname">last_choice</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.last_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember the index of the last child trusted for a decision.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.losses">
+<code class="sig-name descname">losses</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the log-barrier OMD step, a vector of losses has to be given. Faster to keep it as an attribute instead of reallocating it every time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.rhos">
+<code class="sig-name descname">rhos</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.rhos" title="Permalink to this definition">¶</a></dt>
+<dd><p>I use the inverses of the <span class="math notranslate nohighlight">\(\rho_{t,i}\)</span> from the Algorithm in the reference article. Simpler to understand, less numerical errors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nicely print the name of the algorithm with its relevant parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.__setattr__">
+<code class="sig-name descname">__setattr__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.__setattr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.__setattr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trick method, to update the <span class="math notranslate nohighlight">\(\gamma\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> parameters of the CORRAL algorithm if the horizon T changes.</p>
+<ul class="simple">
+<li><p>This is here just to eventually allow <a class="reference internal" href="Policies.DoublingTrickWrapper.html#module-Policies.DoublingTrickWrapper" title="Policies.DoublingTrickWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.DoublingTrickWrapper</span></code></a> to be used with a CORRAL player.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Not tested yet!</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the game for each child.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give reward for each child, and then update the trust probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choice</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceWithRank</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceFromSubSet">
+<code class="sig-name descname">choiceFromSubSet</code><span class="sig-paren">(</span><em class="sig-param">availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceFromSubSet</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CORRAL.CORRAL.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.CORRAL'</em><a class="headerlink" href="#Policies.CORRAL.CORRAL.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceMultiple</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.choiceIMP">
+<code class="sig-name descname">choiceIMP</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em>, <em class="sig-param">startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.choiceIMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceIMP</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.estimatedOrder">
+<code class="sig-name descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>estimatedOrder</cite>.</p>
+<ul class="simple">
+<li><p>Return the estimate order of the arms, as a permutation on <span class="math notranslate nohighlight">\([0,...,K-1]\)</span> that would order the arms by increasing means.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CORRAL.CORRAL.estimatedBestArms">
+<code class="sig-name descname">estimatedBestArms</code><span class="sig-paren">(</span><em class="sig-param">M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CORRAL.html#CORRAL.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CORRAL.CORRAL.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.CPUCB.html" class="btn btn-neutral float-right" title="Policies.CPUCB module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.CD_UCB.html" class="btn btn-neutral float-left" title="Policies.CD_UCB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,282 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.GenericAggregation module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.GenericAggregation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.GenericAggregation">
+<span id="policies-genericaggregation-module"></span><h1>Policies.GenericAggregation module<a class="headerlink" href="#module-Policies.GenericAggregation" title="Permalink to this headline">¶</a></h1>
+<p>The GenericAggregation aggregation bandit algorithm: use a bandit policy A (master), managing several “slave” algorithms, <span class="math notranslate nohighlight">\(A_1, ..., A_N\)</span>.</p>
+<ul class="simple">
+<li><p>At every step, one slave algorithm A_i is selected, by the master policy A.</p></li>
+<li><p>Then its decision is listen to, played by the master algorithm, and a feedback reward is received.</p></li>
+<li><p>All slaves receive the observation (arm, reward).</p></li>
+<li><p>The master also receives the same observation.</p></li>
+</ul>
+<dl class="function">
+<dt id="Policies.GenericAggregation.random">
+<code class="sig-prename descclassname">Policies.GenericAggregation.</code><code class="sig-name descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; x in the interval [0, 1).<a class="headerlink" href="#Policies.GenericAggregation.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Policies.GenericAggregation.GenericAggregation">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.GenericAggregation.</code><code class="sig-name descname">GenericAggregation</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">master=None</em>, <em class="sig-param">children=None</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The GenericAggregation aggregation bandit algorithm.</p>
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">master=None</em>, <em class="sig-param">children=None</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.lower">
+<code class="sig-name descname">lower</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.lower" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.amplitude">
+<code class="sig-name descname">amplitude</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.amplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Larger values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.last_choice">
+<code class="sig-name descname">last_choice</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.last_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember the index of the last child trusted for a decision.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of slave algorithms.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nicely print the name of the algorithm with its relevant parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the game for each child, and for the master.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give reward for each child, and for the master.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choice</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceWithRank</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.choiceFromSubSet">
+<code class="sig-name descname">choiceFromSubSet</code><span class="sig-paren">(</span><em class="sig-param">availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceFromSubSet</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceMultiple</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.GenericAggregation.GenericAggregation.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.GenericAggregation'</em><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.choiceIMP">
+<code class="sig-name descname">choiceIMP</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em>, <em class="sig-param">startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.choiceIMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceIMP</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.estimatedOrder">
+<code class="sig-name descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>estimatedOrder</cite>.</p>
+<ul class="simple">
+<li><p>Return the estimate order of the arms, as a permutation on <span class="math notranslate nohighlight">\([0,...,K-1]\)</span> that would order the arms by increasing means.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.GenericAggregation.GenericAggregation.estimatedBestArms">
+<code class="sig-name descname">estimatedBestArms</code><span class="sig-paren">(</span><em class="sig-param">M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/GenericAggregation.html#GenericAggregation.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.GenericAggregation.GenericAggregation.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.Hedge.html" class="btn btn-neutral float-right" title="Policies.Hedge module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.GLR_UCB.html" class="btn btn-neutral float-left" title="Policies.GLR_UCB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

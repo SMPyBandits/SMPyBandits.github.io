@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,594 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.DoublingTrickWrapper module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.DoublingTrickWrapper.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.DoublingTrickWrapper">
+<span id="policies-doublingtrickwrapper-module"></span><h1>Policies.DoublingTrickWrapper module<a class="headerlink" href="#module-Policies.DoublingTrickWrapper" title="Permalink to this headline">¶</a></h1>
+<p>A policy that acts as a wrapper on another policy <cite>P</cite>, assumed to be <em>horizon dependent</em> (has to known <span class="math notranslate nohighlight">\(T\)</span>), by implementing a “doubling trick”:</p>
+<ul class="simple">
+<li><p>starts to assume that <span class="math notranslate nohighlight">\(T=T_0=1000\)</span>, and run the policy <span class="math notranslate nohighlight">\(P(T_0)\)</span>, from <span class="math notranslate nohighlight">\(t=1\)</span> to <span class="math notranslate nohighlight">\(t=T_0\)</span>,</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(t &gt; T_0\)</span>, then the “doubling trick” is performed, by either re-initializing or just changing the parameter <cite>horizon</cite> of the policy P, for instance with <span class="math notranslate nohighlight">\(T_2 = 10 \times T_0\)</span>,</p></li>
+<li><p>and keep doing this until <span class="math notranslate nohighlight">\(t = T\)</span>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is implemented in a very generic way, with simply a function <cite>next_horizon(horizon)</cite> that gives the next horizon to try when crossing the current guess.
+It can be a simple linear function (<cite>next_horizon(horizon) = horizon + 100</cite>), a geometric growth to have the “real” doubling trick (<cite>next_horizon(horizon) = horizon * 10</cite>), or even functions growing exponentially fast (<cite>next_horizon(horizon) = horizon ** 1.1</cite>, <cite>next_horizon(horizon) = horizon ** 1.5</cite>, <cite>next_horizon(horizon) = horizon ** 2</cite>).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>My guess is that this “doubling trick” wrapping policy can only be efficient (for stochastic problems) if:</p>
+<ul class="simple">
+<li><p>the underlying policy <cite>P</cite> is a very efficient horizon-dependent algorithm, e.g., the <a class="reference internal" href="Policies.ApproximatedFHGittins.html#module-Policies.ApproximatedFHGittins" title="Policies.ApproximatedFHGittins"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.ApproximatedFHGittins</span></code></a>,</p></li>
+<li><p>the growth function <cite>next_horizon</cite> is growing faster than any geometric rate, so that the number of refresh is <span class="math notranslate nohighlight">\(o(\log T)\)</span> and not <span class="math notranslate nohighlight">\(O(\log T)\)</span>.</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Reference: [[What the Doubling Trick Can or Can’t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](<a class="reference external" href="https://hal.inria.fr/hal-01736357">https://hal.inria.fr/hal-01736357</a>), to be presented soon.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Interface: If <cite>FULL_RESTART=False</cite> (default), the underlying algorithm is recreated at every breakpoint,
+instead its attribute <cite>horizon</cite> or <cite>_horizon</cite> is updated. Be sure that this is enough to really
+change the internal value used by the policy. Some policy use T only once to compute others parameters,
+which should be updated as well. A manual implementation of the <cite>__setattr__</cite> method can help.</p>
+</div>
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.default_horizonDependent_policy">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">default_horizonDependent_policy</code><a class="headerlink" href="#Policies.DoublingTrickWrapper.default_horizonDependent_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="Policies.UCBH.html#Policies.UCBH.UCBH" title="Policies.UCBH.UCBH"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.UCBH.UCBH</span></code></a></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.FULL_RESTART">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">FULL_RESTART</code><em class="property"> = False</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.FULL_RESTART" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constant to know what to do when restarting the underlying policy with a new horizon parameter.</p>
+<ul class="simple">
+<li><p><cite>True</cite> means that a new policy, initialized from scratch, will be created at every breakpoint.</p></li>
+<li><p><cite>False</cite> means that the same policy object is used but just its attribute <cite>horizon</cite> is updated (default).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.DEFAULT_FIRST_HORIZON">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">DEFAULT_FIRST_HORIZON</code><em class="property"> = 200</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DEFAULT_FIRST_HORIZON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default horizon, used for the first step.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.ARITHMETIC_STEP">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">ARITHMETIC_STEP</code><em class="property"> = 200</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.ARITHMETIC_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default stepsize for the arithmetic horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__arithmetic">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">next_horizon__arithmetic</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__arithmetic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__arithmetic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The arithmetic horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T &amp;\mapsto T + 100,\\
+T_i &amp;:= T_0 + 100 \times i.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.GEOMETRIC_STEP">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">GEOMETRIC_STEP</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.GEOMETRIC_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default multiplicative constant for the geometric horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__geometric">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">next_horizon__geometric</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__geometric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__geometric" title="Permalink to this definition">¶</a></dt>
+<dd><p>The geometric horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T &amp;\mapsto T \times 2,\\
+T_i &amp;:= T_0 2^i.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.EXPONENTIAL_STEP">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">EXPONENTIAL_STEP</code><em class="property"> = 1.5</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.EXPONENTIAL_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exponential constant for the exponential horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">next_horizon__exponential</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T &amp;\mapsto \left\lfloor T^{1.5} \right\rfloor,\\
+T_i &amp;:= \left\lfloor T_0^{1.5^i} \right\rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.SLOW_EXPONENTIAL_STEP">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">SLOW_EXPONENTIAL_STEP</code><em class="property"> = 1.1</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.SLOW_EXPONENTIAL_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exponential constant for the slow exponential horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential_slow">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">next_horizon__exponential_slow</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential_slow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential_slow" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T &amp;\mapsto \left\lfloor T^{1.1} \right\rfloor,\\
+T_i &amp;:= \left\lfloor T_0^{1.1^i} \right\rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.FAST_EXPONENTIAL_STEP">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">FAST_EXPONENTIAL_STEP</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.FAST_EXPONENTIAL_STEP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exponential constant for the fast exponential horizon progression.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential_fast">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">next_horizon__exponential_fast</code><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential_fast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T &amp;\mapsto \lfloor T^{2} \rfloor,\\
+T_i &amp;:= \lfloor T_0^{2^i} \rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.ALPHA">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">ALPHA</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.ALPHA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constant <span class="math notranslate nohighlight">\(\alpha\)</span> for the generic exponential sequence.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.BETA">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">BETA</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.BETA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default constant <span class="math notranslate nohighlight">\(\beta\)</span> for the generic exponential sequence.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.next_horizon__exponential_generic">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">next_horizon__exponential_generic</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#next_horizon__exponential_generic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.next_horizon__exponential_generic" title="Permalink to this definition">¶</a></dt>
+<dd><p>The generic exponential horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[T_i := \left\lfloor \frac{T_0}{a} a^{b^i} \right\rfloor.\]</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.default_next_horizon">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">default_next_horizon</code><a class="headerlink" href="#Policies.DoublingTrickWrapper.default_next_horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exponential horizon progression function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T &amp;\mapsto \left\lfloor T^{1.1} \right\rfloor,\\
+T_i &amp;:= \left\lfloor T_0^{1.1^i} \right\rfloor.\end{split}\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.breakpoints">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">breakpoints</code><span class="sig-paren">(</span><em class="sig-param">next_horizon</em>, <em class="sig-param">first_horizon</em>, <em class="sig-param">horizon</em>, <em class="sig-param">debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#breakpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.breakpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of restart point (breakpoints), if starting from <code class="docutils literal notranslate"><span class="pre">first_horizon</span></code> to <code class="docutils literal notranslate"><span class="pre">horizon</span></code> with growth function <code class="docutils literal notranslate"><span class="pre">next_horizon</span></code>.</p>
+<ul class="simple">
+<li><p>Also return the gap between the last guess for horizon and the true horizon. This gap should not be too large.</p></li>
+<li><p>Nicely print all the values if <code class="docutils literal notranslate"><span class="pre">debug=True</span></code>.</p></li>
+<li><p>First examples:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_horizon</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">30000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__arithmetic</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  
+<span class="go">([1000, 1200, 1400, ..., 29800, 30000], 0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__geometric</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 2000, 4000, 8000, 16000, 32000], 2000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 31622], 1622)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_slow</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 1995, 4265, 9838, 24671, 67827], 37827)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_fast</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([1000, 1000000], 970000)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Second examples:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_horizon</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">1000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__arithmetic</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  
+<span class="go">([5000, 5200, ..., 999600, 999800, 1000000], 0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__geometric</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000, 1280000], 280000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 353553, 210223755], 209223755)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_slow</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 11718, 29904, 83811, 260394, 906137, 3572014], 2572014)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_fast</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([5000, 25000000], 24000000)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Third examples:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">first_horizon</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">1123456</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__arithmetic</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>  
+<span class="go">([10, 210, 410, ..., 1123210, 1123410, 1123610], 154)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__geometric</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 20480, 40960, 81920, 163840, 327680, 655360, 1310720], 187264)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([10, 31, 172, 2255, 107082, 35040856], 33917400)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_slow</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([10, 12, 15, 19, 25, 34, 48, 70, 107, 170, 284, 499, 928, 1837, 3895, 8903, 22104, 60106, 180638, 606024, 2294768], 1171312)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">breakpoints</span><span class="p">(</span><span class="n">next_horizon__exponential_fast</span><span class="p">,</span> <span class="n">first_horizon</span><span class="p">,</span> <span class="n">horizon</span><span class="p">)</span>
+<span class="go">([10, 100, 10000, 100000000], 98876544)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.constant_c_for_the_functions_f">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">constant_c_for_the_functions_f</code><em class="property"> = 0.5</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.constant_c_for_the_functions_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>The constant c in front of the function f.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_geometric_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_geometric_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">c=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_geometric_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_geometric_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the <em>geometric</em> doubling sequences, <span class="math notranslate nohighlight">\(f(i) = c \times \log(i)\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_exponential_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_exponential_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">c=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_exponential_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_exponential_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the <em>exponential</em> doubling sequences, <span class="math notranslate nohighlight">\(f(i) = c \times i\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_generic_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_generic_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">c=0.5</em>, <em class="sig-param">d=0.5</em>, <em class="sig-param">e=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_generic_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_generic_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a certain <em>generic</em> family of doubling sequences, <span class="math notranslate nohighlight">\(f(i) = c \times i^{d} \times (\log(i))^{e}\)</span>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">d,</span> <span class="pre">e</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">1</span></code> gives <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_geometric_sequences" title="Policies.DoublingTrickWrapper.function_f__for_geometric_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_geometric_sequences()</span></code></a>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d,</span> <span class="pre">e</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">0</span></code> gives <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_geometric_sequences" title="Policies.DoublingTrickWrapper.function_f__for_geometric_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_geometric_sequences()</span></code></a>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">d,</span> <span class="pre">e</span> <span class="pre">=</span> <span class="pre">0.5,</span> <span class="pre">0</span></code> gives an intermediate sequence, growing faster than any geometric sequence and slower than any exponential sequence,</p></li>
+<li><p>any other combination has not been studied yet.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">d</span></code> should most probably be smaller than 1.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_intermediate_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_intermediate_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_intermediate_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate_sequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_intermediate2_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_intermediate2_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_intermediate2_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate2_sequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_intermediate3_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_intermediate3_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_intermediate3_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate3_sequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_intermediate4_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_intermediate4_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_intermediate4_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate4_sequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.function_f__for_intermediate5_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">function_f__for_intermediate5_sequences</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#function_f__for_intermediate5_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate5_sequences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.alpha_for_Ti">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">alpha_for_Ti</code><em class="property"> = 0.5</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.alpha_for_Ti" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of the parameter <span class="math notranslate nohighlight">\(\alpha\)</span> for the <a class="reference internal" href="#Policies.DoublingTrickWrapper.Ti_from_f" title="Policies.DoublingTrickWrapper.Ti_from_f"><code class="xref py py-func docutils literal notranslate"><span class="pre">Ti_from_f()</span></code></a> function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_from_f">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_from_f</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_from_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_from_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>For any non-negative and increasing function <span class="math notranslate nohighlight">\(f: i \mapsto f(i)\)</span>, the corresponding sequence is defined by:</p>
+<div class="math notranslate nohighlight">
+\[\forall i\in\mathbb{N},\; T_i := \lfloor \exp(\alpha \times \exp(f(i))) \rfloor.\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><span class="math notranslate nohighlight">\(f(i)\)</span> can need other parameters, see the examples above. They can be given as <code class="docutils literal notranslate"><span class="pre">*args</span></code> or <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> to <a class="reference internal" href="#Policies.DoublingTrickWrapper.Ti_from_f" title="Policies.DoublingTrickWrapper.Ti_from_f"><code class="xref py py-func docutils literal notranslate"><span class="pre">Ti_from_f()</span></code></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>it should be computed otherwise, I should give <span class="math notranslate nohighlight">\(i \mapsto \exp(f(i))\)</span> instead of <span class="math notranslate nohighlight">\(f: i \mapsto f(i)\)</span>. I need to try as much as possible to reduce the risk of overflow errors!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_geometric">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_geometric</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_geometric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_geometric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_geometric_sequences" title="Policies.DoublingTrickWrapper.function_f__for_geometric_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_geometric_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_exponential">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_exponential</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_exponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_exponential_sequences" title="Policies.DoublingTrickWrapper.function_f__for_exponential_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_exponential_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_intermediate_sqrti">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_intermediate_sqrti</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_intermediate_sqrti"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_intermediate_sqrti" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate_sequences" title="Policies.DoublingTrickWrapper.function_f__for_intermediate_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_intermediate_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_intermediate_i13">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_intermediate_i13</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_intermediate_i13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_intermediate_i13" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate2_sequences" title="Policies.DoublingTrickWrapper.function_f__for_intermediate2_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_intermediate2_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_intermediate_i23">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_intermediate_i23</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_intermediate_i23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_intermediate_i23" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate3_sequences" title="Policies.DoublingTrickWrapper.function_f__for_intermediate3_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_intermediate3_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_intermediate_i12_logi12">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_intermediate_i12_logi12</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_intermediate_i12_logi12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_intermediate_i12_logi12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate4_sequences" title="Policies.DoublingTrickWrapper.function_f__for_intermediate4_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_intermediate4_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.Ti_intermediate_i_by_logi">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">Ti_intermediate_i_by_logi</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">horizon</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#Ti_intermediate_i_by_logi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.Ti_intermediate_i_by_logi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence <span class="math notranslate nohighlight">\(T_i\)</span> generated from the function <span class="math notranslate nohighlight">\(f\)</span> = <a class="reference internal" href="#Policies.DoublingTrickWrapper.function_f__for_intermediate5_sequences" title="Policies.DoublingTrickWrapper.function_f__for_intermediate5_sequences"><code class="xref py py-func docutils literal notranslate"><span class="pre">function_f__for_intermediate5_sequences()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.last_term_operator_LT">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">last_term_operator_LT</code><span class="sig-paren">(</span><em class="sig-param">Ti</em>, <em class="sig-param">max_i=10000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#last_term_operator_LT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.last_term_operator_LT" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a certain function representing a doubling sequence, <span class="math notranslate nohighlight">\(T: i \mapsto T_i\)</span>, this <a class="reference internal" href="#Policies.DoublingTrickWrapper.last_term_operator_LT" title="Policies.DoublingTrickWrapper.last_term_operator_LT"><code class="xref py py-func docutils literal notranslate"><span class="pre">last_term_operator_LT()</span></code></a> function returns the function <span class="math notranslate nohighlight">\(L: T \mapsto L_T\)</span>, defined as:</p>
+<div class="math notranslate nohighlight">
+\[\forall T\in\mathbb{N},\; L_T := \min\{ i \in\mathbb{N},\; T \leq T_i \}.\]</div>
+<p><span class="math notranslate nohighlight">\(L_T\)</span> is the only integer which satisfies <span class="math notranslate nohighlight">\(T_{L_T - 1} &lt; T \leq T_{L_T}\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.plot_doubling_sequences">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">plot_doubling_sequences</code><span class="sig-paren">(</span><em class="sig-param">i_min=1</em>, <em class="sig-param">i_max=30</em>, <em class="sig-param">list_of_f=(&lt;function function_f__for_geometric_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate2_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate3_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate4_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_exponential_sequences&gt;)</em>, <em class="sig-param">label_of_f=('Geometric    doubling (d=0</em>, <em class="sig-param">e=1)'</em>, <em class="sig-param">'Intermediate doubling (d=1/2</em>, <em class="sig-param">e=0)'</em>, <em class="sig-param">'Intermediate doubling (d=1/3</em>, <em class="sig-param">e=0)'</em>, <em class="sig-param">'Intermediate doubling (d=2/3</em>, <em class="sig-param">e=0)'</em>, <em class="sig-param">'Intermediate doubling (d=1/2</em>, <em class="sig-param">e=1/2)'</em>, <em class="sig-param">'Exponential  doubling (d=1</em>, <em class="sig-param">e=0)')</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#plot_doubling_sequences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.plot_doubling_sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a plot to illustrate the values of the <span class="math notranslate nohighlight">\(T_i\)</span> as a function of <span class="math notranslate nohighlight">\(i\)</span> for some i.</p>
+<ul class="simple">
+<li><p>Can accept many functions f (and labels).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.DoublingTrickWrapper.plot_quality_first_upper_bound">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">plot_quality_first_upper_bound</code><span class="sig-paren">(</span><em class="sig-param">Tmin=10</em>, <em class="sig-param">Tmax=100000000</em>, <em class="sig-param">nbTs=100</em>, <em class="sig-param">gamma=0.0</em>, <em class="sig-param">delta=1.0</em>, <em class="sig-param">list_of_f=(&lt;function function_f__for_geometric_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate2_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate3_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_intermediate4_sequences&gt;</em>, <em class="sig-param">&lt;function function_f__for_exponential_sequences&gt;)</em>, <em class="sig-param">label_of_f=('Geometric    doubling (d=0</em>, <em class="sig-param">e=1)'</em>, <em class="sig-param">'Intermediate doubling (d=1/2</em>, <em class="sig-param">e=0)'</em>, <em class="sig-param">'Intermediate doubling (d=1/3</em>, <em class="sig-param">e=0)'</em>, <em class="sig-param">'Intermediate doubling (d=2/3</em>, <em class="sig-param">e=0)'</em>, <em class="sig-param">'Intermediate doubling (d=1/2</em>, <em class="sig-param">e=1/2)'</em>, <em class="sig-param">'Exponential  doubling (d=1</em>, <em class="sig-param">e=0)')</em>, <em class="sig-param">show_Ti_m_Tim1=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#plot_quality_first_upper_bound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.plot_quality_first_upper_bound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a plot to compare numerically between the following sum <span class="math notranslate nohighlight">\(S\)</span> and the upper-bound we hope to have, <span class="math notranslate nohighlight">\(T^{\gamma} (\log T)^{\delta}\)</span>, as a function of <span class="math notranslate nohighlight">\(T\)</span> for some values between <span class="math notranslate nohighlight">\(T_{\min}\)</span> and <span class="math notranslate nohighlight">\(T_{\max}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[S := \sum_{i=0}^{L_T} (T_i - T_{i-1})^{\gamma} (\log (T_i - T_{i-1}))^{\delta}.\]</div>
+<ul class="simple">
+<li><p>Can accept many functions f (and labels).</p></li>
+<li><p>Can use <span class="math notranslate nohighlight">\(T_i\)</span> instead of <span class="math notranslate nohighlight">\(T_i - T_{i-1}\)</span> if <code class="docutils literal notranslate"><span class="pre">show_Ti_m_Tim1=False</span></code> (default is to use the smaller possible bound, with difference of sequence lengths, <span class="math notranslate nohighlight">\(T_i - T_{i-1}\)</span>).</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is still ON GOING WORK.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DoublingTrickWrapper.MAX_NB_OF_TRIALS">
+<code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">MAX_NB_OF_TRIALS</code><em class="property"> = 500</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.MAX_NB_OF_TRIALS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the sequence Ti does not grow enough, artificially increase i until T_inext &gt; T_i</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DoublingTrickWrapper.</code><code class="sig-name descname">DoublingTrickWrapper</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">full_restart=False</em>, <em class="sig-param">policy=&lt;class 'Policies.UCBH.UCBH'&gt;</em>, <em class="sig-param">next_horizon=CPUDispatcher(&lt;function next_horizon__exponential_slow&gt;)</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
+<p>A policy that acts as a wrapper on another policy <cite>P</cite>, assumed to be <em>horizon dependent</em> (has to known <span class="math notranslate nohighlight">\(T\)</span>), by implementing a “doubling trick”.</p>
+<ul class="simple">
+<li><p>Reference: [[What the Doubling Trick Can or Can’t Do for Multi-Armed Bandits, Lilian Besson and Emilie Kaufmann, 2018]](<a class="reference external" href="https://hal.inria.fr/hal-01736357">https://hal.inria.fr/hal-01736357</a>), to be presented soon.</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">full_restart=False</em>, <em class="sig-param">policy=&lt;class 'Policies.UCBH.UCBH'&gt;</em>, <em class="sig-param">next_horizon=CPUDispatcher(&lt;function next_horizon__exponential_slow&gt;)</em>, <em class="sig-param">first_horizon=200</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.full_restart">
+<code class="sig-name descname">full_restart</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.full_restart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant to know how to refresh the underlying policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.next_horizon_name">
+<code class="sig-name descname">next_horizon_name</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.next_horizon_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretty string of the name of this growing function</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DoublingTrickWrapper'</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.horizon">
+<code class="sig-name descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last guess for the horizon</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the policy for a new game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DoublingTrickWrapper.DoublingTrickWrapper.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DoublingTrickWrapper.html#DoublingTrickWrapper.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DoublingTrickWrapper.DoublingTrickWrapper.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass the reward, as usual, update t and sometimes restart the underlying policy.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.EmpiricalMeans.html" class="btn btn-neutral float-right" title="Policies.EmpiricalMeans module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.DiscountedUCB.html" class="btn btn-neutral float-left" title="Policies.DiscountedUCB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

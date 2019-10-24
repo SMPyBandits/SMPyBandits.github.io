@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,574 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>Arms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Arms</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Arms : contains different types of bandit arms:</span>
+<span class="sd">:class:`Constant`, :class:`UniformArm`, :class:`Bernoulli`, :class:`Binomial`, :class:`Poisson`, :class:`Gaussian`, :class:`Exponential`, :class:`Gamma`, :class:`DiscreteArm`.</span>
+
+<span class="sd">Each arm class follows the same interface::</span>
+
+<span class="sd">    &gt; my_arm = Arm(params)</span>
+<span class="sd">    &gt; my_arm.mean</span>
+<span class="sd">    0.5</span>
+<span class="sd">    &gt; my_arm.draw()  # one random draw</span>
+<span class="sd">    0.0</span>
+<span class="sd">    &gt; my_arm.draw_nparray(20)  # or ((3, 10)), many draw</span>
+<span class="sd">    array([ 0.,  1.,  0.,  0.,  0.,  0.,  0.,  1.,  1.,  0.,  1.,  0.,  0.,</span>
+<span class="sd">            1.,  0.,  0.,  0.,  1.,  1.,  1.])</span>
+
+
+<span class="sd">Also contains:</span>
+
+<span class="sd">- :func:`uniformMeans`, to generate uniformly spaced means of arms.</span>
+<span class="sd">- :func:`uniformMeansWithSparsity`, to generate uniformly spaced means of arms, with sparsity constraints.</span>
+<span class="sd">- :func:`randomMeans`, to generate randomly spaced means of arms.</span>
+<span class="sd">- :func:`randomMeansWithGapBetweenMbestMworst`, to generate randomly spaced means of arms, with a constraint on the gap between the M-best arms and the (K-M)-worst arms.</span>
+<span class="sd">- :func:`randomMeansWithSparsity`, to generate randomly spaced means of arms with sparsity constraint.</span>
+<span class="sd">- :func:`shuffled`, to return a shuffled version of a list.</span>
+<span class="sd">- Utility functions :func:`array_from_str` :func:`list_from_str` and :func:`tuple_from_str` to obtain a `numpy.ndarray`, a `list` or a `tuple` from a string (used for the CLI env variables interface).</span>
+<span class="sd">- :func:`optimal_selection_probabilities`.</span>
+<span class="sd">- :func:`geometricChangePoints`, to obtain randomly spaced change points.</span>
+<span class="sd">- :func:`continuouslyVaryingMeans` and :func:`randomContinuouslyVaryingMeans`, to get new random means for continuously varying non-stationary MAB problems.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">shuffle</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">copy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Local imports</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Constant</span> <span class="k">import</span> <span class="n">Constant</span>
+    <span class="kn">from</span> <span class="nn">.UniformArm</span> <span class="k">import</span> <span class="n">UniformArm</span>
+    <span class="kn">from</span> <span class="nn">.Bernoulli</span> <span class="k">import</span> <span class="n">Bernoulli</span>
+    <span class="kn">from</span> <span class="nn">.Binomial</span> <span class="k">import</span> <span class="n">Binomial</span>
+    <span class="kn">from</span> <span class="nn">.Poisson</span> <span class="k">import</span> <span class="n">Poisson</span><span class="p">,</span> <span class="n">UnboundedPoisson</span>
+    <span class="kn">from</span> <span class="nn">.Gaussian</span> <span class="k">import</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="n">Gaussian_0_1</span><span class="p">,</span> <span class="n">Gaussian_0_2</span><span class="p">,</span> <span class="n">Gaussian_0_5</span><span class="p">,</span> <span class="n">Gaussian_0_10</span><span class="p">,</span> <span class="n">Gaussian_0_100</span><span class="p">,</span> <span class="n">Gaussian_m1_1</span><span class="p">,</span> <span class="n">Gaussian_m2_2</span><span class="p">,</span> <span class="n">Gaussian_m5_5</span><span class="p">,</span> <span class="n">Gaussian_m10_10</span><span class="p">,</span> <span class="n">Gaussian_m100_100</span><span class="p">,</span> <span class="n">UnboundedGaussian</span>
+    <span class="kn">from</span> <span class="nn">.Exponential</span> <span class="k">import</span> <span class="n">Exponential</span><span class="p">,</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="n">UnboundedExponential</span>
+    <span class="kn">from</span> <span class="nn">.Gamma</span> <span class="k">import</span> <span class="n">Gamma</span><span class="p">,</span> <span class="n">GammaFromMean</span><span class="p">,</span> <span class="n">UnboundedGamma</span>
+    <span class="kn">from</span> <span class="nn">.DiscreteArm</span> <span class="k">import</span> <span class="n">DiscreteArm</span>
+
+    <span class="n">mapping_ARM_TYPE</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Constant&quot;</span><span class="p">:</span> <span class="n">Constant</span><span class="p">,</span>
+        <span class="s2">&quot;Uniform&quot;</span><span class="p">:</span> <span class="n">UniformArm</span><span class="p">,</span>
+        <span class="s2">&quot;Bernoulli&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+        <span class="s2">&quot;Gaussian&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="s2">&quot;Gauss&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">Gaussian</span><span class="p">,</span>
+        <span class="s2">&quot;Gaussian_0_1&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_1</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_2&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_2</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_5&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_5</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_10&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_10</span><span class="p">,</span> <span class="s2">&quot;Gaussian_0_100&quot;</span><span class="p">:</span> <span class="n">Gaussian_0_100</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m1_1&quot;</span><span class="p">:</span> <span class="n">Gaussian_m1_1</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m2_2&quot;</span><span class="p">:</span> <span class="n">Gaussian_m2_2</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m5_5&quot;</span><span class="p">:</span> <span class="n">Gaussian_m5_5</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m10_10&quot;</span><span class="p">:</span> <span class="n">Gaussian_m10_10</span><span class="p">,</span> <span class="s2">&quot;Gaussian_m100_100&quot;</span><span class="p">:</span> <span class="n">Gaussian_m100_100</span><span class="p">,</span>
+        <span class="s2">&quot;UnboundedGaussian&quot;</span><span class="p">:</span> <span class="n">UnboundedGaussian</span><span class="p">,</span>
+        <span class="s2">&quot;Poisson&quot;</span><span class="p">:</span> <span class="n">Poisson</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="n">Poisson</span><span class="p">,</span>
+        <span class="s2">&quot;Exponential&quot;</span><span class="p">:</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="s2">&quot;Exp&quot;</span><span class="p">:</span> <span class="n">ExponentialFromMean</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="n">ExponentialFromMean</span><span class="p">,</span>
+        <span class="s2">&quot;Gamma&quot;</span><span class="p">:</span> <span class="n">GammaFromMean</span><span class="p">,</span>
+        <span class="s2">&quot;DiscreteArm&quot;</span><span class="p">:</span> <span class="n">DiscreteArm</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<div class="viewcode-block" id="shuffled"><a class="viewcode-back" href="../docs/Arms.html#Arms.shuffled">[docs]</a><span class="k">def</span> <span class="nf">shuffled</span><span class="p">(</span><span class="n">mylist</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a shuffled version of the input 1D list. sorted() exists instead of list.sort(), but shuffled() does not exist instead of random.shuffle()...</span>
+
+<span class="sd">    &gt;&gt;&gt; from random import seed; seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; mylist = [ 0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9]</span>
+<span class="sd">    &gt;&gt;&gt; shuffled(mylist)</span>
+<span class="sd">    [0.9, 0.4, 0.3, 0.6, 0.5, 0.7, 0.1, 0.2, 0.8]</span>
+<span class="sd">    &gt;&gt;&gt; shuffled(mylist)</span>
+<span class="sd">    [0.4, 0.3, 0.7, 0.5, 0.8, 0.1, 0.9, 0.6, 0.2]</span>
+<span class="sd">    &gt;&gt;&gt; shuffled(mylist)</span>
+<span class="sd">    [0.4, 0.6, 0.9, 0.5, 0.7, 0.2, 0.1, 0.3, 0.8]</span>
+<span class="sd">    &gt;&gt;&gt; shuffled(mylist)</span>
+<span class="sd">    [0.8, 0.7, 0.3, 0.1, 0.9, 0.5, 0.6, 0.2, 0.4]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">copiedlist</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">mylist</span><span class="p">)</span>
+    <span class="n">shuffle</span><span class="p">(</span><span class="n">copiedlist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">copiedlist</span></div>
+
+
+<div class="viewcode-block" id="uniformMeans"><a class="viewcode-back" href="../docs/Arms.html#Arms.uniformMeans">[docs]</a><span class="k">def</span> <span class="nf">uniformMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, well spaced:</span>
+
+<span class="sd">    - in [lower, lower + amplitude],</span>
+<span class="sd">    - sorted in increasing order,</span>
+<span class="sd">    - starting from lower + amplitude * delta, up to lower + amplitude * (1 - delta),</span>
+<span class="sd">    - and there is nbArms arms.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeans(2, 0.1))</span>
+<span class="sd">    array([0.1, 0.9])</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeans(3, 0.1))</span>
+<span class="sd">    array([0.1, 0.5, 0.9])</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeans(9, 1 / (1. + 9)))</span>
+<span class="sd">    array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;delta&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be in (0, 1).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shuffled</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="uniformMeansWithSparsity"><a class="viewcode-back" href="../docs/Arms.html#Arms.uniformMeansWithSparsity">[docs]</a><span class="k">def</span> <span class="nf">uniformMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, well spaced, in [lower, lower + amplitude].</span>
+
+<span class="sd">    - Exactly ``nbArms-sparsity`` arms will have a mean = ``lower`` and the others are randomly sampled uniformly in [lowerNonZero, lower + amplitude].</span>
+<span class="sd">    - All means will be different, except if ``mingap=None``, with a min gap &gt; 0.</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeansWithSparsity(nbArms=6, sparsity=2))  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 0.  ,  0.  ,  0.  ,  0.  ,  0.55,  0.95])</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeansWithSparsity(nbArms=6, sparsity=2, lowerNonZero=0.8, delta=0.03))  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 0.   ,  0.   ,  0.   ,  0.   ,  0.806,  0.994])</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeansWithSparsity(nbArms=10, sparsity=2))  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.  ,  0.55,  0.95])</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeansWithSparsity(nbArms=6, sparsity=2, delta=0.05))  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 0.   ,  0.   ,  0.   ,  0.   ,  0.525,  0.975])</span>
+<span class="sd">    &gt;&gt;&gt; np.array(uniformMeansWithSparsity(nbArms=10, sparsity=4, delta=0.05))  # doctest: +ELLIPSIS</span>
+<span class="sd">    array([ 0.   ,  0.   ,  0.   ,  0.   ,  0.   ,  0.   ,  0.525,  0.675,</span>
+<span class="sd">            0.825,  0.975])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="mf">0.</span> <span class="o">&lt;</span> <span class="n">delta</span> <span class="o">&lt;</span> <span class="mf">1.</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;delta&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be in (0, 1).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">sparsity</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;sparsity&#39; = </span><span class="si">{}</span><span class="s2"> has to be 0 &lt;= sparsity &lt;= nbArms = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sparsity</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">lower</span> <span class="o">&lt;=</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;lower&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &lt;= &#39;lowerNonZero&#39; = </span><span class="si">{:.3g}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">sparsity</span><span class="p">))</span>
+    <span class="c1"># bad_mus = [lower] * (nbArms - sparsity)  # WARNING this was putting all the bad arms on 0 !</span>
+    <span class="n">bad_mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">lowerNonZero</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">))</span>
+    <span class="n">good_mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lowerNonZero</span> <span class="o">+</span> <span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">-</span> <span class="n">lowerNonZero</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">sparsity</span><span class="p">))</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shuffled</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="randomMeans"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomMeans">[docs]</a><span class="k">def</span> <span class="nf">randomMeans</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, randomly sampled uniformly in [lower, lower + amplitude], with a min gap &gt;= mingap.</span>
+
+<span class="sd">    - All means will be different, except if ``mingap=None``, with a min gap &gt; 0.</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeans(nbArms=3, mingap=0.05)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.191..., 0.437..., 0.622...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeans(nbArms=3, mingap=0.01)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.276..., 0.801..., 0.958...]</span>
+
+<span class="sd">    - Means are sorted, except if ``isSorted=False``.</span>
+
+<span class="sd">    &gt;&gt;&gt; import random; random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeans(nbArms=5, mingap=0.01, isSorted=True)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.006..., 0.229..., 0.416..., 0.535..., 0.899...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeans(nbArms=5, mingap=0.01, isSorted=False)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.419..., 0.932..., 0.072..., 0.755..., 0.650...]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">mingap</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">),</span> <span class="s2">&quot;Error: &#39;mingap&#39; = </span><span class="si">{:.3g}</span><span class="s2"> is too large, it might be impossible to find a vector of means with such a large gap for </span><span class="si">{}</span><span class="s2"> arms.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mingap</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="c1"># while len(set(mus)) == nbArms and np.min(np.abs(np.diff(mus))) &lt;= mingap:  # Ensure a min gap &gt; mingap</span>
+        <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>  <span class="c1"># Useless</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="randomMeansWithGapBetweenMbestMworst"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomMeansWithGapBetweenMbestMworst">[docs]</a><span class="k">def</span> <span class="nf">randomMeansWithGapBetweenMbestMworst</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, randomly sampled uniformly in [lower, lower + amplitude], with a min gap &gt;= mingap between the set Mbest and Mworst.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">nbPlayers</span> <span class="o">&lt;</span> <span class="n">nbArms</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">mingap</span> <span class="o">&lt;</span> <span class="n">amplitude</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;mingap&#39; = </span><span class="si">{:.3g}</span><span class="s2"> is too large, it might be impossible to find a vector of means with such a large gap for </span><span class="si">{}</span><span class="s2"> arms.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mingap</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">def</span> <span class="nf">gap</span><span class="p">(</span><span class="n">mus</span><span class="p">):</span>
+            <span class="n">sorted_mus</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>
+            <span class="n">mu_Mbest</span> <span class="o">=</span> <span class="n">sorted_mus</span><span class="p">[</span><span class="o">-</span><span class="n">nbPlayers</span><span class="p">]</span>
+            <span class="n">mu_Mworst</span> <span class="o">=</span> <span class="n">sorted_mus</span><span class="p">[</span><span class="o">-</span><span class="n">nbPlayers</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">mu_Mbest</span> <span class="o">-</span> <span class="n">mu_Mworst</span>
+        <span class="c1"># while len(set(mus)) == nbArms and gap(mus) &lt;= mingap:  # Ensure a min gap &gt; mingap</span>
+        <span class="k">while</span> <span class="n">gap</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>  <span class="c1"># Useless</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="randomMeansWithSparsity"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomMeansWithSparsity">[docs]</a><span class="k">def</span> <span class="nf">randomMeansWithSparsity</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</span>
+
+<span class="sd">    - Exactly ``nbArms-sparsity`` arms will have a mean = ``lower`` and the others are randomly sampled uniformly in ``[lowerNonZero, lower + amplitude]``.</span>
+<span class="sd">    - All means will be different, except if ``mingap=None``, with a min gap &gt; 0.</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity(nbArms=6, sparsity=2, mingap=0.05)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.595..., 0.811...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity(nbArms=6, sparsity=2, mingap=0.01)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.718..., 0.892...]</span>
+
+<span class="sd">    - Means are sorted, except if ``isSorted=False``.</span>
+
+<span class="sd">    &gt;&gt;&gt; import random; random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity(nbArms=6, sparsity=2, mingap=0.01, isSorted=True)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity(nbArms=6, sparsity=2, mingap=0.01, isSorted=False)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">sparsity</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;sparsity&#39; = </span><span class="si">{}</span><span class="s2"> has to be 0 &lt;= sparsity &lt;= nbArms = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sparsity</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">lower</span> <span class="o">&lt;=</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;lower&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &lt;= &#39;lowerNonZero&#39; = </span><span class="si">{:.3g}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">sparsity</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">mingap</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">),</span> <span class="s2">&quot;Error: &#39;mingap&#39; = </span><span class="si">{:.3g}</span><span class="s2"> is too large, it might be impossible to find a vector of means with such a large gap for </span><span class="si">{}</span><span class="s2"> arms.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mingap</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span> <span class="o">==</span> <span class="n">sparsity</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">sparsity</span><span class="p">))</span>
+    <span class="c1"># bad_mus = [lower] * (nbArms - sparsity)  # WARNING this was putting all the bad arms on 0 !</span>
+    <span class="k">if</span> <span class="n">lowerNonZero</span> <span class="o">==</span> <span class="n">lower</span><span class="p">:</span>
+        <span class="n">bad_mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bad_mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span> <span class="o">+</span> <span class="p">(</span><span class="n">lowerNonZero</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span><span class="p">,</span> <span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">))</span>
+    <span class="n">good_mus</span> <span class="o">=</span> <span class="n">lowerNonZero</span> <span class="o">+</span> <span class="p">((</span><span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">-</span> <span class="n">lowerNonZero</span><span class="p">)</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span>
+
+    <span class="c1"># Just some check...</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span> <span class="o">==</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: randomMeansWithSparsity() created a list mus of size = </span><span class="si">{}</span><span class="s2"> not = nbArms = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mus</span><span class="p">),</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mus</span> <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="n">lowerNonZero</span><span class="p">])</span> <span class="o">==</span> <span class="n">sparsity</span><span class="p">,</span> <span class="s2">&quot;Error: randomMeansWithSparsity() created a list mus of with sparsity = </span><span class="si">{}</span><span class="s2"> not equal to s = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mus</span> <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;=</span> <span class="n">lowerNonZero</span><span class="p">]),</span> <span class="n">sparsity</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mus</span> <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="n">lowerNonZero</span><span class="p">])</span> <span class="o">==</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">),</span> <span class="s2">&quot;Error: randomMeansWithSparsity() created a list mus of with a number of zero component = </span><span class="si">{}</span><span class="s2"> not equal to K - s = </span><span class="si">{}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mus</span> <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="n">lowerNonZero</span><span class="p">]),</span> <span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># print(&quot;randomMeansWithSparsity() returns mus = {} ...&quot;.format(np.asarray(mus)))  # DEBUG</span>
+
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shuffled</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="randomMeansWithSparsity2"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomMeansWithSparsity2">[docs]</a><span class="k">def</span> <span class="nf">randomMeansWithSparsity2</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sparsity</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mingap</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">lower</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a list of means of arms, in [lower, lower + amplitude], with a min gap &gt;= mingap.</span>
+
+<span class="sd">    - Exactly ``nbArms-sparsity`` arms will have a mean sampled uniformly in ``[lower, lowerNonZero]`` and the others are randomly sampled uniformly in ``[lowerNonZero, lower + amplitude]``.</span>
+<span class="sd">    - All means will be different, except if ``mingap=None``, with a min gap &gt; 0.</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np; np.random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.05)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.595..., 0.811...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.01)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.718..., 0.892...]</span>
+
+<span class="sd">    - Means are sorted, except if ``isSorted=False``.</span>
+
+<span class="sd">    &gt;&gt;&gt; import random; random.seed(1234)  # reproducible results</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.01, isSorted=True)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.0, 0.0, 0.636..., 0.889...]</span>
+<span class="sd">    &gt;&gt;&gt; randomMeansWithSparsity2(nbArms=6, sparsity=2, mingap=0.01, isSorted=False)  # doctest: +ELLIPSIS</span>
+<span class="sd">    [0.0, 0.0, 0.900..., 0.638..., 0.0, 0.0]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">nbArms</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;nbArms&#39; = </span><span class="si">{}</span><span class="s2"> has to be &gt;= 1.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">amplitude</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;amplitude&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &gt; 0.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">sparsity</span> <span class="o">&lt;=</span> <span class="n">nbArms</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;sparsity&#39; = </span><span class="si">{}</span><span class="s2"> has to be 0 &lt;= sparsity &lt;= nbArms = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sparsity</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="k">assert</span> <span class="n">lower</span> <span class="o">&lt;=</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="s2">&quot;Error: &#39;lower&#39; = </span><span class="si">{:.3g}</span><span class="s2"> has to be &lt;= &#39;lowerNonZero&#39; = </span><span class="si">{:.3g}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># first the bad</span>
+    <span class="n">nb_bad</span> <span class="o">=</span> <span class="n">nbArms</span> <span class="o">-</span> <span class="n">sparsity</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_bad</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">nbArms</span> <span class="o">*</span> <span class="n">mingap</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">amplitude</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">),</span> <span class="s2">&quot;Error: &#39;mingap&#39; = </span><span class="si">{:.3g}</span><span class="s2"> is too large, it might be impossible to find a vector of means with such a large gap for </span><span class="si">{}</span><span class="s2"> arms.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mingap</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span> <span class="o">==</span> <span class="n">nb_bad</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_bad</span><span class="p">))</span>
+    <span class="n">bad_mus</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="p">((</span><span class="n">lowerNonZero</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">lower</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="s2">&quot;Error: bad generation of &#39;bad_mus&#39;, in interval [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">] instead of [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">]...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">),</span> <span class="n">lower</span><span class="p">,</span> <span class="n">lowerNonZero</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="c1"># then the good</span>
+    <span class="n">nb_good</span> <span class="o">=</span> <span class="n">sparsity</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_good</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">mingap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mingap</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span> <span class="o">==</span> <span class="n">nb_good</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">mus</span><span class="p">)))</span> <span class="o">&lt;=</span> <span class="n">mingap</span><span class="p">:</span>  <span class="c1"># Ensure a min gap &gt; mingap</span>
+            <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">nb_good</span><span class="p">))</span>
+    <span class="n">good_mus</span> <span class="o">=</span> <span class="n">lowerNonZero</span> <span class="o">+</span> <span class="p">((</span><span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span> <span class="o">-</span> <span class="n">lowerNonZero</span><span class="p">)</span> <span class="o">*</span> <span class="n">mus</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">lowerNonZero</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">,</span> <span class="s2">&quot;Error: bad generation of &#39;good_mus&#39;, in interval [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">] instead of [</span><span class="si">{:.3g}</span><span class="s2">,</span><span class="si">{:.3g}</span><span class="s2">]...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">good_mus</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">good_mus</span><span class="p">),</span> <span class="n">lowerNonZero</span><span class="p">,</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">bad_mus</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">good_mus</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">shuffled</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="array_from_str"><a class="viewcode-back" href="../docs/Arms.html#Arms.array_from_str">[docs]</a><span class="k">def</span> <span class="nf">array_from_str</span><span class="p">(</span><span class="n">my_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a string like &quot;[0.1, 0.2, 0.3]&quot; to a numpy array `[0.1, 0.2, 0.3]`, using safe `json.loads` instead of `exec`.</span>
+
+<span class="sd">    &gt;&gt;&gt; array_from_str(&quot;[0.1, 0.2, 0.3]&quot;)</span>
+<span class="sd">    array([0.1,  0.2,  0.3])</span>
+<span class="sd">    &gt;&gt;&gt; array_from_str(&quot;0.1, 0.2, 0.3&quot;)</span>
+<span class="sd">    array([0.1,  0.2,  0.3])</span>
+<span class="sd">    &gt;&gt;&gt; array_from_str(&quot;0.9&quot;)</span>
+<span class="sd">    array([0.9])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(&quot;array_from_str called with my_str =&quot;, my_str)  # DEBUG</span>
+    <span class="k">if</span> <span class="n">my_str</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">my_str</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">my_str</span> <span class="ow">and</span> <span class="s1">&#39;]&#39;</span> <span class="ow">in</span> <span class="n">my_str</span><span class="p">):</span>
+            <span class="n">my_str</span> <span class="o">=</span> <span class="s1">&#39;[</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">my_str</span>
+        <span class="n">dict_str</span> <span class="o">=</span> <span class="s1">&#39;{&quot;XXX&quot;: </span><span class="si">%s</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="n">my_str</span>
+        <span class="n">fake_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dict_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fake_dict</span><span class="p">[</span><span class="s2">&quot;XXX&quot;</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error while interpreting the string </span><span class="si">{}</span><span class="s2"> as an array...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">my_str</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="list_from_str"><a class="viewcode-back" href="../docs/Arms.html#Arms.list_from_str">[docs]</a><span class="k">def</span> <span class="nf">list_from_str</span><span class="p">(</span><span class="n">my_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a string like &quot;[0.1, 0.2, 0.3]&quot; to a list `(0.1, 0.2, 0.3)`, using safe `json.loads` instead of `exec`.</span>
+
+<span class="sd">    &gt;&gt;&gt; list_from_str(&quot;[0.1, 0.2, 0.3]&quot;)</span>
+<span class="sd">    [0.1, 0.2, 0.3]</span>
+<span class="sd">    &gt;&gt;&gt; list_from_str(&quot;0.1, 0.2, 0.3&quot;)</span>
+<span class="sd">    [0.1, 0.2, 0.3]</span>
+<span class="sd">    &gt;&gt;&gt; list_from_str(&quot;0.9&quot;)</span>
+<span class="sd">    [0.9]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(&quot;list_from_str called with my_str =&quot;, my_str)  # DEBUG</span>
+    <span class="k">if</span> <span class="n">my_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">my_str</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_str</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">my_str</span> <span class="ow">and</span> <span class="s1">&#39;]&#39;</span> <span class="ow">in</span> <span class="n">my_str</span><span class="p">):</span>
+            <span class="n">my_str</span> <span class="o">=</span> <span class="s1">&#39;[</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">my_str</span>
+        <span class="n">dict_str</span> <span class="o">=</span> <span class="s1">&#39;{&quot;XXX&quot;: </span><span class="si">%s</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="n">my_str</span>
+        <span class="n">fake_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dict_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fake_dict</span><span class="p">[</span><span class="s2">&quot;XXX&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error while interpreting the string </span><span class="si">{}</span><span class="s2"> as a list...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">my_str</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="tuple_from_str"><a class="viewcode-back" href="../docs/Arms.html#Arms.tuple_from_str">[docs]</a><span class="k">def</span> <span class="nf">tuple_from_str</span><span class="p">(</span><span class="n">my_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a string like &quot;[0.1, 0.2, 0.3]&quot; to a tuple `(0.1, 0.2, 0.3)`, using safe `json.loads` instead of `exec`.</span>
+
+<span class="sd">    &gt;&gt;&gt; tuple_from_str(&quot;[0.1, 0.2, 0.3]&quot;)</span>
+<span class="sd">    (0.1, 0.2, 0.3)</span>
+<span class="sd">    &gt;&gt;&gt; tuple_from_str(&quot;0.1, 0.2, 0.3&quot;)</span>
+<span class="sd">    (0.1, 0.2, 0.3)</span>
+<span class="sd">    &gt;&gt;&gt; tuple_from_str(&quot;0.9&quot;)</span>
+<span class="sd">    (0.9,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(&quot;tuple_from_str called with my_str =&quot;, my_str)  # DEBUG</span>
+    <span class="k">if</span> <span class="n">my_str</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">my_str</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">my_str</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">my_str</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="ow">in</span> <span class="n">my_str</span> <span class="ow">and</span> <span class="s1">&#39;]&#39;</span> <span class="ow">in</span> <span class="n">my_str</span><span class="p">):</span>
+            <span class="n">my_str</span> <span class="o">=</span> <span class="s1">&#39;[</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">my_str</span>
+        <span class="n">dict_str</span> <span class="o">=</span> <span class="s1">&#39;{&quot;XXX&quot;: </span><span class="si">%s</span><span class="s1">}&#39;</span> <span class="o">%</span> <span class="n">my_str</span>
+        <span class="n">fake_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">dict_str</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fake_dict</span><span class="p">[</span><span class="s2">&quot;XXX&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error while interpreting the string </span><span class="si">{}</span><span class="s2"> as a tuple...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">my_str</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="optimal_selection_probabilities"><a class="viewcode-back" href="../docs/Arms.html#Arms.optimal_selection_probabilities">[docs]</a><span class="k">def</span> <span class="nf">optimal_selection_probabilities</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Compute the optimal selection probabilities of K arms of means :math:`\mu_i` by :math:`1 \leq M \leq K` players, if they all observe each other pulls and rewards, as derived in (15) p3 of [[The Effect of Communication on Noncooperative Multiplayer Multi-Armed Bandit Problems, by Noyan Evirgen, Alper Kose, IEEE ICMLA 2017]](https://arxiv.org/abs/1711.01628v1).</span>
+
+<span class="sd">    .. warning:: They consider a different collision model than I usually do, when two (or more) players ask for the same resource at same time t, I usually consider than all the colliding players receive a zero reward (see :func:`Environment.CollisionModels.onlyUniqUserGetsReward`), but they consider than exactly one of the colliding players gets the reward, and all the others get a zero reward (see :func:`Environment.CollisionModels.rewardIsSharedUniformly`).</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; optimal_selection_probabilities(3, [0.1,0.1,0.1])</span>
+<span class="sd">    array([0.33333333,  0.33333333,  0.33333333])</span>
+
+<span class="sd">    &gt;&gt;&gt; optimal_selection_probabilities(3, [0.1,0.2,0.3])  # weird ? not really...</span>
+<span class="sd">    array([0.        ,  0.43055556,  0.56944444])</span>
+
+<span class="sd">    &gt;&gt;&gt; optimal_selection_probabilities(3, [0.1,0.3,0.9])  # weird ? not really...</span>
+<span class="sd">    array([0.        ,  0.45061728,  0.54938272])</span>
+
+<span class="sd">    &gt;&gt;&gt; optimal_selection_probabilities(3, [0.7,0.8,0.9])</span>
+<span class="sd">    array([0.15631866,  0.35405647,  0.48962487])</span>
+
+<span class="sd">    .. note:: These results may sound counter-intuitive, but again they use a different collision models: in my usual collision model, it makes no sense to completely drop an arm when K=M=3, no matter the probabilities :math:`\mu_i`, but in their collision model, a player wins more (in average) if she has a :math:`50\%` chance of being alone on an arm with mean :math:`0.3` than if she is sure to be alone on an arm with mean :math:`0.1` (see examples 3 and 4).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">M</span> <span class="o">&lt;=</span> <span class="n">K</span><span class="p">,</span> <span class="s2">&quot;Error: number of arm M must be 1 &lt;= M &lt;= K but M = </span><span class="si">{}</span><span class="s2"> and K = </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+    <span class="n">mup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="p">((</span><span class="n">K</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">mup</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">mup</span><span class="p">)</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">c</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">c</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">c</span></div>
+
+
+<span class="c1"># --- Randomized changepoints</span>
+
+<div class="viewcode-block" id="geometricChangePoints"><a class="viewcode-back" href="../docs/Arms.html#Arms.geometricChangePoints">[docs]</a><span class="k">def</span> <span class="nf">geometricChangePoints</span><span class="p">(</span><span class="n">horizon</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">proba</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Change points following a geometric distribution: at each time, the probability of having a change point at the next step is ``proba``.</span>
+
+<span class="sd">    &gt;&gt;&gt; np.random.seed(0)</span>
+<span class="sd">    &gt;&gt;&gt; geometricChangePoints(100, 0.1)</span>
+<span class="sd">    array([ 8, 20, 29, 37, 43, 53, 59, 81])</span>
+<span class="sd">    &gt;&gt;&gt; geometricChangePoints(100, 0.2)</span>
+<span class="sd">    array([ 6,  8, 14, 29, 31, 35, 40, 44, 46, 60, 63, 72, 78, 80, 88, 91])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">geometric</span><span class="p">(</span><span class="n">proba</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">horizon</span><span class="p">)</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">points</span><span class="p">[</span><span class="n">points</span> <span class="o">&lt;</span> <span class="n">horizon</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="continuouslyVaryingMeans"><a class="viewcode-back" href="../docs/Arms.html#Arms.continuouslyVaryingMeans">[docs]</a><span class="k">def</span> <span class="nf">continuouslyVaryingMeans</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">sign</span><span class="o">=+</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxSlowChange</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;New means, slightly modified from the previous ones.</span>
+
+<span class="sd">    - The change and the sign of change are constants.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">slowChange</span> <span class="o">=</span> <span class="n">sign</span> <span class="o">*</span> <span class="n">maxSlowChange</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">means</span> <span class="o">+</span> <span class="n">slowChange</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">),</span> <span class="n">lower</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>  <span class="c1"># Useless</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="randomContinuouslyVaryingMeans"><a class="viewcode-back" href="../docs/Arms.html#Arms.randomContinuouslyVaryingMeans">[docs]</a><span class="k">def</span> <span class="nf">randomContinuouslyVaryingMeans</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">maxSlowChange</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">isSorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;New means, slightly modified from the previous ones.</span>
+
+<span class="sd">    - The amplitude ``c`` of the change is constant, but it is randomly sampled in :math:`\mathcal{U}([-c,c])`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">slowChange</span> <span class="o">=</span> <span class="n">maxSlowChange</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">means</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">slowChange</span>
+    <span class="n">mus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">mus</span><span class="p">,</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">amplitude</span><span class="p">),</span> <span class="n">lower</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">isSorted</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span>  <span class="c1"># Useless</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">mus</span><span class="p">)</span></div>
+
+<span class="c1"># --- Debugging</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Code for debugging purposes.</span>
+    <span class="kn">from</span> <span class="nn">doctest</span> <span class="k">import</span> <span class="n">testmod</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Testing automatically all the docstring written in each functions of this module :&quot;</span><span class="p">)</span>
+    <span class="n">testmod</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

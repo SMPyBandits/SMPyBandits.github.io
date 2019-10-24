@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,253 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.Posterior.Beta</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.Posterior.Beta</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; Manipulate posteriors of Bernoulli/Beta experiments.</span>
+
+<span class="sd">Rewards not in :math:`{0, 1}` are handled with a trick, see :func:`bernoulliBinarization`, with a &quot;random binarization&quot;, cf., [Agrawal12]_ (algorithm 2).</span>
+<span class="sd">When reward :math:`r_t \in [0, 1]` is observed, the player receives the result of a Bernoulli sample of average :math:`r_t`: :math:`r_t \sim \mathrm{Bernoulli}(r_t)` so it is well in :math:`{0, 1}`.</span>
+
+<span class="sd">- See https://en.wikipedia.org/wiki/Bernoulli_distribution#Related_distributions</span>
+<span class="sd">- And https://en.wikipedia.org/wiki/Conjugate_prior#Discrete_distributions</span>
+
+<span class="sd">.. [Agrawal12] http://jmlr.org/proceedings/papers/v23/agrawal12/agrawal12.pdf</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Olivier Cappé, Aurélien Garivier, Emilie Kaufmann, Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">random</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="k">import</span> <span class="n">beta</span> <span class="k">as</span> <span class="n">betavariate</span>  <span class="c1"># Faster! Yes!</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">betavariate</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">btdtri</span>
+
+<span class="c1"># Local imports</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Posterior</span> <span class="k">import</span> <span class="n">Posterior</span>
+
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">SystemError</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">Posterior</span> <span class="k">import</span> <span class="n">Posterior</span>
+
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+
+
+<span class="c1"># --- Utility functions</span>
+
+
+<div class="viewcode-block" id="bernoulliBinarization"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.bernoulliBinarization">[docs]</a><span class="k">def</span> <span class="nf">bernoulliBinarization</span><span class="p">(</span><span class="n">r_t</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Return a (random) binarization of a reward :math:`r_t`, in the continuous interval :math:`[0, 1]` as an observation in discrete :math:`{0, 1}`.</span>
+
+<span class="sd">    - Useful to allow to use a Beta posterior for non-Bernoulli experiments,</span>
+<span class="sd">    - That way, :class:`Thompson` sampling can be used for any continuous-valued bounded rewards.</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    &gt;&gt;&gt; import random</span>
+<span class="sd">    &gt;&gt;&gt; random.seed(0)</span>
+
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.3)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.3)</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.3)</span>
+<span class="sd">    0</span>
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.3)</span>
+<span class="sd">    0</span>
+
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.9)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.9)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.9)</span>
+<span class="sd">    1</span>
+<span class="sd">    &gt;&gt;&gt; bernoulliBinarization(0.9)</span>
+<span class="sd">    0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">r_t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>  <span class="c1"># Returns a int!</span>
+    <span class="k">elif</span> <span class="n">r_t</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>  <span class="c1"># Returns a int!</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">r_t</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Error: only bounded rewards in [0, 1] are supported by this Beta posterior right now.&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">with_proba</span><span class="p">(</span><span class="n">r_t</span><span class="p">))</span></div>
+
+
+<span class="c1"># --- Class</span>
+
+<div class="viewcode-block" id="Beta"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta">[docs]</a><span class="k">class</span> <span class="nc">Beta</span><span class="p">(</span><span class="n">Posterior</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Manipulate posteriors of Bernoulli/Beta experiments.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Beta.__init__"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Create a Beta posterior :math:`\mathrm{Beta}(\alpha, \beta)` with no observation, i.e., :math:`\alpha = 1` and :math:`\beta = 1` by default.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: parameter &#39;a&#39; for Beta posterior has to be &gt;= 0.&quot;</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="k">assert</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error: parameter &#39;b&#39; for Beta posterior has to be &gt;= 0.&quot;</span>  <span class="c1"># DEBUG</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>  <span class="c1">#: List of two parameters [a, b]</span></div>
+
+<div class="viewcode-block" id="Beta.__str__"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Beta(\alpha=</span><span class="si">{:.3g}</span><span class="s2">, \beta=</span><span class="si">{:.3g}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Beta.reset"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset alpha and beta, both to 1 as when creating a new default Beta.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Beta.sample"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a random sample from the Beta posterior (using :func:`numpy.random.betavariate`).</span>
+
+<span class="sd">        - Used only by :class:`Thompson` Sampling and :class:`AdBandits` so far.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">betavariate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Beta.quantile"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.quantile">[docs]</a>    <span class="k">def</span> <span class="nf">quantile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the p quantile of the Beta posterior (using :func:`scipy.stats.btdtri`).</span>
+
+<span class="sd">        - Used only by :class:`BayesUCB` and :class:`AdBandits` so far.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">btdtri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">)</span></div>
+        <span class="c1"># Bug: do not call btdtri with (0.5,0.5,0.5) in scipy version &lt; 0.9 (old)</span>
+
+<div class="viewcode-block" id="Beta.mean"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.mean">[docs]</a>    <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the mean of the Beta posterior (should be useless).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Beta.forget"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.forget">[docs]</a>    <span class="k">def</span> <span class="nf">forget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Forget the last observation.&quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;Info: calling Beta.forget() with obs = {} ...&quot;.format(obs))  # DEBUG</span>
+        <span class="c1"># FIXED update this code, to accept obs that are FLOAT in [0, 1] and not just in {0, 1}...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="n">bernoulliBinarization</span><span class="p">(</span><span class="n">obs</span><span class="p">)]</span> <span class="o">-=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Beta.update"><a class="viewcode-back" href="../../../docs/Policies.Posterior.Beta.html#Policies.Posterior.Beta.Beta.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add an observation.</span>
+
+<span class="sd">        - If obs is 1, update :math:`\alpha` the count of positive observations,</span>
+<span class="sd">        - If it is 0, update :math:`\beta` the count of negative observations.</span>
+
+<span class="sd">        .. note:: Otherwise, a trick with :func:`bernoulliBinarization` has to be used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># print(&quot;Info: calling Beta.update() with obs = {} ...&quot;.format(obs))  # DEBUG</span>
+        <span class="c1"># FIXED update this code, to accept obs that are FLOAT in [0, 1] and not just in {0, 1}...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">[</span><span class="n">bernoulliBinarization</span><span class="p">(</span><span class="n">obs</span><span class="p">)]</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

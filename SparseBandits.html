@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -117,3 +116,265 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-experiments">How to run the experiments ?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#some-illustrations">Some illustrations</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#variants-of-sparse-wrapper-for-ucb-on-a-simple-sparse-bernoulli-problem">3 variants of Sparse-Wrapper for UCB, on a “simple” sparse Bernoulli problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scroll-license-github-license">📜 License ? </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/SparseBandits.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="structure-and-sparsity-of-stochastic-multi-armed-bandits">
+<h1><strong>Structure and Sparsity of Stochastic Multi-Armed Bandits</strong><a class="headerlink" href="#structure-and-sparsity-of-stochastic-multi-armed-bandits" title="Permalink to this headline">¶</a></h1>
+<p>This page explains shortly what I studied on sparse stochastic multi-armed bandits.
+Assume a MAB problem with <code class="docutils literal notranslate"><span class="pre">$K$</span></code> arms, each parametrized by its <em>mean</em> <code class="docutils literal notranslate"><span class="pre">$\mu_k\in\mathbb{R}$</span></code>.
+If you know in advance that only a small subset (of size <code class="docutils literal notranslate"><span class="pre">$s$</span></code>) of the arms have a positive arm, it sounds reasonable to hope to be more efficient in playing the bandit game compared to an approach which is non aware of the sparsity.</p>
+<p>The <a class="reference external" href="docs/Policies.SparseUCB.html#Policies.SparseUCB.SparseUCB"><code class="docutils literal notranslate"><span class="pre">SparseUCB</span></code></a> is an extension of the well-known <a class="reference external" href="docs/Policies.UCB.html"><code class="docutils literal notranslate"><span class="pre">UCB</span></code></a>, and requires to known <strong>exactly</strong> the value of <code class="docutils literal notranslate"><span class="pre">$s$</span></code>.
+It works by identifying as fast as possible (actually, in a sub-logarithmic number of samples) the arms with non-positive means.
+Then it only plays in the “good” arms with positive means, with a regular UCB policy.</p>
+<p>I studied extensions of this idea, first of all the <a class="reference external" href="docs/Policies.SparseklUCB.html#Policies.SparseklUCB.SparseklUCB"><code class="docutils literal notranslate"><span class="pre">SparseklUCB</span></code></a> policy as it was suggested in the original research paper, but mainly a generic “wrapper” black-box approach.
+For more details, see <a class="reference external" href="docs/Policies.SparseWrapper.html#Policies.SparseWrapper.SparseWrapper"><code class="docutils literal notranslate"><span class="pre">SparseWrapper</span></code></a>.</p>
+<ul class="simple">
+<li><p>Reference: [<a class="reference external" href="https://arxiv.org/abs/1706.01383">“Sparse Stochastic Bandits”, by J. Kwon, V. Perchet &amp; C. Vernade, COLT 2017</a>]. Note that this algorithm only works for sparse <a class="reference external" href="(docs/Arms.Gaussian.html)">Gaussian</a> (or sub-Gaussian) stochastic bandits, and it includes <a class="reference external" href="docs/Arms.Bernoulli.html">Bernoulli arms</a>.</p></li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="article">
+<h2>Article<a class="headerlink" href="#article" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>TODO finish! I am writing a small research article on that topic, it is a better introduction as a self-contained document to explain this idea and the algorithms. Reference: <a class="reference external" href="https://hal.inria.fr/hal-XXX">[Structure and Sparsity of Stochastic Multi-Arm Bandits, Lilian Besson and Emilie Kaufmann, 2018]</a>.</p>
+</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="example-of-simulation-configuration">
+<h2>Example of simulation configuration<a class="headerlink" href="#example-of-simulation-configuration" title="Permalink to this headline">¶</a></h2>
+<p>A simple python file, <a class="reference external" href="https://smpybandits.github.io/docs/configuration_sparse.html"><code class="docutils literal notranslate"><span class="pre">configuration_sparse.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.</p>
+<p>For example, we can compare the standard <a class="reference external" href="docs/Policies.UCB.html"><code class="docutils literal notranslate"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="docs/Policies.BayesUCB.html"><code class="docutils literal notranslate"><span class="pre">BayesUCB</span></code></a> algorithms, non aware of the sparsity, against the sparsity-aware <a class="reference external" href="docs/Policies.SparseUCB.html"><code class="docutils literal notranslate"><span class="pre">SparseUCB</span></code></a> algorithm, as well as 4 versions of <a class="reference external" href="docs/Policies.SparseWrapper.html"><code class="docutils literal notranslate"><span class="pre">SparseWrapper</span></code></a> applied to <a class="reference external" href="docs/Policies.BayesUCB.html"><code class="docutils literal notranslate"><span class="pre">BayesUCB</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>    <span class="c1"># Finite horizon of the simulation</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># number of repetitions</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>        <span class="c1"># Maximum number of cores for parallelization: use ALL your CPU</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>      <span class="c1"># Verbosity for the joblib calls</span>
+    <span class="c1"># Environment configuration, you can set up more than one.</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>   <span class="c1"># sparsity = nb of &gt;= 0 mean, = 3 here</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="c1"># Policies that should be simulated, and their parameters.</span>
+    <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">UCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;sparsity&quot;</span><span class="p">:</span> <span class="mi">3</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span><span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="p">}</span> <span class="p">},</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Then add a <a class="reference external" href="docs/Policies.SparseWrapper.html">Sparse-Wrapper</a> bandit algorithm (<a class="reference external" href="docs/Policies.SparseWrapper.html"><code class="docutils literal notranslate"><span class="pre">SparseWrapper</span></code> class</a>), you can use this piece of code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;policies&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SparseWrapper</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">BayesUCB</span><span class="p">,</span>
+            <span class="s2">&quot;use_ucb_for_set_J&quot;</span><span class="p">:</span> <span class="n">use_ucb_for_set_J</span><span class="p">,</span>
+            <span class="s2">&quot;use_ucb_for_set_K&quot;</span><span class="p">:</span> <span class="n">use_ucb_for_set_K</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">use_ucb_for_set_J</span> <span class="ow">in</span> <span class="p">[</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span> <span class="p">]</span>
+    <span class="k">for</span> <span class="n">use_ucb_for_set_K</span> <span class="ow">in</span> <span class="p">[</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span> <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="how-to-run-the-experiments">
+<h2><a class="reference internal" href="How_to_run_the_code.html"><span class="doc">How to run the experiments ?</span></a><a class="headerlink" href="#how-to-run-the-experiments" title="Permalink to this headline">¶</a></h2>
+<p>You should use the provided <a class="reference external" href="Makefile"><code class="docutils literal notranslate"><span class="pre">Makefile</span></code></a> file to do this simply:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install  <span class="c1"># install the requirements ONLY ONCE</span>
+make sparse   <span class="c1"># run and log the main.py script</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="some-illustrations">
+<h2>Some illustrations<a class="headerlink" href="#some-illustrations" title="Permalink to this headline">¶</a></h2>
+<p>Here are some plots illustrating the performances of the different <a class="reference external" href="docs/Policies.">policies</a> implemented in this project, against various sparse problems (with <a class="reference external" href="Arms/Bernoulli.html"><code class="docutils literal notranslate"><span class="pre">Bernoulli</span></code></a> or <a class="reference external" href="https://smpybandits.github.io/docs/Arms.Gaussian.html"><code class="docutils literal notranslate"><span class="pre">UnboundedGaussian</span></code></a> arms only):</p>
+<div class="section" id="variants-of-sparse-wrapper-for-ucb-on-a-simple-sparse-bernoulli-problem">
+<h3>3 variants of <a class="reference external" href="docs/Policies.SparseWrapper.html">Sparse-Wrapper</a> for UCB, on a “simple” sparse Bernoulli problem<a class="headerlink" href="#variants-of-sparse-wrapper-for-ucb-on-a-simple-sparse-bernoulli-problem" title="Permalink to this headline">¶</a></h3>
+<p><img alt="3 variants of Sparse-Wrapper for UCB, on a &quot;simple&quot; sparse Bernoulli problem" src="plots/main____env1-1_XXX.png" /></p>
+<p>FIXME run some simulations and explain them!</p>
+<blockquote>
+<div><p>These illustrations come from my (work in progress) article, <a class="reference external" href="https://hal.inria.fr/hal-XXX">[Structure and Sparsity of Stochastic Multi-Arm Bandits, Lilian Besson and Emilie Kaufmann, 2018]</a>.</p>
+</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="scroll-license-github-license">
+<h3>📜 License ? <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg" /></a><a class="headerlink" href="#scroll-license-github-license" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://lbesson.mit-license.org/">MIT Licensed</a> (file <a class="reference external" href="LICENSE">LICENSE</a>).</p>
+<p>© 2016-2018 <a class="reference external" href="https://GitHub.com/Naereen">Lilian Besson</a>.</p>
+<p><a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/"><img alt="Open Source? Yes!" src="https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
+<a class="reference external" href="https://GitHub.com/Naereen/ama"><img alt="Ask Me Anything !" src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/"><img alt="Analytics" src="https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel" /></a>
+<img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI version" src="https://img.shields.io/pypi/v/smpybandits.svg" />
+<img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI implementation" src="https://img.shields.io/pypi/implementation/smpybandits.svg" />
+<a class="reference external" href="https://pypi.org/project/SMPyBandits"><img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/smpybandits.svg?logo=python" />
+</a>
+<a class="reference external" href="https://pypi.org/project/SMPyBandits"><img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI download" src="https://img.shields.io/pypi/dm/smpybandits.svg" /></a>
+<a class="reference external" href="https://pypi.org/project/SMPyBandits"><img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI status" src="https://img.shields.io/pypi/status/smpybandits.svg" /></a>
+<a class="reference external" href="https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/smpybandits/badge/?version=latest" /></a>
+<a class="reference external" href="https://travis-ci.org/SMPyBandits/SMPyBandits"><img alt="Build Status" src="https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/stargazers"><img alt="Stars of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/stars/SMPyBandits/SMPyBandits" /></a>
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/releases"><img alt="Releases of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/release/SMPyBandits/SMPyBandits" /></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="NonStationaryBandits.html" class="btn btn-neutral float-right" title="Non-Stationary Stochastic Multi-Armed Bandits" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="DoublingTrick.html" class="btn btn-neutral float-left" title="Doubling Trick for Multi-Armed Bandits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

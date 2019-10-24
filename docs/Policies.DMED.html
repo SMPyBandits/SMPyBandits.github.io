@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,270 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.DMED module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.DMED.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.DMED">
+<span id="policies-dmed-module"></span><h1>Policies.DMED module<a class="headerlink" href="#module-Policies.DMED" title="Permalink to this headline">¶</a></h1>
+<p>The DMED policy of [Honda &amp; Takemura, COLT 2010] in the special case of Bernoulli rewards (can be used on any [0,1]-valued rewards, but warning: in the non-binary case, this is not the algorithm of [Honda &amp; Takemura, COLT 2010]) (see note below on the variant).</p>
+<ul class="simple">
+<li><p>Reference: [Garivier &amp; Cappé - COLT, 2011](<a class="reference external" href="https://arxiv.org/pdf/1102.2490.pdf">https://arxiv.org/pdf/1102.2490.pdf</a>).</p></li>
+</ul>
+<dl class="class">
+<dt id="Policies.DMED.DMED">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DMED.</code><code class="sig-name descname">DMED</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">genuine=False</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMED"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The DMED policy of [Honda &amp; Takemura, COLT 2010] in the special case of Bernoulli rewards (can be used on any [0,1]-valued rewards, but warning: in the non-binary case, this is not the algorithm of [Honda &amp; Takemura, COLT 2010]) (see note below on the variant).</p>
+<ul class="simple">
+<li><p>Reference: [Garivier &amp; Cappé - COLT, 2011](<a class="reference external" href="https://arxiv.org/pdf/1102.2490.pdf">https://arxiv.org/pdf/1102.2490.pdf</a>).</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DMED.DMED.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">genuine=False</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMED.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMED.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DMED.DMED.kl">
+<code class="sig-name descname">kl</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DMED.DMED.kl" title="Permalink to this definition">¶</a></dt>
+<dd><p>kl function to use</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DMED.DMED.tolerance">
+<code class="sig-name descname">tolerance</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DMED.DMED.tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numerical tolerance</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DMED.DMED.genuine">
+<code class="sig-name descname">genuine</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DMED.DMED.genuine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know which variant is implemented, DMED or DMED+</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DMED.DMED.nextActions">
+<code class="sig-name descname">nextActions</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DMED.DMED.nextActions" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of next actions to play, every next step is playing <code class="docutils literal notranslate"><span class="pre">nextActions.pop(0)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DMED.DMED.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMED.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMED.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DMED.DMED.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMED.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMED.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the policy for a new game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DMED.DMED.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMED.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMED.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is still a next action to play, pop it and play it, otherwise make new list and play first action.</p>
+<p>The list of action is obtained as all the indexes <span class="math notranslate nohighlight">\(k\)</span> satisfying the following equation.</p>
+<ul class="simple">
+<li><p>For the naive version (<code class="docutils literal notranslate"><span class="pre">genuine</span> <span class="pre">=</span> <span class="pre">False</span></code>), DMED:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathrm{kl}(\hat{\mu}_k(t), \hat{\mu}^*(t)) &lt; \frac{\log(t)}{N_k(t)}.\]</div>
+<ul class="simple">
+<li><p>For the original version (<code class="docutils literal notranslate"><span class="pre">genuine</span> <span class="pre">=</span> <span class="pre">True</span></code>), DMED+:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\mathrm{kl}(\hat{\mu}_k(t), \hat{\mu}^*(t)) &lt; \frac{\log(\frac{t}{N_k(t)})}{N_k(t)}.\]</div>
+<p>Where <span class="math notranslate nohighlight">\(X_k(t)\)</span> is the sum of rewards from arm k, <span class="math notranslate nohighlight">\(\hat{\mu}_k(t)\)</span> is the empirical mean,
+and <span class="math notranslate nohighlight">\(\hat{\mu}^*(t)\)</span> is the best empirical mean.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}X_k(t) &amp;= \sum_{\sigma=1}^{t} 1(A(\sigma) = k) r_k(\sigma) \\
+\hat{\mu}_k(t) &amp;= \frac{X_k(t)}{N_k(t)}, \\
+\hat{\mu}^*(t) &amp;= \max_{k=1}^{K} \hat{\mu}_k(t)\end{split}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DMED.DMED.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMED.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMED.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is still enough actions to play, pop them and play them, otherwise make new list and play nb first actions.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DMED.DMED.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DMED'</em><a class="headerlink" href="#Policies.DMED.DMED.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DMED.DMEDPlus">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DMED.</code><code class="sig-name descname">DMEDPlus</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMEDPlus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMEDPlus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.DMED.DMED" title="Policies.DMED.DMED"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.DMED.DMED</span></code></a></p>
+<p>The DMED+ policy of [Honda &amp; Takemura, COLT 2010] in the special case of Bernoulli rewards (can be used on any [0,1]-valued rewards, but warning: in the non-binary case, this is not the algorithm of [Honda &amp; Takemura, COLT 2010]).</p>
+<ul class="simple">
+<li><p>Reference: [Garivier &amp; Cappé - COLT, 2011](<a class="reference external" href="https://arxiv.org/pdf/1102.2490.pdf">https://arxiv.org/pdf/1102.2490.pdf</a>).</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DMED.DMEDPlus.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">tolerance=0.0001</em>, <em class="sig-param">kl=CPUDispatcher(&lt;function klBern&gt;)</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DMED.html#DMEDPlus.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DMED.DMEDPlus.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DMED.DMEDPlus.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DMED'</em><a class="headerlink" href="#Policies.DMED.DMEDPlus.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.DiscountedBayesianIndexPolicy.html" class="btn btn-neutral float-right" title="Policies.DiscountedBayesianIndexPolicy module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.CUSUM_UCB.html" class="btn btn-neutral float-left" title="Policies.CUSUM_UCB module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

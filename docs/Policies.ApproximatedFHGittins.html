@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,255 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.ApproximatedFHGittins module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.ApproximatedFHGittins.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.ApproximatedFHGittins">
+<span id="policies-approximatedfhgittins-module"></span><h1>Policies.ApproximatedFHGittins module<a class="headerlink" href="#module-Policies.ApproximatedFHGittins" title="Permalink to this headline">¶</a></h1>
+<p>The approximated Finite-Horizon Gittins index policy for bounded bandits.</p>
+<ul class="simple">
+<li><p>This is not the computationally costly Gittins index, but a simple approximation, using the knowledge of the horizon T.</p></li>
+<li><p>Reference: [Lattimore - COLT, 2016](<a class="reference external" href="http://www.jmlr.org/proceedings/papers/v49/lattimore16.pdf">http://www.jmlr.org/proceedings/papers/v49/lattimore16.pdf</a>), and [his COLT presentation](<a class="reference external" href="https://youtu.be/p8AwKiudhZ4?t=276">https://youtu.be/p8AwKiudhZ4?t=276</a>)</p></li>
+</ul>
+<dl class="data">
+<dt id="Policies.ApproximatedFHGittins.ALPHA">
+<code class="sig-prename descclassname">Policies.ApproximatedFHGittins.</code><code class="sig-name descname">ALPHA</code><em class="property"> = 0.5</em><a class="headerlink" href="#Policies.ApproximatedFHGittins.ALPHA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the parameter <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span> for ApproximatedFHGittins.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.ApproximatedFHGittins.DISTORTION_HORIZON">
+<code class="sig-prename descclassname">Policies.ApproximatedFHGittins.</code><code class="sig-name descname">DISTORTION_HORIZON</code><em class="property"> = 1.01</em><a class="headerlink" href="#Policies.ApproximatedFHGittins.DISTORTION_HORIZON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the parameter <span class="math notranslate nohighlight">\(\tau \geq 1\)</span> that is used to artificially increase the horizon, from <span class="math notranslate nohighlight">\(T\)</span> to :math`tau T`.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.ApproximatedFHGittins.</code><code class="sig-name descname">ApproximatedFHGittins</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">distortion_horizon=1.01</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ApproximatedFHGittins.html#ApproximatedFHGittins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.IndexPolicy.html#Policies.IndexPolicy.IndexPolicy" title="Policies.IndexPolicy.IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.IndexPolicy.IndexPolicy</span></code></a></p>
+<p>The approximated Finite-Horizon Gittins index policy for bounded bandits.</p>
+<ul class="simple">
+<li><p>This is not the computationally costly Gittins index, but a simple approximation, using the knowledge of the horizon T.</p></li>
+<li><p>Reference: [Lattimore - COLT, 2016](<a class="reference external" href="http://www.jmlr.org/proceedings/papers/v49/lattimore16.pdf">http://www.jmlr.org/proceedings/papers/v49/lattimore16.pdf</a>), and [his COLT presentation](<a class="reference external" href="https://youtu.be/p8AwKiudhZ4?t=276">https://youtu.be/p8AwKiudhZ4?t=276</a>)</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">alpha=0.5</em>, <em class="sig-param">distortion_horizon=1.01</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ApproximatedFHGittins.html#ApproximatedFHGittins.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li><p>nbArms: the number of arms,</p></li>
+<li><p>lower, amplitude: lower value and known amplitude of the rewards.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.alpha">
+<code class="sig-name descname">alpha</code><em class="property"> = None</em><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.distortion_horizon">
+<code class="sig-name descname">distortion_horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.distortion_horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\tau &gt; 0\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.horizon">
+<code class="sig-name descname">horizon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T\)</span> = known horizon of the experiment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ApproximatedFHGittins.html#ApproximatedFHGittins.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.m">
+<em class="property">property </em><code class="sig-name descname">m</code><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.m" title="Permalink to this definition">¶</a></dt>
+<dd><p><span class="math notranslate nohighlight">\(m = T - t + 1\)</span> is the number of steps to be played until end of the game.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The article does not explain how to deal with unknown horizon, but eventually if <span class="math notranslate nohighlight">\(T\)</span> is wrong, this <cite>m</cite> becomes negative. Empirically, I force it to be <span class="math notranslate nohighlight">\(\geq 1\)</span>, to not mess up with the <span class="math notranslate nohighlight">\(\log(m)\)</span> used below, by using <span class="math notranslate nohighlight">\(\tau T\)</span> instead of <span class="math notranslate nohighlight">\(T\)</span> (e.g., <span class="math notranslate nohighlight">\(\tau = 1.01\)</span> is enough to not ruin the performance in the last steps of the experiment).</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.computeIndex">
+<code class="sig-name descname">computeIndex</code><span class="sig-paren">(</span><em class="sig-param">arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ApproximatedFHGittins.html#ApproximatedFHGittins.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current index, at time t and after <span class="math notranslate nohighlight">\(N_k(t)\)</span> pulls of arm k:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}I_k(t) &amp;= \frac{X_k(t)}{N_k(t)} + \sqrt{\frac{2 \alpha}{N_k(t)} \log\left( \frac{m}{N_k(t) \log^{1/2}\left( \frac{m}{N_k(t)} \right)} \right)}, \\
+\text{where}\;\; &amp; m = T - t + 1.\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This <span class="math notranslate nohighlight">\(\log^{1/2}(\dots) = \sqrt(\log(\dots)))\)</span> term can be <em>undefined</em>, as soon as <span class="math notranslate nohighlight">\(m &lt; N_k(t)\)</span>, so empirically, <span class="math notranslate nohighlight">\(\sqrt(\max(0, \log(\dots))\)</span> is used instead, or a larger horizon can be used to make <span class="math notranslate nohighlight">\(m\)</span> artificially larger (e.g., <span class="math notranslate nohighlight">\(T' = 1.1 T\)</span>).</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.ApproximatedFHGittins'</em><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.ApproximatedFHGittins.ApproximatedFHGittins.computeAllIndex">
+<code class="sig-name descname">computeAllIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ApproximatedFHGittins.html#ApproximatedFHGittins.computeAllIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ApproximatedFHGittins.ApproximatedFHGittins.computeAllIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current indexes for all arms, in a vectorized manner.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.BESA.html" class="btn btn-neutral float-right" title="Policies.BESA module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.Aggregator.html" class="btn btn-neutral float-left" title="Policies.Aggregator module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

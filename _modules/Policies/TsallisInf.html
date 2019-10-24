@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,221 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.TsallisInf</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.TsallisInf</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; The 1/2-Tsallis-Inf policy for bounded bandit, (order) optimal for stochastic and adversarial bandits.</span>
+
+<span class="sd">- Reference: [[&quot;An Optimal Algorithm for Stochastic and Adversarial Bandits&quot;, Julian Zimmert, Yevgeny Seldin, 2018, arXiv:1807.07623]](https://arxiv.org/abs/1807.07623)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Exp3</span> <span class="k">import</span> <span class="n">Exp3</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Exp3</span> <span class="k">import</span> <span class="n">Exp3</span>
+
+<span class="c1">#: Default value for :math:`\alpha` the parameter of the Tsallis entropy.</span>
+<span class="c1">#: We focus on the 1/2-Tsallis algorithm, ie, with :math:`\alpha=\frac{1}{2}`.</span>
+<span class="n">ALPHA</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<div class="viewcode-block" id="TsallisInf"><a class="viewcode-back" href="../../docs/Policies.TsallisInf.html#Policies.TsallisInf.TsallisInf">[docs]</a><span class="k">class</span> <span class="nc">TsallisInf</span><span class="p">(</span><span class="n">Exp3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The 1/2-Tsallis-Inf policy for bounded bandit, (order) optimal for stochastic and adversarial bandits.</span>
+
+<span class="sd">    - Reference: [[&quot;An Optimal Algorithm for Stochastic and Adversarial Bandits&quot;, Julian Zimmert, Yevgeny Seldin, 2018, arXiv:1807.07623]](https://arxiv.org/abs/1807.07623)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TsallisInf.__init__"><a class="viewcode-back" href="../../docs/Policies.TsallisInf.html#Policies.TsallisInf.TsallisInf.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">ALPHA</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TsallisInf</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">unbiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>  <span class="c1">#: Store the constant :math:`\alpha` used by the Online-Mirror-Descent step using :math:`\alpha` Tsallis entropy.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inverse_exponent</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1">#: Store :math:`\frac{1}{\alpha-1}` to only compute it once.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">)</span>  <span class="c1">#: Keep in memory the vector :math:`\hat{L}_t` of cumulative (unbiased estimates) of losses.</span></div>
+
+<div class="viewcode-block" id="TsallisInf.__str__"><a class="viewcode-back" href="../../docs/Policies.TsallisInf.html#Policies.TsallisInf.TsallisInf.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;Tsallis-Inf($\alpha=</span><span class="si">{:.3g}</span><span class="s2">$)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">eta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Decreasing learning rate, :math:`\eta_t = \frac{1}{\sqrt{t}}`.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trusts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Trusts probabilities :math:`\mathrm{trusts}(t+1)` are just the normalized weights :math:`w_k(t)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span>
+
+<div class="viewcode-block" id="TsallisInf.getReward"><a class="viewcode-back" href="../../docs/Policies.TsallisInf.html#Policies.TsallisInf.TsallisInf.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Give a reward: accumulate rewards on that arm k, then recompute the trusts.</span>
+
+<span class="sd">        Compute the trusts probabilities :math:`w_k(t)` with one step of Online-Mirror-Descent for bandit, using the :math:`\alpha` Tsallis entropy for the :math:`\Psi_t` functions.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \mathrm{trusts}&#39;_k(t+1) &amp;= \nabla (\Psi_t + \mathcal{I}_{\Delta^K})^* (- \hat{L}_{t-1}), \\</span>
+<span class="sd">            \mathrm{trusts}(t+1) &amp;= \mathrm{trusts}&#39;(t+1) / \sum_{k=1}^{K} \mathrm{trusts}&#39;_k(t+1).</span>
+
+<span class="sd">        - If :math:`\Delta^K` is the probability simplex of dimension :math:`K`,</span>
+<span class="sd">        - and :math:`\hat{L}_{t-1}` is the cumulative loss vector, ie, the sum of the (unbiased estimate) :math:`\hat{\ell}_t` for the previous time steps,</span>
+<span class="sd">        - where :math:`\hat{\ell}_{t,i} = 1(I_t = i) \frac{\ell_{t,i}}{\mathrm{trusts}_i(t)}` is the unbiased estimate of the loss,</span>
+<span class="sd">        - With :math:`\Psi_t = \Psi_{t,\alpha}(w) := - \sum_{k=1}^{K} \frac{w_k^{\alpha}}{\alpha \eta_t}`,</span>
+<span class="sd">        - With learning rate :math:`\eta_t = \frac{1}{\sqrt{t}}` the (decreasing) learning rate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TsallisInf</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>  <span class="c1"># XXX Call to Exp3</span>
+        <span class="c1"># normalize reward to [0,1]</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="c1"># for one reward in [0,1], loss = 1 - reward</span>
+        <span class="n">biased_loss</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">reward</span>
+        <span class="c1"># unbiased estimate, from the weights of the previous step</span>
+        <span class="n">unbiased_loss</span> <span class="o">=</span> <span class="n">biased_loss</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">unbiased_loss</span>
+        <span class="n">eta_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
+
+        <span class="c1"># 1. solve f(x)=1 to get an approximation of the (unique) Lagrange multiplier x</span>
+        <span class="k">def</span> <span class="nf">objective_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">(</span><span class="n">eta_t</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_exponent</span> <span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="n">result_of_minimization</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize_scalar</span><span class="p">(</span><span class="n">objective_function</span><span class="p">)</span>
+        <span class="c1"># result_of_minimization = opt.minimize(objective_function, 0.0)  # XXX is it not faster?</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">result_of_minimization</span><span class="o">.</span><span class="n">x</span>
+
+        <span class="c1"># 2. use x to compute the new weights</span>
+        <span class="n">new_weights</span> <span class="o">=</span> <span class="p">(</span> <span class="n">eta_t</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cumulative_losses</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_exponent</span>
+
+        <span class="c1"># print(&quot;DEBUG: {} at time {} (seeing reward {} on arm {}), compute slack variable x = {}, \n    and new_weights = {}...&quot;.format(self, self.t, reward, arm, x, new_weights))  # DEBUG</span>
+
+        <span class="c1"># XXX Handle weird cases, slow down everything but safer!</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)):</span>
+            <span class="n">new_weights</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># set bad values to 0</span>
+        <span class="c1"># Bad case, where the sum is so small that it&#39;s only rounding errors</span>
+        <span class="c1"># or where all values where bad and forced to 0, start with new_weights=[1/K...]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_weights</span><span class="p">),</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># Normalize it!</span>
+            <span class="n">new_weights</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="c1"># 3. Renormalize weights at each step</span>
+        <span class="n">new_weights</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_weights</span><span class="p">)</span>
+
+        <span class="c1"># 4. store weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span>  <span class="n">new_weights</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,396 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Environment.CollisionModels</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Environment.CollisionModels</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Define the different collision models.</span>
+
+<span class="sd">Collision models are generic functions, taking:</span>
+
+<span class="sd">- the time: ``t``</span>
+<span class="sd">- the arms of the current environment: ``arms``</span>
+<span class="sd">- the list of players: ``players``</span>
+<span class="sd">- the numpy array of their choices: ``choices``</span>
+<span class="sd">- the numpy array to store their rewards: ``rewards``</span>
+<span class="sd">- the numpy array to store their pulls: ``pulls``</span>
+<span class="sd">- the numpy array to store their collisions: ``collisions``</span>
+
+<span class="sd">As far as now, there is 4 different collision models implemented:</span>
+
+<span class="sd">- :func:`noCollision`: simple collision model where all players sample it and receive the reward.</span>
+<span class="sd">- :func:`onlyUniqUserGetsReward`: simple collision model, where only the players alone on one arm sample it and receive the reward (default).</span>
+<span class="sd">- :func:`rewardIsSharedUniformly`: in case of more than one player on one arm, only one player (uniform choice) can sample it and receive the reward.</span>
+<span class="sd">- :func:`closerUserGetsReward`: in case of more than one player on one arm, only the closer player can sample it and receive the reward. It can take, or create if not given, a random distance of each player to the base station (random number in [0, 1]).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">lru_cache</span>  <span class="c1"># Only for Python 3.2+</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ImportError: functools.lru_cache is not available, using a fake implementation.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Fake implementation of functools.lru_cache, not available in Python 2.&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">lru_cache_internal</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Fake wrapped f, in fact it&#39;s just f.&quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">f</span>
+        <span class="k">return</span> <span class="n">lru_cache_internal</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="k">def</span> <span class="nf">handleCollision_or_getZeroReward</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; If the player has a method handleCollision, it is called, otherwise a reward of lower is given to the player for that arm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># player.handleCollision(arm) is called to inform the user that there were a collision</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s1">&#39;handleCollision&#39;</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">lower</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># XXX Should player.getReward() be called with a reward = 0 when there is collisions (to change the internals memory of the player) ?</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">lower</span><span class="p">)</span>  <span class="c1"># XXX Strong assumption on the model</span>
+
+
+<div class="viewcode-block" id="onlyUniqUserGetsReward"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.onlyUniqUserGetsReward">[docs]</a><span class="k">def</span> <span class="nf">onlyUniqUserGetsReward</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Simple collision model where only the players alone on one arm samples it and receives the reward.</span>
+
+<span class="sd">    - This is the default collision model, cf. [[Multi-Player Bandits Revisited, Lilian Besson and Emilie Kaufmann, 2017]](https://hal.inria.fr/hal-01629733).</span>
+<span class="sd">    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, sense in all the arms</span>
+    <span class="n">sensing</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">arms</span><span class="p">]</span>
+    <span class="c1"># XXX Yes, I know, it&#39;s suboptimal to sample each arm even if no player chose it</span>
+    <span class="c1"># But a quick benchmark showed it was quicker than</span>
+    <span class="c1"># sensing = [a.draw(t) for i,a in enumerate(arms) if nbCollisions[i]&gt;=0]</span>
+
+    <span class="n">nbCollisions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="n">minlength</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arms</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="c1"># print(&quot;onlyUniqUserGetsReward() at time t = {}, nbCollisions = {}.&quot;.format(t, nbCollisions))  # DEBUG</span>
+
+    <span class="c1"># if np.max(nbCollisions) &gt;= 1:  # DEBUG</span>
+    <span class="c1">#     print(&quot;- onlyUniqUserGetsReward: some collisions on channels {} at time t = {} ...&quot;.format(np.nonzero(np.array(nbCollisions) &gt;= 1)[0], t))  # DEBUG</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">players</span><span class="p">):</span>  <span class="c1"># Loop is needed because player is needed</span>
+        <span class="c1"># FIXED pulls counts the number of selection, not the number of successful selection!! HUGE BUG! See https://github.com/SMPyBandits/SMPyBandits/issues/33</span>
+        <span class="n">pulls</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">nbCollisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># No collision</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sensing</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>  <span class="c1"># Observing *sensing*</span>
+            <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensing</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>  <span class="c1"># Storing actual rewards</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># print(&quot;  - 1 collision on channel {} : {} other users chose it at time t = {} ...&quot;.format(choices[i], nbCollisions[choices[i]], t))  # DEBUG</span>
+            <span class="n">collisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Should be counted here, onlyUniqUserGetsReward</span>
+            <span class="c1"># handleCollision_or_getZeroReward(player, choices[i])  # NOPE</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sensing</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>  <span class="c1"># Observing *sensing* but collision</span></div>
+            <span class="c1"># If learning is done on sensing, handleCollision uses this reward</span>
+            <span class="c1"># But if learning is done on ACK, handleCollision does not use this reward</span>
+
+
+<span class="c1"># Default collision model to use</span>
+<span class="n">defaultCollisionModel</span> <span class="o">=</span> <span class="n">onlyUniqUserGetsReward</span>
+
+
+<div class="viewcode-block" id="onlyUniqUserGetsRewardSparse"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.onlyUniqUserGetsRewardSparse">[docs]</a><span class="k">def</span> <span class="nf">onlyUniqUserGetsRewardSparse</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Simple collision model where only the players alone on one arm samples it and receives the reward.</span>
+
+<span class="sd">    - This is the default collision model, cf. [[Multi-Player Bandits Revisited, Lilian Besson and Emilie Kaufmann, 2017]](https://hal.inria.fr/hal-01629733).</span>
+<span class="sd">    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).</span>
+<span class="sd">    - Support for player non activated, by choosing a negative index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, sense in all the arms</span>
+    <span class="c1"># FIXME had support for problems with different means for each players?</span>
+    <span class="c1"># see issue https://github.com/SMPyBandits/SMPyBandits/issues/185 and papers referenced therein</span>
+    <span class="n">sensing</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">arms</span><span class="p">]</span>
+
+    <span class="n">nbCollisions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">choices</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">minlength</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arms</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="c1"># print(&quot;onlyUniqUserGetsRewardSparse() at time t = {}, nbCollisions = {}.&quot;.format(t, nbCollisions))  # DEBUG</span>
+
+    <span class="c1"># if np.max(nbCollisions) &gt;= 1:  # DEBUG</span>
+    <span class="c1">#     print(&quot;- onlyUniqUserGetsRewardSparse: some collisions on channels {} at time t = {} ...&quot;.format(np.nonzero(np.array(nbCollisions) &gt;= 1)[0], t))  # DEBUG</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">players</span><span class="p">):</span>  <span class="c1"># Loop is needed because player is needed</span>
+        <span class="c1"># FIXED pulls counts the number of selection, not the number of successful selection!! HUGE BUG! See https://github.com/SMPyBandits/SMPyBandits/issues/33</span>
+        <span class="k">if</span> <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pulls</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">nbCollisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># No collision</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sensing</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>  <span class="c1"># Observing *sensing*</span>
+                <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensing</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>  <span class="c1"># Storing actual rewards</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># print(&quot;  - 1 collision on channel {} : {} other users chose it at time t = {} ...&quot;.format(choices[i], nbCollisions[choices[i]], t))  # DEBUG</span>
+                <span class="n">collisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Should be counted here, onlyUniqUserGetsRewardSparse</span>
+                <span class="c1"># handleCollision_or_getZeroReward(player, choices[i])  # NOPE</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sensing</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>  <span class="c1"># Observing *sensing* but collision</span></div>
+                <span class="c1"># If learning is done on sensing, handleCollision uses this reward</span>
+                <span class="c1"># But if learning is done on ACK, handleCollision does not use this reward</span>
+
+
+<div class="viewcode-block" id="allGetRewardsAndUseCollision"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.allGetRewardsAndUseCollision">[docs]</a><span class="k">def</span> <span class="nf">allGetRewardsAndUseCollision</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A variant of the first simple collision model where all players sample their arm, receive their rewards, and are informed of the collisions.</span>
+
+
+<span class="sd">    .. note:: it is NOT the one we consider, and so our lower-bound on centralized regret is wrong (users don&#39;t care about collisions for their internal rewards so regret does not take collisions into account!)</span>
+
+<span class="sd">    - This is the NOT default collision model, cf. [Liu &amp; Zhao, 2009](https://arxiv.org/abs/0910.2065v3) collision model 1.</span>
+<span class="sd">    - The numpy array &#39;choices&#39; is increased according to the number of users who collided (it is NOT binary).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nbCollisions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">choices</span><span class="p">,</span> <span class="n">minlength</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arms</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># XXX this is faster!</span>
+    <span class="c1"># print(&quot;allGetRewardsAndUseCollision() at time t = {}, nbCollisions = {}.&quot;.format(t, nbCollisions))  # DEBUG</span>
+    <span class="c1"># if np.max(nbCollisions) &gt;= 1:  # DEBUG</span>
+    <span class="c1">#     print(&quot;- allGetRewardsAndUseCollision: some collisions on channels {} at time t = {} ...&quot;.format(np.nonzero(np.array(nbCollisions) &gt;= 1)[0], t))  # DEBUG</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">players</span><span class="p">):</span>  <span class="c1"># Loop is needed because player is needed</span>
+        <span class="c1"># FIXED pulls counts the number of selection, not the number of successful selection!! HUGE BUG! See https://github.com/SMPyBandits/SMPyBandits/issues/33</span>
+        <span class="n">pulls</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arms</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">nbCollisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># If collision</span>
+            <span class="c1"># print(&quot;  - 1 collision on channel {} : {} other users chose it at time t = {} ...&quot;.format(choices[i], nbCollisions[choices[i]], t))  # DEBUG</span>
+            <span class="n">collisions</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Should be counted here, allGetRewardsAndUseCollision</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">handleCollision</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># FIXED</span></div>
+
+
+<div class="viewcode-block" id="noCollision"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.noCollision">[docs]</a><span class="k">def</span> <span class="nf">noCollision</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Simple collision model where all players sample it and receive the reward.</span>
+
+<span class="sd">    - It corresponds to the single-player simulation: each player is a policy, compared without collision.</span>
+<span class="sd">    - The numpy array &#39;collisions&#39; is not modified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">players</span><span class="p">):</span>
+        <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arms</span><span class="p">[</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">pulls</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span></div>
+        <span class="c1"># collisions[choices[i]] += 0  # that&#39;s the idea, but useless to do it</span>
+
+
+<div class="viewcode-block" id="rewardIsSharedUniformly"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.rewardIsSharedUniformly">[docs]</a><span class="k">def</span> <span class="nf">rewardIsSharedUniformly</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Less simple collision model where:</span>
+
+<span class="sd">    - The players alone on one arm sample it and receive the reward.</span>
+<span class="sd">    - In case of more than one player on one arm, only one player (uniform choice) can sample it and receive the reward. It is chosen by the base station.</span>
+
+
+<span class="sd">    .. Note:: it can also model a choice from the users point of view: in a time frame (eg. 1 second), when there is a collision, each colliding user chose (uniformly) a random small time offset (eg. 20 ms), and start sensing + emitting again after that time. The first one to sense is alone, it transmits, and the next ones find the channel used when sensing. So only one player is transmitting, and from the base station point of view, it is the same as if it was chosen uniformly among the colliding users.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># For each arm, explore who chose it</span>
+    <span class="k">for</span> <span class="n">armId</span><span class="p">,</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arms</span><span class="p">):</span>
+        <span class="c1"># If he is alone, sure to be chosen, otherwise only one get randomly chosen</span>
+        <span class="n">players_who_chose_it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">choices</span> <span class="o">==</span> <span class="n">armId</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># print(&quot;players_who_chose_it =&quot;, players_who_chose_it)  # DEBUG</span>
+        <span class="c1"># print(&quot;np.shape(players_who_chose_it) =&quot;, np.shape(players_who_chose_it))  # DEBUG</span>
+        <span class="c1"># if len(players_who_chose_it) &gt; 1:  # DEBUG</span>
+        <span class="c1">#     print(&quot;- rewardIsSharedUniformly: for arm {}, {} users won&#39;t have a reward at time t = {} ...&quot;.format(armId, len(players_who_chose_it) - 1, t))  # DEBUG</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">players_who_chose_it</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">collisions</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">players_who_chose_it</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>   <span class="c1"># Increase nb of collisions for nb of player who chose it, minus 1 (eg, if 1 then no collision, if 2 then one collision)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">players_who_chose_it</span><span class="p">)</span>
+            <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arm</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">players</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">armId</span><span class="p">,</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">pulls</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">armId</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">players_who_chose_it</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">handleCollision_or_getZeroReward</span><span class="p">(</span><span class="n">players</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">armId</span><span class="p">)</span></div>
+
+
+<span class="c1"># XXX Using a cache to not regenerate a random vector of distances. Siooooux!</span>
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># XXX size is NOT bounded... bad!</span>
+<span class="k">def</span> <span class="nf">random_distances</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Get a random vector of distances.&quot;&quot;&quot;</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I just generated a new distances vector, for </span><span class="si">{}</span><span class="s2"> players : distances = </span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">distances</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+    <span class="k">return</span> <span class="n">distances</span>
+
+
+<div class="viewcode-block" id="closerUserGetsReward"><a class="viewcode-back" href="../../docs/Environment.CollisionModels.html#Environment.CollisionModels.closerUserGetsReward">[docs]</a><span class="k">def</span> <span class="nf">closerUserGetsReward</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">arms</span><span class="p">,</span> <span class="n">players</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">pulls</span><span class="p">,</span> <span class="n">collisions</span><span class="p">,</span> <span class="n">distances</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Simple collision model where:</span>
+
+<span class="sd">    - The players alone on one arm sample it and receive the reward.</span>
+<span class="sd">    - In case of more than one player on one arm, only the closer player can sample it and receive the reward. It can take, or create if not given, a distance of each player to the base station (numbers in [0, 1]).</span>
+<span class="sd">    - If distances is not given, it is either generated randomly (random numbers in [0, 1]) or is a linspace of nbPlayers values in (0, 1), equally spacen (default).</span>
+
+<span class="sd">    .. note:: This kind of effects is known in telecommunication as the Near-Far effect or the Capture effect [Roberts, 1975](https://dl.acm.org/citation.cfm?id=1024920)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">distances</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">distances</span> <span class="o">==</span> <span class="s1">&#39;uniform&#39;</span><span class="p">):</span>  <span class="c1"># Uniformly spacen distances, in (0, 1)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">distances</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>  <span class="c1"># Or fully uniform</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">random_distances</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">))</span>
+    <span class="c1"># For each arm, explore who chose it</span>
+    <span class="k">for</span> <span class="n">armId</span><span class="p">,</span> <span class="n">arm</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arms</span><span class="p">):</span>
+        <span class="c1"># If he is alone, sure to be chosen, otherwise only the closest one can sample</span>
+        <span class="n">players_who_chose_it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">choices</span> <span class="o">==</span> <span class="n">armId</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># print(&quot;players_who_chose_it =&quot;, players_who_chose_it)  # DEBUG</span>
+        <span class="c1"># if np.size(players_who_chose_it) &gt; 1:  # DEBUG</span>
+        <span class="c1">#     print(&quot;- rewardIsSharedUniformly: for arm {}, {} users won&#39;t have a reward at time t = {} ...&quot;.format(armId, np.size(players_who_chose_it) - 1, t))  # DEBUG</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">players_who_chose_it</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">collisions</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">players_who_chose_it</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>   <span class="c1"># Increase nb of collisions for nb of player who chose it, minus 1 (eg, if 1 then no collision, if 2 then one collision as the closest gets it)</span>
+            <span class="n">distancesChosen</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">players_who_chose_it</span><span class="p">]</span>
+            <span class="n">smaller_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">distancesChosen</span><span class="p">)</span>
+            <span class="c1"># print(&quot;Using distances to chose the user who can pull arm {} : only users at the minimal distance = {} can transmit ...&quot;.format(armId, smaller_distance))  # DEBUG</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">distancesChosen</span> <span class="o">==</span> <span class="n">smaller_distance</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">players_who_chose_it</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distancesChosen</span><span class="p">)]</span>
+                <span class="c1"># print(&quot;Only one user is at minimal distance, of index i =&quot;, i)  # DEBUG</span>
+            <span class="k">else</span><span class="p">:</span>   <span class="c1"># XXX very low probability, if the distances are randomly chosen</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">players_who_chose_it</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">distancesChosen</span> <span class="o">==</span> <span class="n">smaller_distance</span><span class="p">))]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Randomly choosing one user at minimal distance = </span><span class="si">{:.4g}</span><span class="s2">, among </span><span class="si">{}</span><span class="s2">... Index i = </span><span class="si">{}</span><span class="s2"> was chose !&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">smaller_distance</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="n">distancesChosen</span> <span class="o">==</span> <span class="n">smaller_distance</span><span class="p">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># DEBUG</span>
+            <span class="c1"># Player i can pull the armId</span>
+            <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arm</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">players</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">armId</span><span class="p">,</span> <span class="n">rewards</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">pulls</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">armId</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">players_who_chose_it</span><span class="p">:</span>
+                <span class="c1"># The other players cannot</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">handleCollision_or_getZeroReward</span><span class="p">(</span><span class="n">players</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">armId</span><span class="p">)</span></div>
+
+
+<span class="c1">#: List of possible collision models</span>
+<span class="n">collision_models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">onlyUniqUserGetsReward</span><span class="p">,</span>
+    <span class="n">onlyUniqUserGetsRewardSparse</span><span class="p">,</span>
+    <span class="n">allGetRewardsAndUseCollision</span><span class="p">,</span>
+    <span class="n">noCollision</span><span class="p">,</span>
+    <span class="n">rewardIsSharedUniformly</span><span class="p">,</span>
+    <span class="n">closerUserGetsReward</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="c1">#: Mapping of collision model names to True or False,</span>
+<span class="c1">#: to know if a collision implies a lost communication or not in this model</span>
+<span class="n">full_lost_if_collision</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Fake collision model</span>
+    <span class="s2">&quot;noCollision&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># No lost communication in case of collision</span>
+    <span class="s2">&quot;closerUserGetsReward&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># In average, no lost communication in case of collision</span>
+    <span class="s2">&quot;rewardIsSharedUniformly&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># Lost communication in case of collision</span>
+    <span class="s2">&quot;onlyUniqUserGetsReward&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;onlyUniqUserGetsRewardSparse&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;allGetRewardsAndUseCollision&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1">#: Only export and expose the useful functions and constants defined here</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;onlyUniqUserGetsReward&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;onlyUniqUserGetsRewardSparse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allGetRewardsAndUseCollision&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;noCollision&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;closerUserGetsReward&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rewardIsSharedUniformly&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;defaultCollisionModel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;collision_models&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;full_lost_if_collision&quot;</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

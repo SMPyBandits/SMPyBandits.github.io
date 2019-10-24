@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -152,3 +151,495 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Arms.html">Arms package</a> &raquo;</li>
+        
+      <li>Arms.Gaussian module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Arms.Gaussian.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Arms.Gaussian">
+<span id="arms-gaussian-module"></span><h1>Arms.Gaussian module<a class="headerlink" href="#module-Arms.Gaussian" title="Permalink to this headline">¶</a></h1>
+<p>Gaussian distributed arm.</p>
+<p>Example of creating an arm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Gauss03</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># small variance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Gauss03</span>
+<span class="go">N(0.3, 0.05)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Gauss03</span><span class="o">.</span><span class="n">mean</span>
+<span class="go">0.3</span>
+</pre></div>
+</div>
+<p>Examples of sampling from an arm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Gauss03</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>  
+<span class="go">0.3470...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Gauss03</span><span class="o">.</span><span class="n">draw_nparray</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>  
+<span class="go">array([0.388..., 0.320..., 0.348... , 0.412..., 0.393... ,</span>
+<span class="go">       0.251..., 0.347..., 0.292..., 0.294..., 0.320...,</span>
+<span class="go">       0.307..., 0.372..., 0.338..., 0.306..., 0.322...,</span>
+<span class="go">       0.316..., 0.374..., 0.289..., 0.315..., 0.257...])</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.05</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Arms.Arm.html#Arms.Arm.Arm" title="Arms.Arm.Arm"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Arm.Arm</span></code></a></p>
+<p>Gaussian distributed arm, possibly truncated.</p>
+<ul class="simple">
+<li><p>Default is to truncate into [0, 1] (so Gaussian.draw() is in [0, 1]).</p></li>
+</ul>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.05</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian.mu">
+<code class="sig-name descname">mu</code><em class="property"> = None</em><a class="headerlink" href="#Arms.Gaussian.Gaussian.mu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean of Gaussian arm</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian.mean">
+<code class="sig-name descname">mean</code><em class="property"> = None</em><a class="headerlink" href="#Arms.Gaussian.Gaussian.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean of Gaussian arm</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian.sigma">
+<code class="sig-name descname">sigma</code><em class="property"> = None</em><a class="headerlink" href="#Arms.Gaussian.Gaussian.sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variance of Gaussian arm</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian.min">
+<code class="sig-name descname">min</code><em class="property"> = None</em><a class="headerlink" href="#Arms.Gaussian.Gaussian.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower value of rewards</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian.max">
+<code class="sig-name descname">max</code><em class="property"> = None</em><a class="headerlink" href="#Arms.Gaussian.Gaussian.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Higher value of rewards</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.draw">
+<code class="sig-name descname">draw</code><span class="sig-paren">(</span><em class="sig-param">t=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw one random sample. The parameter t is ignored in this Arm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.draw_nparray">
+<code class="sig-name descname">draw_nparray</code><span class="sig-paren">(</span><em class="sig-param">shape=(1</em>, <em class="sig-param">)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.draw_nparray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.draw_nparray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a numpy array of random samples, of a certain shape.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.lower_amplitude">
+<em class="property">property </em><code class="sig-name descname">lower_amplitude</code><a class="headerlink" href="#Arms.Gaussian.Gaussian.lower_amplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>(lower, amplitude)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.__repr__">
+<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.kl">
+<code class="sig-name descname">kl</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.kl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.kl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The kl(x, y) to use for this arm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.oneLR">
+<code class="sig-name descname">oneLR</code><span class="sig-paren">(</span><em class="sig-param">mumax</em>, <em class="sig-param">mu</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.oneLR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.oneLR" title="Permalink to this definition">¶</a></dt>
+<dd><p>One term of the Lai &amp; Robbins lower bound for Gaussian arms: (mumax - mu) / KL(mu, mumax).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian.oneHOI">
+<code class="sig-name descname">oneHOI</code><span class="sig-paren">(</span><em class="sig-param">mumax</em>, <em class="sig-param">mu</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian.oneHOI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian.oneHOI" title="Permalink to this definition">¶</a></dt>
+<dd><p>One term for the HOI factor for this arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_0_1">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_0_1</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.05</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [0, 1].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_0_1.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.05</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_1.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_1.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_0_1.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_1.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_0_2">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_0_2</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.1</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [0, 2].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_0_2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.1</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_0_2.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_2.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_0_5">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_0_5</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.5</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [0, 5].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_0_5.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.5</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_5.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_5.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_0_5.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_5.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_0_10">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_0_10</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=1</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [0, 10].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_0_10.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=1</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_10.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_10.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_0_10.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_10.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_0_100">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_0_100</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=5</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=100</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_100" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [0, 100].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_0_100.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=5</em>, <em class="sig-param">mini=0</em>, <em class="sig-param">maxi=100</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_0_100.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_100.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_0_100.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_0_100.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_m1_1">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_m1_1</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.1</em>, <em class="sig-param">mini=-1</em>, <em class="sig-param">maxi=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m1_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m1_1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [-1, 1].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_m1_1.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.1</em>, <em class="sig-param">mini=-1</em>, <em class="sig-param">maxi=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m1_1.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m1_1.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_m1_1.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_m1_1.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_m2_2">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_m2_2</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.25</em>, <em class="sig-param">mini=-2</em>, <em class="sig-param">maxi=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m2_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m2_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [-2, 2].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_m2_2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=0.25</em>, <em class="sig-param">mini=-2</em>, <em class="sig-param">maxi=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m2_2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m2_2.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_m2_2.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_m2_2.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_m5_5">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_m5_5</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=1</em>, <em class="sig-param">mini=-5</em>, <em class="sig-param">maxi=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m5_5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m5_5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [-5, 5].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_m5_5.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=1</em>, <em class="sig-param">mini=-5</em>, <em class="sig-param">maxi=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m5_5.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m5_5.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_m5_5.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_m5_5.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_m10_10">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_m10_10</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=2</em>, <em class="sig-param">mini=-10</em>, <em class="sig-param">maxi=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m10_10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m10_10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [-10, 10].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_m10_10.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=2</em>, <em class="sig-param">mini=-10</em>, <em class="sig-param">maxi=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m10_10.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m10_10.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_m10_10.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_m10_10.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.Gaussian_m100_100">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">Gaussian_m100_100</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=10</em>, <em class="sig-param">mini=-100</em>, <em class="sig-param">maxi=100</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m100_100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m100_100" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, truncated to [-100, 100].</p>
+<dl class="method">
+<dt id="Arms.Gaussian.Gaussian_m100_100.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=10</em>, <em class="sig-param">mini=-100</em>, <em class="sig-param">maxi=100</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#Gaussian_m100_100.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.Gaussian_m100_100.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.Gaussian_m100_100.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.Gaussian_m100_100.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Arms.Gaussian.UnboundedGaussian">
+<em class="property">class </em><code class="sig-prename descclassname">Arms.Gaussian.</code><code class="sig-name descname">UnboundedGaussian</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#UnboundedGaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.UnboundedGaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Arms.Gaussian.Gaussian" title="Arms.Gaussian.Gaussian"><code class="xref py py-class docutils literal notranslate"><span class="pre">Arms.Gaussian.Gaussian</span></code></a></p>
+<p>Gaussian distributed arm, not truncated, ie. supported in (-oo,  oo).</p>
+<dl class="method">
+<dt id="Arms.Gaussian.UnboundedGaussian.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">mu</em>, <em class="sig-param">sigma=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#UnboundedGaussian.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.UnboundedGaussian.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New arm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.UnboundedGaussian.draw">
+<code class="sig-name descname">draw</code><span class="sig-paren">(</span><em class="sig-param">t=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#UnboundedGaussian.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.UnboundedGaussian.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw one random sample. The parameter t is ignored in this Arm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.UnboundedGaussian.draw_nparray">
+<code class="sig-name descname">draw_nparray</code><span class="sig-paren">(</span><em class="sig-param">shape=(1</em>, <em class="sig-param">)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#UnboundedGaussian.draw_nparray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.UnboundedGaussian.draw_nparray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a numpy array of random samples, of a certain shape.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Arms.Gaussian.UnboundedGaussian.__repr__">
+<code class="sig-name descname">__repr__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Arms/Gaussian.html#UnboundedGaussian.__repr__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Arms.Gaussian.UnboundedGaussian.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Arms.Gaussian.UnboundedGaussian.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Arms.Gaussian'</em><a class="headerlink" href="#Arms.Gaussian.UnboundedGaussian.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Arms.Poisson.html" class="btn btn-neutral float-right" title="Arms.Poisson module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Arms.Gamma.html" class="btn btn-neutral float-left" title="Arms.Gamma module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

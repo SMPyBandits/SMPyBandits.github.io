@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,393 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.DiscountedUCB module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.DiscountedUCB.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.DiscountedUCB">
+<span id="policies-discounteducb-module"></span><h1>Policies.DiscountedUCB module<a class="headerlink" href="#module-Policies.DiscountedUCB" title="Permalink to this headline">¶</a></h1>
+<p>The Discounted-UCB index policy, with a discount factor of <span class="math notranslate nohighlight">\(\gamma\in(0,1]\)</span>.</p>
+<ul class="simple">
+<li><p>Reference: [“On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems”, by A.Garivier &amp; E.Moulines, ALT 2011](<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">https://arxiv.org/pdf/0805.3415.pdf</a>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma\)</span> should not be 1, otherwise you should rather use <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a> instead.</p></li>
+<li><p>The smaller the <span class="math notranslate nohighlight">\(\gamma\)</span>, the shorter the <em>“memory”</em> of the algorithm is.</p></li>
+</ul>
+<dl class="data">
+<dt id="Policies.DiscountedUCB.ALPHA">
+<code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">ALPHA</code><em class="property"> = 1</em><a class="headerlink" href="#Policies.DiscountedUCB.ALPHA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default parameter for alpha.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DiscountedUCB.GAMMA">
+<code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">GAMMA</code><em class="property"> = 0.99</em><a class="headerlink" href="#Policies.DiscountedUCB.GAMMA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default parameter for gamma.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DiscountedUCB.DiscountedUCB">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">DiscountedUCB</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">alpha=1</em>, <em class="sig-param">gamma=0.99</em>, <em class="sig-param">useRealDiscount=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a></p>
+<p>The Discounted-UCB index policy, with a discount factor of <span class="math notranslate nohighlight">\(\gamma\in(0,1]\)</span>.</p>
+<ul class="simple">
+<li><p>Reference: [“On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems”, by A.Garivier &amp; E.Moulines, ALT 2011](<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">https://arxiv.org/pdf/0805.3415.pdf</a>)</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">alpha=1</em>, <em class="sig-param">gamma=0.99</em>, <em class="sig-param">useRealDiscount=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li><p>nbArms: the number of arms,</p></li>
+<li><p>lower, amplitude: lower value and known amplitude of the rewards.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.discounted_pulls">
+<code class="sig-name descname">discounted_pulls</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.discounted_pulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of pulls of each arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.discounted_rewards">
+<code class="sig-name descname">discounted_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.discounted_rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cumulated rewards of each arms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.alpha">
+<code class="sig-name descname">alpha</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter alpha</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.gamma">
+<code class="sig-name descname">gamma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter gamma</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.delta_time_steps">
+<code class="sig-name descname">delta_time_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.delta_time_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep memory of the <span class="math notranslate nohighlight">\(\Delta_k(t)\)</span> for each time step.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.useRealDiscount">
+<code class="sig-name descname">useRealDiscount</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.useRealDiscount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag to know if the real update should be used, the one with a multiplication by <span class="math notranslate nohighlight">\(\gamma^{1+\Delta_k(t)}\)</span> and not simply a multiplication by <span class="math notranslate nohighlight">\(\gamma\)</span>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give a reward: increase t, pulls, and update cumulated sum of rewards for that arm (normalized in [0, 1]).</p>
+<ul class="simple">
+<li><p>Keep up-to date the following two quantities, using different definition and notation as from the article, but being consistent w.r.t. my project:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}N_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} N_k(s), \\
+X_{k,\gamma}(t+1) &amp;:= \sum_{s=1}^{t} \gamma^{t - s} X_k(s).\end{split}\]</div>
+<ul class="simple">
+<li><p>Instead of keeping the whole history of rewards, as expressed in the math formula, we keep the sum of discounted rewards from <code class="docutils literal notranslate"><span class="pre">s=0</span></code> to <code class="docutils literal notranslate"><span class="pre">s=t</span></code>, because updating it is easy (2 operations instead of just 1 for classical <a class="reference internal" href="Policies.UCBalpha.html#Policies.UCBalpha.UCBalpha" title="Policies.UCBalpha.UCBalpha"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.UCBalpha.UCBalpha</span></code></a>, and 2 operations instead of <span class="math notranslate nohighlight">\(\mathcal{O}(t)\)</span> as expressed mathematically). Denote <span class="math notranslate nohighlight">\(\Delta_k(t)\)</span> the number of time steps during which the arm <code class="docutils literal notranslate"><span class="pre">k</span></code> was <em>not</em> selected (maybe 0 if it is selected twice in a row). Then the update can be done easily by multiplying by <span class="math notranslate nohighlight">\(\gamma^{1+\Delta_k(t)}\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}N_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times N_{k,\gamma}(\text{last pull}) + \mathbb{1}(A(t+1) = k), \\
+X_{k,\gamma}(t+1) &amp;= \gamma^{1+\Delta_k(t)} \times X_{k,\gamma}(\text{last pull}) + X_k(t+1).\end{split}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.computeIndex">
+<code class="sig-name descname">computeIndex</code><span class="sig-paren">(</span><em class="sig-param">arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current index, at time <span class="math notranslate nohighlight">\(t\)</span> and after <span class="math notranslate nohighlight">\(N_{k,\gamma}(t)\)</span> <em>“discounted”</em> pulls of arm k, and <span class="math notranslate nohighlight">\(n_{\gamma}(t)\)</span> <em>“discounted”</em> pulls of all arms:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}I_k(t) &amp;:= \frac{X_{k,\gamma}(t)}{N_{k,\gamma}(t)} + \sqrt{\frac{\alpha \log(n_{\gamma}(t))}{2 N_{k,\gamma}(t)}}, \\
+\text{where}\;\; n_{\gamma}(t) &amp;:= \sum_{k=1}^{K} N_{k,\gamma}(t).\end{split}\]</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.computeAllIndex">
+<code class="sig-name descname">computeAllIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCB.computeAllIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.computeAllIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current indexes for all arms, in a vectorized manner.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCB.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DiscountedUCB'</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DiscountedUCB.DiscountedUCBPlus">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">DiscountedUCBPlus</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">max_nb_random_events=None</em>, <em class="sig-param">alpha=1</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCBPlus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCBPlus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.DiscountedUCB.DiscountedUCB" title="Policies.DiscountedUCB.DiscountedUCB"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.DiscountedUCB.DiscountedUCB</span></code></a></p>
+<p>The Discounted-UCB index policy, with a particular value of the discount factor of <span class="math notranslate nohighlight">\(\gamma\in(0,1]\)</span>, knowing the horizon and the number of breakpoints (or an upper-bound).</p>
+<ul class="simple">
+<li><p>Reference: [“On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems”, by A.Garivier &amp; E.Moulines, ALT 2011](<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">https://arxiv.org/pdf/0805.3415.pdf</a>)</p></li>
+<li><p>Uses <span class="math notranslate nohighlight">\(\gamma =  1 - \frac{1}{4}\sqrt{\frac{\Upsilon}{T}}\)</span>, if the horizon <span class="math notranslate nohighlight">\(T\)</span> is given and an upper-bound on the number of random events (“breakpoints”) <span class="math notranslate nohighlight">\(\Upsilon\)</span> is known, otherwise use the default value.</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedUCBPlus.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">horizon=None</em>, <em class="sig-param">max_nb_random_events=None</em>, <em class="sig-param">alpha=1</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedUCBPlus.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCBPlus.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li><p>nbArms: the number of arms,</p></li>
+<li><p>lower, amplitude: lower value and known amplitude of the rewards.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedUCBPlus.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DiscountedUCB'</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedUCBPlus.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DiscountedUCB.constant_c">
+<code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">constant_c</code><em class="property"> = 1.0</em><a class="headerlink" href="#Policies.DiscountedUCB.constant_c" title="Permalink to this definition">¶</a></dt>
+<dd><p>default value, as it was in pymaBandits v1.0</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.DiscountedUCB.tolerance">
+<code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">tolerance</code><em class="property"> = 0.0001</em><a class="headerlink" href="#Policies.DiscountedUCB.tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the tolerance for computing numerical approximations of the kl-UCB indexes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">DiscountedklUCB</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.DiscountedUCB.DiscountedUCB" title="Policies.DiscountedUCB.DiscountedUCB"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.DiscountedUCB.DiscountedUCB</span></code></a></p>
+<p>The Discounted-klUCB index policy, with a particular value of the discount factor of <span class="math notranslate nohighlight">\(\gamma\in(0,1]\)</span>, knowing the horizon and the number of breakpoints (or an upper-bound).</p>
+<ul class="simple">
+<li><p>Reference: [“On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems”, by A.Garivier &amp; E.Moulines, ALT 2011](<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">https://arxiv.org/pdf/0805.3415.pdf</a>)</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New generic index policy.</p>
+<ul class="simple">
+<li><p>nbArms: the number of arms,</p></li>
+<li><p>lower, amplitude: lower value and known amplitude of the rewards.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB.klucb">
+<code class="sig-name descname">klucb</code><em class="property"> = None</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB.klucb" title="Permalink to this definition">¶</a></dt>
+<dd><p>kl function to use</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCB.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB.computeIndex">
+<code class="sig-name descname">computeIndex</code><span class="sig-paren">(</span><em class="sig-param">arm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCB.computeIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB.computeIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current index, at time <span class="math notranslate nohighlight">\(t\)</span> and after <span class="math notranslate nohighlight">\(N_{k,\gamma}(t)\)</span> <em>“discounted”</em> pulls of arm k, and <span class="math notranslate nohighlight">\(n_{\gamma}(t)\)</span> <em>“discounted”</em> pulls of all arms:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\hat{\mu'}_k(t) &amp;= \frac{X_{k,\gamma}(t)}{N_{k,\gamma}(t)} , \\
+U_k(t) &amp;= \sup\limits_{q \in [a, b]} \left\{ q : \mathrm{kl}(\hat{\mu'}_k(t), q) \leq \frac{c \log(t)}{N_{k,\gamma}(t)} \right\},\\
+I_k(t) &amp;= U_k(t),\\
+\text{where}\;\; n_{\gamma}(t) &amp;:= \sum_{k=1}^{K} N_{k,\gamma}(t).\end{split}\]</div>
+<p>If rewards are in <span class="math notranslate nohighlight">\([a, b]\)</span> (default to <span class="math notranslate nohighlight">\([0, 1]\)</span>) and <span class="math notranslate nohighlight">\(\mathrm{kl}(x, y)\)</span> is the Kullback-Leibler divergence between two distributions of means x and y (see <a class="reference internal" href="Arms.kullback.html#module-Arms.kullback" title="Arms.kullback"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Arms.kullback</span></code></a>),
+and c is the parameter (default to 1).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB.computeAllIndex">
+<code class="sig-name descname">computeAllIndex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCB.computeAllIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB.computeAllIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the current indexes for all arms. Possibly vectorized, by default it can <em>not</em> be vectorized automatically.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedklUCB.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DiscountedUCB'</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCB.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.DiscountedUCB.DiscountedklUCBPlus">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.DiscountedUCB.</code><code class="sig-name descname">DiscountedklUCBPlus</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">klucb=CPUDispatcher(&lt;function klucbBern&gt;)</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCBPlus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCBPlus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.DiscountedUCB.DiscountedklUCB" title="Policies.DiscountedUCB.DiscountedklUCB"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.DiscountedUCB.DiscountedklUCB</span></code></a>, <a class="reference internal" href="#Policies.DiscountedUCB.DiscountedUCBPlus" title="Policies.DiscountedUCB.DiscountedUCBPlus"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.DiscountedUCB.DiscountedUCBPlus</span></code></a></p>
+<p>The Discounted-klUCB index policy, with a particular value of the discount factor of <span class="math notranslate nohighlight">\(\gamma\in(0,1]\)</span>, knowing the horizon and the number of breakpoints (or an upper-bound).</p>
+<ul class="simple">
+<li><p>Reference: [“On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems”, by A.Garivier &amp; E.Moulines, ALT 2011](<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">https://arxiv.org/pdf/0805.3415.pdf</a>)</p></li>
+<li><p>Uses <span class="math notranslate nohighlight">\(\gamma =  1 - \frac{1}{4}\sqrt{\frac{\Upsilon}{T}}\)</span>, if the horizon <span class="math notranslate nohighlight">\(T\)</span> is given and an upper-bound on the number of random events (“breakpoints”) <span class="math notranslate nohighlight">\(\Upsilon\)</span> is known, otherwise use the default value.</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.DiscountedUCB.DiscountedklUCBPlus.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/DiscountedUCB.html#DiscountedklUCBPlus.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCBPlus.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.DiscountedUCB.DiscountedklUCBPlus.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.DiscountedUCB'</em><a class="headerlink" href="#Policies.DiscountedUCB.DiscountedklUCBPlus.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.DoublingTrickWrapper.html" class="btn btn-neutral float-right" title="Policies.DoublingTrickWrapper module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.DiscountedThompson.html" class="btn btn-neutral float-left" title="Policies.DiscountedThompson module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

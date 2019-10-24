@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,339 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.LM_DSEE module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.LM_DSEE.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.LM_DSEE">
+<span id="policies-lm-dsee-module"></span><h1>Policies.LM_DSEE module<a class="headerlink" href="#module-Policies.LM_DSEE" title="Permalink to this headline">¶</a></h1>
+<p>The LM-DSEE policy for non-stationary bandits, from [[“On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems”, by Lai Wei, Vaibhav Srivastava, 2018, arXiv:1802.08380]](https://arxiv.org/pdf/1802.08380)</p>
+<ul class="simple">
+<li><p>It uses an additional <span class="math notranslate nohighlight">\(\mathcal{O}(\tau_\max)\)</span> memory for a game of maximum stationary length <span class="math notranslate nohighlight">\(\tau_\max\)</span>.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This implementation is still experimental!</p>
+</div>
+<dl class="class">
+<dt id="Policies.LM_DSEE.State">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.LM_DSEE.</code><code class="sig-name descname">State</code><a class="headerlink" href="#Policies.LM_DSEE.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Different states during the LM-DSEE algorithm</p>
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.State.Exploitation">
+<code class="sig-name descname">Exploitation</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.LM_DSEE.State.Exploitation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.State.Exploration">
+<code class="sig-name descname">Exploration</code><em class="property"> = 1</em><a class="headerlink" href="#Policies.LM_DSEE.State.Exploration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.State.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.LM_DSEE'</em><a class="headerlink" href="#Policies.LM_DSEE.State.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.LM_DSEE.VERBOSE">
+<code class="sig-prename descclassname">Policies.LM_DSEE.</code><code class="sig-name descname">VERBOSE</code><em class="property"> = False</em><a class="headerlink" href="#Policies.LM_DSEE.VERBOSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to be verbose when doing the search for valid parameter <span class="math notranslate nohighlight">\(\ell\)</span>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.LM_DSEE.parameter_ell">
+<code class="sig-prename descclassname">Policies.LM_DSEE.</code><code class="sig-name descname">parameter_ell</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">N</em>, <em class="sig-param">b</em>, <em class="sig-param">gamma</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">max_value_on_l=1000000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#parameter_ell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.parameter_ell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for the smallest value of the parameter <span class="math notranslate nohighlight">\(\ell\)</span> that satisfies the following equations:</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.LM_DSEE.LM_DSEE">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.LM_DSEE.</code><code class="sig-name descname">LM_DSEE</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">nu=0.5</em>, <em class="sig-param">DeltaMin=0.5</em>, <em class="sig-param">a=1</em>, <em class="sig-param">b=0.25</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The LM-DSEE policy for non-stationary bandits, from [[“On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems”, by Lai Wei, Vaibhav Srivastava, 2018, arXiv:1802.08380]](https://arxiv.org/pdf/1802.08380)</p>
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">nu=0.5</em>, <em class="sig-param">DeltaMin=0.5</em>, <em class="sig-param">a=1</em>, <em class="sig-param">b=0.25</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.a">
+<code class="sig-name descname">a</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(a\)</span> for the LM-DSEE algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.b">
+<code class="sig-name descname">b</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(b\)</span> for the LM-DSEE algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.l">
+<code class="sig-name descname">l</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\ell\)</span> for the LM-DSEE algorithm, as computed by the function <a class="reference internal" href="#Policies.LM_DSEE.parameter_ell" title="Policies.LM_DSEE.parameter_ell"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter_ell()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.gamma">
+<code class="sig-name descname">gamma</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\gamma\)</span> for the LM-DSEE algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.rho">
+<code class="sig-name descname">rho</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.rho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\rho = \frac{1-\nu}{1+\nu}\)</span> for the LM-DSEE algorithm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.phase">
+<code class="sig-name descname">phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current phase, exploration or exploitation.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.current_exploration_arm">
+<code class="sig-name descname">current_exploration_arm</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.current_exploration_arm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Currently explored arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.current_exploitation_arm">
+<code class="sig-name descname">current_exploitation_arm</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.current_exploitation_arm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Currently exploited arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.batch_number">
+<code class="sig-name descname">batch_number</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.batch_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of batch</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.length_of_current_phase">
+<code class="sig-name descname">length_of_current_phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_of_current_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the current phase, either computed from <a class="reference internal" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Policies.LM_DSEE.LM_DSEE.length_exploration_phase"><code class="xref py py-func docutils literal notranslate"><span class="pre">length_exploration_phase()</span></code></a> or func:<cite>length_exploitation_phase</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.step_of_current_phase">
+<code class="sig-name descname">step_of_current_phase</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.step_of_current_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Timer inside the current phase.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.all_rewards">
+<code class="sig-name descname">all_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.all_rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Memory of all the rewards. A list per arm. Growing list until restart of that arm?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the game (fill pulls and rewards with 0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.length_exploration_phase">
+<code class="sig-name descname">length_exploration_phase</code><span class="sig-paren">(</span><em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploration_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploration_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the value of the current exploration phase:</p>
+<div class="math notranslate nohighlight">
+\[L_1(k) = L(k) = \lceil \gamma \log(k^{\rho} l b)\rceil.\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>I think there is a typo in the paper, as their formula are weird (like <span class="math notranslate nohighlight">\(al\)</span> is defined from <span class="math notranslate nohighlight">\(a\)</span>). See <a class="reference internal" href="#Policies.LM_DSEE.parameter_ell" title="Policies.LM_DSEE.parameter_ell"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter_ell()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.length_exploitation_phase">
+<code class="sig-name descname">length_exploitation_phase</code><span class="sig-paren">(</span><em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.length_exploitation_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.length_exploitation_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the value of the current exploitation phase:</p>
+<div class="math notranslate nohighlight">
+\[L_2(k) = \lceil a k^{\rho} l \rceil - K L_1(k).\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>I think there is a typo in the paper, as their formula are weird (like <span class="math notranslate nohighlight">\(al\)</span> is defined from <span class="math notranslate nohighlight">\(a\)</span>). See <a class="reference internal" href="#Policies.LM_DSEE.parameter_ell" title="Policies.LM_DSEE.parameter_ell"><code class="xref py py-func docutils literal notranslate"><span class="pre">parameter_ell()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a reward from an arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LM_DSEE.LM_DSEE.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.LM_DSEE'</em><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.LM_DSEE.LM_DSEE.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LM_DSEE.html#LM_DSEE.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LM_DSEE.LM_DSEE.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose an arm following the different phase of growing lenghts according to the LM-DSEE algorithm.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.LearnExp.html" class="btn btn-neutral float-right" title="Policies.LearnExp module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.IndexPolicy.html" class="btn btn-neutral float-left" title="Policies.IndexPolicy module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

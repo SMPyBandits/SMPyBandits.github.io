@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,214 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.Selfish</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for PoliciesMultiPlayers.Selfish</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Selfish: a multi-player policy where every player is selfish, playing on their side.</span>
+
+<span class="sd">- without knowing how many players there is,</span>
+<span class="sd">- and not even knowing that they should try to avoid collisions. When a collision happens, the algorithm simply receive a 0 reward for the chosen arm.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.5&quot;</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">.ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">BaseMPPolicy</span> <span class="k">import</span> <span class="n">BaseMPPolicy</span>
+    <span class="kn">from</span> <span class="nn">ChildPointer</span> <span class="k">import</span> <span class="n">ChildPointer</span>
+
+
+<div class="viewcode-block" id="SelfishChildPointer"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.SelfishChildPointer">[docs]</a><span class="k">class</span> <span class="nc">SelfishChildPointer</span><span class="p">(</span><span class="n">ChildPointer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Selfish version of the ChildPointer class (just pretty printed).&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SelfishChildPointer.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.SelfishChildPointer.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">m</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span><span class="p">])</span>
+        <span class="c1"># XXX Small hack to give a better name to MEGA or MusicalChair</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;MEGA&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;MusicalChair&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">{}</span><span class="s2">&lt;</span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">{}</span><span class="s2">&lt;</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># PENALTY = -1</span>
+<span class="c1"># PENALTY = 0</span>
+<span class="c1">#: Customize here the value given to a user after a collision</span>
+<span class="c1">#: XXX If it is None, then player.lower (default to 0) is used instead</span>
+<span class="n">PENALTY</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="Selfish"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.Selfish">[docs]</a><span class="k">class</span> <span class="nc">Selfish</span><span class="p">(</span><span class="n">BaseMPPolicy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Selfish: a multi-player policy where every player is selfish, playing on their side.</span>
+
+<span class="sd">    - without nowing how many players there is, and</span>
+<span class="sd">    - not even knowing that they should try to avoid collisions. When a collision happens, the algorithm simply receives a 0 reward for the chosen arm (can be changed with penalty= argument).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Selfish.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.Selfish.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="n">PENALTY</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">        &gt;&gt;&gt; from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; s = Selfish(nbPlayers, nbArms, Uniform)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 13, 1, 8, 16, 15]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 9, 15, 11, 6, 16]</span>
+
+<span class="sd">        - To get a list of usable players, use ``s.children``.</span>
+<span class="sd">        - Warning: ``s._players`` is for internal use ONLY!</span>
+
+<span class="sd">        .. warning:: I want my code to stay compatible with Python 2, so I cannot use the `new syntax of keyword-only argument &lt;https://www.python.org/dev/peps/pep-3102/&gt;`_. It would make more sense to have ``*args, penalty=PENALTY, lower=0., amplitude=1., **kwargs`` instead of ``penalty=PENALTY, *args, **kwargs`` but I can&#39;t.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">nbPlayers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; for Selfish class has to be &gt; 0.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="n">nbPlayers</span>  <span class="c1">#: Number of players</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">penalty</span> <span class="o">=</span> <span class="n">penalty</span>  <span class="c1">#: Penalty = reward given in case of collision</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms</span>
+        <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># Create it here!</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">SelfishChildPointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">],</span> <span class="s1">&#39;handleCollision&#39;</span><span class="p">):</span>  <span class="c1"># XXX they should not have such method!</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Selfish found a player #</span><span class="si">{}</span><span class="s2"> which has a method &#39;handleCollision&#39; : Selfish should NOT be used with bandit algorithms aware of collision-avoidance!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">playerId</span><span class="p">))</span>  <span class="c1"># DEBUG</span></div>
+                <span class="c1"># raise ValueError(&quot;Invalid child policy {} for Selfish algorithm! It should not have a collision avoidance protocol!&quot;.format(self._players[playerId]))</span>
+
+<div class="viewcode-block" id="Selfish.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.Selfish.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Selfish(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span></div>
+
+    <span class="c1"># --- Proxy methods</span>
+
+<div class="viewcode-block" id="Selfish._handleCollision_one"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.Selfish.html#PoliciesMultiPlayers.Selfish.Selfish._handleCollision_one">[docs]</a>    <span class="k">def</span> <span class="nf">_handleCollision_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Give a reward of 0, or player.lower, or self.penalty, in case of collision.&quot;&quot;&quot;</span>
+        <span class="c1"># Selfish UCB indexes learn on the SUCCESSFUL TRANSMISSIONS (ie. ACK), not on the sensing!</span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Selfish internal indexes does NOT get updated by reward, but by 0, in case of collision, learning is done on SUCCESSFUL TRANSMISSIONS (ie. ACK), not sensing!&quot;</span><span class="p">)</span>  <span class="c1"># DEBUG</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">penalty</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">penalty</span><span class="p">)</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

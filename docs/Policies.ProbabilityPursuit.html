@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,255 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.ProbabilityPursuit module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.ProbabilityPursuit.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.ProbabilityPursuit">
+<span id="policies-probabilitypursuit-module"></span><h1>Policies.ProbabilityPursuit module<a class="headerlink" href="#module-Policies.ProbabilityPursuit" title="Permalink to this headline">¶</a></h1>
+<p>The basic Probability Pursuit algorithm.</p>
+<ul>
+<li><p>We use the simple version of the pursuit algorithm, as described in the seminal book by Sutton and Barto (1998), <a class="reference external" href="https://webdocs.cs.ualberta.ca/~sutton/book/the-book.html">https://webdocs.cs.ualberta.ca/~sutton/book/the-book.html</a>.</p></li>
+<li><p>Initially, a uniform probability is set on each arm, <span class="math notranslate nohighlight">\(p_k(0) = 1/k\)</span>.</p></li>
+<li><p>At each time step <span class="math notranslate nohighlight">\(t\)</span>, the probabilities are <em>all</em> recomputed, following this equation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_k(t+1) = \begin{cases}
+(1 - \beta) p_k(t) + \beta \times 1 &amp; \text{if}\; \hat{\mu}_k(t) = \max_j \hat{\mu}_j(t) \\
+(1 - \beta) p_k(t) + \beta \times 0 &amp; \text{otherwise}.
+\end{cases}\end{split}\]</div>
+</li>
+<li><p><span class="math notranslate nohighlight">\(\beta \in (0, 1)\)</span> is a <em>learning rate</em>, default is <cite>BETA = 0.5</cite>.</p></li>
+<li><p>And then arm <span class="math notranslate nohighlight">\(A_k(t+1)\)</span> is randomly selected from the distribution <span class="math notranslate nohighlight">\((p_k(t+1))_{1 \leq k \leq K}\)</span>.</p></li>
+<li><p>References: [Kuleshov &amp; Precup - JMLR, 2000](<a class="reference external" href="http://www.cs.mcgill.ca/~vkules/bandits.pdf#page=6">http://www.cs.mcgill.ca/~vkules/bandits.pdf#page=6</a>), [Sutton &amp; Barto, 1998]</p></li>
+</ul>
+<dl class="data">
+<dt id="Policies.ProbabilityPursuit.BETA">
+<code class="sig-prename descclassname">Policies.ProbabilityPursuit.</code><code class="sig-name descname">BETA</code><em class="property"> = 0.5</em><a class="headerlink" href="#Policies.ProbabilityPursuit.BETA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the beta parameter</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.ProbabilityPursuit.</code><code class="sig-name descname">ProbabilityPursuit</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">beta=0.5</em>, <em class="sig-param">prior='uniform'</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The basic Probability pursuit algorithm.</p>
+<ul class="simple">
+<li><p>References: [Kuleshov &amp; Precup - JMLR, 2000](<a class="reference external" href="http://www.cs.mcgill.ca/~vkules/bandits.pdf#page=6">http://www.cs.mcgill.ca/~vkules/bandits.pdf#page=6</a>), [Sutton &amp; Barto, 1998]</p></li>
+</ul>
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">beta=0.5</em>, <em class="sig-param">prior='uniform'</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.probabilities">
+<code class="sig-name descname">probabilities</code><em class="property"> = None</em><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probabilities of each arm</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reinitialize probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.beta">
+<em class="property">property </em><code class="sig-name descname">beta</code><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant parameter <span class="math notranslate nohighlight">\(\beta(t) = \beta(0)\)</span>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give a reward: accumulate rewards on that arm k, then update the probabilities <span class="math notranslate nohighlight">\(p_k(t)\)</span> of each arm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>One random selection, with probabilities <span class="math notranslate nohighlight">\((p_k(t))_{1 \leq k \leq K}\)</span>, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiple (rank &gt;= 1) random selection, with probabilities <span class="math notranslate nohighlight">\((p_k(t))_{1 \leq k \leq K}\)</span>, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>, and select the last one (less probable).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.choiceFromSubSet">
+<code class="sig-name descname">choiceFromSubSet</code><span class="sig-paren">(</span><em class="sig-param">availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>One random selection, from availableArms, with probabilities <span class="math notranslate nohighlight">\((p_k(t))_{1 \leq k \leq K}\)</span>, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.ProbabilityPursuit'</em><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.ProbabilityPursuit.ProbabilityPursuit.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/ProbabilityPursuit.html#ProbabilityPursuit.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.ProbabilityPursuit.ProbabilityPursuit.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiple (nb &gt;= 1) random selection, with probabilities <span class="math notranslate nohighlight">\((p_k(t))_{1 \leq k \leq K}\)</span>, thank to <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.RCB.html" class="btn btn-neutral float-right" title="Policies.RCB module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.PHE.html" class="btn btn-neutral float-left" title="Policies.PHE module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

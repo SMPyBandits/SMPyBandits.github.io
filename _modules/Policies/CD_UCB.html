@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,439 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>Policies.CD_UCB</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Policies.CD_UCB</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sa">r</span><span class="sd">&quot;&quot;&quot; The CD-UCB generic policy policies for non-stationary bandits.</span>
+
+<span class="sd">- Reference: [[&quot;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&quot;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539)</span>
+<span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :class:`UCBLCB_IndexPolicy` is a wrapper:</span>
+
+<span class="sd">    &gt;&gt;&gt; policy = UCBLCB_IndexPolicy(nbArms, UCB)</span>
+<span class="sd">    &gt;&gt;&gt; # use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
+
+<span class="sd">- It uses an additional :math:`\mathcal{O}(\tau_\max)` memory for a game of maximum stationary length :math:`\tau_\max`.</span>
+
+<span class="sd">.. warning:: It can only work on basic index policy based on empirical averages (and an exploration bias), like :class:`UCB`, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.9&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">isinf</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+    <span class="kn">from</span> <span class="nn">.BaseWrapperPolicy</span> <span class="k">import</span> <span class="n">BaseWrapperPolicy</span>
+    <span class="kn">from</span> <span class="nn">.UCB</span> <span class="k">import</span> <span class="n">UCB</span> <span class="k">as</span> <span class="n">DefaultPolicy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">with_proba</span> <span class="k">import</span> <span class="n">with_proba</span>
+    <span class="kn">from</span> <span class="nn">BaseWrapperPolicy</span> <span class="k">import</span> <span class="n">BaseWrapperPolicy</span>
+    <span class="kn">from</span> <span class="nn">UCB</span> <span class="k">import</span> <span class="n">UCB</span> <span class="k">as</span> <span class="n">DefaultPolicy</span>
+
+
+<span class="c1">#: Whether to be verbose when doing the change detection algorithm.</span>
+<span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: Default probability of random exploration :math:`\alpha`.</span>
+<span class="n">PROBA_RANDOM_EXPLORATION</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1">#: Should we reset one arm empirical average or all? Default is ``True``, it&#39;s usually more efficient!</span>
+<span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">PER_ARM_RESTART</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1">#: Should we fully restart the algorithm or simply reset one arm empirical average? Default is ``False``, it&#39;s usually more efficient!</span>
+<span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">FULL_RESTART_WHEN_REFRESH</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1">#: Precision of the test. For CUSUM/PHT, :math:`\varepsilon` is the drift correction threshold (see algorithm).</span>
+<span class="n">EPSILON</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+<span class="c1">#: Default value of :math:`\lambda`.</span>
+<span class="n">LAMBDA</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1">#: Hypothesis on the speed of changes: between two change points, there is at least :math:`M * K` time steps, where K is the number of arms, and M is this constant.</span>
+<span class="n">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="c1">#: XXX Be lazy and try to detect changes only X steps, where X is small like 10 for instance.</span>
+<span class="c1">#: It is a simple but efficient way to speed up CD tests, see https://github.com/SMPyBandits/SMPyBandits/issues/173</span>
+<span class="c1">#: Default value is 0, to not use this feature, and 10 should speed up the test by x10.</span>
+<span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<span class="c1"># --- The very generic class</span>
+
+<div class="viewcode-block" id="CD_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">CD_IndexPolicy</span><span class="p">(</span><span class="n">BaseWrapperPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The CD-UCB generic policy for non-stationary bandits, from [[&quot;A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem&quot;. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="CD_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+            <span class="n">full_restart_when_refresh</span><span class="o">=</span><span class="n">FULL_RESTART_WHEN_REFRESH</span><span class="p">,</span>
+            <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span>
+            <span class="n">epsilon</span><span class="o">=</span><span class="n">EPSILON</span><span class="p">,</span>
+            <span class="n">proba_random_exploration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">lazy_detect_change_only_x_steps</span><span class="o">=</span><span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># New parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>  <span class="c1">#: Parameter :math:`\varepsilon` for the test.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">=</span> <span class="n">lazy_detect_change_only_x_steps</span>  <span class="c1">#: Be lazy and try to detect changes only X steps, where X is small like 10 for instance.</span>
+        <span class="k">if</span> <span class="n">proba_random_exploration</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">proba_random_exploration</span><span class="p">))</span>  <span class="c1"># crop to [0, 1]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span> <span class="o">=</span> <span class="n">alpha</span>  <span class="c1">#: What they call :math:`\alpha` in their paper: the probability of uniform exploration at each time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span> <span class="o">=</span> <span class="n">full_restart_when_refresh</span>  <span class="c1"># Should we fully restart the algorithm or simply reset one arm empirical average ?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="o">=</span> <span class="n">per_arm_restart</span>  <span class="c1"># Should we reset one arm empirical average or all?</span>
+        <span class="c1"># Internal memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span>  <span class="c1">#: Keep in memory all the rewards obtained since the last restart on that arm.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the number times since last restart. Start with -1 (never seen)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Keep in memory the times of last restarts (for each arm).</span></div>
+
+<div class="viewcode-block" id="CD_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;CD-</span><span class="si">{}</span><span class="s2">($\varepsilon=</span><span class="si">{:.3g}</span><span class="s2">$, $\gamma=</span><span class="si">{:.3g}</span><span class="s2">$, </span><span class="si">{}{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">,</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span> <span class="s2">&quot;, lazy detect </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CD_IndexPolicy.choice"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; With a probability :math:`\alpha`, play uniformly at random, otherwise, pass the call to :meth:`choice` of the underlying policy.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="CD_IndexPolicy.choiceWithRank"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy.choiceWithRank">[docs]</a>    <span class="k">def</span> <span class="nf">choiceWithRank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; With a probability :math:`\alpha`, play uniformly at random, otherwise, pass the call to :meth:`choiceWithRank` of the underlying policy.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">with_proba</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">choiceWithRank</span><span class="p">(</span><span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CD_IndexPolicy.getReward"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Give a reward: increase t, pulls, and update cumulated sum of rewards and update small history (sliding window) for that arm (normalized in [0, 1]).</span>
+
+<span class="sd">        - Reset the whole empirical average if the change detection algorithm says so, with method :meth:`detect_change`, for this arm at this current time step.</span>
+
+<span class="sd">        .. warning:: This is computationally costly, so an easy way to speed up this step is to use :attr:`lazy_detect_change_only_x_steps` :math:`= \mathrm{Step_t}` for a small value (e.g., 10), so not test for all :math:`t\in\mathbb{N}^*` but only :math:`s\in\mathbb{N}^*, s % \mathrm{Step_t} = 0` (e.g., one out of every 10 steps).</span>
+
+<span class="sd">        .. warning:: If the :math:`detect_change` method also returns an estimate of the position of the change-point, :math:`\hat{tau}`, then it is used to reset the memory of the changing arm and keep the observations from :math:`\hat{tau}+1`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="c1"># Get reward</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
+        <span class="c1"># We seen it one more time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Store it in place for the empirical average of that arm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
+
+        <span class="n">should_you_try_to_detect</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">should_you_try_to_detect</span><span class="p">:</span> <span class="k">return</span>
+        <span class="n">has_detected_and_maybe_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_change</span><span class="p">(</span><span class="n">arm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">has_detected_and_maybe_position</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">has_detected</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">has_detected_and_maybe_position</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_detected</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">has_detected_and_maybe_position</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_detected</span><span class="p">:</span> <span class="k">return</span>
+        <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># print(&quot;For a player {} a change was detected at time {} for arm {}, after {} pulls of that arm (giving mean reward = {:.3g}). Last restart on that arm was at tau = {}&quot;.format(self, self.t, arm, self.last_pulls[arm], np.sum(self.all_rewards[arm]) / self.last_pulls[arm], self.last_restart_times[arm]))  # DEBUG</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
+                <span class="c1"># or reset current memory for ALL THE arms</span>
+                <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># reset current memory for THIS arm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span>
+
+            <span class="c1"># Fully restart the algorithm ?!</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">startGame</span><span class="p">(</span><span class="n">createNewPolicy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Or simply reset one of the empirical averages?</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
+                <span class="c1"># or reset current memory for ALL THE arms</span>
+                    <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># reset current memory for THIS arm</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+        <span class="c1"># XXX second case, for policies implementing the localization trick</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># print(&quot;For a player {} a change was detected at time {} for arm {}, after {} pulls of that arm (giving mean reward = {:.3g}). Last restart on that arm was at tau = {}&quot;.format(self, self.t, arm, self.last_pulls[arm], np.sum(self.all_rewards[arm]) / self.last_pulls[arm], self.last_restart_times[arm]))  # DEBUG</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
+                <span class="c1"># or reset current memory for ALL THE arms</span>
+                <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># reset current memory for THIS arm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">][</span><span class="n">position</span><span class="p">:]</span> <span class="o">+</span> <span class="p">[</span><span class="n">reward</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_restart_times</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># Fully restart the algorithm ?!</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_full_restart_when_refresh</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">startGame</span><span class="p">(</span><span class="n">createNewPolicy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Or simply reset one of the empirical averages?</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span><span class="p">:</span>
+                <span class="c1"># or reset current memory for ALL THE arms</span>
+                    <span class="k">for</span> <span class="n">other_arm</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">other_arm</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># reset current memory for THIS arm</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span></div>
+
+        <span class="c1"># we update the total number of samples available to the underlying policy</span>
+        <span class="c1"># self.policy.t = sum(self.last_pulls)  # DONE for the generic CD UCB policy, nothing to do here to change self.policy.t</span>
+        <span class="c1"># XXX See CUSUM_UCB which forces self.policy.t = sum(last_pulls)</span>
+        <span class="c1"># XXX See GLR_UCB which forces self.policy.t_for_each_arm = t - self.last_restart_times (different t for each arm)!</span>
+
+<div class="viewcode-block" id="CD_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.CD_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Try to detect a change in the current arm.</span>
+
+<span class="sd">        .. warning:: This is not implemented for the generic CD algorithm, it has to be implement by a child of the class :class:`CD_IndexPolicy`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<span class="c1"># --- Different change detection algorithms</span>
+
+<div class="viewcode-block" id="SlidingWindowRestart_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">SlidingWindowRestart_IndexPolicy</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; A more generic implementation is the :class:`Policies.SlidingWindowRestart` class.</span>
+
+<span class="sd">    .. warning:: I have no idea if what I wrote is correct or not!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SlidingWindowRestart_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Try to detect a change in the current arm.</span>
+
+<span class="sd">        .. warning:: This one is simply using a sliding-window of fixed size = 100. A more generic implementation is the :class:`Policies.SlidingWindowRestart` class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tau</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">tau</span><span class="p">:</span>
+            <span class="c1"># Compute the empirical average for that arm</span>
+            <span class="n">empirical_average</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+            <span class="c1"># And the small empirical average for that arm</span>
+            <span class="n">small_empirical_average</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">empirical_average</span> <span class="o">-</span> <span class="n">small_empirical_average</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span></div></div>
+
+
+<span class="c1"># --- UCB-CDP based on LCB/UCB Mukherjee &amp; Maillard&#39;s paper</span>
+
+<span class="c1">#: XXX Be lazy and try to detect changes for :math:`s` taking steps of size ``steps_s``. Default is to have ``steps_s=1``, but only using ``steps_s=2`` should already speed up by 2.</span>
+<span class="c1">#: It is a simple but efficient way to speed up GLR tests, see https://github.com/SMPyBandits/SMPyBandits/issues/173</span>
+<span class="c1">#: Default value is 1, to not use this feature, and 10 should speed up the test by x10.</span>
+<span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<span class="c1">#: Default value of ``use_localization`` for policies. All the experiments I tried showed that the localization always helps improving learning, so the default value is set to True.</span>
+<span class="n">USE_LOCALIZATION</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">USE_LOCALIZATION</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="UCBLCB_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.UCBLCB_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">UCBLCB_IndexPolicy</span><span class="p">(</span><span class="n">CD_IndexPolicy</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The UCBLCB-UCB generic policy for non-stationary bandits, from [[Improved Changepoint Detection for Piecewise i.i.d Bandits, by S. Mukherjee  &amp; O.-A. Maillard, preprint 2018](https://subhojyoti.github.io/pdf/aistats_2019.pdf)].</span>
+
+<span class="sd">    .. warning:: This is still experimental! See https://github.com/SMPyBandits/SMPyBandits/issues/177</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="UCBLCB_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.UCBLCB_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
+            <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">lazy_try_value_s_only_x_steps</span><span class="o">=</span><span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span><span class="p">,</span>
+            <span class="n">use_localization</span><span class="o">=</span><span class="n">USE_LOCALIZATION</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">UCBLCB_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">per_arm_restart</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># New parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proba_random_exploration</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: What they call :math:`\alpha` in their paper: the probability of uniform exploration at each time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span> <span class="o">=</span> <span class="n">lazy_try_value_s_only_x_steps</span>  <span class="c1">#: Be lazy and try to detect changes for :math:`s` taking steps of size ``steps_s``.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_localization</span> <span class="o">=</span> <span class="n">use_localization</span>  <span class="c1">#: experiment to use localization of the break-point, ie, restart memory of arm by keeping observations s+1...n instead of just the last one</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="o">=</span> <span class="n">delta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delta0</span> <span class="o">=</span> <span class="n">delta0</span></div>
+
+<div class="viewcode-block" id="UCBLCB_IndexPolicy.__str__"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.UCBLCB_IndexPolicy.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s2">&quot;lazy detect </span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_detect_change_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_DETECT_CHANGE_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lazy s </span><span class="si">{}</span><span class="s2">, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span> <span class="o">!=</span> <span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;$\delta_0=</span><span class="si">{:.3g}</span><span class="s2">$, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_delta0</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta0</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">):</span> <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">-CDP</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UCBLCB_IndexPolicy.delta"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.UCBLCB_IndexPolicy.delta">[docs]</a>    <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Use :math:`\delta = \delta_0` if it was given as an argument to the policy, or :math:`\frac{\delta_0}{t}` as the confidence level of UCB/LCB test (default is :math:`\delta_0=1`).</span>
+
+<span class="sd">        .. warning:: It is unclear (in the article) whether :math:`t` is the time since the last restart or the total time?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delta0</span> <span class="o">/</span> <span class="n">t</span></div>
+
+<div class="viewcode-block" id="UCBLCB_IndexPolicy.detect_change"><a class="viewcode-back" href="../../docs/Policies.CD_UCB.html#Policies.CD_UCB.UCBLCB_IndexPolicy.detect_change">[docs]</a>    <span class="k">def</span> <span class="nf">detect_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">VERBOSE</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot; Detect a change in the current arm, using the two-sided UCB-LCB algorithm [Mukherjee &amp; Maillard, 2018].</span>
+
+<span class="sd">        - Let :math:`\hat{\mu}_{i,t:t&#39;}` the empirical mean of rewards obtained for arm i from time :math:`t` to :math:`t&#39;`, and :math:`N_{i,t:t&#39;}` the number of samples.</span>
+<span class="sd">        - Let :math:`S_{i,t:t&#39;} = \sqrt{\frac{\log(4 t^2 / \delta)}{2 N_{i,t:t&#39;}}}` the length of the confidence interval.</span>
+
+<span class="sd">        - When we have data starting at :math:`t_0=0` (since last restart) and up-to current time :math:`t`, for each *arm* i,</span>
+<span class="sd">            - For each intermediate time steps :math:`t&#39; \in [t_0, t)`,</span>
+<span class="sd">                - Compute :math:`LCB_{\text{before}} = \hat{\mu}_{i,t_0:t&#39;} - S_{i,t_0:t&#39;}`,</span>
+<span class="sd">                - Compute :math:`UCB_{\text{before}} = \hat{\mu}_{i,t_0:t&#39;} + S_{i,t_0:t&#39;}`,</span>
+<span class="sd">                - Compute :math:`LCB_{\text{after}} = \hat{\mu}_{i,t&#39;+1:t} - S_{i,t&#39;+1:t}`,</span>
+<span class="sd">                - Compute :math:`UCB_{\text{after}} = \hat{\mu}_{i,t&#39;+1:t} + S_{i,t&#39;+1:t}`,</span>
+<span class="sd">                - If :math:`UCB_{\text{before}} &lt; LCB_{\text{after}}` or :math:`UCB_{\text{after}} &lt; LCB_{\text{before}}`, then restart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">armId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">):</span>
+            <span class="n">data_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_rewards</span><span class="p">[</span><span class="n">armId</span><span class="p">]</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_y</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">mean_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_y</span><span class="p">[</span><span class="n">t0</span> <span class="p">:</span> <span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">mean_before</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">mean_after</span> <span class="o">=</span> <span class="n">mean_all</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">data_y</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+                <span class="n">mean_before</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">mean_before</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">mean_after</span> <span class="o">=</span> <span class="p">((</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">s</span> <span class="o">+</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="n">mean_after</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">s</span> <span class="o">+</span> <span class="n">t0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">s</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">lazy_try_value_s_only_x_steps</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">ucb_lcb_cst</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+                <span class="n">S_before</span> <span class="o">=</span> <span class="n">ucb_lcb_cst</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">S_after</span>  <span class="o">=</span> <span class="n">ucb_lcb_cst</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="n">s</span> <span class="o">+</span> <span class="n">t0</span><span class="p">)</span>
+                <span class="n">ucb_after</span>  <span class="o">=</span> <span class="n">mean_after</span>  <span class="o">+</span> <span class="n">S_after</span>
+                <span class="n">lcb_before</span> <span class="o">=</span> <span class="n">mean_before</span> <span class="o">-</span> <span class="n">S_before</span>
+
+                <span class="k">if</span> <span class="n">ucb_after</span> <span class="o">&lt;</span> <span class="n">lcb_before</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - For arm = </span><span class="si">{}</span><span class="s2">, t0 = </span><span class="si">{}</span><span class="s2">, s = </span><span class="si">{}</span><span class="s2">, t = </span><span class="si">{}</span><span class="s2">, the mean before mu(t0,s) = </span><span class="si">{:.3g}</span><span class="s2"> and the mean after mu(s+1,t) = </span><span class="si">{:.3g}</span><span class="s2"> and the S_before = </span><span class="si">{:.3g}</span><span class="s2"> and S_after = </span><span class="si">{:.3g}</span><span class="s2">, so UCB_after = </span><span class="si">{:.3g}</span><span class="s2"> &lt; LCB_before = </span><span class="si">{:.3g}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">armId</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">mean_before</span><span class="p">,</span> <span class="n">mean_after</span><span class="p">,</span> <span class="n">S_before</span><span class="p">,</span> <span class="n">S_after</span><span class="p">,</span> <span class="n">ucb_after</span><span class="p">,</span> <span class="n">lcb_before</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">s</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_localization</span> <span class="k">else</span> <span class="kc">None</span>
+
+                <span class="n">ucb_before</span> <span class="o">=</span> <span class="n">mean_before</span> <span class="o">+</span> <span class="n">S_before</span>
+                <span class="n">lcb_after</span>  <span class="o">=</span> <span class="n">mean_after</span>  <span class="o">-</span> <span class="n">S_after</span>
+
+                <span class="k">if</span> <span class="n">ucb_before</span> <span class="o">&lt;</span> <span class="n">lcb_after</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  - For arm = </span><span class="si">{}</span><span class="s2">, t0 = </span><span class="si">{}</span><span class="s2">, s = </span><span class="si">{}</span><span class="s2">, t = </span><span class="si">{}</span><span class="s2">, the mean before mu(t0,s) = </span><span class="si">{:.3g}</span><span class="s2"> and the mean after mu(s+1,t) = </span><span class="si">{:.3g}</span><span class="s2"> and the S_before = </span><span class="si">{:.3g}</span><span class="s2"> and S_after = </span><span class="si">{:.3g}</span><span class="s2">, so UCB_before = </span><span class="si">{:.3g}</span><span class="s2"> &lt; LCB_after = </span><span class="si">{:.3g}</span><span class="s2">...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">armId</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">mean_before</span><span class="p">,</span> <span class="n">mean_after</span><span class="p">,</span> <span class="n">S_before</span><span class="p">,</span> <span class="n">S_after</span><span class="p">,</span> <span class="n">ucb_before</span><span class="p">,</span> <span class="n">lcb_after</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">s</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_localization</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

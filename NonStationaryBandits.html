@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -129,3 +128,407 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#article">Article?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scroll-license-github-license">📜 License ? </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="API.html">Short documentation of the API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/NonStationaryBandits.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="non-stationary-stochastic-multi-armed-bandits">
+<h1><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong><a class="headerlink" href="#non-stationary-stochastic-multi-armed-bandits" title="Permalink to this headline">¶</a></h1>
+<p>A well-known and well-studied variant of the <a class="reference external" href="https://en.wikipedia.org/wiki/Multi-armed_bandit">stochastic Multi-Armed Bandits</a> is the so-called <strong>Non-Stationary Stochastic Multi-Armed Bandits</strong>.
+I give here a short introduction, with references below. If you are in a hurry, please read the first two pages of <a class="reference external" href="https://arxiv.org/pdf/1802.08380">this recent article instead (arXiv:1802.08380)</a>.</p>
+<ul class="simple">
+<li><p>The first studied variant considers <em>piece-wise</em> stationary problems, also referred to as <strong>abruptly changing</strong>, where the distributions of the <code class="docutils literal notranslate"><span class="pre">$K$</span></code> arms are stationary on some intervals <code class="docutils literal notranslate"><span class="pre">$[T_i,\ldots,T_{i+1}]$</span></code> with some abrupt change points <code class="docutils literal notranslate"><span class="pre">$(T_i)$</span></code>.</p>
+<ul>
+<li><p>It is always assumed that the location of the change points are unknown to the user, otherwise the problem is not harder: just play your <a class="reference external" href="docs/Policies.html">favorite algorithm</a>, and restart it at each change point.</p></li>
+<li><p>The change points can be fixed or randomly generated, but it is assumed that they are generated with a random source being oblivious of the user’s actions, so we can always consider that they were already generated before the game starts.</p></li>
+<li><p>For instance, <a class="reference external" href="docs/Arms.html#Arms.geometricChangePoints"><code class="docutils literal notranslate"><span class="pre">Arms.geometricChangePoints()</span></code></a> generates some change point if we assume that at every time step <code class="docutils literal notranslate"><span class="pre">$t=1,\ldots,T]$</span></code>, there is a (small) probability p to have a change point.</p></li>
+<li><p>The number of change points is usually denoted <code class="docutils literal notranslate"><span class="pre">$L$</span></code> or <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code>, and should not be a constant w.r.t. <code class="docutils literal notranslate"><span class="pre">$T$</span></code> (otherwise when <code class="docutils literal notranslate"><span class="pre">$T\to\infty$</span></code> only the last section counts and give a stationary problem so it is not harder). Some algorithms require to know the value of <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code>, or at least an upper-bound, and some algorithms try to be efficient without knowing it (this is what we want!).</p></li>
+<li><p>The goal is to have an efficient algorithm, but of course if <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T</span> <span class="pre">=</span> <span class="pre">\mathcal{O}(T)$</span></code> the problem is too hard to hope to be efficient and any algorithm will suffer a linear regret (i.e., be as efficient as a naive random strategy).</p></li>
+</ul>
+</li>
+<li><p>Another variant is the <strong>slowly varying</strong> problem, where the rewards <code class="docutils literal notranslate"><span class="pre">$r(t)</span> <span class="pre">=</span> <span class="pre">r_{A(t),t}$</span></code> is sampled at each time from a parametric distribution, and the parameter(s) change at each time (usually parametrized by its mean). If we focus on 1D exponential families, or any family of distributions parametrized by their mean <code class="docutils literal notranslate"><span class="pre">$\mu$</span></code>, we denote this by having <code class="docutils literal notranslate"><span class="pre">$r(t)</span> <span class="pre">\sim</span> <span class="pre">D(\mu_{A(t)}(t))$</span></code> where <code class="docutils literal notranslate"><span class="pre">$\mu_k(t)$</span></code> can be varying with the time. The slowly varying hypothesis is that every time step can be a break point, and that the speed of change <code class="docutils literal notranslate"><span class="pre">$|\mu_k(t+1)</span> <span class="pre">-</span> <span class="pre">\mu_k(t)|$</span></code> is bounded.</p></li>
+<li><p>Other variants include harder settings.</p>
+<ul>
+<li><p>For instance, we can consider that an adversarial is deciding the change points, by being adaptative to the user’s actions. I consider it harder, as always with adversarial problems, and not very useful to model real-world problems.</p></li>
+<li><p>Another harder setting is a “pseudo-Markovian rested” point-of-view: the mean (or parameters) of an arm’s distribution can change only when it is sampled, either from time to time or at each time step. It makes sense for some applications, for instance <a class="reference external" href="https://www.linkedin.com/in/julien-seznec-29364a104/">Julien’s work (in SequeL Inria team)</a>, but for others it doesn’t really make sense (e.g., cognitive radio applications).</p></li>
+</ul>
+</li>
+</ul>
+<p>TODO fix notations more precisely, include definitions!
+TODO what are the lower-bounds given in the more recent articles?</p>
+<div class="section" id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Permalink to this headline">¶</a></h2>
+<p><em>TL;DR</em>: the world is non stationary, so it makes sense to study this!</p>
+<p>TODO write more justifications about applications, mainly for IoT networks (like when I studied <a class="reference internal" href="MultiPlayers.html"><span class="doc">multi-player bandits</span></a>).</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>Here is a partial list of references on this topic. For more, a good starting point is to read the references given in the mentioned article, as always.</p>
+<div class="section" id="main-references">
+<h3>Main references<a class="headerlink" href="#main-references" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>It is not on non-stationary but on non-stochastic (i.e., adversary) bandits, but it can be a good reading for the curious reader. [<a class="reference external" href="https://epubs.siam.org/doi/pdf/10.1137/S0097539701398375">“The Non-Stochastic Multi-Armed Bandit Problem”. P. Auer, N. Cesa-Bianchi, Y. Freund and R. Schapire. SIAM journal on computing, 32(1), 48-77, 2002</a>].</p></li>
+<li><p>The Sliding-Window and Discounted UCB algorithms were given in [<a class="reference external" href="https://arxiv.org/pdf/0805.3415.pdf">“On Upper-Confidence Bound Policies for Non-Stationary Bandit Problems”. Aurélien Garivier and Éric Moulines, ALT 2011</a>].</p>
+<ul class="simple">
+<li><p>They are implemented in <a class="reference external" href="docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCB"><code class="docutils literal notranslate"><span class="pre">Policies.SlidingWindowUCB.SWUCB</span></code></a> and <a class="reference external" href="docs/Policies.DiscountedUCB.html"><code class="docutils literal notranslate"><span class="pre">Policies.DiscountedUCB</span></code></a>.</p></li>
+<li><p>Note that I also implemented the non-anytime heuristic given by the author, <a class="reference external" href="docs/Policies.SlidingWindowUCB.html#Policies.SlidingWindowUCB.SWUCBPlus"><code class="docutils literal notranslate"><span class="pre">Policies.SlidingWindowUCB.SWUCBPlus</span></code></a> which uses the knowledge of the horizon <code class="docutils literal notranslate"><span class="pre">$T$</span></code> to <em>try to</em> guess a correct value for <code class="docutils literal notranslate"><span class="pre">$\tau$</span></code> the sliding window size.</p></li>
+<li><p>I implemented this sliding window idea in a generic way, and <a class="reference external" href="docs/Policies.SlidingWindowRestart.html"><code class="docutils literal notranslate"><span class="pre">Policies.SlidingWindowRestart</span></code></a> is a generic wrapper that can work with (almost) any algorithm: it is an experimental policy, using a sliding window (of for instance <code class="docutils literal notranslate"><span class="pre">$\tau=100$</span></code> draws of each arm), and reset the underlying algorithm as soon as the small empirical average is too far away from the long history empirical average (or just restart for one arm, if possible).</p></li>
+</ul>
+</li>
+<li><p>[<a class="reference external" href="https://www.researchgate.net/profile/Ole-Christoffer_Granmo/publication/232616670_Thompson_Sampling_for_Dynamic_Multi-armed_Bandits/links/56a7d8e808ae0fd8b3fe3dc6.pdf">“Thompson sampling for dynamic multi-armed bandits”. N Gupta,. OC Granmo, A. Agrawala, 10th International Conference on Machine Learning and Applications Workshops. IEEE, 2011</a>]</p></li>
+<li><p>[<a class="reference external" href="http://papers.nips.cc/paper/5378-stochastic-multi-armed-bandit-problem-with-non-stationary-rewards.pdf">“Stochastic multi-armed-bandit problem with non-stationary rewards”, O. Besbes, Y. Gur, A. Zeevi. Advances in Neural Information Processing Systems (pp. 199-207), 2014</a>]</p></li>
+<li><p>[<a class="reference external" href="https://arxiv.org/pdf/1711.03539">“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017</a>] introduced the <a class="reference external" href="https://smpybandits.github.io/docs/Policies.CD_UCB.html"><code class="docutils literal notranslate"><span class="pre">CUSUM-UCB</span></code></a> and <code class="docutils literal notranslate"><span class="pre">PHT-UCB</span></code> algorithms.</p></li>
+<li><p>[<a class="reference external" href="https://arxiv.org/pdf/1802.03692">“Nearly Optimal Adaptive Procedure for Piecewise-Stationary Bandit: a Change-Point Detection Approach”. Yang Cao, Zheng Wen, Branislav Kveton, Yao Xie. arXiv preprint arXiv:1802.03692, 2018</a>] introduced the <a class="reference external" href="https://smpybandits.github.io/docs/Policies.Monitored_UCB.html"><code class="docutils literal notranslate"><span class="pre">M-UCB</span></code></a> algorithm.</p></li>
+</ol>
+</div>
+<div class="section" id="recent-references">
+<h3>Recent references<a class="headerlink" href="#recent-references" title="Permalink to this headline">¶</a></h3>
+<p>More recent articles include the following:</p>
+<ol class="simple">
+<li><p>[<a class="reference external" href="https://arxiv.org/pdf/1802.08380">“On Abruptly-Changing and Slowly-Varying Multiarmed Bandit Problems”. L. Wei and V. Srivastav. arXiv preprint arXiv:1802.08380, 2018</a>], introduced the first algorithms that can (try to) tackle the two problems simultaneously, <a class="reference external" href="https://smpybandits.github.io/docs/Policies.LM_DSEE.html"><code class="docutils literal notranslate"><span class="pre">LM-DSEE</span></code></a> and <a class="reference external" href="https://smpybandits.github.io/docs/Policies.SWHash_UCB.html"><code class="docutils literal notranslate"><span class="pre">SW-UCB#</span></code></a>.</p>
+<ul class="simple">
+<li><p>They require to know the rate of change but not the number of changes. They either assume that the number of break points <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code> is <code class="docutils literal notranslate"><span class="pre">$\mathcal{O}(T^\nu)$</span></code> for some <code class="docutils literal notranslate"><span class="pre">$\nu\in(0,1)$</span></code> (for abruptly-changing), or that the rate of change is <code class="docutils literal notranslate"><span class="pre">$\max_t</span> <span class="pre">|\mu_{t+1}</span> <span class="pre">-</span> <span class="pre">\mu_{t}|</span> <span class="pre">\leq</span> <span class="pre">\varepsilon_T</span> <span class="pre">=</span> <span class="pre">\mathcal{O}(T^{-\kappa})$</span></code>. In both cases, their model assumes to know <code class="docutils literal notranslate"><span class="pre">$\nu$</span></code> or <code class="docutils literal notranslate"><span class="pre">$\kappa$</span></code>, or an upper-bound on it.</p></li>
+<li><p>One advantage of their algorithms is their simplicity and ability to tackle both cases!</p></li>
+</ul>
+</li>
+<li><p>[<a class="reference external" href="https://ewrl.files.wordpress.com/2018/09/ewrl_14_2018_paper_28.pdf">“Adaptively Tracking the Best Arm with an Unknown Number of Distribution Changes”. Peter Auer, Pratik Gajane and Ronald Ortner. EWRL 2018, Lille</a>], introduced the <a class="reference external" href="https://smpybandits.github.io/docs/Policies.AdSwitch.html"><code class="docutils literal notranslate"><span class="pre">AdSwitch</span></code></a> algorithm, which does not require to know the number <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code> of change points.</p>
+<ul class="simple">
+<li><p>Be sure how to adapt it to <code class="docutils literal notranslate"><span class="pre">$K\geq2$</span></code> arms and not just <code class="docutils literal notranslate"><span class="pre">$K=2$</span></code> (it shouldn’t be hard).</p></li>
+<li><p>TODO adapt it to unknown horizon (using <a class="reference external" href="DoublingTrick.html">doubling tricks?</a>!</p></li>
+</ul>
+</li>
+<li><p>[<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01811697/document">“Memory Bandits: a Bayesian approach for the Switching Bandit Problem”. Réda Alami, Odalric Maillard, Raphaël Féraud. 31st Conference on Neural Information Processing Systems (NIPS 2017), hal-01811697</a>], introduced the <a class="reference external" href="XXX"><code class="docutils literal notranslate"><span class="pre">MemoryBandit</span></code></a> algorithm, which does not require to know the number <code class="docutils literal notranslate"><span class="pre">$\Upsilon_T$</span></code> of change points.</p>
+<ul class="simple">
+<li><p>They use a generic idea of <a class="reference internal" href="Aggregation.html"><span class="doc">expert aggregation</span></a> with <a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01615424/">an efficient tracking of a growing number of expert</a>. The basic idea is the following: a new expert is started <em>at every time</em>, and at a breakpoint, the expert started just after the breakpoint will essentially be the most efficient one (and we need efficient tracking to know it).</p></li>
+<li><p>Their <code class="docutils literal notranslate"><span class="pre">MemoryBandit</span></code> algorithm is very efficient empirically, but not easy to implement and it requires a large memory (although some discussion is given in their article’s appendix, as they evoke an heuristic that reduces the storage requirement).</p></li>
+</ul>
+</li>
+<li><p>🇫🇷 [<a class="reference external" href="http://oatao.univ-toulouse.fr/17130/1/louedec_17130.pdf">“Algorithme de bandit et obsolescence : un modèle pour la recommandation”. Jonhathan Louëdec, Laurent Rossi, Max Chevalier, Aurélien Garivier and Josiane Mothe. 18ème Conférence francophone sur l’Apprentissage Automatique, 2016 (Marseille, France)</a>] (🇫🇷 <em>in French</em>), introduces and justifies the possible applications of slowly-varying to recommender systems. They studies and present a model with an exponential decrease of the means, and the <a class="reference external" href="XXX"><code class="docutils literal notranslate"><span class="pre">FadingUCB</span></code></a> that is efficient if a bound on the speed of the exponential decrease is known.</p></li>
+</ol>
+</div>
+<div class="section" id="other-references">
+<h3>Other references<a class="headerlink" href="#other-references" title="Permalink to this headline">¶</a></h3>
+<p>Other interesting references:</p>
+<ol class="simple">
+<li><p>[<a class="reference external" href="https://hal.archives-ouvertes.fr/hal-01575000/document">“The Non-Stationary Stochastic Multi Armed Bandit Problem”. R. Allesiardo, Raphaël Féraud and Odalric-Ambrym Maillard. International Journal of Data Science and Analytics, 3(4), 267-283. 2017</a>]  introduced the <a class="reference external" href="https://smpybandits.github.io/docs/Policies.CD_UCB.html"><code class="docutils literal notranslate"><span class="pre">Exp3R</span></code></a> algorithm.</p></li>
+<li><p>[<a class="reference external" href="https://arxiv.org/pdf/1707.09727">“Taming non-stationary bandits: A Bayesian approach”. V. Raj and S. Kalyani. arXiv preprint arXiv:1707.09727, 2017</a>] introduced the <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedThompson.html"><code class="docutils literal notranslate"><span class="pre">DiscountedThompson</span></code></a> algorithm.</p></li>
+</ol>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="example-of-simulation-configuration">
+<h2>Example of simulation configuration<a class="headerlink" href="#example-of-simulation-configuration" title="Permalink to this headline">¶</a></h2>
+<p>A simple python file, <a class="reference external" href="https://smpybandits.github.io/docs/configuration_nonstationary.html"><code class="docutils literal notranslate"><span class="pre">configuration_nonstationary.py</span></code></a>, is used to import the <a class="reference external" href="Arms/">arm classes</a>, the <a class="reference external" href="Policies/">policy classes</a> and define the problems and the experiments.
+The <a class="reference external" href="https://smpybandits.github.io/docs/main.html"><code class="docutils literal notranslate"><span class="pre">main.py</span></code></a> file is used to import the configuration and launch the simulations.</p>
+<p>For example, we can compare the standard <a class="reference external" href="https://smpybandits.github.io/docs/Policies.UCB.html"><code class="docutils literal notranslate"><span class="pre">UCB</span></code></a> and  <a class="reference external" href="https://smpybandits.github.io/docs/Policies.Thompson.html"><code class="docutils literal notranslate"><span class="pre">Thompson</span></code></a> algorithms, non aware of the non-stationarity, against the non-stationarity aware <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedUCB.html"><code class="docutils literal notranslate"><span class="pre">DiscountedUCB</span></code></a> <a class="reference external" href="https://smpybandits.github.io/docs/Policies.SlidingWindowUCB.html"><code class="docutils literal notranslate"><span class="pre">SWUCB</span></code></a>, and the efficient <a class="reference external" href="https://smpybandits.github.io/docs/Policies.DiscountedThompson.html"><code class="docutils literal notranslate"><span class="pre">DiscountedThompson</span></code></a> algorithm.</p>
+<p>We also included our algorithms <a class="reference external" href="https://smpybandits.github.io/docs/Policies.GLR_UCB.html"><code class="docutils literal notranslate"><span class="pre">Bernoulli-GLR-UCB</span></code></a> using <a class="reference external" href="https://smpybandits.github.io/docs/Policies.klUCB.html"><code class="docutils literal notranslate"><span class="pre">kl-UCB</span></code></a>,
+and compare it with <a class="reference external" href="https://smpybandits.github.io/docs/Policies.CUSUM_UCB.html"><code class="docutils literal notranslate"><span class="pre">CUSUM-UCB</span></code></a> and <a class="reference external" href="https://smpybandits.github.io/docs/Policies.Monitored_UCB.html"><code class="docutils literal notranslate"><span class="pre">M-UCB</span></code></a>, the two other state-of-the-art actively adaptive algorithms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">horizon</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="n">change_points</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">]</span>
+<span class="n">nb_random_events</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">change_points</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># t=0 is not a change-point</span>
+<span class="n">list_of_means</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="c1"># from 0 to 1000</span>
+    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="c1"># from 1000 to 2000</span>
+    <span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="c1"># from 2000 to 3000</span>
+    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="c1"># from 3000 to 4000</span>
+    <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="c1"># from 4000 to 5000</span>
+<span class="p">]</span>
+
+<span class="n">configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span>    <span class="c1"># Finite horizon of the simulation</span>
+    <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>  <span class="c1"># number of repetitions</span>
+    <span class="s2">&quot;n_jobs&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>        <span class="c1"># Maximum number of cores for parallelization: use ALL your CPU</span>
+    <span class="s2">&quot;verbosity&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>      <span class="c1"># Verbosity for the joblib calls</span>
+    <span class="c1"># Environment configuration, you can set up more than one.</span>
+    <span class="s2">&quot;environment&quot;</span><span class="p">:</span> <span class="p">[</span>     <span class="c1"># Bernoulli arms with non-stationarity</span>
+        <span class="p">{</span>   <span class="c1"># A non stationary problem: every step of the same repetition use a different mean vector!</span>
+            <span class="s2">&quot;arm_type&quot;</span><span class="p">:</span> <span class="n">Bernoulli</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;listOfMeans&quot;</span><span class="p">:</span> <span class="n">list_of_means</span><span class="p">,</span>
+                <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">change_points</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">]</span>
+    <span class="p">],</span>
+    <span class="c1"># Policies that should be simulated, and their parameters.</span>
+    <span class="s2">&quot;policies&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Thompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">OracleSequentiallyRestartPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span>
+            <span class="s2">&quot;changePoints&quot;</span><span class="p">:</span> <span class="n">change_points</span><span class="p">,</span>
+            <span class="s2">&quot;list_of_means&quot;</span><span class="p">:</span> <span class="n">list_of_means</span><span class="p">,</span>
+            <span class="s2">&quot;reset_for_all_change&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s2">&quot;reset_for_suboptimal_change&quot;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="p">}}</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">SWklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tau&quot;</span><span class="p">:</span>  <span class="c1"># formula from [GarivierMoulines2011]</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">horizon</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">horizon</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">nb_random_events</span><span class="p">))</span>
+        <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedklUCB</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.95</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">DiscountedThompson</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;gamma&quot;</span><span class="p">:</span> <span class="mf">0.95</span> <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">Monitored_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+        <span class="p">}</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">CUSUM_IndexPolicy</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">nb_random_events</span><span class="p">,</span> <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="c1"># Delta n to speed up</span>
+        <span class="p">}</span> <span class="p">}</span> <span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="s2">&quot;archtype&quot;</span><span class="p">:</span> <span class="n">BernoulliGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span>
+        <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;horizon&quot;</span><span class="p">:</span> <span class="n">horizon</span><span class="p">,</span> <span class="s2">&quot;policy&quot;</span><span class="p">:</span> <span class="n">klUCB_forGLR</span><span class="p">,</span> <span class="s2">&quot;max_nb_random_events&quot;</span><span class="p">:</span> <span class="n">nb_random_events</span><span class="p">,</span>
+            <span class="s2">&quot;lazy_detect_change_only_x_steps&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="c1"># Delta n to speed up</span>
+            <span class="s2">&quot;lazy_try_value_s_only_x_steps&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="c1"># Delta s</span>
+            <span class="s2">&quot;per_arm_restart&quot;</span><span class="p">:</span> <span class="n">per_arm_restart</span><span class="p">,</span>
+        <span class="p">}</span> <span class="p">}</span>
+        <span class="k">for</span> <span class="n">per_arm_restart</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">]</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="how-to-run-the-experiments">
+<h2><a class="reference internal" href="How_to_run_the_code.html"><span class="doc">How to run the experiments ?</span></a><a class="headerlink" href="#how-to-run-the-experiments" title="Permalink to this headline">¶</a></h2>
+<p>You should use the provided <a class="reference external" href="Makefile"><code class="docutils literal notranslate"><span class="pre">Makefile</span></code></a> file to do this simply:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># if not already installed, otherwise update with &#39;git pull&#39;</span>
+git clone https://github.com/SMPyBandits/SMPyBandits/
+<span class="nb">cd</span> SMPyBandits
+make install         <span class="c1"># install the requirements ONLY ONCE</span>
+</pre></div>
+</div>
+<p>Then modify the <code class="docutils literal notranslate"><span class="pre">configuration_nonstationary.py</span></code> file, to specify the algorithms you want to compare (use the snippet above for inspiration). And run with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make nonstationary   <span class="c1"># run and log the main.py script</span>
+</pre></div>
+</div>
+<p>There is a couple of different piece-wise stationary problems, that we implemented for our article, and you can use environment variables to modify the experiment to run.
+For instance, to run problems 1 and 2, with horizon T=5000, N=1000 repetitions, using 4 cores, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PROBLEMS</span><span class="o">=</span><span class="m">1</span>,2 <span class="nv">T</span><span class="o">=</span><span class="m">5000</span> <span class="nv">N</span><span class="o">=</span><span class="m">1000</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> <span class="nv">DEBUG</span><span class="o">=</span>False <span class="nv">SAVEALL</span><span class="o">=</span>True make nonstationary
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="some-illustrations">
+<h2>Some illustrations<a class="headerlink" href="#some-illustrations" title="Permalink to this headline">¶</a></h2>
+<p>Here are some plots illustrating the performances of the different <a class="reference external" href="https://smpybandits.github.io/docs/Policies/">policies</a> implemented in this project, against various non-stationary problems (with <a class="reference external" href="https://smpybandits.github.io/docs/Arms.Bernoulli.html"><code class="docutils literal notranslate"><span class="pre">Bernoulli</span></code></a> only).</p>
+<div class="section" id="history-of-means-for-this-simple-problem">
+<h3>History of means for this simple problem<a class="headerlink" href="#history-of-means-for-this-simple-problem" title="Permalink to this headline">¶</a></h3>
+<p>We consider a simple piece-wise stationary problem, with $K=3$ arms, a time horizon $T=5000$ and $N=1000$ repetitions.
+Arm changes concern only one arm at a time, and there is $\Upsilon=4$ changes at times $1000,2000,3000,4000$ ($C_T=\Upsilon_T=4)$.</p>
+<p><img alt="plots/NonStationary_example_HistoryOfMeans.png" src="_images/NonStationary_example_HistoryOfMeans.png" /></p>
+<blockquote>
+<div><p>Figure 1 : history of means $\mu_i(t)$ for the $K=3$ arms. There is only one change of the optimal arm.</p>
+</div></blockquote>
+<p>The next figures were obtained with the following command (at the date of writing, 31st of January 2019):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PROBLEMS</span><span class="o">=</span><span class="m">1</span> <span class="nv">T</span><span class="o">=</span><span class="m">5000</span> <span class="nv">N</span><span class="o">=</span><span class="m">1000</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> <span class="nv">DEBUG</span><span class="o">=</span>False <span class="nv">SAVEALL</span><span class="o">=</span>True make nonstationary
+</pre></div>
+</div>
+</div>
+<div class="section" id="comparison-of-different-algorithms">
+<h3>Comparison of different algorithms<a class="headerlink" href="#comparison-of-different-algorithms" title="Permalink to this headline">¶</a></h3>
+<p>By using the configuration snippet shown above, we compare 9 algorithms.
+The plots below show how to perform.
+Our proposal is the GLR-klUCB, with two options for <strong>Local</strong> or <strong>Global</strong> restarts (Generalized Likelihood Ratio test + klUCB), and it outperforms all the previous state-of-the-art approaches.</p>
+<p><img alt="plots/NonStationary_example_Regret.png" src="_images/NonStationary_example_Regret.png" /></p>
+<blockquote>
+<div><p>Figure 2 : plot of the mean regret $R_t$ as a function of the current time step $t$, for the different algorithms.</p>
+</div></blockquote>
+<p><img alt="plots/NonStationary_example_BoxPlotRegret.png" src="_images/NonStationary_example_BoxPlotRegret.png" /></p>
+<blockquote>
+<div><p>Figure 3 : box plot of the regret at $T=5000$, for the different algorithms.</p>
+</div></blockquote>
+<p><img alt="plots/NonStationary_example_HistogramsRegret.png" src="_images/NonStationary_example_HistogramsRegret.png" /></p>
+<blockquote>
+<div><p>Figure 4 : plot of the histograms of the regret at $T=5000$, for the different algorithms.</p>
+</div></blockquote>
+</div>
+<div class="section" id="comparison-of-time-and-memory-consumptions">
+<h3>Comparison of time and memory consumptions<a class="headerlink" href="#comparison-of-time-and-memory-consumptions" title="Permalink to this headline">¶</a></h3>
+<p><img alt="plots/NonStationary_example_RunningTimes.png" src="_images/NonStationary_example_RunningTimes.png" /></p>
+<blockquote>
+<div><p>Figure 5 : comparison of the running times. Our approach, like other actively adaptive approach, is slower, but drastically more efficient!</p>
+</div></blockquote>
+<p><img alt="plots/NonStationary_example_MemoryConsumption.png" src="_images/NonStationary_example_MemoryConsumption.png" /></p>
+<blockquote>
+<div><p>Figure 6 : comparison of the memory consumption. Our approach, like other actively adaptive approach, is more costly, but drastically more efficient!</p>
+</div></blockquote>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="article">
+<h2>Article?<a class="headerlink" href="#article" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Not yet! We are working on this! TODO</p>
+</div></blockquote>
+<hr class="docutils" />
+<div class="section" id="scroll-license-github-license">
+<h3>📜 License ? <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/SMPyBandits/SMPyBandits.svg" /></a><a class="headerlink" href="#scroll-license-github-license" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://lbesson.mit-license.org/">MIT Licensed</a> (file <a class="reference external" href="LICENSE">LICENSE</a>).</p>
+<p>© 2016-2018 <a class="reference external" href="https://GitHub.com/Naereen">Lilian Besson</a>.</p>
+<p><a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/"><img alt="Open Source? Yes!" src="https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/graphs/commit-activity"><img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
+<a class="reference external" href="https://GitHub.com/Naereen/ama"><img alt="Ask Me Anything !" src="https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/"><img alt="Analytics" src="https://ga-beacon.appspot.com/UA-38514290-17/github.com/SMPyBandits/SMPyBandits/README.md?pixel" /></a>
+<img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI version" src="https://img.shields.io/pypi/v/smpybandits.svg" />
+<img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI implementation" src="https://img.shields.io/pypi/implementation/smpybandits.svg" />
+<a class="reference external" href="https://pypi.org/project/SMPyBandits"><img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/smpybandits.svg?logo=python" />
+</a>
+<a class="reference external" href="https://pypi.org/project/SMPyBandits"><img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI download" src="https://img.shields.io/pypi/dm/smpybandits.svg" /></a>
+<a class="reference external" href="https://pypi.org/project/SMPyBandits"><img alt="https://pypi.org/project/SMPyBandits" src="https://pypi.org/project/SMPyBandits" /><img alt="PyPI status" src="https://img.shields.io/pypi/status/smpybandits.svg" /></a>
+<a class="reference external" href="https://SMPyBandits.ReadTheDocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/smpybandits/badge/?version=latest" /></a>
+<a class="reference external" href="https://travis-ci.org/SMPyBandits/SMPyBandits"><img alt="Build Status" src="https://travis-ci.org/SMPyBandits/SMPyBandits.svg?branch=master" /></a>
+<a class="reference external" href="https://GitHub.com/SMPyBandits/SMPyBandits/stargazers"><img alt="Stars of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/stars/SMPyBandits/SMPyBandits" /></a>
+<a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/releases"><img alt="Releases of https://github.com/SMPyBandits/SMPyBandits/" src="https://badgen.net/github/release/SMPyBandits/SMPyBandits" /></a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="API.html" class="btn btn-neutral float-right" title="Short documentation of the API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="SparseBandits.html" class="btn btn-neutral float-left" title="Structure and Sparsity of Stochastic Multi-Armed Bandits" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

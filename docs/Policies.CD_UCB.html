@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,446 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.CD_UCB module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.CD_UCB.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.CD_UCB">
+<span id="policies-cd-ucb-module"></span><h1>Policies.CD_UCB module<a class="headerlink" href="#module-Policies.CD_UCB" title="Permalink to this headline">¶</a></h1>
+<p>The CD-UCB generic policy policies for non-stationary bandits.</p>
+<ul>
+<li><p>Reference: [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539)</p></li>
+<li><p>It runs on top of a simple policy, e.g., <code class="xref py py-class docutils literal notranslate"><span class="pre">UCB</span></code>, and <a class="reference internal" href="#Policies.CD_UCB.UCBLCB_IndexPolicy" title="Policies.CD_UCB.UCBLCB_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">UCBLCB_IndexPolicy</span></code></a> is a wrapper:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">UCBLCB_IndexPolicy</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">UCB</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># use policy as usual, with policy.startGame(), r = policy.choice(), policy.getReward(arm, r)</span>
+</pre></div>
+</div>
+</li>
+<li><p>It uses an additional <span class="math notranslate nohighlight">\(\mathcal{O}(\tau_\max)\)</span> memory for a game of maximum stationary length <span class="math notranslate nohighlight">\(\tau_\max\)</span>.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It can only work on basic index policy based on empirical averages (and an exploration bias), like <code class="xref py py-class docutils literal notranslate"><span class="pre">UCB</span></code>, and cannot work on any Bayesian policy (for which we would have to remember all previous observations in order to reset the history with a small history)!</p>
+</div>
+<dl class="data">
+<dt id="Policies.CD_UCB.VERBOSE">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">VERBOSE</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CD_UCB.VERBOSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether to be verbose when doing the change detection algorithm.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.PROBA_RANDOM_EXPLORATION">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">PROBA_RANDOM_EXPLORATION</code><em class="property"> = 0.1</em><a class="headerlink" href="#Policies.CD_UCB.PROBA_RANDOM_EXPLORATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default probability of random exploration <span class="math notranslate nohighlight">\(\alpha\)</span>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.PER_ARM_RESTART">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">PER_ARM_RESTART</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CD_UCB.PER_ARM_RESTART" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we reset one arm empirical average or all? Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>, it’s usually more efficient!</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.FULL_RESTART_WHEN_REFRESH">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">FULL_RESTART_WHEN_REFRESH</code><em class="property"> = False</em><a class="headerlink" href="#Policies.CD_UCB.FULL_RESTART_WHEN_REFRESH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Should we fully restart the algorithm or simply reset one arm empirical average? Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>, it’s usually more efficient!</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.EPSILON">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">EPSILON</code><em class="property"> = 0.05</em><a class="headerlink" href="#Policies.CD_UCB.EPSILON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Precision of the test. For CUSUM/PHT, <span class="math notranslate nohighlight">\(\varepsilon\)</span> is the drift correction threshold (see algorithm).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.LAMBDA">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">LAMBDA</code><em class="property"> = 1</em><a class="headerlink" href="#Policies.CD_UCB.LAMBDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value of <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT</code><em class="property"> = 50</em><a class="headerlink" href="#Policies.CD_UCB.MIN_NUMBER_OF_OBSERVATION_BETWEEN_CHANGE_POINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hypothesis on the speed of changes: between two change points, there is at least <span class="math notranslate nohighlight">\(M * K\)</span> time steps, where K is the number of arms, and M is this constant.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.LAZY_DETECT_CHANGE_ONLY_X_STEPS">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">LAZY_DETECT_CHANGE_ONLY_X_STEPS</code><em class="property"> = 10</em><a class="headerlink" href="#Policies.CD_UCB.LAZY_DETECT_CHANGE_ONLY_X_STEPS" title="Permalink to this definition">¶</a></dt>
+<dd><p>XXX Be lazy and try to detect changes only X steps, where X is small like 10 for instance.
+It is a simple but efficient way to speed up CD tests, see <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/173">https://github.com/SMPyBandits/SMPyBandits/issues/173</a>
+Default value is 0, to not use this feature, and 10 should speed up the test by x10.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.CD_UCB.CD_IndexPolicy">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">CD_IndexPolicy</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">full_restart_when_refresh=False</em>, <em class="sig-param">per_arm_restart=True</em>, <em class="sig-param">epsilon=0.05</em>, <em class="sig-param">proba_random_exploration=None</em>, <em class="sig-param">lazy_detect_change_only_x_steps=10</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BaseWrapperPolicy.html#Policies.BaseWrapperPolicy.BaseWrapperPolicy" title="Policies.BaseWrapperPolicy.BaseWrapperPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BaseWrapperPolicy.BaseWrapperPolicy</span></code></a></p>
+<p>The CD-UCB generic policy for non-stationary bandits, from [[“A Change-Detection based Framework for Piecewise-stationary Multi-Armed Bandit Problem”. F. Liu, J. Lee and N. Shroff. arXiv preprint arXiv:1711.03539, 2017]](https://arxiv.org/pdf/1711.03539).</p>
+<dl class="method">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">full_restart_when_refresh=False</em>, <em class="sig-param">per_arm_restart=True</em>, <em class="sig-param">epsilon=0.05</em>, <em class="sig-param">proba_random_exploration=None</em>, <em class="sig-param">lazy_detect_change_only_x_steps=10</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.epsilon">
+<code class="sig-name descname">epsilon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\varepsilon\)</span> for the test.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.lazy_detect_change_only_x_steps">
+<code class="sig-name descname">lazy_detect_change_only_x_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.lazy_detect_change_only_x_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Be lazy and try to detect changes only X steps, where X is small like 10 for instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.proba_random_exploration">
+<code class="sig-name descname">proba_random_exploration</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
+<dd><p>What they call <span class="math notranslate nohighlight">\(\alpha\)</span> in their paper: the probability of uniform exploration at each time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.all_rewards">
+<code class="sig-name descname">all_rewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.all_rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep in memory all the rewards obtained since the last restart on that arm.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.last_pulls">
+<code class="sig-name descname">last_pulls</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.last_pulls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep in memory the number times since last restart. Start with -1 (never seen)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.last_restart_times">
+<code class="sig-name descname">last_restart_times</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.last_restart_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep in memory the times of last restarts (for each arm).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>With a probability <span class="math notranslate nohighlight">\(\alpha\)</span>, play uniformly at random, otherwise, pass the call to <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy.choice" title="Policies.CD_UCB.CD_IndexPolicy.choice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">choice()</span></code></a> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>With a probability <span class="math notranslate nohighlight">\(\alpha\)</span>, play uniformly at random, otherwise, pass the call to <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy.choiceWithRank" title="Policies.CD_UCB.CD_IndexPolicy.choiceWithRank"><code class="xref py py-meth docutils literal notranslate"><span class="pre">choiceWithRank()</span></code></a> of the underlying policy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give a reward: increase t, pulls, and update cumulated sum of rewards and update small history (sliding window) for that arm (normalized in [0, 1]).</p>
+<ul class="simple">
+<li><p>Reset the whole empirical average if the change detection algorithm says so, with method <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy.detect_change" title="Policies.CD_UCB.CD_IndexPolicy.detect_change"><code class="xref py py-meth docutils literal notranslate"><span class="pre">detect_change()</span></code></a>, for this arm at this current time step.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is computationally costly, so an easy way to speed up this step is to use <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy.lazy_detect_change_only_x_steps" title="Policies.CD_UCB.CD_IndexPolicy.lazy_detect_change_only_x_steps"><code class="xref py py-attr docutils literal notranslate"><span class="pre">lazy_detect_change_only_x_steps</span></code></a> <span class="math notranslate nohighlight">\(= \mathrm{Step_t}\)</span> for a small value (e.g., 10), so not test for all <span class="math notranslate nohighlight">\(t\in\mathbb{N}^*\)</span> but only <span class="math notranslate nohighlight">\(s\in\mathbb{N}^*, s % \mathrm{Step_t} = 0\)</span> (e.g., one out of every 10 steps).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the <span class="math notranslate nohighlight">\(detect_change\)</span> method also returns an estimate of the position of the change-point, <span class="math notranslate nohighlight">\(\hat{tau}\)</span>, then it is used to reset the memory of the changing arm and keep the observations from <span class="math notranslate nohighlight">\(\hat{tau}+1\)</span>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.detect_change">
+<code class="sig-name descname">detect_change</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#CD_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to detect a change in the current arm.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is not implemented for the generic CD algorithm, it has to be implement by a child of the class <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">CD_IndexPolicy</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.CD_IndexPolicy.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.CD_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.CD_UCB.SlidingWindowRestart_IndexPolicy">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">SlidingWindowRestart_IndexPolicy</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">full_restart_when_refresh=False</em>, <em class="sig-param">per_arm_restart=True</em>, <em class="sig-param">epsilon=0.05</em>, <em class="sig-param">proba_random_exploration=None</em>, <em class="sig-param">lazy_detect_change_only_x_steps=10</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
+<p>A more generic implementation is the <a class="reference internal" href="Policies.SlidingWindowRestart.html#module-Policies.SlidingWindowRestart" title="Policies.SlidingWindowRestart"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.SlidingWindowRestart</span></code></a> class.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>I have no idea if what I wrote is correct or not!</p>
+</div>
+<dl class="method">
+<dt id="Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change">
+<code class="sig-name descname">detect_change</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#SlidingWindowRestart_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to detect a change in the current arm.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This one is simply using a sliding-window of fixed size = 100. A more generic implementation is the <a class="reference internal" href="Policies.SlidingWindowRestart.html#module-Policies.SlidingWindowRestart" title="Policies.SlidingWindowRestart"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.SlidingWindowRestart</span></code></a> class.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.SlidingWindowRestart_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.LAZY_TRY_VALUE_S_ONLY_X_STEPS">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">LAZY_TRY_VALUE_S_ONLY_X_STEPS</code><em class="property"> = 10</em><a class="headerlink" href="#Policies.CD_UCB.LAZY_TRY_VALUE_S_ONLY_X_STEPS" title="Permalink to this definition">¶</a></dt>
+<dd><p>XXX Be lazy and try to detect changes for <span class="math notranslate nohighlight">\(s\)</span> taking steps of size <code class="docutils literal notranslate"><span class="pre">steps_s</span></code>. Default is to have <code class="docutils literal notranslate"><span class="pre">steps_s=1</span></code>, but only using <code class="docutils literal notranslate"><span class="pre">steps_s=2</span></code> should already speed up by 2.
+It is a simple but efficient way to speed up GLR tests, see <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/173">https://github.com/SMPyBandits/SMPyBandits/issues/173</a>
+Default value is 1, to not use this feature, and 10 should speed up the test by x10.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.CD_UCB.USE_LOCALIZATION">
+<code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">USE_LOCALIZATION</code><em class="property"> = True</em><a class="headerlink" href="#Policies.CD_UCB.USE_LOCALIZATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value of <code class="docutils literal notranslate"><span class="pre">use_localization</span></code> for policies. All the experiments I tried showed that the localization always helps improving learning, so the default value is set to True.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.CD_UCB.</code><code class="sig-name descname">UCBLCB_IndexPolicy</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">delta=None</em>, <em class="sig-param">delta0=1.0</em>, <em class="sig-param">lazy_try_value_s_only_x_steps=10</em>, <em class="sig-param">use_localization=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Policies.CD_UCB.CD_IndexPolicy" title="Policies.CD_UCB.CD_IndexPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.CD_UCB.CD_IndexPolicy</span></code></a></p>
+<p>The UCBLCB-UCB generic policy for non-stationary bandits, from [[Improved Changepoint Detection for Piecewise i.i.d Bandits, by S. Mukherjee  &amp; O.-A. Maillard, preprint 2018](<a class="reference external" href="https://subhojyoti.github.io/pdf/aistats_2019.pdf">https://subhojyoti.github.io/pdf/aistats_2019.pdf</a>)].</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is still experimental! See <a class="reference external" href="https://github.com/SMPyBandits/SMPyBandits/issues/177">https://github.com/SMPyBandits/SMPyBandits/issues/177</a></p>
+</div>
+<dl class="method">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">delta=None</em>, <em class="sig-param">delta0=1.0</em>, <em class="sig-param">lazy_try_value_s_only_x_steps=10</em>, <em class="sig-param">use_localization=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.proba_random_exploration">
+<code class="sig-name descname">proba_random_exploration</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.proba_random_exploration" title="Permalink to this definition">¶</a></dt>
+<dd><p>What they call <span class="math notranslate nohighlight">\(\alpha\)</span> in their paper: the probability of uniform exploration at each time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.lazy_try_value_s_only_x_steps">
+<code class="sig-name descname">lazy_try_value_s_only_x_steps</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.lazy_try_value_s_only_x_steps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Be lazy and try to detect changes for <span class="math notranslate nohighlight">\(s\)</span> taking steps of size <code class="docutils literal notranslate"><span class="pre">steps_s</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.use_localization">
+<code class="sig-name descname">use_localization</code><em class="property"> = None</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.use_localization" title="Permalink to this definition">¶</a></dt>
+<dd><p>experiment to use localization of the break-point, ie, restart memory of arm by keeping observations s+1…n instead of just the last one</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.CD_UCB'</em><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.delta">
+<code class="sig-name descname">delta</code><span class="sig-paren">(</span><em class="sig-param">t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy.delta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use <span class="math notranslate nohighlight">\(\delta = \delta_0\)</span> if it was given as an argument to the policy, or <span class="math notranslate nohighlight">\(\frac{\delta_0}{t}\)</span> as the confidence level of UCB/LCB test (default is <span class="math notranslate nohighlight">\(\delta_0=1\)</span>).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is unclear (in the article) whether <span class="math notranslate nohighlight">\(t\)</span> is the time since the last restart or the total time?</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.CD_UCB.UCBLCB_IndexPolicy.detect_change">
+<code class="sig-name descname">detect_change</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/CD_UCB.html#UCBLCB_IndexPolicy.detect_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.CD_UCB.UCBLCB_IndexPolicy.detect_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect a change in the current arm, using the two-sided UCB-LCB algorithm [Mukherjee &amp; Maillard, 2018].</p>
+<ul class="simple">
+<li><p>Let <span class="math notranslate nohighlight">\(\hat{\mu}_{i,t:t'}\)</span> the empirical mean of rewards obtained for arm i from time <span class="math notranslate nohighlight">\(t\)</span> to <span class="math notranslate nohighlight">\(t'\)</span>, and <span class="math notranslate nohighlight">\(N_{i,t:t'}\)</span> the number of samples.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(S_{i,t:t'} = \sqrt{\frac{\log(4 t^2 / \delta)}{2 N_{i,t:t'}}}\)</span> the length of the confidence interval.</p></li>
+<li><dl class="simple">
+<dt>When we have data starting at <span class="math notranslate nohighlight">\(t_0=0\)</span> (since last restart) and up-to current time <span class="math notranslate nohighlight">\(t\)</span>, for each <em>arm</em> i,</dt><dd><ul>
+<li><dl class="simple">
+<dt>For each intermediate time steps <span class="math notranslate nohighlight">\(t' \in [t_0, t)\)</span>,</dt><dd><ul>
+<li><p>Compute <span class="math notranslate nohighlight">\(LCB_{\text{before}} = \hat{\mu}_{i,t_0:t'} - S_{i,t_0:t'}\)</span>,</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(UCB_{\text{before}} = \hat{\mu}_{i,t_0:t'} + S_{i,t_0:t'}\)</span>,</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(LCB_{\text{after}} = \hat{\mu}_{i,t'+1:t} - S_{i,t'+1:t}\)</span>,</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(UCB_{\text{after}} = \hat{\mu}_{i,t'+1:t} + S_{i,t'+1:t}\)</span>,</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(UCB_{\text{before}} &lt; LCB_{\text{after}}\)</span> or <span class="math notranslate nohighlight">\(UCB_{\text{after}} &lt; LCB_{\text{before}}\)</span>, then restart.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.CORRAL.html" class="btn btn-neutral float-right" title="Policies.CORRAL module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.BoltzmannGumbel.html" class="btn btn-neutral float-left" title="Policies.BoltzmannGumbel module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

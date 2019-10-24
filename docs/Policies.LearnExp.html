@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,353 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.LearnExp module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.LearnExp.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.LearnExp">
+<span id="policies-learnexp-module"></span><h1>Policies.LearnExp module<a class="headerlink" href="#module-Policies.LearnExp" title="Permalink to this headline">¶</a></h1>
+<p>The LearnExp aggregation bandit algorithm, similar to Exp4 but not equivalent.</p>
+<p>The algorithm is a master A, managing several “slave” algorithms, <span class="math notranslate nohighlight">\(A_1, ..., A_N\)</span>.</p>
+<ul class="simple">
+<li><p>At every step, one slave algorithm is selected, by a random selection from a trust distribution on <span class="math notranslate nohighlight">\([1,...,N]\)</span>.</p></li>
+<li><p>Then its decision is listen to, played by the master algorithm, and a feedback reward is received.</p></li>
+<li><p>The reward is reweighted by the trust of the listened algorithm, and given back to it <em>with</em> a certain probability.</p></li>
+<li><p>The other slaves, whose decision was not even asked, receive nothing.</p></li>
+<li><p>The trust probabilities are first uniform, <span class="math notranslate nohighlight">\(P_i = 1/N\)</span>, and then at every step, after receiving the feedback for <em>one</em> arm k (the reward), the trust in each slave Ai is updated: <span class="math notranslate nohighlight">\(P_i\)</span> by the reward received.</p></li>
+<li><p>The detail about how to increase or decrease the probabilities are specified in the reference article.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Reference: [[Learning to Use Learners’ Advice, A.Singla, H.Hassani &amp; A.Krause, 2017](<a class="reference external" href="https://arxiv.org/abs/1702.04825">https://arxiv.org/abs/1702.04825</a>)].</p>
+</div>
+<dl class="function">
+<dt id="Policies.LearnExp.random">
+<code class="sig-prename descclassname">Policies.LearnExp.</code><code class="sig-name descname">random</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; x in the interval [0, 1).<a class="headerlink" href="#Policies.LearnExp.random" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Policies.LearnExp.renormalize_reward">
+<code class="sig-prename descclassname">Policies.LearnExp.</code><code class="sig-name descname">renormalize_reward</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">trust=1.0</em>, <em class="sig-param">unbiased=True</em>, <em class="sig-param">mintrust=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#renormalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.renormalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renormalize the reward to <cite>[0, 1]</cite>:</p>
+<ul class="simple">
+<li><p>divide by (<cite>trust/mintrust</cite>) if <cite>unbiased</cite> is <cite>True</cite>.</p></li>
+<li><p>simply project to <cite>[0, 1]</cite> if <cite>unbiased</cite> is <cite>False</cite>,</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If <cite>mintrust</cite> is unknown, the unbiased estimator CANNOT be projected back to a bounded interval.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.LearnExp.unnormalize_reward">
+<code class="sig-prename descclassname">Policies.LearnExp.</code><code class="sig-name descname">unnormalize_reward</code><span class="sig-paren">(</span><em class="sig-param">reward</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#unnormalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.unnormalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Project back reward to <cite>[lower, lower + amplitude]</cite>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.LearnExp.UNBIASED">
+<code class="sig-prename descclassname">Policies.LearnExp.</code><code class="sig-name descname">UNBIASED</code><em class="property"> = True</em><a class="headerlink" href="#Policies.LearnExp.UNBIASED" title="Permalink to this definition">¶</a></dt>
+<dd><p>self.unbiased is a flag to know if the rewards are used as biased estimator,
+i.e., just <span class="math notranslate nohighlight">\(r_t\)</span>, or unbiased estimators, <span class="math notranslate nohighlight">\(r_t / p_t\)</span>, if <span class="math notranslate nohighlight">\(p_t\)</span> is the probability of selecting that arm at time <span class="math notranslate nohighlight">\(t\)</span>.
+It seemed to work better with unbiased estimators (of course).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Policies.LearnExp.ETA">
+<code class="sig-prename descclassname">Policies.LearnExp.</code><code class="sig-name descname">ETA</code><em class="property"> = 0.5</em><a class="headerlink" href="#Policies.LearnExp.ETA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the constant Eta in (0, 1]</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.LearnExp.LearnExp">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.LearnExp.</code><code class="sig-name descname">LearnExp</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">children=None</em>, <em class="sig-param">unbiased=True</em>, <em class="sig-param">eta=0.5</em>, <em class="sig-param">prior='uniform'</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>The LearnExp aggregation bandit algorithm, similar to Exp4 but not equivalent.</p>
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">children=None</em>, <em class="sig-param">unbiased=True</em>, <em class="sig-param">eta=0.5</em>, <em class="sig-param">prior='uniform'</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.lower">
+<code class="sig-name descname">lower</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.lower" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lower values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.amplitude">
+<code class="sig-name descname">amplitude</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.amplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Larger values for rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.unbiased">
+<code class="sig-name descname">unbiased</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.unbiased" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag, see above.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.eta">
+<code class="sig-name descname">eta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.eta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant parameter <span class="math notranslate nohighlight">\(\eta\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.rate">
+<code class="sig-name descname">rate</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant <span class="math notranslate nohighlight">\(\eta / N\)</span>, faster computations if it is stored once.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of slave algorithms.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.last_choice">
+<code class="sig-name descname">last_choice</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.last_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remember the index of the last child trusted for a decision.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.trusts">
+<code class="sig-name descname">trusts</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.trusts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initial trusts in the slaves <span class="math notranslate nohighlight">\(p_j^t\)</span>. Default to uniform, but a prior can also be given.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.weights">
+<code class="sig-name descname">weights</code><em class="property"> = None</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weights <span class="math notranslate nohighlight">\(w_j^t\)</span>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nicely print the name of the algorithm with its relevant parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the game for each child.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give reward for each child, and then update the trust probabilities.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choice</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.choiceWithRank">
+<code class="sig-name descname">choiceWithRank</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.choiceWithRank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.choiceWithRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceWithRank</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.choiceFromSubSet">
+<code class="sig-name descname">choiceFromSubSet</code><span class="sig-paren">(</span><em class="sig-param">availableArms='all'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.choiceFromSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.choiceFromSubSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceFromSubSet</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.choiceMultiple">
+<code class="sig-name descname">choiceMultiple</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.choiceMultiple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.choiceMultiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceMultiple</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.choiceIMP">
+<code class="sig-name descname">choiceIMP</code><span class="sig-paren">(</span><em class="sig-param">nb=1</em>, <em class="sig-param">startWithChoiceMultiple=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.choiceIMP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.choiceIMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>choiceIMP</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.LearnExp.LearnExp.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.LearnExp'</em><a class="headerlink" href="#Policies.LearnExp.LearnExp.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.estimatedOrder">
+<code class="sig-name descname">estimatedOrder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.estimatedOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.estimatedOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trust one of the slave and listen to his <cite>estimatedOrder</cite>.</p>
+<ul class="simple">
+<li><p>Return the estimate order of the arms, as a permutation on <span class="math notranslate nohighlight">\([0,...,K-1]\)</span> that would order the arms by increasing means.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.LearnExp.LearnExp.estimatedBestArms">
+<code class="sig-name descname">estimatedBestArms</code><span class="sig-paren">(</span><em class="sig-param">M=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/LearnExp.html#LearnExp.estimatedBestArms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.LearnExp.LearnExp.estimatedBestArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a (non-necessarily sorted) list of the indexes of the M-best arms. Identify the set M-best.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.MEGA.html" class="btn btn-neutral float-right" title="Policies.MEGA module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.LM_DSEE.html" class="btn btn-neutral float-left" title="Policies.LM_DSEE module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

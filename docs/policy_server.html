@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -135,3 +134,215 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+      <li>policy_server module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/policy_server.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-policy_server">
+<span id="policy-server-module"></span><h1>policy_server module<a class="headerlink" href="#module-policy_server" title="Permalink to this headline">¶</a></h1>
+<p>Server to play multi-armed bandits problem against.</p>
+<dl class="simple">
+<dt>Usage:</dt><dd><p>policy_server.py [–port=&lt;PORT&gt;] [–host=&lt;HOST&gt;] [–means=&lt;MEANS&gt;] &lt;json_configuration&gt;
+policy_server.py (-h|–help)
+policy_server.py –version</p>
+</dd>
+<dt>Options:</dt><dd><p>-h –help       Show this screen.
+–version       Show version.
+–port=&lt;PORT&gt;   Port to use for the TCP connection [default: 10000].
+–host=&lt;HOST&gt;   Address to use for the TCP connection [default: 0.0.0.0].
+–means=&lt;MEANS&gt; Means of arms used by the environment, to print regret [default: None].</p>
+</dd>
+</dl>
+<dl class="data">
+<dt id="policy_server.default_configuration">
+<code class="sig-prename descclassname">policy_server.</code><code class="sig-name descname">default_configuration</code><em class="property"> = {'archtype': 'UCBalpha', 'nbArms': 10, 'params': {'alpha': 1}}</em><a class="headerlink" href="#policy_server.default_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example of configuration to pass from the command line.
+<code class="docutils literal notranslate"><span class="pre">'{&quot;nbArms&quot;:</span> <span class="pre">3,</span> <span class="pre">&quot;archtype&quot;:</span> <span class="pre">&quot;UCBalpha&quot;,</span> <span class="pre">&quot;params&quot;:</span> <span class="pre">{</span> <span class="pre">&quot;alpha&quot;:</span> <span class="pre">0.5</span> <span class="pre">}}'</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy_server.read_configuration_policy">
+<code class="sig-prename descclassname">policy_server.</code><code class="sig-name descname">read_configuration_policy</code><span class="sig-paren">(</span><em class="sig-param">a_string</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/policy_server.html#read_configuration_policy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#policy_server.read_configuration_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a valid configuration dictionary to initialize a policy, from the input string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy_server.server">
+<code class="sig-prename descclassname">policy_server.</code><code class="sig-name descname">server</code><span class="sig-paren">(</span><em class="sig-param">policy</em>, <em class="sig-param">host</em>, <em class="sig-param">port</em>, <em class="sig-param">means=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/policy_server.html#server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#policy_server.server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch a server that:</p>
+<ul class="simple">
+<li><p>uses sockets to listen to input and reply</p></li>
+<li><p>create a learning algorithm from a JSON configuration (exactly like <code class="docutils literal notranslate"><span class="pre">main.py</span></code> when it reads <code class="docutils literal notranslate"><span class="pre">configuration.py</span></code>)</p></li>
+<li><p>then receives feedback <code class="docutils literal notranslate"><span class="pre">(arm,</span> <span class="pre">reward)</span></code> from the network, pass it to the algorithm, listens to his <code class="docutils literal notranslate"><span class="pre">arm</span> <span class="pre">=</span> <span class="pre">choice()</span></code> suggestion, and sends this back to the network.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy_server.transform_str">
+<code class="sig-prename descclassname">policy_server.</code><code class="sig-name descname">transform_str</code><span class="sig-paren">(</span><em class="sig-param">params</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/policy_server.html#transform_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#policy_server.transform_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like a safe <a class="reference external" href="https://docs.python.org/3/library/functions.html#exec" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> on a dictionary that can contain special values:</p>
+<ul class="simple">
+<li><p>strings are interpreted as variables names (e.g., policy names) from the current <code class="docutils literal notranslate"><span class="pre">globals()</span></code> scope,</p></li>
+<li><p>list are transformed to tuples to be constant and hashable,</p></li>
+<li><p>dictionary are recursively transformed.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is still as unsafe as <a class="reference external" href="https://docs.python.org/3/library/functions.html#exec" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> : only use it with trusted inputs!</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="policy_server.main">
+<code class="sig-prename descclassname">policy_server.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/policy_server.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#policy_server.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take args, construct the learning policy and starts the server.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../How_to_run_the_code.html" class="btn btn-neutral float-right" title="How to run the code ?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="main_sparse_multiplayers.html" class="btn btn-neutral float-left" title="main_sparse_multiplayers module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

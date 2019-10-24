@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -167,3 +166,313 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="PoliciesMultiPlayers.html">PoliciesMultiPlayers package</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.rhoCentralized module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/PoliciesMultiPlayers.rhoCentralized.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-PoliciesMultiPlayers.rhoCentralized">
+<span id="policiesmultiplayers-rhocentralized-module"></span><h1>PoliciesMultiPlayers.rhoCentralized module<a class="headerlink" href="#module-PoliciesMultiPlayers.rhoCentralized" title="Permalink to this headline">¶</a></h1>
+<p>rhoCentralized: implementation of the multi-player policy from [Distributed Algorithms for Learning…, Anandkumar et al., 2010](<a class="reference external" href="http://ieeexplore.ieee.org/document/5462144/">http://ieeexplore.ieee.org/document/5462144/</a>).</p>
+<ul class="simple">
+<li><p>Each child player is selfish, and plays according to an index policy (any index policy, e.g., UCB, Thompson, KL-UCB, BayesUCB etc),</p></li>
+<li><p>But instead of aiming at the best (the 1-st best) arm, player i aims at the rank_i-th best arm,</p></li>
+<li><p>Every player has rank_i = i + 1, as given by the base station.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is not fully decentralized: as each child player needs to know the (fixed) number of players, and an initial orthogonal configuration.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This policy is NOT efficient at ALL! Don’t use it! It seems a smart idea, but it’s not.</p>
+</div>
+<dl class="class">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized">
+<em class="property">class </em><code class="sig-prename descclassname">PoliciesMultiPlayers.rhoCentralized.</code><code class="sig-name descname">oneRhoCentralized</code><span class="sig-paren">(</span><em class="sig-param">maxRank</em>, <em class="sig-param">mother</em>, <em class="sig-param">playerId</em>, <em class="sig-param">rank=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#oneRhoCentralized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="PoliciesMultiPlayers.ChildPointer.html#PoliciesMultiPlayers.ChildPointer.ChildPointer" title="PoliciesMultiPlayers.ChildPointer.ChildPointer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoliciesMultiPlayers.ChildPointer.ChildPointer</span></code></a></p>
+<p>Class that acts as a child policy, but in fact it pass all its method calls to the mother class, who passes it to its i-th player.</p>
+<ul class="simple">
+<li><p>The player does not aim at the best arm, but at the rank-th best arm, based on her index policy.</p></li>
+</ul>
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">maxRank</em>, <em class="sig-param">mother</em>, <em class="sig-param">playerId</em>, <em class="sig-param">rank=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#oneRhoCentralized.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.maxRank">
+<code class="sig-name descname">maxRank</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.maxRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max rank, usually nbPlayers but can be different</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.keep_the_same_rank">
+<code class="sig-name descname">keep_the_same_rank</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.keep_the_same_rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>If True, the rank is kept constant during the game, as if it was given by the Base Station</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.rank">
+<code class="sig-name descname">rank</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current rank, starting to 1 by default, or ‘rank’ if given as an argument</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#oneRhoCentralized.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#oneRhoCentralized.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.handleCollision">
+<code class="sig-name descname">handleCollision</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#oneRhoCentralized.handleCollision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.handleCollision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a new fully random rank, and give reward to the algorithm if not None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#oneRhoCentralized.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Chose with the actual rank.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'PoliciesMultiPlayers.rhoCentralized'</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.oneRhoCentralized.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized">
+<em class="property">class </em><code class="sig-prename descclassname">PoliciesMultiPlayers.rhoCentralized.</code><code class="sig-name descname">rhoCentralized</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers</em>, <em class="sig-param">nbArms</em>, <em class="sig-param">playerAlgo</em>, <em class="sig-param">maxRank=None</em>, <em class="sig-param">orthogonalRanks=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#rhoCentralized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="PoliciesMultiPlayers.BaseMPPolicy.html#PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy" title="PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoliciesMultiPlayers.BaseMPPolicy.BaseMPPolicy</span></code></a></p>
+<p>rhoCentralized: implementation of a variant of the multi-player rhoRand policy from [Distributed Algorithms for Learning…, Anandkumar et al., 2010](<a class="reference external" href="http://ieeexplore.ieee.org/document/5462144/">http://ieeexplore.ieee.org/document/5462144/</a>).</p>
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbPlayers</em>, <em class="sig-param">nbArms</em>, <em class="sig-param">playerAlgo</em>, <em class="sig-param">maxRank=None</em>, <em class="sig-param">orthogonalRanks=True</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#rhoCentralized.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><p>nbPlayers: number of players to create (in self._players).</p></li>
+<li><p>playerAlgo: class to use for every players.</p></li>
+<li><p>nbArms: number of arms, given as first argument to playerAlgo.</p></li>
+<li><p>maxRank: maximum rank allowed by the rhoCentralized child (default to nbPlayers, but for instance if there is 2 × rhoCentralized[UCB] + 2 × rhoCentralized[klUCB], maxRank should be 4 not 2).</p></li>
+<li><p>orthogonalRanks: if True, orthogonal ranks 1..M are directly affected to the players 1..M.</p></li>
+<li><p><cite>*args</cite>, <cite>**kwargs</cite>: arguments, named arguments, given to playerAlgo.</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Policies</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">random</span><span class="p">;</span> <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span><span class="p">;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">rhoCentralized</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">UCB</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[12, 15, 0, 3, 3, 7]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span> <span class="n">child</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">children</span> <span class="p">]</span>
+<span class="go">[9, 4, 6, 12, 1, 6]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>To get a list of usable players, use <code class="docutils literal notranslate"><span class="pre">s.children</span></code>.</p></li>
+<li><p>Warning: <code class="docutils literal notranslate"><span class="pre">s._players</span></code> is for internal use ONLY!</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.maxRank">
+<code class="sig-name descname">maxRank</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.maxRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Max rank, usually nbPlayers but can be different</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.nbPlayers">
+<code class="sig-name descname">nbPlayers</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.nbPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of players</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.orthogonalRanks">
+<code class="sig-name descname">orthogonalRanks</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.orthogonalRanks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using orthogonal ranks from starting</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.children">
+<code class="sig-name descname">children</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.children" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of children, fake algorithms</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PoliciesMultiPlayers/rhoCentralized.html#rhoCentralized.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PoliciesMultiPlayers.rhoCentralized.rhoCentralized.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'PoliciesMultiPlayers.rhoCentralized'</em><a class="headerlink" href="#PoliciesMultiPlayers.rhoCentralized.rhoCentralized.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="PoliciesMultiPlayers.rhoEst.html" class="btn btn-neutral float-right" title="PoliciesMultiPlayers.rhoEst module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="PoliciesMultiPlayers.Selfish.html" class="btn btn-neutral float-left" title="PoliciesMultiPlayers.Selfish module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

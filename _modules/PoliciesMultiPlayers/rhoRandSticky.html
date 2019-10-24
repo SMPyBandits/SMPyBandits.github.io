@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -113,3 +112,247 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>PoliciesMultiPlayers.rhoRandSticky</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for PoliciesMultiPlayers.rhoRandSticky</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; rhoRandSticky: implementation of a variant of the multi-player policy rhoRand from [Distributed Algorithms for Learning..., Anandkumar et al., 2010](http://ieeexplore.ieee.org/document/5462144/).</span>
+
+<span class="sd">- Each child player is selfish, and plays according to an index policy (any index policy, e.g., UCB, Thompson, KL-UCB, BayesUCB etc),</span>
+<span class="sd">- But instead of aiming at the best (the 1-st best) arm, player i aims at the rank_i-th best arm,</span>
+<span class="sd">- At first, every player has a random rank_i from 1 to M, and when a collision occurs, rank_i is sampled from a uniform distribution on [1, .., M] where M is the number of player.</span>
+<span class="sd">- The *only* difference with rhoRand is that once a player selected a rank and did not encounter a collision for STICKY_TIME time steps, he will never change his rank. rhoRand has STICKY_TIME = +oo, MusicalChair is something like STICKY_TIME = 1, this variant rhoRandSticky has this as a parameter.</span>
+
+
+<span class="sd">.. note:: This is not fully decentralized: as each child player needs to know the (fixed) number of players.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>  <span class="c1"># Python 2 compatibility</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Lilian Besson&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.6&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rn</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">rhoRand</span> <span class="k">import</span> <span class="n">oneRhoRand</span><span class="p">,</span> <span class="n">rhoRand</span>
+
+<span class="c1">#: Default value for STICKY_TIME</span>
+<span class="n">STICKY_TIME</span> <span class="o">=</span> <span class="mi">10</span>
+
+
+<span class="c1"># --- Class oneRhoRandSticky, for children</span>
+
+<div class="viewcode-block" id="oneRhoRandSticky"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.oneRhoRandSticky">[docs]</a><span class="k">class</span> <span class="nc">oneRhoRandSticky</span><span class="p">(</span><span class="n">oneRhoRand</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Class that acts as a child policy, but in fact it pass all its method calls to the mother class, who passes it to its i-th player.</span>
+
+<span class="sd">    - Except for the handleCollision method: a new random rank is sampled after observing a collision,</span>
+<span class="sd">    - And the player does not aim at the best arm, but at the rank-th best arm, based on her index policy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="oneRhoRandSticky.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.oneRhoRandSticky.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxRank</span><span class="p">,</span> <span class="n">stickyTime</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">oneRhoRandSticky</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">maxRank</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span> <span class="o">=</span> <span class="n">maxRank</span>  <span class="c1">#: Max rank, usually nbPlayers but can be different</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span> <span class="o">=</span> <span class="n">stickyTime</span>  <span class="c1">#: Number of time steps needed without collisions before sitting (never changing rank again)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#: Current rank, starting to 1 by default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Not yet sitted. After stickyTime steps without collisions, sit and never change rank again.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepsWithoutCollisions</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Number of steps since we chose that rank and did not see any collision. As soon as this gets greater than stickyTime, the player sit.</span></div>
+
+<div class="viewcode-block" id="oneRhoRandSticky.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.oneRhoRandSticky.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>   <span class="c1"># Better to recompute it automatically</span>
+        <span class="k">return</span> <span class="sa">r</span><span class="s2">&quot;#</span><span class="si">{}</span><span class="s2">&lt;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}{}{}</span><span class="s2">]&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\rho^{\mathrm</span><span class="si">{Rand}</span><span class="s2">}$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mother</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerId</span><span class="p">],</span> <span class="s2">&quot;, rank:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rank</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;, $T_0:</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="oneRhoRandSticky.startGame"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.oneRhoRandSticky.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start game.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">oneRhoRandSticky</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">startGame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">rn</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span><span class="p">)</span>  <span class="c1"># XXX Start with a random rank, safer to avoid first collisions.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Start not sitted, of course!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepsWithoutCollisions</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># No previous steps without collision, of course</span></div>
+
+<div class="viewcode-block" id="oneRhoRandSticky.handleCollision"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.oneRhoRandSticky.handleCollision">[docs]</a>    <span class="k">def</span> <span class="nf">handleCollision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Get a new fully random rank, and give reward to the algorithm if not None.&quot;&quot;&quot;</span>
+        <span class="c1"># rhoRandSticky UCB indexes learn on the SENSING, not on the successful transmissions!</span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># print(&quot;Info: rhoRandSticky UCB internal indexes DOES get updated by reward, in case of collision, learning is done on SENSING, not successful transmissions!&quot;)  # DEBUG</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">oneRhoRandSticky</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stepsWithoutCollisions</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">rn</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span><span class="p">)</span>  <span class="c1"># New random rank</span></div>
+            <span class="c1"># print(&quot; - A oneRhoRandSticky player {} saw a collision, so she had to select a new random rank : {} ...&quot;.format(self, self.rank))  # DEBUG</span>
+
+<div class="viewcode-block" id="oneRhoRandSticky.getReward"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.oneRhoRandSticky.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Pass the call to self.mother._getReward_one(playerId, arm, reward) with the player&#39;s ID number.</span>
+
+<span class="sd">        - Additionally, if the current rank was good enough to not bring any collision during the last stickyTime time steps, the player &quot;sits&quot; on that rank.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">oneRhoRandSticky</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stepsWithoutCollisions</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stepsWithoutCollisions</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span><span class="p">:</span>
+            <span class="c1"># print(&quot; - A oneRhoRandSticky player {} had rank = {}, without any collision from the last {} steps, so he is now sitted on this rank, and will not change ...&quot;.format(self, self.rank, self.stepsWithoutCollisions))  # DEBUG</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sitted</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+
+
+<span class="c1"># --- Class rhoRandSticky</span>
+
+<div class="viewcode-block" id="rhoRandSticky"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.rhoRandSticky">[docs]</a><span class="k">class</span> <span class="nc">rhoRandSticky</span><span class="p">(</span><span class="n">rhoRand</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; rhoRandSticky: implementation of a variant of the multi-player policy rhoRand from [Distributed Algorithms for Learning..., Anandkumar et al., 2010](http://ieeexplore.ieee.org/document/5462144/).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="rhoRandSticky.__init__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.rhoRandSticky.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">playerAlgo</span><span class="p">,</span>
+                 <span class="n">stickyTime</span><span class="o">=</span><span class="n">STICKY_TIME</span><span class="p">,</span> <span class="n">maxRank</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        - nbPlayers: number of players to create (in self._players).</span>
+<span class="sd">        - playerAlgo: class to use for every players.</span>
+<span class="sd">        - nbArms: number of arms, given as first argument to playerAlgo.</span>
+<span class="sd">        - stickyTime: given to the oneRhoRandSticky objects (see above).</span>
+<span class="sd">        - maxRank: maximum rank allowed by the rhoRandSticky child (default to nbPlayers, but for instance if there is 2 × rhoRandSticky[UCB] + 2 × rhoRandSticky[klUCB], maxRank should be 4 not 2).</span>
+<span class="sd">        - `*args`, `**kwargs`: arguments, named arguments, given to playerAlgo.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; from Policies import *</span>
+<span class="sd">        &gt;&gt;&gt; import random; random.seed(0); import numpy as np; np.random.seed(0)</span>
+<span class="sd">        &gt;&gt;&gt; nbArms = 17</span>
+<span class="sd">        &gt;&gt;&gt; nbPlayers = 6</span>
+<span class="sd">        &gt;&gt;&gt; stickyTime = 5</span>
+<span class="sd">        &gt;&gt;&gt; s = rhoRandSticky(nbPlayers, nbArms, UCB, stickyTime=stickyTime)</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [12, 15, 0, 3, 3, 7]</span>
+<span class="sd">        &gt;&gt;&gt; [ child.choice() for child in s.children ]</span>
+<span class="sd">        [9, 4, 6, 12, 1, 6]</span>
+
+<span class="sd">        - To get a list of usable players, use ``s.children``.</span>
+
+<span class="sd">        .. warning:: ``s._players`` is for internal use ONLY!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">nbPlayers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Error, the parameter &#39;nbPlayers&#39; for rhoRandSticky class has to be &gt; 0.&quot;</span>
+        <span class="k">if</span> <span class="n">maxRank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maxRank</span> <span class="o">=</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxRank</span> <span class="o">=</span> <span class="n">maxRank</span>  <span class="c1">#: Max rank, usually nbPlayers but can be different</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span> <span class="o">=</span> <span class="n">stickyTime</span>  <span class="c1">#: Number of time steps needed without collisions before sitting (never changing rank again)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span> <span class="o">=</span> <span class="n">nbPlayers</span>  <span class="c1">#: Number of players</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_players</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nbPlayers</span>  <span class="c1">#: List of children, fake algorithms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms</span>
+        <span class="k">for</span> <span class="n">playerId</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerAlgo</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">playerId</span><span class="p">]</span> <span class="o">=</span> <span class="n">oneRhoRandSticky</span><span class="p">(</span><span class="n">maxRank</span><span class="p">,</span> <span class="n">stickyTime</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">playerId</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="rhoRandSticky.__str__"><a class="viewcode-back" href="../../docs/PoliciesMultiPlayers.rhoRandSticky.html#PoliciesMultiPlayers.rhoRandSticky.rhoRandSticky.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;rhoRandSticky(</span><span class="si">{}</span><span class="s2"> x </span><span class="si">{}{}{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbPlayers</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_players</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s2">&quot;$T_0:</span><span class="si">{}</span><span class="s2">$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stickyTime</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

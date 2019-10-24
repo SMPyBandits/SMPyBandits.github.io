@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -232,3 +231,444 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+      <li>Policies.TrekkingTSN module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.TrekkingTSN.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.TrekkingTSN">
+<span id="policies-trekkingtsn-module"></span><h1>Policies.TrekkingTSN module<a class="headerlink" href="#module-Policies.TrekkingTSN" title="Permalink to this headline">¶</a></h1>
+<p>TrekkingTSN: implementation of the decentralized multi-player policy from [R.Kumar, A.Yadav, S.J.Darak, M.K.Hanawal, Trekking based Distributed Algorithm for Opportunistic Spectrum Access in Infrastructure-less Network, 2018](XXX).</p>
+<ul class="simple">
+<li><p>Each player has 3 states, 1st is channel characterization, 2nd is Trekking phase</p></li>
+<li><dl class="simple">
+<dt>1st step</dt><dd><ul>
+<li><p>FIXME</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>2nd step:</dt><dd><ul>
+<li><p>FIXME</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="function">
+<dt id="Policies.TrekkingTSN.special_times">
+<code class="sig-prename descclassname">Policies.TrekkingTSN.</code><code class="sig-name descname">special_times</code><span class="sig-paren">(</span><em class="sig-param">nbArms=10</em>, <em class="sig-param">theta=0.01</em>, <em class="sig-param">epsilon=0.1</em>, <em class="sig-param">delta=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#special_times"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.special_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the lower-bound suggesting “large-enough” values for the different parameters <span class="math notranslate nohighlight">\(T_{RH}\)</span>, <span class="math notranslate nohighlight">\(T_{SH}\)</span> and <span class="math notranslate nohighlight">\(T_{TR}\)</span> that should guarantee constant regret with probability at least <span class="math notranslate nohighlight">\(1 - \delta\)</span>, if the gap <span class="math notranslate nohighlight">\(\Delta\)</span> is larger than <span class="math notranslate nohighlight">\(\epsilon\)</span> and the smallest mean is larger than <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}T_{RH} &amp;= \frac{\log(\frac{\delta}{3 K})}{\log(1 - \theta (1 - \frac{1}{K})^{K-1}))} \\
+T_{SH} &amp;= (2 K / \varepsilon^2) \log(\frac{2 K^2}{\delta / 3}) \\
+T_{TR} &amp;= \lceil\frac{\log((\delta / 3) K XXX)}{\log(1 - \theta)} \rceil \frac{(K - 1) K}{2}.\end{split}\]</div>
+<ul class="simple">
+<li><p>Cf. Theorem 1 of [Kumar et al., 2018](XXX).</p></li>
+<li><p>Examples:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span> <span class="o">=</span> <span class="n">Delta</span> <span class="o">=</span> <span class="mf">0.07</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">theta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">special_times</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>  
+<span class="go">(197, 26949, -280)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">special_times</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>  
+<span class="go">(279, 34468, 616)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">special_times</span><span class="p">(</span><span class="n">nbArms</span><span class="o">=</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>  
+<span class="go">(362, 41987, 1512)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.TrekkingTSN.boundOnFinalRegret">
+<code class="sig-prename descclassname">Policies.TrekkingTSN.</code><code class="sig-name descname">boundOnFinalRegret</code><span class="sig-paren">(</span><em class="sig-param">T_RH</em>, <em class="sig-param">T_SH</em>, <em class="sig-param">T_TR</em>, <em class="sig-param">nbPlayers</em>, <em class="sig-param">nbArms</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#boundOnFinalRegret"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.boundOnFinalRegret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the upper-bound on regret when <span class="math notranslate nohighlight">\(T_{RH}\)</span>, <span class="math notranslate nohighlight">\(T_{SH}\)</span> and <span class="math notranslate nohighlight">\(T_{TR}\)</span> and <span class="math notranslate nohighlight">\(M\)</span> are known.</p>
+<ul>
+<li><p>The “constant” regret of course grows linearly with <span class="math notranslate nohighlight">\(T_{RH}\)</span>, <span class="math notranslate nohighlight">\(T_{SH}\)</span> and <span class="math notranslate nohighlight">\(T_{TR}\)</span>, as:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\forall T \geq T_{RH} + T_{SH} + T_{TR}, \;\; R_T \leq M (T_{RH} + (1 - \frac{M}{K}) T_{SH} + T_{TR}).\]</div>
+</div></blockquote>
+</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>this bound is not a deterministic result, it is only value with a certain probability (at least <span class="math notranslate nohighlight">\(1 - \delta\)</span>, if <span class="math notranslate nohighlight">\(T_{RH}\)</span>, <span class="math notranslate nohighlight">\(T_{SH}\)</span> and <span class="math notranslate nohighlight">\(T_{TR}\)</span> is chosen as given by <a class="reference internal" href="#Policies.TrekkingTSN.special_times" title="Policies.TrekkingTSN.special_times"><code class="xref py py-func docutils literal notranslate"><span class="pre">special_times()</span></code></a>).</p>
+</div>
+<ul class="simple">
+<li><p>Cf. Theorem 1 of [Kumar et al., 2018](XXX).</p></li>
+<li><p>Examples:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">197</span><span class="p">,</span> <span class="mi">26949</span><span class="p">,</span> <span class="o">-</span><span class="mi">280</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  
+<span class="go">40257.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">279</span><span class="p">,</span> <span class="mi">34468</span><span class="p">,</span> <span class="mi">616</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>   
+<span class="go">53492.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">362</span><span class="p">,</span> <span class="mi">41987</span><span class="p">,</span> <span class="mi">1512</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  
+<span class="go">66728.5</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>For <span class="math notranslate nohighlight">\(M=5\)</span>:</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">197</span><span class="p">,</span> <span class="mi">26949</span><span class="p">,</span> <span class="o">-</span><span class="mi">280</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  
+<span class="go">50114.375</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">279</span><span class="p">,</span> <span class="mi">34468</span><span class="p">,</span> <span class="mi">616</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>   
+<span class="go">69102.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">362</span><span class="p">,</span> <span class="mi">41987</span><span class="p">,</span> <span class="mi">1512</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  
+<span class="go">88095.625</span>
+</pre></div>
+</div>
+<blockquote>
+<div><ul class="simple">
+<li><p>For <span class="math notranslate nohighlight">\(M=K=8\)</span>:</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">197</span><span class="p">,</span> <span class="mi">26949</span><span class="p">,</span> <span class="o">-</span><span class="mi">280</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  
+<span class="go">-664.0  # there is something wrong with T_TR !</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">279</span><span class="p">,</span> <span class="mi">34468</span><span class="p">,</span> <span class="mi">616</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>   
+<span class="go">7160.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">boundOnFinalRegret</span><span class="p">(</span><span class="mi">362</span><span class="p">,</span> <span class="mi">41987</span><span class="p">,</span> <span class="mi">1512</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>  
+<span class="go">14992.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.TrekkingTSN.State">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.TrekkingTSN.</code><code class="sig-name descname">State</code><a class="headerlink" href="#Policies.TrekkingTSN.State" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Different states during the Musical Chair algorithm</p>
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.State.ChannelCharacterization">
+<code class="sig-name descname">ChannelCharacterization</code><em class="property"> = 2</em><a class="headerlink" href="#Policies.TrekkingTSN.State.ChannelCharacterization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.State.NotStarted">
+<code class="sig-name descname">NotStarted</code><em class="property"> = 1</em><a class="headerlink" href="#Policies.TrekkingTSN.State.NotStarted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.State.TrekkingTSN">
+<code class="sig-name descname">TrekkingTSN</code><em class="property"> = 3</em><a class="headerlink" href="#Policies.TrekkingTSN.State.TrekkingTSN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.State.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.TrekkingTSN'</em><a class="headerlink" href="#Policies.TrekkingTSN.State.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.TrekkingTSN.TrekkingTSN">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.TrekkingTSN.</code><code class="sig-name descname">TrekkingTSN</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">theta=0.01</em>, <em class="sig-param">epsilon=0.1</em>, <em class="sig-param">delta=0.05</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="Policies.BasePolicy.html#Policies.BasePolicy.BasePolicy" title="Policies.BasePolicy.BasePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Policies.BasePolicy.BasePolicy</span></code></a></p>
+<p>TrekkingTSN: implementation of the single-player policy from [R.Kumar, A.Yadav, S.J.Darak, M.K.Hanawal, Trekking based Distributed Algorithm for Opportunistic Spectrum Access in Infrastructure-less Network, 2018](XXX).</p>
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">theta=0.01</em>, <em class="sig-param">epsilon=0.1</em>, <em class="sig-param">delta=0.05</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><p>nbArms: number of arms,</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nbArms</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">player1</span> <span class="o">=</span> <span class="n">TrekkingTSN</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For multi-players use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">configuration</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Selfish</span><span class="p">(</span><span class="n">NB_PLAYERS</span><span class="p">,</span> <span class="n">TrekkingTSN</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">epsilon</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span><span class="o">.</span><span class="n">children</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.state">
+<code class="sig-name descname">state</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current state</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.theta">
+<code class="sig-name descname">theta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.theta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.epsilon">
+<code class="sig-name descname">epsilon</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.delta">
+<code class="sig-name descname">delta</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.delta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(\delta\)</span>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.T_RH">
+<code class="sig-name descname">T_RH</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.T_RH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T_{RH}\)</span> computed from <a class="reference internal" href="#Policies.TrekkingTSN.special_times" title="Policies.TrekkingTSN.special_times"><code class="xref py py-func docutils literal notranslate"><span class="pre">special_times()</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.T_SH">
+<code class="sig-name descname">T_SH</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.T_SH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T_{SH}\)</span> computed from <a class="reference internal" href="#Policies.TrekkingTSN.special_times" title="Policies.TrekkingTSN.special_times"><code class="xref py py-func docutils literal notranslate"><span class="pre">special_times()</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.T_CC">
+<code class="sig-name descname">T_CC</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.T_CC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T_{CC} = T_{RH} + T_{SH}\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.T_TR">
+<code class="sig-name descname">T_TR</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.T_TR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameter <span class="math notranslate nohighlight">\(T_{TR}\)</span> computed from <a class="reference internal" href="#Policies.TrekkingTSN.special_times" title="Policies.TrekkingTSN.special_times"><code class="xref py py-func docutils literal notranslate"><span class="pre">special_times()</span></code></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.last_was_successful">
+<code class="sig-name descname">last_was_successful</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.last_was_successful" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the l of the paper</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.last_choice">
+<code class="sig-name descname">last_choice</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.last_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keep memory of the last choice for CC phase</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.cumulatedRewards">
+<code class="sig-name descname">cumulatedRewards</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.cumulatedRewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the V_n of the paper</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.nbObservations">
+<code class="sig-name descname">nbObservations</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.nbObservations" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the S_n of the paper</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.lock_channel">
+<code class="sig-name descname">lock_channel</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.lock_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the L of the paper</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.t">
+<code class="sig-name descname">t</code><em class="property"> = None</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal times</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just reinitialize all the internal memory, and decide how to start (state 1 or 2).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose an arm, as described by the Musical Chair algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive a reward on arm of index ‘arm’, as described by the Musical Chair algorithm.</p>
+<ul class="simple">
+<li><p>If not collision, receive a reward after pulling the arm.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN._endCCPhase">
+<code class="sig-name descname">_endCCPhase</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN._endCCPhase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN._endCCPhase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Small computation needed at the end of the initial CC phase.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.handleCollision">
+<code class="sig-name descname">handleCollision</code><span class="sig-paren">(</span><em class="sig-param">arm</em>, <em class="sig-param">reward=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/TrekkingTSN.html#TrekkingTSN.handleCollision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.handleCollision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a collision, on arm of index ‘arm’.</p>
+<ul class="simple">
+<li><p>Warning: this method has to be implemented in the collision model, it is NOT implemented in the EvaluatorMultiPlayers.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.TrekkingTSN.TrekkingTSN.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.TrekkingTSN'</em><a class="headerlink" href="#Policies.TrekkingTSN.TrekkingTSN.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.TsallisInf.html" class="btn btn-neutral float-right" title="Policies.TsallisInf module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.Thompson.html" class="btn btn-neutral float-left" title="Policies.Thompson module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

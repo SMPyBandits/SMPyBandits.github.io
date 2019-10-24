@@ -1,4 +1,3 @@
-Error: package not found, install 'emoji' package with 'pip install emoji'
 
 
 <!DOCTYPE html>
@@ -143,3 +142,273 @@ Error: package not found, install 'emoji' package with 'pip install emoji'
 <li class="toctree-l1"><a class="reference internal" href="../NonStationaryBandits.html"><strong>Non-Stationary Stochastic Multi-Armed Bandits</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API.html">Short documentation of the API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../About_parallel_computations.html">About parallel computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../TODO.html">💥 TODO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plots/README.html">Some illustrations for this project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/README.html">Jupyter Notebooks 📓 by Naereen &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/list.html">List of notebooks for SMPyBandits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Profiling.html">A note on execution times, speed and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uml_diagrams/README.html">UML diagrams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logs/README.html"><code class="docutils literal notranslate"><span class="pre">logs</span></code> files</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMPyBandits</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">SMPyBandits modules</a> &raquo;</li>
+        
+          <li><a href="Policies.html">Policies package</a> &raquo;</li>
+        
+          <li><a href="Policies.Experimentals.html">Policies.Experimentals package</a> &raquo;</li>
+        
+      <li>Policies.Experimentals.BlackBoxOpt module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/docs/Policies.Experimentals.BlackBoxOpt.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="module-Policies.Experimentals.BlackBoxOpt">
+<span id="policies-experimentals-blackboxopt-module"></span><h1>Policies.Experimentals.BlackBoxOpt module<a class="headerlink" href="#module-Policies.Experimentals.BlackBoxOpt" title="Permalink to this headline">¶</a></h1>
+<p>An experimental “on-line” policy, using algorithms from black-box Bayesian optimization, using [scikit-optimize](<a class="reference external" href="https://scikit-optimize.github.io/">https://scikit-optimize.github.io/</a>).</p>
+<ul class="simple">
+<li><p>It uses an iterative black-box Bayesian optimizer, with two methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">ask()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">tell()</span></code> to be used as <code class="xref py py-meth docutils literal notranslate"><span class="pre">choice()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">getReward()</span></code> for our Multi-Armed Bandit optimization environment.</p></li>
+<li><p>See <a class="reference external" href="https://scikit-optimize.github.io/notebooks/ask-and-tell.html">https://scikit-optimize.github.io/notebooks/ask-and-tell.html</a> for more details.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is still <strong>experimental</strong>! It is NOT efficient in terms of storage, and <strong>highly</strong> NOT efficient either in terms of efficiency against a Bandit problem (i.e., regret, best arm identification etc).</p>
+</div>
+<dl class="function">
+<dt id="Policies.Experimentals.BlackBoxOpt.default_estimator">
+<code class="sig-prename descclassname">Policies.Experimentals.BlackBoxOpt.</code><code class="sig-name descname">default_estimator</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#default_estimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.default_estimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default estimator object.</p>
+<ul class="simple">
+<li><p>Default is <code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestRegressor</span></code> (<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.RandomForestRegressor">https://scikit-optimize.github.io/learning/index.html#skopt.learning.RandomForestRegressor</a>).</p></li>
+<li><p>Another possibility is to use <code class="xref py py-class docutils literal notranslate"><span class="pre">ExtraTreesRegressor</span></code> (<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.ExtraTreesRegressor">https://scikit-optimize.github.io/learning/index.html#skopt.learning.ExtraTreesRegressor</a>), but it is slower!</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianProcessRegressor</span></code> (<a class="reference external" href="https://scikit-optimize.github.io/learning/index.html#skopt.learning.GaussianProcessRegressor">https://scikit-optimize.github.io/learning/index.html#skopt.learning.GaussianProcessRegressor</a>) was failing, don’t really know why. I think it is not designed to work with Categorical inputs.</p></li>
+<li><p>Any of <a class="reference external" href="https://scikit-optimize.github.io/learning/index.html">https://scikit-optimize.github.io/learning/index.html</a> can be used.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="Policies.Experimentals.BlackBoxOpt.default_optimizer">
+<code class="sig-prename descclassname">Policies.Experimentals.BlackBoxOpt.</code><code class="sig-name descname">default_optimizer</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">est</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#default_optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.default_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default optimizer object.</p>
+<ul class="simple">
+<li><p>Default is <code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code> (<a class="reference external" href="https://scikit-optimize.github.io/#skopt.Optimizer">https://scikit-optimize.github.io/#skopt.Optimizer</a>).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt">
+<em class="property">class </em><code class="sig-prename descclassname">Policies.Experimentals.BlackBoxOpt.</code><code class="sig-name descname">BlackBoxOpt</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">opt=&lt;function default_optimizer&gt;</em>, <em class="sig-param">est=&lt;function default_estimator&gt;</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#BlackBoxOpt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePolicy.BasePolicy</span></code></p>
+<p>Black-box Bayesian optimizer for Multi-Armed Bandit, using Gaussian processes.</p>
+<ul class="simple">
+<li><p>By default, it uses <a class="reference internal" href="#Policies.Experimentals.BlackBoxOpt.default_optimizer" title="Policies.Experimentals.BlackBoxOpt.default_optimizer"><code class="xref py py-func docutils literal notranslate"><span class="pre">default_optimizer()</span></code></a>.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This is still <strong>experimental</strong>! It works fine, but it is EXTREMELY SLOW!</p>
+</div>
+<dl class="method">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">nbArms</em>, <em class="sig-param">opt=&lt;function default_optimizer&gt;</em>, <em class="sig-param">est=&lt;function default_estimator&gt;</em>, <em class="sig-param">lower=0.0</em>, <em class="sig-param">amplitude=1.0</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#BlackBoxOpt.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>New policy.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.nbArms">
+<code class="sig-name descname">nbArms</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.nbArms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of arms of the MAB problem.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.t">
+<code class="sig-name descname">t</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.opt">
+<code class="sig-name descname">opt</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.opt" title="Permalink to this definition">¶</a></dt>
+<dd><p>The black-box optimizer to use, initialized from the other arguments</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.lower">
+<code class="sig-name descname">lower</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.lower" title="Permalink to this definition">¶</a></dt>
+<dd><p>Known lower bounds on the rewards.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.amplitude">
+<code class="sig-name descname">amplitude</code><em class="property"> = None</em><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.amplitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Known amplitude of the rewards.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.__str__">
+<code class="sig-name descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#BlackBoxOpt.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>-&gt; str</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.startGame">
+<code class="sig-name descname">startGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#BlackBoxOpt.startGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.startGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reinitialize the black-box optimizer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.getReward">
+<code class="sig-name descname">getReward</code><span class="sig-paren">(</span><em class="sig-param">armId</em>, <em class="sig-param">reward</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#BlackBoxOpt.getReward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.getReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store this observation <cite>reward</cite> for that arm <cite>armId</cite>.</p>
+<ul class="simple">
+<li><p>In fact, <code class="xref py py-class docutils literal notranslate"><span class="pre">skopt.Optimizer</span></code> is a <em>minimizer</em>, so <cite>loss=1-reward</cite> is stored, to maximize the rewards by minimizing the losses.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.choice">
+<code class="sig-name descname">choice</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/Policies/Experimentals/BlackBoxOpt.html#BlackBoxOpt.choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose an arm, according to the black-box optimizer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.__module__">
+<code class="sig-name descname">__module__</code><em class="property"> = 'Policies.Experimentals.BlackBoxOpt'</em><a class="headerlink" href="#Policies.Experimentals.BlackBoxOpt.BlackBoxOpt.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Policies.Experimentals.KLempUCB.html" class="btn btn-neutral float-right" title="Policies.Experimentals.KLempUCB module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Policies.Experimentals.html" class="btn btn-neutral float-left" title="Policies.Experimentals package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016-2018, Lilian Besson (Naereen)
+      <span class="lastupdated">
+        Last updated on 24 Oct 2019, 13h.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
