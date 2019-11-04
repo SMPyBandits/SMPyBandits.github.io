@@ -185,7 +185,7 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The GLR-UCB policy and variants, for non-stationary bandits.</span>
 
-<span class="sd">- Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](TODO)</span>
+<span class="sd">- Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">- It runs on top of a simple policy, e.g., :class:`UCB`, and :class:`BernoulliGLR_IndexPolicy` is a wrapper:</span>
 
 <span class="sd">    &gt;&gt;&gt; policy = BernoulliGLR_IndexPolicy(nbArms, UCB)</span>
@@ -497,12 +497,15 @@
 <span class="sd">    - ``threshold_function`` computes the threshold :math:`\beta(t, \delta)`, it can be for instance :func:`threshold_GaussianGLR` or :func:`threshold_BernoulliGLR`.</span>
 
 <span class="sd">    - From [&quot;Sequential change-point detection: Laplace concentration of scan statistics and non-asymptotic delay bounds&quot;, O.-A. Maillard, 2018].</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="GLR_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.GLR_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span>
             <span class="n">horizon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_nb_random_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">kl</span><span class="o">=</span><span class="n">klGauss</span><span class="p">,</span>
             <span class="n">alpha0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exponentBeta</span><span class="o">=</span><span class="n">EXPONENT_BETA</span><span class="p">,</span> <span class="n">alpha_t1</span><span class="o">=</span><span class="n">ALPHA_T1</span><span class="p">,</span>
             <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">use_increasing_alpha</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">lazy_try_value_s_only_x_steps</span><span class="o">=</span><span class="n">LAZY_TRY_VALUE_S_ONLY_X_STEPS</span><span class="p">,</span>
             <span class="n">per_arm_restart</span><span class="o">=</span><span class="n">PER_ARM_RESTART</span><span class="p">,</span>
             <span class="n">use_localization</span><span class="o">=</span><span class="n">USE_LOCALIZATION</span><span class="p">,</span>
@@ -524,6 +527,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>  <span class="c1">#: The confidence level :math:`\delta`. Defaults to :math:`\delta=\frac{1}{\sqrt{T}}` if ``horizon`` is given and ``delta=None`` but :math:`\Upsilon_T` is unknown. Defaults to :math:`\delta=\frac{1}{\sqrt{\Upsilon_T T}}` if both :math:`T` and :math:`\Upsilon_T` are given (``horizon`` and ``max_nb_random_events``).</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha0</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="o">=</span> <span class="n">variant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_increasing_alpha</span> <span class="o">=</span> <span class="n">use_increasing_alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threshold_function</span> <span class="o">=</span> <span class="n">threshold_function</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_args_to_kl</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>  <span class="c1"># Tuple of extra arguments to give to the :attr:`kl` function.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kl</span> <span class="o">=</span> <span class="n">kl</span>  <span class="c1">#: The parametrized Kullback-Leibler divergence (:math:`\mathrm{kl}(x,y) = KL(D(x),D(y))`) for the 1-dimensional exponential family :math:`x\mapsto D(x)`. Example: :func:`kullback.klBern` or :func:`kullback.klGauss`.</span>
@@ -539,6 +543,12 @@
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;What they call :math:`\alpha` in their paper: the probability of uniform exploration at each time.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_increasing_alpha</span><span class="p">:</span>
+            <span class="n">ell</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_restart</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ell</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">T</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">alpha</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">smallest_time_since_last_restart</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pulls</span><span class="p">)</span>
             <span class="n">t</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">smallest_time_since_last_restart</span><span class="p">)</span>
@@ -555,6 +565,7 @@
         <span class="n">with_tracking</span> <span class="o">=</span> <span class="s2">&quot;tracking&quot;</span> <span class="k">if</span> <span class="s2">&quot;WithTracking&quot;</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">with_randomexploration</span> <span class="o">=</span> <span class="s2">&quot;random expl.&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">with_tracking</span> <span class="ow">and</span> <span class="s2">&quot;DeterministicExploration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">class_name</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;threshold #</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variant</span><span class="p">)</span>
+        <span class="n">use_increasing_alpha</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;increasing $\alpha_t$&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_increasing_alpha</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span>
             <span class="s2">&quot;Local&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_per_arm_restart</span> <span class="k">else</span> <span class="s2">&quot;Global&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Localization&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_localization</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -567,6 +578,7 @@
             <span class="n">with_tracking</span><span class="p">,</span>
             <span class="n">with_randomexploration</span><span class="p">,</span>
             <span class="n">variant</span><span class="p">,</span>
+            <span class="n">use_increasing_alpha</span><span class="p">,</span>
         <span class="p">]</span> <span class="k">if</span> <span class="n">s</span><span class="p">)</span>
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="n">policy_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="o">.</span><span class="vm">__name__</span>  <span class="c1">#.replace(&quot;_forGLR&quot;, &quot;&quot;)</span>
@@ -632,6 +644,8 @@
 
 <div class="viewcode-block" id="GLR_IndexPolicy_WithTracking"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.GLR_IndexPolicy_WithTracking">[docs]</a><span class="k">class</span> <span class="nc">GLR_IndexPolicy_WithTracking</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A variant of the GLR policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven&#39;t been explored enough (with a tracking).</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="GLR_IndexPolicy_WithTracking.choice"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.GLR_IndexPolicy_WithTracking.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; If any arm is not explored enough (:math:`n_k \leq \frac{\alpha}{K} \times (t - n_k)`, play uniformly at random one of these arms, otherwise, pass the call to :meth:`choice` of the underlying policy.</span>
@@ -657,6 +671,8 @@
 
 <span class="sd">        A &amp;:= (t - \tau) \mod \lceil \frac{K}{\gamma} \rceil,\\</span>
 <span class="sd">        A &amp;\leq K \implies A_t = A.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="GLR_IndexPolicy_WithDeterministicExploration.choice"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.GLR_IndexPolicy_WithDeterministicExploration.choice">[docs]</a>    <span class="k">def</span> <span class="nf">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot; For some time steps, play uniformly at random one of these arms, otherwise, pass the call to :meth:`choice` of the underlying policy.</span>
@@ -693,17 +709,24 @@
 <span class="c1"># --- GLR for Bernoulli</span>
 <div class="viewcode-block" id="BernoulliGLR_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.BernoulliGLR_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">BernoulliGLR_IndexPolicy</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The BernoulliGLR-UCB policy for non-stationary bandits, for Bernoulli distributions.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="BernoulliGLR_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.BernoulliGLR_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">kl</span><span class="o">=</span><span class="n">klBern</span><span class="p">,</span> <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BernoulliGLR_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">kl</span><span class="o">=</span><span class="n">kl</span><span class="p">,</span> <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="BernoulliGLR_IndexPolicy_WithTracking"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.BernoulliGLR_IndexPolicy_WithTracking">[docs]</a><span class="k">class</span> <span class="nc">BernoulliGLR_IndexPolicy_WithTracking</span><span class="p">(</span><span class="n">GLR_IndexPolicy_WithTracking</span><span class="p">,</span> <span class="n">BernoulliGLR_IndexPolicy</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A variant of the BernoulliGLR-UCB policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven&#39;t been explored enough.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; A variant of the BernoulliGLR-UCB policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven&#39;t been explored enough.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="BernoulliGLR_IndexPolicy_WithDeterministicExploration"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.BernoulliGLR_IndexPolicy_WithDeterministicExploration">[docs]</a><span class="k">class</span> <span class="nc">BernoulliGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">(</span><span class="n">GLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span> <span class="n">BernoulliGLR_IndexPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A variant of the BernoulliGLR-UCB policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
@@ -711,6 +734,8 @@
 <span class="c1"># --- GLR for sigma=1 Gaussian</span>
 <div class="viewcode-block" id="OurGaussianGLR_IndexPolicy"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy">[docs]</a><span class="k">class</span> <span class="nc">OurGaussianGLR_IndexPolicy</span><span class="p">(</span><span class="n">GLR_IndexPolicy</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot; The GaussianGLR-UCB policy for non-stationary bandits, for fixed-variance Gaussian distributions (ie, :math:`\sigma^2`=``sig2`` known and fixed), but with our threshold designed for the sub-Bernoulli case.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="OurGaussianGLR_IndexPolicy.__init__"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbArms</span><span class="p">,</span> <span class="n">sig2</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">kl</span><span class="o">=</span><span class="n">klGauss</span><span class="p">,</span> <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_BernoulliGLR</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OurGaussianGLR_IndexPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nbArms</span><span class="p">,</span> <span class="n">kl</span><span class="o">=</span><span class="n">kl</span><span class="p">,</span> <span class="n">threshold_function</span><span class="o">=</span><span class="n">threshold_function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -720,11 +745,15 @@
 
 <div class="viewcode-block" id="OurGaussianGLR_IndexPolicy_WithTracking"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy_WithTracking">[docs]</a><span class="k">class</span> <span class="nc">OurGaussianGLR_IndexPolicy_WithTracking</span><span class="p">(</span><span class="n">GLR_IndexPolicy_WithTracking</span><span class="p">,</span> <span class="n">OurGaussianGLR_IndexPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A variant of the GaussianGLR-UCB policy where the exploration is not forced to be uniformly random but based on a tracking of arms that haven&#39;t been explored enough, but with our threshold designed for the sub-Bernoulli case, but with our threshold designed for the sub-Bernoulli case.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="OurGaussianGLR_IndexPolicy_WithDeterministicExploration"><a class="viewcode-back" href="../../docs/Policies.GLR_UCB.html#Policies.GLR_UCB.OurGaussianGLR_IndexPolicy_WithDeterministicExploration">[docs]</a><span class="k">class</span> <span class="nc">OurGaussianGLR_IndexPolicy_WithDeterministicExploration</span><span class="p">(</span><span class="n">GLR_IndexPolicy_WithDeterministicExploration</span><span class="p">,</span> <span class="n">OurGaussianGLR_IndexPolicy</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A variant of the GaussianGLR-UCB policy where the exploration is not forced to be uniformly random but deterministic, inspired by what M-UCB proposed, but with our threshold designed for the sub-Bernoulli case.</span>
+
+<span class="sd">    - Reference: [[&quot;Combining the Generalized Likelihood Ratio Test and kl-UCB for Non-Stationary Bandits. E. Kaufmann and L. Besson, 2019]](https://hal.inria.fr/hal-02006471/)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span></div>
 
@@ -882,7 +911,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 25 Oct 2019, 15h.
+        Last updated on 04 Nov 2019, 16h.
       </span>
 
     </p>
