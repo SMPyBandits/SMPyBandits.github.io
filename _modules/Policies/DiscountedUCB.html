@@ -258,10 +258,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DiscountedUCB</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
         <span class="c1"># FIXED we should multiply by gamma^delta where delta is the number of time steps where we didn&#39;t play this arm, +1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">discounted_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span><span class="p">[</span><span class="n">arm</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">discounted_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="c1"># XXX self.discounted_pulls[arm] += 1  # if we were using N_k(t) and not N_{k,gamma}(t).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discounted_pulls</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discounted_rewards</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discounted_pulls</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">amplitude</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">discounted_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span><span class="p">[</span><span class="n">arm</span><span class="p">]))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">discounted_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">+</span> <span class="n">reward</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discounted_rewards</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="n">reward</span>
+        <span class="c1"># XXX self.discounted_pulls[arm] += 1  # if we were using N_k(t) and not N_{k,gamma}(t).</span>
         <span class="c1"># Ok and we saw this arm so no delta now</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">useRealDiscount</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">delta_time_steps</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># increase delay for each algorithms</span>
@@ -408,7 +410,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 06 Nov 2019, 17h.
+        Last updated on 17 Dec 2019, 17h.
       </span>
 
     </p>
