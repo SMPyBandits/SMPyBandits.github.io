@@ -234,6 +234,7 @@
     <span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">pulls</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cumul_pulls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arms</span><span class="p">))]</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
         <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">choice</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">choice</span><span class="p">()</span>
@@ -244,7 +245,8 @@
         <span class="n">noisy_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">noisy_reward</span><span class="p">)</span>
         <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward</span><span class="p">)</span>
         <span class="n">pulls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;rewards&#39;</span><span class="p">:</span> <span class="n">rewards</span><span class="p">,</span> <span class="s1">&#39;noisy_rewards&#39;</span><span class="p">:</span> <span class="n">noisy_rewards</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">times</span><span class="p">,</span> <span class="s1">&#39;pulls&#39;</span><span class="p">:</span> <span class="n">pulls</span><span class="p">,</span> <span class="s1">&#39;cumul_pulls&#39;</span> <span class="p">:</span> <span class="n">policy</span><span class="o">.</span><span class="n">pulls</span><span class="p">}</span></div>
+        <span class="n">cumul_pulls</span><span class="p">[</span><span class="n">choice</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;rewards&#39;</span><span class="p">:</span> <span class="n">rewards</span><span class="p">,</span> <span class="s1">&#39;noisy_rewards&#39;</span><span class="p">:</span> <span class="n">noisy_rewards</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">times</span><span class="p">,</span> <span class="s1">&#39;pulls&#39;</span><span class="p">:</span> <span class="n">pulls</span><span class="p">,</span> <span class="s1">&#39;cumul_pulls&#39;</span> <span class="p">:</span> <span class="n">cumul_pulls</span><span class="p">}</span></div>
 </pre></div>
 
            </div>
@@ -259,7 +261,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 17 Dec 2019, 17h.
+        Last updated on 17 Dec 2019, 18h.
       </span>
 
     </p>
