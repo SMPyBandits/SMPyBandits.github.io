@@ -382,7 +382,7 @@
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Create a new UnsupervisedLearning policy.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span> <span class="o">=</span> <span class="n">nbArms</span>  <span class="c1">#: Number of arms of the MAB problem.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1">#: Current time.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Current time.</span>
         <span class="n">T_0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T_0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">T_0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T_0</span><span class="p">))</span>  <span class="c1">#: Number of random exploration of each arm at the beginning.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit_every</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fit_every</span><span class="p">)</span>  <span class="c1">#: Frequency of refit of the unsupervised models.</span>
@@ -406,7 +406,7 @@
 
 <div class="viewcode-block" id="UnsupervisedLearning.startGame"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.startGame">[docs]</a>    <span class="k">def</span> <span class="nf">startGame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Reinitialize the estimators.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ests</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_estimator</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbArms</span><span class="p">)]</span></div>
 
 <div class="viewcode-block" id="UnsupervisedLearning.getReward"><a class="viewcode-back" href="../../../docs/Policies.Experimentals.UnsupervisedLearning.html#Policies.Experimentals.UnsupervisedLearning.UnsupervisedLearning.getReward">[docs]</a>    <span class="k">def</span> <span class="nf">getReward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">armId</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
@@ -526,7 +526,7 @@
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 17 Dec 2019, 18h.
+        Last updated on 24 Dec 2019, 17h.
       </span>
 
     </p>
