@@ -120,6 +120,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#other-remarks">Other remarks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-experiments">How to run the experiments ?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nix">Nix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#boom-warning">💥 Warning</a></li>
 </ul>
 </li>
@@ -397,7 +398,7 @@ pip install -r requirements_full.txt
 <span class="c1"># run a single-player simulation!</span>
 <span class="nv">N</span><span class="o">=</span><span class="m">100</span> <span class="nv">T</span><span class="o">=</span><span class="m">10000</span> <span class="nv">K</span><span class="o">=</span><span class="m">9</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> make single
 <span class="c1"># run a multi-player simulation!</span>
-<span class="nv">N</span><span class="o">=</span><span class="m">100</span> <span class="nv">T</span><span class="o">=</span><span class="m">10000</span> <span class="nv">M</span><span class="o">=</span><span class="m">3</span> <span class="nv">K</span><span class="o">=</span><span class="m">9</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> make more
+<span class="nv">N</span><span class="o">=</span><span class="m">100</span> <span class="nv">T</span><span class="o">=</span><span class="m">10000</span> <span class="nv">M</span><span class="o">=</span><span class="m">3</span> <span class="nv">K</span><span class="o">=</span><span class="m">9</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> make moremulti
 </pre></div>
 </div>
 <p>You can also install it directly with <a class="reference external" href="https://pip.pypa.io/"><code class="docutils literal notranslate"><span class="pre">pip</span></code></a> and from GitHub:</p>
@@ -415,6 +416,20 @@ pip install git+https://github.com/SMPyBandits/SMPyBandits.git#egg<span class="o
 <li><p>And if speed matters, be sure that you have a working version of <a class="reference external" href="https://numba.pydata.org/">Numba</a>, it is used by many small functions to (try to automatically) speed up the computations.</p></li>
 </ul>
 </div></blockquote>
+<div class="section" id="nix">
+<h3>Nix<a class="headerlink" href="#nix" title="Permalink to this headline">¶</a></h3>
+<p>A pinned <a class="reference external" href="https://nixos.org">Nix</a> environment is available for this experimental setup in the <a class="reference external" href="nix/pkgs"><code class="docutils literal notranslate"><span class="pre">nix/pkgs/</span></code></a> directory.
+From the root of the project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nix-shell
+nix-shell$ jupyter_notebook 
+nix-shell$ <span class="nv">N</span><span class="o">=</span><span class="m">100</span> <span class="nv">T</span><span class="o">=</span><span class="m">10000</span> <span class="nv">K</span><span class="o">=</span><span class="m">9</span> <span class="nv">N_JOBS</span><span class="o">=</span><span class="m">4</span> make single
+</pre></div>
+</div>
+<p>The following one-liner lets you explore one of the example notebooks from any Nix-enabled machine, without cloning the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nix-shell https://github.com/SMPYBandits/SMPyBandits/archive/master.tar.gz --run <span class="s1">&#39;jupyter-notebook $EXAMPLE_NOTEBOOKS/Example_of_a_small_Multi-Player_Simulation__with_Centralized_Algorithms.ipynb&#39;</span> 
+</pre></div>
+</div>
+</div>
 <hr class="docutils" />
 <div class="section" id="boom-warning">
 <h3>💥 Warning<a class="headerlink" href="#boom-warning" title="Permalink to this headline">¶</a></h3>
@@ -492,7 +507,7 @@ If you want to contribute, please have a look to the <a class="reference interna
     <p>
         &copy; Copyright 2016-2018, Lilian Besson (Naereen)
       <span class="lastupdated">
-        Last updated on 10 Jan 2020, 15h.
+        Last updated on 24 Feb 2020, 18h.
       </span>
 
     </p>
